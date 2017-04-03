@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Daedalus</string>
+    <string name="action_settings">设置</string>
+    <string name="notice">Daedalus: 方便易用的基于 CuteDNS 的科学上网工具。</string>
+    <string name="activate">启动</string>
+    <string name="deactivate">停用</string>
+    <string name="action_about">关于</string>
+    <string name="notification_activated">点击回到 Daedalus</string>
+    <string name="settings_system">系统设置</string>
+    <string name="settings_boot">开机自动启动</string>
+    <string name="about">作者：iTX Technologies\n网站：https://itxtech.org\n\nDaedalus 是一个运行在 Android 上的 DNS 代理程序。\n它基于
+        CuteDNS(http://www.cutedns.cn) 的 DNS 服务器。\n\n你可以通过此程序直连：Google, Google Play, Twitter, Facebook, Gmail, Youtube,
+        Google Drive, Tumblr, Mega, Dropbox, Apkpure, ccFox.info, ProjectH, Battle.NET, WordPress, Microsoft Live,
+        Github, Amazon, Archive, Box.com, Disqus, SoundCloud, inoreader, Feedly, FlipBoard, Flickr, imgur, Instagram,
+        DuckDuckGo, Ixquick, Yahoo, Google Services, Google apis, Android, UpLoad, Appspot, Googl eusercontent, Gstatic,
+        Google other, Google research, Wikipedia, xda-developer and so on via https.\n\n此外，你还可以在中国大陆访问 Google Play 应用程序。
+    </string>
+    <string name="settings_server">服务器设置</string>
+    <string name="primary_server">首选 DNS 服务器</string>
+    <string name="server_south_china">华南</string>
+    <string name="server_east_china">华东</string>
+    <string name="server_north_china">华北</string>
+    <string name="secondary_server">备用 DNS 服务器</string>
+    <string name="fab_text">正在前往 CuteDNS 网站。</string>
+</resources>

@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Daedalus</string>
+    <string name="action_settings">Settings</string>
+    <string name="notice">Daedalus: The CuteDNS implementation on Android.</string>
+    <string name="activate">Activate</string>
+    <string name="deactivate">Deactivate</string>
+    <string name="action_about">About</string>
+    <string name="notification_activated">Click to back to Daedalus</string>
+    <string name="settings_system">System settings</string>
+    <string name="settings_boot">Auto activate on boot</string>
+    <string name="about">Author: iTX Technologies\nWebsite: https://itxtech.org\n\nDaedalus is a DNS Proxy on
+        Android.\nIt is based on CuteDNS(http://www.cutedns.cn)\'s DNS server.\n\nYou are able to visit some restricted
+        websites: Google, Google Play, Twitter, Facebook, Gmail, Youtube, Google Drive, Tumblr, Mega, Dropbox, Apkpure,
+        ccFox.info, ProjectH, Battle.NET, WordPress, Microsoft Live, Github, Amazon, Archive, Box.com, Disqus,
+        SoundCloud, inoreader, Feedly, FlipBoard, Flickr, imgur, Instagram, DuckDuckGo, Ixquick, Yahoo, Google Services,
+        Google apis, Android, UpLoad, Appspot, Googl eusercontent, Gstatic, Google other, Google research, Wikipedia,
+        xda-developer and so on via https.\n\nBesides, you are also able to use Google Play application in mainland
+        China.
+    </string>
+    <string name="settings_server">Server settings</string>
+    <string name="primary_server">Primary DNS server</string>
+    <string name="server_south_china">South China</string>
+    <string name="server_east_china">East China</string>
+    <string name="server_north_china">North China</string>
+    <string name="secondary_server">Secondary DNS server</string>
+    <string name="fab_text">Loading CuteDNS website...</string>
+</resources>
