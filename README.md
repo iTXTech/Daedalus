@@ -20,7 +20,9 @@ Introduction
 -------------
 ~~本萌新第一个 Android 应用。~~<br>
 不需要翻墙就能在 Android 上通过 https 协议直连 Google, Twitter, Facebook 等网站。<br>
-基于 CuteDNS 的 DNS 服务器，减少 DNS 劫持~~（当然万能的 *** 想封了你也不是不行）~~。<br>
+通过 CuteDNS 的 DNS 服务器，减少 DNS 劫持 ~~（当然万能的 *** 想封了你也不是不行）~~ 。<br>
+基于 Android 提供的 VpnService 实现，不需要 root，数据连接也可用。<br>
+支持开机启动。 ~~BAT流氓软件~~ <br>
 ~~好吧故事编不下去了。~~ <br>
 <br>
 __各位 dalao 见笑了！__
