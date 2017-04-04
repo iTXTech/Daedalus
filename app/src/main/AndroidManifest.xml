@@ -23,6 +23,7 @@
         <receiver android:name=".BootBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </receiver>
@@ -42,8 +43,13 @@
                 android:name=".SettingsActivity"
                 android:label="@string/action_settings">
         </activity>
-        <activity android:name=".AboutActivity"
-                  android:label="@string/action_about">
+        <activity
+                android:name=".AboutActivity"
+                android:label="@string/action_about">
+        </activity>
+        <activity
+                android:name=".ServerTestActivity"
+                android:label="@string/action_server_test">
         </activity>
     </application>
 

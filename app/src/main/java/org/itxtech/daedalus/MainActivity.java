@@ -1,20 +1,15 @@
 package org.itxtech.daedalus;
 
 import android.app.ActivityManager;
-import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.net.VpnService;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
@@ -49,19 +44,13 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, R.string.fab_text, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-
-                Intent intent = new Intent();
-                intent.setAction("android.intent.action.VIEW");
-                Uri siteURL = Uri.parse("http://www.cutedns.cn");
-                intent.setData(siteURL);
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ServerTestActivity.class);
                 startActivity(intent);
             }
         });
 
-        final Button but = (Button) findViewById(R.id.button);
+        final Button but = (Button) findViewById(R.id.button_activate);
         if (serviceActivated) {
             but.setText(R.string.deactivate);
         } else {
@@ -80,6 +69,21 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        final Button but = (Button) findViewById(R.id.button_activate);
+        serviceActivated = isServiceActivated();
+        if (serviceActivated) {
+            but.setText(R.string.deactivate);
+        } else {
+            but.setText(R.string.activate);
+            NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancelAll();
+        }
     }
 
     private void initConfig() {

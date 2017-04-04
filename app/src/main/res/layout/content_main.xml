@@ -18,7 +18,7 @@
             android:textSize="15sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button"
+            android:id="@+id/button_activate"
             android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
     <TextView
             android:text="@string/notice"
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/textView"
             android:textAppearance="@android:style/TextAppearance.Material" android:fontFamily="sans-serif"
-            android:layout_above="@+id/button"
+            android:layout_above="@+id/button_activate"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="50dp"/>
     <ImageView
@@ -35,7 +35,6 @@
             android:layout_height="wrap_content" app:srcCompat="@mipmap/ic_launcher"
             android:id="@+id/imageView"
             android:clickable="false"
-            android:layout_marginTop="30dp"
-            android:minHeight="120dp" android:minWidth="150dp" android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"/>
+            android:minHeight="120dp" android:minWidth="150dp"
+            android:layout_alignParentTop="true" android:layout_centerHorizontal="true"/>
 </RelativeLayout>

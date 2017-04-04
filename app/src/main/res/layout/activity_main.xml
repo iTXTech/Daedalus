@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@android:drawable/ic_search_category_default"/>
+            app:srcCompat="@mipmap/ic_verified_user_grey600_36dp"/>
     <include layout="@layout/content_main"/>
 
 </android.support.design.widget.CoordinatorLayout>
