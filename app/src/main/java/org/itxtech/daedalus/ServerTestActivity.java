@@ -64,20 +64,20 @@ public class ServerTestActivity extends AppCompatActivity {
                         }
 
                         private String testServer(DNSClient client, String dnsServer, String testUrl, String testText) {
+                            Log.d("Dvpn", "Testing DNS " + dnsServer);
+                            testText += getResources().getString(R.string.test_server_address) + testUrl + "\n"
+                                    + getResources().getString(R.string.test_dns_server) + dnsServer;
+
+                            Question question = new Question(testUrl, Record.TYPE.getType(A.class));
+                            DNSMessage.Builder message = DNSMessage.builder();
+                            message.setQuestion(question);
+                            message.setId((new Random()).nextInt());
+                            message.setRecursionDesired(true);
+                            message.getEdnsBuilder().setUdpPayloadSize(1024).setDnssecOk(false);
+
                             try {
-                                Log.d("Dvpn", "Testing DNS " + dnsServer);
-                                testText += getResources().getString(R.string.test_server_address) + testUrl + "\n"
-                                        + getResources().getString(R.string.test_dns_server) + dnsServer;
                                 long startTime = System.currentTimeMillis();
-
-                                Question question = new Question(testUrl, Record.TYPE.getType(A.class));
-                                DNSMessage.Builder message = DNSMessage.builder();
-                                message.setQuestion(question);
-                                message.setId((new Random()).nextInt());
-                                message.setRecursionDesired(true);
-                                message.getEdnsBuilder().setUdpPayloadSize(1024).setDnssecOk(false);
                                 DNSMessage responseMessage = client.query(message.build(), InetAddressUtil.ipv4From(dnsServer));
-
                                 long endTime = System.currentTimeMillis();
 
                                 Set<A> answers = responseMessage.getAnswersFor(question);
@@ -87,11 +87,13 @@ public class ServerTestActivity extends AppCompatActivity {
                                 }
                                 testText += "\n" + getResources().getString(R.string.test_time_used) + String.valueOf(endTime - startTime) + " ms\n\n";
 
-                                mHandler.obtainMessage(MSG_DISPLAY_STATUS, testText).sendToTarget();
-
                             } catch (Exception e) {
+                                testText += "\n" + getResources().getString(R.string.test_failed) + "\n\n";
+
                                 Log.e("DVpn", e.toString());
                             }
+
+                            mHandler.obtainMessage(MSG_DISPLAY_STATUS, testText).sendToTarget();
                             return testText;
                         }
                     };
