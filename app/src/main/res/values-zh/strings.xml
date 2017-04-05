@@ -22,7 +22,11 @@
     <string name="server_east_china">华东</string>
     <string name="server_north_china">华北</string>
     <string name="secondary_server">备用 DNS 服务器</string>
-    <string name="start_test">正在开始测试 DNS 服务器</string>
+    <string name="start_test">正在测试指定的 DNS 服务器</string>
     <string name="action_server_test">测试服务器</string>
     <string name="action_start_test">开始测试</string>
+    <string name="test_server_address">测试服务器：</string>
+    <string name="test_time_used">耗时：</string>
+    <string name="test_dns_server">DNS 服务器：</string>
+    <string name="test_resolved_address">解析的地址：</string>
 </resources>

@@ -14,12 +14,17 @@
     <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/spinner" android:layout_alignParentTop="true"
+            android:id="@+id/spinner_server_choice" android:layout_alignParentTop="true"
             android:entries="@array/dns_server_options"/>
     <Button
             android:text="@string/action_start_test"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:layout_below="@+id/spinner"
+            android:layout_height="wrap_content" android:layout_below="@+id/spinner_server_choice"
             android:layout_alignParentStart="true" android:layout_marginTop="20dp" android:id="@+id/button_start_test"
             android:layout_alignParentEnd="true"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_below="@+id/button_start_test"
+            android:layout_alignParentStart="true" android:layout_marginTop="10dp" android:id="@+id/textView_test_info"
+            android:textSize="18sp"/>
 </RelativeLayout>

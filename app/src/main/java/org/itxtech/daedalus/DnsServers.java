@@ -23,4 +23,17 @@ public class DnsServers {
                 return "123.206.61.167";
         }
     }
+
+    public static String getDnsServerAddress(int id) {
+        switch (id) {
+            case R.string.server_east_china:
+                return "120.27.103.230";
+            case R.string.server_north_china:
+                return "113.107.249.56";
+            case R.string.server_south_china:
+                return "123.206.61.167";
+            default:
+                return "123.206.61.167";
+        }
+    }
 }

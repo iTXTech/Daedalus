@@ -19,7 +19,7 @@
                 android:text="@string/about"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView2"
+                android:id="@+id/textView_about"
                 android:textSize="20sp" android:layout_alignParentTop="true" android:layout_alignParentStart="true"/>
     </RelativeLayout>
 </ScrollView>
