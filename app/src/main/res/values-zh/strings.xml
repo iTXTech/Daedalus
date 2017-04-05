@@ -3,7 +3,7 @@
     <string name="app_name">Daedalus</string>
     <string name="action_settings">设置</string>
     <string name="notice">Daedalus: 方便易用的基于 CuteDNS 的科学上网工具。</string>
-    <string name="activate">启动</string>
+    <string name="activate">启用</string>
     <string name="deactivate">停用</string>
     <string name="action_about">关于</string>
     <string name="notification_activated">点击回到 Daedalus</string>
