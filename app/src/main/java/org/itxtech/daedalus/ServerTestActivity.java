@@ -45,6 +45,8 @@ public class ServerTestActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
                 startTestBut.setVisibility(View.INVISIBLE);
 
+                textViewTestInfo.setText("");
+
                 if (mThread == null) {
                     Runnable runnable = new Runnable() {
                         @Override
@@ -52,7 +54,7 @@ public class ServerTestActivity extends AppCompatActivity {
                             try {
                                 String testUrl = "www.google.com";
                                 String testText = "";
-                                String[] dnsServers = {"8.8.8.8", "114.114.114.114", DnsServers.getDnsServerAddress(spinnerServerChoice.getSelectedItem().toString())};
+                                String[] dnsServers = {DnsServers.getDnsServerAddress(String.valueOf(spinnerServerChoice.getSelectedItemId())), "114.114.114.114", "8.8.8.8"};
                                 DNSClient client = new DNSClient(null);
                                 for (String dnsServer : dnsServers) {
                                     testText = testServer(client, dnsServer, testUrl, testText);
@@ -67,6 +69,8 @@ public class ServerTestActivity extends AppCompatActivity {
                             Log.d("Dvpn", "Testing DNS " + dnsServer);
                             testText += getResources().getString(R.string.test_server_address) + testUrl + "\n"
                                     + getResources().getString(R.string.test_dns_server) + dnsServer;
+
+                            mHandler.obtainMessage(MSG_DISPLAY_STATUS, testText).sendToTarget();
 
                             Question question = new Question(testUrl, Record.TYPE.getType(A.class));
                             DNSMessage.Builder message = DNSMessage.builder();
