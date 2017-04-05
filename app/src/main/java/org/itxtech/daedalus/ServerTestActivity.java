@@ -67,8 +67,8 @@ public class ServerTestActivity extends AppCompatActivity {
 
                         private String testServer(DNSClient client, String dnsServer, String testUrl, String testText) {
                             Log.d("Dvpn", "Testing DNS " + dnsServer);
-                            testText += getResources().getString(R.string.test_server_address) + testUrl + "\n"
-                                    + getResources().getString(R.string.test_dns_server) + dnsServer;
+                            testText += getResources().getString(R.string.test_server_address) + " " + testUrl + "\n"
+                                    + getResources().getString(R.string.test_dns_server) + " " + dnsServer;
 
                             mHandler.obtainMessage(MSG_DISPLAY_STATUS, testText).sendToTarget();
 
@@ -87,9 +87,9 @@ public class ServerTestActivity extends AppCompatActivity {
                                 Set<A> answers = responseMessage.getAnswersFor(question);
                                 for (A a : answers) {
                                     InetAddress inetAddress = a.getInetAddress();
-                                    testText += "\n" + getResources().getString(R.string.test_resolved_address) + inetAddress.getHostAddress();
+                                    testText += "\n" + getResources().getString(R.string.test_resolved_address) + " " + inetAddress.getHostAddress();
                                 }
-                                testText += "\n" + getResources().getString(R.string.test_time_used) + String.valueOf(endTime - startTime) + " ms\n\n";
+                                testText += "\n" + getResources().getString(R.string.test_time_used) + " " + String.valueOf(endTime - startTime) + " ms\n\n";
 
                             } catch (Exception e) {
                                 testText += "\n" + getResources().getString(R.string.test_failed) + "\n\n";
