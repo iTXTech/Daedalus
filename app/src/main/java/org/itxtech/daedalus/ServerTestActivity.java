@@ -1,15 +1,15 @@
 package org.itxtech.daedalus;
 
+import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.*;
 import de.measite.minidns.DNSClient;
 import de.measite.minidns.DNSMessage;
 import de.measite.minidns.Question;
@@ -18,7 +18,8 @@ import de.measite.minidns.record.A;
 import de.measite.minidns.util.InetAddressUtil;
 
 import java.net.InetAddress;
-import java.util.*;
+import java.util.Random;
+import java.util.Set;
 
 public class ServerTestActivity extends AppCompatActivity {
     private static final int MSG_DISPLAY_STATUS = 0;
@@ -37,6 +38,10 @@ public class ServerTestActivity extends AppCompatActivity {
 
         final Spinner spinnerServerChoice = (Spinner) findViewById(R.id.spinner_server_choice);
 
+        final AutoCompleteTextView textViewTestUrl = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView_test_url);
+        ArrayAdapter arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.default_test_urls));
+        textViewTestUrl.setAdapter(arrayAdapter);
+
         final Button startTestBut = (Button) findViewById(R.id.button_start_test);
         startTestBut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +50,9 @@ public class ServerTestActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
                 startTestBut.setVisibility(View.INVISIBLE);
 
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
                 textViewTestInfo.setText("");
 
                 if (mThread == null) {
@@ -52,7 +60,7 @@ public class ServerTestActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             try {
-                                String testUrl = "www.google.com";
+                                String testUrl = textViewTestUrl.getText().toString();
                                 String testText = "";
                                 String[] dnsServers = {DnsServers.getDnsServerAddress(String.valueOf(spinnerServerChoice.getSelectedItemId())), "114.114.114.114", "8.8.8.8"};
                                 DNSClient client = new DNSClient(null);

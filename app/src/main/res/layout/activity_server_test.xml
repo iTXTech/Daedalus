@@ -6,8 +6,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/activity_server_test"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,8 +23,8 @@
         <Button
                 android:text="@string/action_start_test"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:layout_below="@+id/spinner_server_choice"
-                android:layout_alignParentStart="true" android:layout_marginTop="20dp"
+                android:layout_height="wrap_content" android:layout_below="@+id/autoCompleteTextView_test_url"
+                android:layout_alignParentStart="true" android:layout_marginTop="10dp"
                 android:id="@+id/button_start_test"
                 android:layout_alignParentEnd="true"/>
         <TextView
@@ -35,5 +33,14 @@
                 android:layout_alignParentStart="true" android:layout_marginTop="10dp"
                 android:id="@+id/textView_test_info"
                 android:textSize="18sp"/>
+        <AutoCompleteTextView
+                android:text="www.google.com"
+                android:completionThreshold="3"
+                android:singleLine="true"
+                android:dropDownWidth="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/autoCompleteTextView_test_url" android:layout_below="@+id/spinner_server_choice"
+                android:layout_marginTop="10dp"/>
     </RelativeLayout>
 </ScrollView>
