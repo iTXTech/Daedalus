@@ -12,9 +12,9 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 
 /**
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isServiceActivated() {
         ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if ("org.itxtech.daedalus.DaedalusVpnService".equals(service.service.getClassName())) {
+            if (DaedalusVpnService.class.getName().equals(service.service.getClassName())) {
                 return true;
             }
         }
