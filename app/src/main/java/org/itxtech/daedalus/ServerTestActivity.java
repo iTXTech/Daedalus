@@ -61,6 +61,9 @@ public class ServerTestActivity extends AppCompatActivity {
                         public void run() {
                             try {
                                 String testUrl = textViewTestUrl.getText().toString();
+                                if (testUrl.equals("")) {
+                                    testUrl = getResources().getStringArray(R.array.default_test_urls)[0];
+                                }
                                 String testText = "";
                                 String[] dnsServers = {DnsServers.getDnsServerAddress(String.valueOf(spinnerServerChoice.getSelectedItemId())), "114.114.114.114", "8.8.8.8"};
                                 DNSClient client = new DNSClient(null);

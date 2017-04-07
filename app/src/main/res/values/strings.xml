@@ -31,5 +31,9 @@
     <string name="test_dns_server">DNS server:</string>
     <string name="test_resolved_address">Resolved address:</string>
     <string name="test_failed">Query failed. Timeout or unknown hostname.</string>
-    <string name="action_project_home">Project home</string>
+    <string name="test_test_url">google.com</string>
+    <string name="action_visit_itxtech">Visit iTXTech</string>
+    <string name="action_visit_cutedns">Visit CuteDNS!</string>
+    <string name="action_visit_github">Visit Project home</string>
+    <string name="action_join_qqgroup">Join QQ group</string>
 </resources>

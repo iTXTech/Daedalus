@@ -30,5 +30,9 @@
     <string name="test_dns_server">DNS 服务器：</string>
     <string name="test_resolved_address">解析的地址：</string>
     <string name="test_failed">查询失败。超时或未知的主机。</string>
-    <string name="action_project_home">项目主页</string>
+    <string name="test_test_url">google.com</string>
+    <string name="action_visit_cutedns">访问 CuteDNS!</string>
+    <string name="action_visit_github">访问 项目主页</string>
+    <string name="action_visit_itxtech">访问 iTXTech</string>
+    <string name="action_join_qqgroup">加入 CuteDNS! QQ群</string>
 </resources>

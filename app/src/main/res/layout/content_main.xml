@@ -13,22 +13,6 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:showIn="@layout/activity_main"
         tools:context="org.itxtech.daedalus.MainActivity">
-    <Button
-            android:text="@string/activate"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button_activate"
-            android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
-    <TextView
-            android:text="@string/notice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView_notice"
-            android:textAppearance="@android:style/TextAppearance.Material" android:fontFamily="sans-serif"
-            android:layout_above="@+id/button_activate"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="50dp"/>
     <ImageView
             android:contentDescription="icon"
             android:layout_width="wrap_content"
@@ -37,4 +21,20 @@
             android:clickable="false"
             android:minHeight="120dp" android:minWidth="150dp"
             android:layout_alignParentTop="true" android:layout_centerHorizontal="true"/>
+    <TextView
+            android:text="@string/notice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView_notice"
+            android:textAppearance="@android:style/TextAppearance.Material" android:fontFamily="sans-serif"
+            android:layout_marginTop="46dp"
+            android:layout_below="@+id/imageView" android:layout_centerHorizontal="true"/>
+    <Button
+            android:text="@string/activate"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_activate"
+            android:layout_marginTop="60dp"
+            android:layout_alignTop="@+id/textView_notice" android:layout_centerHorizontal="true"/>
 </RelativeLayout>

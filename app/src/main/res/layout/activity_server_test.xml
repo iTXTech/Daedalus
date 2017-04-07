@@ -34,10 +34,9 @@
                 android:id="@+id/textView_test_info"
                 android:textSize="18sp"/>
         <AutoCompleteTextView
-                android:text="www.google.com"
-                android:completionThreshold="3"
+                android:completionThreshold="1"
                 android:singleLine="true"
-                android:dropDownWidth="wrap_content"
+                android:hint="@string/test_test_url"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/autoCompleteTextView_test_url" android:layout_below="@+id/spinner_server_choice"

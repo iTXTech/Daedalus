@@ -5,7 +5,6 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.net.VpnService;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -153,10 +152,6 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_about) {
             startActivity(new Intent(this, AboutActivity.class));
             return true;
-        }
-
-        if (id == R.id.action_project_home) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus")));
         }
 
         return super.onOptionsItemSelected(item);

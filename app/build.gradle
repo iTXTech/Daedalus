@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 
+def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -26,7 +28,7 @@ android {
         variant.outputs.each { output ->
             def outputFile = output.outputFile
             if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                def fileName = outputFile.name.replace("app", "${defaultConfig.applicationId}_${defaultConfig.versionName}_${System.currentTimeMillis()}")
+                def fileName = outputFile.name.replace("app", "${defaultConfig.applicationId}_${defaultConfig.versionName}_${gitSha}")
                 output.outputFile = new File(outputFile.parent, fileName)
             }
         }

@@ -10,9 +10,10 @@
         <item>2</item>
     </string-array>
     <string-array name="default_test_urls">
-        <item>www.google.com</item>
+        <item>google.com</item>
         <item>twitter.com</item>
         <item>youtube.com</item>
         <item>facebook.com</item>
+        <item>wikipedia.org</item>
     </string-array>
 </resources>
