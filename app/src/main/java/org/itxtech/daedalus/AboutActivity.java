@@ -47,9 +47,9 @@ public class AboutActivity extends AppCompatActivity {
         });
 
         if (Locale.getDefault().getLanguage().equals("zh")) {
-            view.loadUrl("file:///android_asset/index_zh.html");
+            view.loadUrl("file:///android_asset/about_html/index_zh.html");
         } else {
-            view.loadUrl("file:///android_asset/index.html");
+            view.loadUrl("file:///android_asset/about_html/index.html");
         }
 
         view.setWebViewClient(new WebViewClient() {

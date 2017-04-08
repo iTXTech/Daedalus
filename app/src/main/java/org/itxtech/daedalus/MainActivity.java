@@ -27,7 +27,6 @@ import android.widget.Button;
  * the Free Software Foundation, version 3.
  */
 public class MainActivity extends AppCompatActivity {
-    private boolean serviceActivated = false;
     private SharedPreferences prefs;
 
     @Override
@@ -36,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
         initConfig();
 
-        serviceActivated = isServiceActivated();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -51,21 +49,19 @@ public class MainActivity extends AppCompatActivity {
         });
 
         final Button but = (Button) findViewById(R.id.button_activate);
-        if (serviceActivated) {
-            but.setText(R.string.deactivate);
+        if (isServiceActivated()) {
+            but.setText(R.string.button_text_deactivate);
         } else {
-            but.setText(R.string.activate);
+            but.setText(R.string.button_text_activate);
         }
         but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                serviceActivated = isServiceActivated();
-                if (serviceActivated) {
+                if (isServiceActivated()) {
+                    but.setText(R.string.button_text_activate);
                     deactivateService();
-                    but.setText(R.string.activate);
                 } else {
                     activateService();
-                    but.setText(R.string.deactivate);
                 }
             }
         });
@@ -76,11 +72,10 @@ public class MainActivity extends AppCompatActivity {
         super.onRestart();
 
         final Button but = (Button) findViewById(R.id.button_activate);
-        serviceActivated = isServiceActivated();
-        if (serviceActivated) {
-            but.setText(R.string.deactivate);
+        if (isServiceActivated()) {
+            but.setText(R.string.button_text_deactivate);
         } else {
-            but.setText(R.string.activate);
+            but.setText(R.string.button_text_activate);
             NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancelAll();
         }
@@ -126,6 +121,9 @@ public class MainActivity extends AppCompatActivity {
             DaedalusVpnService.secondaryServer = DnsServers.getDnsServerAddress(prefs.getString("secondary_server", "1"));
 
             startService(getServiceIntent().setAction(DaedalusVpnService.ACTION_ACTIVATE));
+
+
+            ((Button) findViewById(R.id.button_activate)).setText(R.string.button_text_deactivate);
         }
     }
 
