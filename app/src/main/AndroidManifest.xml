@@ -3,7 +3,6 @@
           package="org.itxtech.daedalus">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR"/>
 
@@ -29,7 +28,9 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".StatusBarBroadcastReceiver">
+        <receiver
+                android:name=".StatusBarBroadcastReceiver"
+                android:exported="false">
             <intent-filter>
                 <action android:name="org.itxtech.daedalus.StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION"/>
                 <action android:name="org.itxtech.daedalus.StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION"/>
@@ -49,14 +50,17 @@
         </activity>
         <activity
                 android:name=".SettingsActivity"
+                android:launchMode="singleTask"
                 android:label="@string/action_settings">
         </activity>
         <activity
                 android:name=".AboutActivity"
+                android:launchMode="singleTask"
                 android:label="@string/action_about">
         </activity>
         <activity
                 android:name=".ServerTestActivity"
+                android:launchMode="singleTask"
                 android:label="@string/action_server_test">
         </activity>
     </application>
