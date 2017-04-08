@@ -6,7 +6,7 @@
     <string name="button_text_activate">启用</string>
     <string name="button_text_deactivate">停用</string>
     <string name="action_about">关于</string>
-    <string name="notification_activated">点击回到 Daedalus</string>
+    <string name="notification_activated">已启用 iTXTech Daedalus。</string>
     <string name="settings_system">系统设置</string>
     <string name="settings_boot">开机自动启用</string>
     <string name="settings_server">服务器设置</string>
@@ -29,4 +29,5 @@
     <string name="action_visit_itxtech">访问 iTXTech</string>
     <string name="action_join_qqgroup">加入 CuteDNS! QQ群</string>
     <string name="notice_join_group_failed">未安装手Q或当前版本不支持此操作。</string>
+    <string name="settings_notification">启用时在状态栏显示通知</string>
 </resources>

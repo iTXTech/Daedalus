@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.VpnService;
 import android.os.ParcelFileDescriptor;
+import android.preference.PreferenceManager;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
@@ -21,15 +22,16 @@ import android.util.Log;
  * the Free Software Foundation, version 3.
  */
 public class DaedalusVpnService extends VpnService implements Runnable {
-    public static final String ACTION_ACTIVATE = "org.itxtech.daedalus.DaedalusVpnServer.ACTIVATE";
-    public static final String ACTION_DEACTIVATE = "org.itxtech.daedalus.DaedalusVpnServer.DEACTIVATE";
+    static final String ACTION_ACTIVATE = "org.itxtech.daedalus.DaedalusVpnService.ACTION_ACTIVATE";
+    static final String ACTION_DEACTIVATE = "org.itxtech.daedalus.DaedalusVpnService.ACTION_DEACTIVATE";
 
-    public static String primaryServer;
-    public static String secondaryServer;
+    static String primaryServer;
+    static String secondaryServer;
 
     private Thread mThread = null;
     private static int ip = 0;
     private ParcelFileDescriptor descriptor;
+    private boolean running = false;
 
     @Override
     public void onCreate() {
@@ -41,27 +43,32 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         if (intent != null) {
             switch (intent.getAction()) {
                 case ACTION_ACTIVATE:
+                    if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("settings_notification", true)) {
 
-                    NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+                        NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+                        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
 
-                    Intent nIntent = new Intent(this, MainActivity.class);
-                    PendingIntent pIntent = PendingIntent.getActivity(this, 0, nIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                    builder.setContentTitle(getResources().getString(R.string.notification_activated))
-                            .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
-                            .setSmallIcon(R.mipmap.ic_launcher)
-                            .setAutoCancel(true)
-                            .setOngoing(true)
-                            .setContentIntent(pIntent);
+                        Intent nIntent = new Intent(this, MainActivity.class);
+                        PendingIntent pIntent = PendingIntent.getActivity(this, 0, nIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        builder.setContentTitle(getResources().getString(R.string.notification_activated))
+                                .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
+                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setAutoCancel(true)
+                                .setOngoing(true)
+                                .setContentIntent(pIntent)
+                                .addAction(R.mipmap.ic_launcher, getResources().getString(R.string.button_text_deactivate), PendingIntent.getBroadcast(this, 0, new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION), 0))
+                                .addAction(R.mipmap.ic_launcher, getResources().getString(R.string.action_settings), PendingIntent.getBroadcast(this, 0, new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION), 0));
 
-                    Notification notification = builder.build();
-                    notification.flags = Notification.FLAG_NO_CLEAR;
+                        Notification notification = builder.build();
+                        notification.flags = Notification.FLAG_NO_CLEAR;
 
-                    manager.notify(0, notification);
+                        manager.notify(0, notification);
+                    }
 
                     if (this.mThread == null) {
                         this.mThread = new Thread(this, "DaedalusVpn");
+                        this.running = true;
                         this.mThread.start();
                     }
                     return START_STICKY;
@@ -87,6 +94,10 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             if (this.descriptor != null) {
                 this.descriptor.close();
                 this.descriptor = null;
+            }
+            if (this.mThread != null) {
+                this.running = false;
+                this.mThread = null;
             }
         } catch (Exception e) {
             Log.d("DVpn", e.toString());
@@ -122,8 +133,8 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             builder.addDnsServer(primaryServer).addDnsServer(secondaryServer);
             this.descriptor = builder.setSession("DVpn").establish();
 
-            while (true) {
-                Thread.sleep(8000);
+            while (running) {
+                Thread.sleep(1000);
             }
         } catch (Exception e) {
             Log.d("DVpn", e.toString());

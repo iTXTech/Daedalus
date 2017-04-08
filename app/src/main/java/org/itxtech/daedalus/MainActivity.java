@@ -27,11 +27,18 @@ import android.widget.Button;
  * the Free Software Foundation, version 3.
  */
 public class MainActivity extends AppCompatActivity {
+    private static MainActivity instance = null;
     private SharedPreferences prefs;
+
+    static MainActivity getInstance() {
+        return instance;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        instance = this;
 
         initConfig();
 

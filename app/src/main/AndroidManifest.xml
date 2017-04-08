@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR"/>
 
     <application
             android:allowBackup="true"
@@ -25,6 +26,13 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".StatusBarBroadcastReceiver">
+            <intent-filter>
+                <action android:name="org.itxtech.daedalus.StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION"/>
+                <action android:name="org.itxtech.daedalus.StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION"/>
             </intent-filter>
         </receiver>
 

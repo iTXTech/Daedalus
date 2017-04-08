@@ -10,8 +10,8 @@ package org.itxtech.daedalus;
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  */
-public class DnsServers {
-    public static String getDnsServerAddress(String id) {
+class DnsServers {
+    static String getDnsServerAddress(String id) {
         switch (id) {
             case "0":
                 return "113.107.249.56";
