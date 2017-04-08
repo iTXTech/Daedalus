@@ -36,6 +36,7 @@ public class AboutActivity extends AppCompatActivity {
         WebView view = (WebView) findViewById(R.id.webView_about);
 
         view.getSettings().setJavaScriptEnabled(true);
+        view.setBackgroundColor(0);
         view.addJavascriptInterface(this, "JavascriptInterface");
 
         view.setOnLongClickListener(new View.OnLongClickListener() {
