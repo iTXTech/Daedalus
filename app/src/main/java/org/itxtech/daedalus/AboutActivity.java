@@ -4,10 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -36,8 +38,15 @@ public class AboutActivity extends AppCompatActivity {
         view.getSettings().setJavaScriptEnabled(true);
         view.addJavascriptInterface(this, "JavascriptInterface");
 
-        if (Locale.getDefault().getLanguage().equals("zh")) {//TODO: multi language
-            view.loadUrl("file:///android_asset/index.html");
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                return true;
+            }
+        });
+
+        if (Locale.getDefault().getLanguage().equals("zh")) {
+            view.loadUrl("file:///android_asset/index_zh.html");
         } else {
             view.loadUrl("file:///android_asset/index.html");
         }
@@ -47,7 +56,7 @@ public class AboutActivity extends AppCompatActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 try {
-                    view.loadUrl("javascript:changeVersion('" + getPackageManager().getPackageInfo(getPackageName(), 0).versionName + "')");
+                    view.loadUrl("javascript:changeVersionInfo('" + getPackageManager().getPackageInfo(getPackageName(), 0).versionName + "', '" + BuildConfig.BUILD_TIME + "', '" + BuildConfig.GIT_COMMIT + "')");
                 } catch (Exception e) {
                     Log.e("Dvpn", e.toString());
                 }
@@ -83,7 +92,7 @@ public class AboutActivity extends AppCompatActivity {
         }
 
         if (id == R.id.action_join_qqgroup) {
-            joinQQGroup("gg");
+            joinQQGroup("q6Lfo_EhAEO1fP6Xg3fmKsP4pd6U5-RE");
         }
 
         return super.onOptionsItemSelected(item);
@@ -97,7 +106,8 @@ public class AboutActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         } catch (Exception e) {
-            // 未安装手Q或安装的版本不支持
+            Snackbar.make(findViewById(R.id.activity_about), R.string.notice_join_group_failed, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
             return false;
         }
     }

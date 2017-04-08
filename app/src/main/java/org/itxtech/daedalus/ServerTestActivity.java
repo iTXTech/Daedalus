@@ -46,7 +46,7 @@ public class ServerTestActivity extends AppCompatActivity {
         startTestBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v, R.string.start_test, Snackbar.LENGTH_LONG)
+                Snackbar.make(v, R.string.notice_start_test, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 startTestBut.setVisibility(View.INVISIBLE);
 
@@ -78,7 +78,7 @@ public class ServerTestActivity extends AppCompatActivity {
 
                         private String testServer(DNSClient client, String dnsServer, String testUrl, String testText) {
                             Log.d("Dvpn", "Testing DNS " + dnsServer);
-                            testText += getResources().getString(R.string.test_server_address) + " " + testUrl + "\n"
+                            testText += getResources().getString(R.string.test_domain) + " " + testUrl + "\n"
                                     + getResources().getString(R.string.test_dns_server) + " " + dnsServer;
 
                             mHandler.obtainMessage(MSG_DISPLAY_STATUS, testText).sendToTarget();
@@ -98,7 +98,7 @@ public class ServerTestActivity extends AppCompatActivity {
                                 Set<A> answers = responseMessage.getAnswersFor(question);
                                 for (A a : answers) {
                                     InetAddress inetAddress = a.getInetAddress();
-                                    testText += "\n" + getResources().getString(R.string.test_resolved_address) + " " + inetAddress.getHostAddress();
+                                    testText += "\n" + getResources().getString(R.string.test_result_resolved) + " " + inetAddress.getHostAddress();
                                 }
                                 testText += "\n" + getResources().getString(R.string.test_time_used) + " " + String.valueOf(endTime - startTime) + " ms\n\n";
 

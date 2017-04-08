@@ -36,7 +36,7 @@
         <AutoCompleteTextView
                 android:completionThreshold="1"
                 android:singleLine="true"
-                android:hint="@string/test_test_url"
+                android:hint="@string/test_test_domain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/autoCompleteTextView_test_url" android:layout_below="@+id/spinner_server_choice"

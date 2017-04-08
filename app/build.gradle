@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 
-def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
+def gitCommit = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
 
 android {
     compileSdkVersion 25
@@ -11,6 +11,11 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0.0"
+
+
+        buildConfigField "String", "BUILD_TIME", "\"${System.currentTimeMillis()}\""
+        buildConfigField "String", "GIT_COMMIT", "\"${gitCommit}\""
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -28,7 +33,7 @@ android {
         variant.outputs.each { output ->
             def outputFile = output.outputFile
             if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                def fileName = outputFile.name.replace("app", "${defaultConfig.applicationId}_${defaultConfig.versionName}_${gitSha}")
+                def fileName = outputFile.name.replace("app", "${defaultConfig.applicationId}_${defaultConfig.versionName}_${gitCommit}")
                 output.outputFile = new File(outputFile.parent, fileName)
             }
         }
@@ -44,6 +49,9 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'
-    compile "de.measite.minidns:minidns-hla:0.2.1"
+    compile 'com.android.support:percent:25.3.1'
+
+    compile 'de.measite.minidns:minidns-hla:0.2.1'
+    
     testCompile 'junit:junit:4.12'
 }

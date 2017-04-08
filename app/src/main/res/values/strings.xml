@@ -8,32 +8,25 @@
     <string name="notification_activated">Click to back to Daedalus</string>
     <string name="settings_system">System settings</string>
     <string name="settings_boot">Auto activate on boot</string>
-    <string name="about">Author: iTX Technologies\nWebsite: https://itxtech.org\n\nDaedalus is a DNS Proxy on
-        Android.\nIt is based on CuteDNS(http://www.cutedns.cn)\'s DNS server.\n\nYou are able to visit some restricted
-        websites: Google, Google Play, Twitter, Facebook, Gmail, Youtube, Google Drive, Tumblr, Mega, Dropbox, Apkpure,
-        ccFox.info, ProjectH, Battle.NET, WordPress, Microsoft Live, Github, Amazon, Archive, Box.com, Disqus,
-        SoundCloud, inoreader, Feedly, FlipBoard, Flickr, imgur, Instagram, DuckDuckGo, Ixquick, Yahoo, Google Services,
-        Google apis, Android, UpLoad, Appspot, Googl eusercontent, Gstatic, Google other, Google research, Wikipedia,
-        xda-developer and so on via https.\n\nBesides, you are also able to use Google Play application in mainland
-        China.
-    </string>
     <string name="settings_server">Server settings</string>
     <string name="primary_server">Primary DNS server</string>
     <string name="server_south_china">South China</string>
     <string name="server_east_china">East China</string>
     <string name="server_north_china">North China</string>
     <string name="secondary_server">Secondary DNS server</string>
-    <string name="start_test">Testing specified DNS server</string>
+    <string name="notice_start_test">Testing specified DNS server</string>
     <string name="action_server_test">Server test</string>
     <string name="action_start_test">Start test</string>
-    <string name="test_server_address">Test server address:</string>
+    <string name="test_domain">Test domain:</string>
     <string name="test_time_used">Time used:</string>
     <string name="test_dns_server">DNS server:</string>
-    <string name="test_resolved_address">Resolved address:</string>
+    <string name="test_result_resolved">Resolved address:</string>
     <string name="test_failed">Query failed. Timeout or unknown hostname.</string>
-    <string name="test_test_url">google.com</string>
+    <string name="test_test_domain">google.com</string>
     <string name="action_visit_itxtech">Visit iTXTech</string>
     <string name="action_visit_cutedns">Visit CuteDNS!</string>
     <string name="action_visit_github">Visit Project home</string>
     <string name="action_join_qqgroup">Join QQ group</string>
+    <string name="notice_join_group_failed">QQ is not installed or this version of QQ does not support this operation.
+    </string>
 </resources>
