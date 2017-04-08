@@ -29,5 +29,5 @@
     <string name="action_join_qqgroup">Join QQ group</string>
     <string name="notice_join_group_failed">QQ is not installed or this version of QQ does not support this operation.
     </string>
-    <string name="settings_notification">Display notification in status bar when activated</string>
+    <string name="settings_notification">Show notification when activated</string>
 </resources>
