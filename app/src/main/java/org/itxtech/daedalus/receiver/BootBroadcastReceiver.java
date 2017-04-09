@@ -1,4 +1,4 @@
-package org.itxtech.daedalus;
+package org.itxtech.daedalus.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,6 +7,9 @@ import android.content.SharedPreferences;
 import android.net.VpnService;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import org.itxtech.daedalus.R;
+import org.itxtech.daedalus.service.DaedalusVpnService;
+import org.itxtech.daedalus.util.DnsServer;
 
 /**
  * Daedalus Project
@@ -30,8 +33,8 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
                 context.startActivity(vIntent);
             }
 
-            DaedalusVpnService.primaryServer = DnsServers.getDnsServerAddress(prefs.getString("primary_server", "0"));
-            DaedalusVpnService.secondaryServer = DnsServers.getDnsServerAddress(prefs.getString("secondary_server", "1"));
+            DaedalusVpnService.primaryServer = DnsServer.getDnsServerAddressById(prefs.getString("primary_server", "0"));
+            DaedalusVpnService.secondaryServer = DnsServer.getDnsServerAddressById(prefs.getString("secondary_server", "1"));
 
             context.startService((new Intent(context, DaedalusVpnService.class)).setAction(DaedalusVpnService.ACTION_ACTIVATE));
 

@@ -1,4 +1,4 @@
-package org.itxtech.daedalus;
+package org.itxtech.daedalus.activity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,11 +16,23 @@ import de.measite.minidns.Question;
 import de.measite.minidns.Record;
 import de.measite.minidns.record.A;
 import de.measite.minidns.util.InetAddressUtil;
+import org.itxtech.daedalus.R;
+import org.itxtech.daedalus.util.DnsServer;
 
 import java.net.InetAddress;
 import java.util.Random;
 import java.util.Set;
 
+/**
+ * Daedalus Project
+ *
+ * @author iTXTech
+ * @link https://itxtech.org
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ */
 public class ServerTestActivity extends AppCompatActivity {
     private static final int MSG_DISPLAY_STATUS = 0;
     private static final int MSG_TEST_DONE = 1;
@@ -37,10 +49,14 @@ public class ServerTestActivity extends AppCompatActivity {
         final TextView textViewTestInfo = (TextView) findViewById(R.id.textView_test_info);
 
         final Spinner spinnerServerChoice = (Spinner) findViewById(R.id.spinner_server_choice);
+        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, DnsServer.getDnsServerNames(this));
+        spinnerServerChoice.setAdapter(spinnerArrayAdapter);
 
         final AutoCompleteTextView textViewTestUrl = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView_test_url);
-        ArrayAdapter arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.default_test_urls));
-        textViewTestUrl.setAdapter(arrayAdapter);
+        ArrayAdapter autoCompleteArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.default_test_urls));
+        textViewTestUrl.setAdapter(autoCompleteArrayAdapter);
+
+        final Context context = this;
 
         final Button startTestBut = (Button) findViewById(R.id.button_start_test);
         startTestBut.setOnClickListener(new View.OnClickListener() {
@@ -65,7 +81,7 @@ public class ServerTestActivity extends AppCompatActivity {
                                     testUrl = getResources().getStringArray(R.array.default_test_urls)[0];
                                 }
                                 String testText = "";
-                                String[] dnsServers = {DnsServers.getDnsServerAddress(String.valueOf(spinnerServerChoice.getSelectedItemId())), "114.114.114.114", "8.8.8.8"};
+                                String[] dnsServers = {DnsServer.getDnsServerAddressByStringDesription(context, spinnerServerChoice.getSelectedItem().toString()), "114.114.114.114", "8.8.8.8"};
                                 DNSClient client = new DNSClient(null);
                                 for (String dnsServer : dnsServers) {
                                     testText = testServer(client, dnsServer, testUrl, testText);

@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
-      tools:context="org.itxtech.daedalus.AboutActivity">
+      tools:context="org.itxtech.daedalus.activity.AboutActivity">
     <item android:id="@+id/action_visit_itxtech"
           android:title="@string/action_visit_itxtech"
           android:orderInCategory="100"

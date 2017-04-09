@@ -1,4 +1,4 @@
-package org.itxtech.daedalus;
+package org.itxtech.daedalus.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import org.itxtech.daedalus.BuildConfig;
+import org.itxtech.daedalus.R;
 
 import java.util.Locale;
 

@@ -1,4 +1,4 @@
-package org.itxtech.daedalus;
+package org.itxtech.daedalus.service;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -10,6 +10,9 @@ import android.os.ParcelFileDescriptor;
 import android.preference.PreferenceManager;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
+import org.itxtech.daedalus.R;
+import org.itxtech.daedalus.activity.MainActivity;
+import org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver;
 
 /**
  * Daedalus Project
@@ -22,11 +25,11 @@ import android.util.Log;
  * the Free Software Foundation, version 3.
  */
 public class DaedalusVpnService extends VpnService implements Runnable {
-    static final String ACTION_ACTIVATE = "org.itxtech.daedalus.DaedalusVpnService.ACTION_ACTIVATE";
-    static final String ACTION_DEACTIVATE = "org.itxtech.daedalus.DaedalusVpnService.ACTION_DEACTIVATE";
+    public static final String ACTION_ACTIVATE = "org.itxtech.daedalus.service.DaedalusVpnService.ACTION_ACTIVATE";
+    public static final String ACTION_DEACTIVATE = "org.itxtech.daedalus.service.DaedalusVpnService.ACTION_DEACTIVATE";
 
-    static String primaryServer;
-    static String secondaryServer;
+    public static String primaryServer;
+    public static String secondaryServer;
 
     private Thread mThread = null;
     private static int ip = 0;
@@ -57,8 +60,12 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                                 .setAutoCancel(true)
                                 .setOngoing(true)
                                 .setContentIntent(pIntent)
-                                .addAction(R.mipmap.ic_launcher, getResources().getString(R.string.button_text_deactivate), PendingIntent.getBroadcast(this, 0, new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION), 0))
-                                .addAction(R.mipmap.ic_launcher, getResources().getString(R.string.action_settings), PendingIntent.getBroadcast(this, 0, new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION), 0));
+                                .addAction(R.mipmap.ic_launcher, getResources().getString(R.string.button_text_deactivate),
+                                        PendingIntent.getBroadcast(this, 0,
+                                                new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION), 0))
+                                .addAction(R.mipmap.ic_launcher, getResources().getString(R.string.action_settings),
+                                        PendingIntent.getBroadcast(this, 0,
+                                                new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION), 0));
 
                         Notification notification = builder.build();
                         notification.flags = Notification.FLAG_NO_CLEAR;

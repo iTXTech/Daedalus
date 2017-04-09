@@ -1,10 +1,14 @@
-package org.itxtech.daedalus;
+package org.itxtech.daedalus.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Button;
+import org.itxtech.daedalus.R;
+import org.itxtech.daedalus.activity.MainActivity;
+import org.itxtech.daedalus.activity.SettingsActivity;
+import org.itxtech.daedalus.service.DaedalusVpnService;
 
 import java.lang.reflect.Method;
 
@@ -19,8 +23,8 @@ import java.lang.reflect.Method;
  * the Free Software Foundation, version 3.
  */
 public class StatusBarBroadcastReceiver extends BroadcastReceiver {
-    static String STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION = "org.itxtech.daedalus.StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION";
-    static String STATUS_BAR_BTN_SETTINGS_CLICK_ACTION = "org.itxtech.daedalus.StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION";
+    public static String STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION = "org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION";
+    public static String STATUS_BAR_BTN_SETTINGS_CLICK_ACTION = "org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -31,7 +35,6 @@ public class StatusBarBroadcastReceiver extends BroadcastReceiver {
             if (MainActivity.getInstance() != null) {
                 ((Button) MainActivity.getInstance().findViewById(R.id.button_activate)).setText(R.string.button_text_activate);
             }
-
         }
         if (intent.getAction().equals(STATUS_BAR_BTN_SETTINGS_CLICK_ACTION)) {
             Intent settingsIntent = new Intent(context, SettingsActivity.class);

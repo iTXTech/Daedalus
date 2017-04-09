@@ -1,8 +1,10 @@
-package org.itxtech.daedalus;
+package org.itxtech.daedalus.activity;
 
 import android.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import org.itxtech.daedalus.R;
+import org.itxtech.daedalus.fragment.SettingsFragment;
 
 /**
  * Daedalus Project

@@ -1,14 +1,4 @@
 <resources>
-    <string-array name="dns_server_options">
-        <item>@string/server_north_china</item>
-        <item>@string/server_east_china</item>
-        <item>@string/server_south_china</item>
-    </string-array>
-    <string-array name="dns_server_options_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
     <string-array name="default_test_urls">
         <item>google.com</item>
         <item>twitter.com</item>

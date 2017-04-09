@@ -1,4 +1,4 @@
-package org.itxtech.daedalus;
+package org.itxtech.daedalus.activity;
 
 import android.app.ActivityManager;
 import android.app.NotificationManager;
@@ -15,6 +15,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import org.itxtech.daedalus.R;
+import org.itxtech.daedalus.service.DaedalusVpnService;
+import org.itxtech.daedalus.util.DnsServer;
 
 /**
  * Daedalus Project
@@ -30,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private static MainActivity instance = null;
     private SharedPreferences prefs;
 
-    static MainActivity getInstance() {
+    public static MainActivity getInstance() {
         return instance;
     }
 
@@ -124,8 +127,8 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onActivityResult(int request, int result, Intent data) {
         if (result == RESULT_OK) {
-            DaedalusVpnService.primaryServer = DnsServers.getDnsServerAddress(prefs.getString("primary_server", "0"));
-            DaedalusVpnService.secondaryServer = DnsServers.getDnsServerAddress(prefs.getString("secondary_server", "1"));
+            DaedalusVpnService.primaryServer = DnsServer.getDnsServerAddressById(prefs.getString("primary_server", "0"));
+            DaedalusVpnService.secondaryServer = DnsServer.getDnsServerAddressById(prefs.getString("secondary_server", "1"));
 
             startService(getServiceIntent().setAction(DaedalusVpnService.ACTION_ACTIVATE));
 
