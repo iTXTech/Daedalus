@@ -16,6 +16,7 @@ import de.measite.minidns.Question;
 import de.measite.minidns.Record;
 import de.measite.minidns.record.A;
 import de.measite.minidns.util.InetAddressUtil;
+import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.util.DnsServer;
 
@@ -53,7 +54,7 @@ public class ServerTestActivity extends AppCompatActivity {
         spinnerServerChoice.setAdapter(spinnerArrayAdapter);
 
         final AutoCompleteTextView textViewTestUrl = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView_test_url);
-        ArrayAdapter autoCompleteArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.default_test_urls));
+        ArrayAdapter autoCompleteArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, Daedalus.DEFAULT_TEST_DOMAINS);
         textViewTestUrl.setAdapter(autoCompleteArrayAdapter);
 
         final Context context = this;
@@ -78,7 +79,7 @@ public class ServerTestActivity extends AppCompatActivity {
                             try {
                                 String testUrl = textViewTestUrl.getText().toString();
                                 if (testUrl.equals("")) {
-                                    testUrl = getResources().getStringArray(R.array.default_test_urls)[0];
+                                    testUrl = Daedalus.DEFAULT_TEST_DOMAINS[0];
                                 }
                                 String testText = "";
                                 String[] dnsServers = {DnsServer.getDnsServerAddressByStringDesription(context, spinnerServerChoice.getSelectedItem().toString()), "114.114.114.114", "8.8.8.8"};

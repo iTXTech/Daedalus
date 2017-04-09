@@ -23,6 +23,14 @@ public class Daedalus extends Application {
         add(new DnsServer("2", "123.206.61.167", R.string.server_south_china));
     }};
 
+    public static final String[] DEFAULT_TEST_DOMAINS = new String[]{
+            "google.com",
+            "twitter.com",
+            "youtube.com",
+            "facebook.com",
+            "wikipedia.org"
+    };
+
     private static Daedalus instance = null;
 
     @Override
