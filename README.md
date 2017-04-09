@@ -1,7 +1,7 @@
 Daedalus
 ==============
 
-__Through [CuteDNS!](https://www.cutedns.cn) to see the world outside.__
+__See the world outside through [CuteDNS!](https://www.cutedns.cn).__
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -36,3 +36,7 @@ __各位 dalao 见笑了！__
 Get Daedalus
 -------------
 __[Releases](https://github.com/iTXTech/Daedalus/releases)__
+
+Acknowledgements
+-------------
+* __[ClearEditText](https://github.com/MrFuFuFu/ClearEditText)__ by *[MrFuFuFu](https://github.com/MrFuFuFu)*
