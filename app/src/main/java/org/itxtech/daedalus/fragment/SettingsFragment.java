@@ -1,5 +1,7 @@
 package org.itxtech.daedalus.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -47,7 +49,7 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceClick(Preference preference) {
                 Snackbar.make(view, R.string.notice_checking_update, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                //TODO: async check update
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus/releases")));
                 return false;
             }
         });

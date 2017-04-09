@@ -32,5 +32,5 @@
     <string name="settings_notification">启用时显示通知</string>
     <string name="settings_check_update">检查更新</string>
     <string name="settings_update_summary">通过 GitHub 检查更新</string>
-    <string name="notice_checking_update">正在检查更新……</string>
+    <string name="notice_checking_update">正在前往 GitHub Releases 页面……</string>
 </resources>

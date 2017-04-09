@@ -14,7 +14,7 @@
     <string name="server_east_china">East China</string>
     <string name="server_north_china">North China</string>
     <string name="secondary_server">Secondary DNS server</string>
-    <string name="notice_start_test">Testing specified DNS server…</string>
+    <string name="notice_start_test">Testing specified DNS server …</string>
     <string name="action_server_test">Server test</string>
     <string name="action_start_test">Start test</string>
     <string name="test_domain">Test domain:</string>
@@ -32,5 +32,5 @@
     <string name="settings_notification">Show notification when activated</string>
     <string name="settings_check_update">Check update</string>
     <string name="settings_update_summary">Check update via GitHub</string>
-    <string name="notice_checking_update">Checking update…</string>
+    <string name="notice_checking_update">Going to the GitHub Releases page …</string>
 </resources>
