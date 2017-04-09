@@ -1,18 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
-            android:key="settings_system"
-            android:title="@string/settings_system">
-
-        <SwitchPreference
-                android:key="settings_boot"
-                android:title="@string/settings_boot"
-                android:defaultValue="false"/>
-        <SwitchPreference
-                android:key="settings_notification"
-                android:title="@string/settings_notification"
-                android:defaultValue="true"/>
-    </PreferenceCategory>
 
     <PreferenceCategory
             android:key="settings_server"
@@ -27,5 +14,22 @@
                 android:key="secondary_server"
                 android:title="@string/secondary_server">
         </ListPreference>
+    </PreferenceCategory>
+    <PreferenceCategory
+            android:key="settings_system"
+            android:title="@string/settings_system">
+
+        <SwitchPreference
+                android:key="settings_boot"
+                android:title="@string/settings_boot"
+                android:defaultValue="false"/>
+        <SwitchPreference
+                android:key="settings_notification"
+                android:title="@string/settings_notification"
+                android:defaultValue="true"/>
+        <org.itxtech.daedalus.view.ClickPreference
+                android:key="settings_check_update"
+                android:title="@string/settings_check_update"
+                android:summary="@string/settings_update_summary"/>
     </PreferenceCategory>
 </PreferenceScreen>

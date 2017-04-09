@@ -15,7 +15,7 @@
     <string name="server_east_china">华东</string>
     <string name="server_north_china">华北</string>
     <string name="secondary_server">备用 DNS 服务器</string>
-    <string name="notice_start_test">正在测试指定的 DNS 服务器</string>
+    <string name="notice_start_test">正在测试指定的 DNS 服务器……</string>
     <string name="action_server_test">测试服务器</string>
     <string name="action_start_test">开始测试</string>
     <string name="test_domain">测试域名：</string>
@@ -30,4 +30,7 @@
     <string name="action_join_qqgroup">加入 CuteDNS! QQ群</string>
     <string name="notice_join_group_failed">未安装手Q或当前版本不支持此操作。</string>
     <string name="settings_notification">启用时显示通知</string>
+    <string name="settings_check_update">检查更新</string>
+    <string name="settings_update_summary">通过 GitHub 检查更新</string>
+    <string name="notice_checking_update">正在检查更新……</string>
 </resources>
