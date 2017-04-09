@@ -31,12 +31,10 @@ public class SettingsFragment extends PreferenceFragment {
         ListPreference primaryServer = (ListPreference) findPreference("primary_server");
         primaryServer.setEntries(DnsServer.getDnsServerNames(Daedalus.getInstance()));
         primaryServer.setEntryValues(DnsServer.getDnsServerIds());
-        primaryServer.setDefaultValue(Daedalus.DNS_SERVERS.get(0).getId());
 
         ListPreference secondaryServer = (ListPreference) findPreference("secondary_server");
         secondaryServer.setEntries(DnsServer.getDnsServerNames(Daedalus.getInstance()));
         secondaryServer.setEntryValues(DnsServer.getDnsServerIds());
-        secondaryServer.setDefaultValue(Daedalus.DNS_SERVERS.get(1).getId());
     }
 
     @Override
