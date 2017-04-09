@@ -15,7 +15,7 @@ import org.itxtech.daedalus.R;
 /**
  * Daedalus Project
  *
- * @author iTXTech
+ * @author iTXTech & MrFuFuFu
  * @link https://itxtech.org
  * <p>
  * This program is free software: you can redistribute it and/or modify
