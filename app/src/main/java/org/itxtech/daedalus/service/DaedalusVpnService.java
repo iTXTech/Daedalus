@@ -58,7 +58,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
     private static NotificationCompat.Builder notification = null;
 
-    private static long numberOfQueries = 0;
+    private static long dnsQueryTimes = 0;
 
     private Thread mThread = null;
     private ParcelFileDescriptor descriptor;
@@ -114,7 +114,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                         DaedalusVpnService.notification = builder;
                     }
 
-                    numberOfQueries = 0;
+                    dnsQueryTimes = 0;
                     if (this.mThread == null) {
                         this.mThread = new Thread(this, "DaedalusVpn");
                         this.running = true;
@@ -300,7 +300,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         if (time - lastUpdate >= 1000) {
             lastUpdate = time;
             Log.i(TAG, "notify");
-            notification.setContentTitle(getResources().getString(R.string.notification_queries) + " " + String.valueOf(numberOfQueries));
+            notification.setContentTitle(getResources().getString(R.string.notification_queries) + " " + String.valueOf(dnsQueryTimes));
 
             NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
             manager.notify(NOTIFICATION_ACTIVATED, notification.build());
@@ -365,8 +365,8 @@ public class DaedalusVpnService extends VpnService implements Runnable {
     }
 
     private void queueDeviceWrite(IpPacket ipOutPacket) {
-        numberOfQueries++;
-        Log.i(TAG, "QT " + numberOfQueries);
+        dnsQueryTimes++;
+        Log.i(TAG, "QT " + dnsQueryTimes);
         deviceWrites.add(ipOutPacket.getRawData());
     }
 
@@ -432,6 +432,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         IpPacket parsedPacket;
         try {
             parsedPacket = (IpPacket) IpSelector.newPacket(packetData, 0, packetData.length);
+            //TODO: get rid of pcap4j
         } catch (Exception e) {
             Log.i(TAG, "handleDnsRequest: Discarding invalid IP packet", e);
             return;
