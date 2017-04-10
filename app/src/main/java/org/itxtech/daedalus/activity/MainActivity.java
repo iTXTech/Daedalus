@@ -77,6 +77,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        instance = null;
+    }
+
+    @Override
     protected void onRestart() {
         super.onRestart();
 

@@ -40,3 +40,4 @@ __[Releases](https://github.com/iTXTech/Daedalus/releases)__
 Acknowledgements
 -------------
 * __[ClearEditText](https://github.com/MrFuFuFu/ClearEditText)__ by *[MrFuFuFu](https://github.com/MrFuFuFu)*
+* __[DNS66](https://github.com/julian-klode/dns66)__ by *[julian-klode](https://github.com/julian-klode)*

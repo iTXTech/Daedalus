@@ -33,4 +33,6 @@
     <string name="settings_check_update">Check update</string>
     <string name="settings_update_summary">Check update via GitHub</string>
     <string name="notice_checking_update">Going to the GitHub Releases page …</string>
+    <string name="settings_count_number_of_queries">Count number of DNS queries</string>
+    <string name="notification_queries">DNS Queries:</string>
 </resources>
