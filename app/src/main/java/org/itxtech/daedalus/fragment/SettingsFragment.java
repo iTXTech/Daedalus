@@ -2,10 +2,12 @@ package org.itxtech.daedalus.fragment;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.SwitchPreference;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +27,7 @@ import org.itxtech.daedalus.util.DnsServer;
  * the Free Software Foundation, version 3.
  */
 public class SettingsFragment extends PreferenceFragment {
+    private View view = null;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,11 +40,17 @@ public class SettingsFragment extends PreferenceFragment {
         ListPreference secondaryServer = (ListPreference) findPreference("secondary_server");
         secondaryServer.setEntries(DnsServer.getDnsServerNames(Daedalus.getInstance()));
         secondaryServer.setEntryValues(DnsServer.getDnsServerIds());
+
+        if (Build.VERSION.SDK_INT < 21) {
+            SwitchPreference countQueryTimes = (SwitchPreference) findPreference("settings_count_query_times");
+            countQueryTimes.setChecked(false);
+            countQueryTimes.setEnabled(false);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = super.onCreateView(inflater, container, savedInstanceState);
+        view = super.onCreateView(inflater, container, savedInstanceState);
 
         ListPreference checkUpdate = (ListPreference) findPreference("settings_check_update");
         checkUpdate.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -55,5 +64,21 @@ public class SettingsFragment extends PreferenceFragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (view != null && Build.VERSION.SDK_INT < 21) {
+            Snackbar.make(view, R.string.notice_legacy_api, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        view = null;
     }
 }

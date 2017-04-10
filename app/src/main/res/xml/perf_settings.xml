@@ -26,7 +26,7 @@
                 android:title="@string/settings_boot"
                 android:defaultValue="false"/>
         <SwitchPreference
-                android:key="settings_query"
+                android:key="settings_count_query_times"
                 android:title="@string/settings_count_number_of_queries"
                 android:defaultValue="false"/>
         <SwitchPreference

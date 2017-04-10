@@ -143,8 +143,12 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             if (this.mThread != null) {
                 this.running = false;
                 this.mThread.interrupt();
-                Os.close(mInterruptFd);
-                Os.close(mBlockFd);
+                if (mInterruptFd != null) {
+                    Os.close(mInterruptFd);
+                }
+                if (mBlockFd != null) {
+                    Os.close(mBlockFd);
+                }
                 this.mThread = null;
             }
             if (notification != null) {
@@ -166,10 +170,6 @@ public class DaedalusVpnService extends VpnService implements Runnable {
     @Override
     public void run() {
         try {
-            FileDescriptor[] pipes = Os.pipe();
-            mInterruptFd = pipes[0];
-            mBlockFd = pipes[1];
-
             Builder builder = new Builder();
             String format = null;
             for (String prefix : new String[]{"192.0.2", "198.51.100", "203.0.113", "10.0.0.", "192.168.50"}) {
@@ -185,7 +185,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                 this.descriptor.close();
             }
 
-            boolean statisticQuery = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("settings_query", false);
+            boolean statisticQuery = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("settings_count_query_times", false);
             Log.d(TAG, "tun0 add " + format + " pServ " + primaryServer + " sServ " + secondaryServer);
             Inet4Address primaryDNSServer = InetAddressUtil.ipv4From(primaryServer);
             Inet4Address secondaryDNSServer = InetAddressUtil.ipv4From(secondaryServer);
@@ -194,13 +194,17 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
             if (statisticQuery) {
                 builder.addRoute(primaryDNSServer, primaryDNSServer.getAddress().length * 8)
-                        .addRoute(secondaryDNSServer, secondaryDNSServer.getAddress().length * 8);
+                        .addRoute(secondaryDNSServer, secondaryDNSServer.getAddress().length * 8)
+                        .setBlocking(true);
             }
 
-            this.descriptor = builder.setSession("Daedalus").setConfigureIntent(PendingIntent.getActivity(this, 0, new Intent(this, SettingsActivity.class), PendingIntent.FLAG_ONE_SHOT)).setBlocking(true).establish();
+            this.descriptor = builder.setSession("Daedalus").setConfigureIntent(PendingIntent.getActivity(this, 0, new Intent(this, SettingsActivity.class), PendingIntent.FLAG_ONE_SHOT)).establish();
 
             if (statisticQuery) {
                 Log.d(TAG, "Starting count queries");
+                FileDescriptor[] pipes = Os.pipe();
+                mInterruptFd = pipes[0];
+                mBlockFd = pipes[1];
                 FileInputStream inputStream = new FileInputStream(descriptor.getFileDescriptor());
                 FileOutputStream outputStream = new FileOutputStream(descriptor.getFileDescriptor());
 
