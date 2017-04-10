@@ -56,9 +56,9 @@ public class DaedalusVpnService extends VpnService implements Runnable {
     public static String primaryServer;
     public static String secondaryServer;
 
-    public static NotificationCompat.Builder notification = null;
+    private static NotificationCompat.Builder notification = null;
 
-    public static long numberOfQueries = 0;
+    private static long numberOfQueries = 0;
 
     private Thread mThread = null;
     private ParcelFileDescriptor descriptor;
@@ -73,10 +73,6 @@ public class DaedalusVpnService extends VpnService implements Runnable {
      * Number of iterations since we last cleared the pcap4j cache
      */
     private int pcap4jFactoryClearCacheCounter = 0;
-    /**
-     * After how many iterations we should clear pcap4js packetfactory property cache
-     */
-    private final int PCAP4J_FACTORY_CLEAR_NASTY_CACHE_EVERY = 1024;
 
     @Override
     public void onCreate() {
@@ -127,8 +123,6 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                     return START_STICKY;
                 case ACTION_DEACTIVATE:
                     stopThread();
-
-                    notification = null;
                     return START_NOT_STICKY;
             }
         }
@@ -156,6 +150,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             if (notification != null) {
                 NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.cancel(NOTIFICATION_ACTIVATED);
+                notification = null;
             }
         } catch (Exception e) {
             Log.d(TAG, e.toString());
@@ -270,7 +265,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
                     // pcap4j has some sort of properties cache in the packet factory. This cache leaks, so
                     // we need to clean it up.
-                    if (++pcap4jFactoryClearCacheCounter % PCAP4J_FACTORY_CLEAR_NASTY_CACHE_EVERY == 0) {
+                    if (++pcap4jFactoryClearCacheCounter % 1024 == 0) {
                         try {
                             PacketFactoryPropertiesLoader l = PacketFactoryPropertiesLoader.getInstance();
                             Field field = l.getClass().getDeclaredField("loader");
