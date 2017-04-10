@@ -10,9 +10,9 @@
     <string name="settings_boot">Auto activate on boot</string>
     <string name="settings_server">Server settings</string>
     <string name="primary_server">Primary DNS server</string>
-    <string name="server_south_china">South China</string>
-    <string name="server_east_china">East China</string>
-    <string name="server_north_china">North China</string>
+    <string name="server_south_china">CuteDNS! South China</string>
+    <string name="server_east_china">CuteDNS! East China</string>
+    <string name="server_north_china">CuteDNS! North China</string>
     <string name="secondary_server">Secondary DNS server</string>
     <string name="notice_start_test">Testing specified DNS server …</string>
     <string name="action_server_test">Server test</string>
