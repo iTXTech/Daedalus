@@ -128,9 +128,6 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                 case ACTION_DEACTIVATE:
                     stopThread();
 
-                    NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.cancel(NOTIFICATION_ACTIVATED);
-
                     notification = null;
                     return START_NOT_STICKY;
             }
@@ -155,6 +152,10 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                 Os.close(mInterruptFd);
                 Os.close(mBlockFd);
                 this.mThread = null;
+            }
+            if (notification != null) {
+                NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.cancel(NOTIFICATION_ACTIVATED);
             }
         } catch (Exception e) {
             Log.d(TAG, e.toString());
