@@ -41,7 +41,7 @@ public class SettingsFragment extends PreferenceFragment {
         secondaryServer.setEntries(DnsServer.getDnsServerNames(Daedalus.getInstance()));
         secondaryServer.setEntryValues(DnsServer.getDnsServerIds());
 
-        if (Build.VERSION.SDK_INT < 21) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             SwitchPreference countQueryTimes = (SwitchPreference) findPreference("settings_count_query_times");
             countQueryTimes.setChecked(false);
             countQueryTimes.setEnabled(false);
@@ -69,7 +69,7 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (view != null && Build.VERSION.SDK_INT < 21) {
+        if (view != null && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             Snackbar.make(view, R.string.notice_legacy_api, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }

@@ -1,11 +1,13 @@
 package org.itxtech.daedalus.service;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.VpnService;
+import android.os.Build;
 import android.os.ParcelFileDescriptor;
 import android.preference.PreferenceManager;
 import android.support.v7.app.NotificationCompat;
@@ -134,6 +136,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         stopThread();
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void stopThread() {
         try {
             if (this.descriptor != null) {
@@ -167,6 +170,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         stopThread();
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void run() {
         try {
