@@ -38,7 +38,7 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
 
             context.startService((new Intent(context, DaedalusVpnService.class)).setAction(DaedalusVpnService.ACTION_ACTIVATE));
 
-            Log.d("DVpn", "Boot service");
+            Log.d("DBootRecv", "Triggered boot receiver");
         }
     }
 }

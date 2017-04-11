@@ -56,9 +56,16 @@ public class SettingsFragment extends PreferenceFragment {
         checkUpdate.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Snackbar.make(view, R.string.notice_checking_update, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus/releases")));
+                return false;
+            }
+        });
+
+        ListPreference issueTracker = (ListPreference) findPreference("settings_issue_tracker");
+        issueTracker.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus/issues")));
                 return false;
             }
         });

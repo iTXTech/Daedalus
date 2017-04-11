@@ -29,7 +29,7 @@ import java.util.Locale;
  */
 public class AboutActivity extends AppCompatActivity {
 
-    @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
+    @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled", "addJavascriptInterface"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +61,7 @@ public class AboutActivity extends AppCompatActivity {
                 try {
                     view.loadUrl("javascript:changeVersionInfo('" + getPackageManager().getPackageInfo(getPackageName(), 0).versionName + "', '" + BuildConfig.BUILD_TIME + "', '" + BuildConfig.GIT_COMMIT + "')");
                 } catch (Exception e) {
-                    Log.e("Dvpn", e.toString());
+                    Log.e("DAboutActivity", e.toString());
                 }
             }
         });

@@ -38,6 +38,8 @@ public class ServerTestActivity extends AppCompatActivity {
     private static final int MSG_DISPLAY_STATUS = 0;
     private static final int MSG_TEST_DONE = 1;
 
+    private static final String TAG = "DServerTest";
+
     private static boolean testing = false;
     private static Thread mThread = null;
     private ServerTestHandler mHandler = null;
@@ -89,12 +91,12 @@ public class ServerTestActivity extends AppCompatActivity {
                                 }
                                 mHandler.obtainMessage(MSG_TEST_DONE).sendToTarget();
                             } catch (Exception e) {
-                                Log.e("DVpn", e.toString());
+                                Log.e(TAG, e.toString());
                             }
                         }
 
                         private StringBuilder testServer(DNSClient client, String dnsServer, String testUrl, StringBuilder testText) {
-                            Log.d("Dvpn", "Testing DNS " + dnsServer);
+                            Log.d(TAG, "Testing DNS " + dnsServer);
                             testText.append(getResources().getString(R.string.test_domain)).append(" ").append(testUrl).append("\n"
                             ).append(getResources().getString(R.string.test_dns_server)).append(" ").append(dnsServer);
 
@@ -122,7 +124,7 @@ public class ServerTestActivity extends AppCompatActivity {
                             } catch (Exception e) {
                                 testText.append("\n").append(getResources().getString(R.string.test_failed)).append("\n\n");
 
-                                Log.e("DVpn", e.toString());
+                                Log.e(TAG, e.toString());
                             }
 
                             mHandler.obtainMessage(MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();

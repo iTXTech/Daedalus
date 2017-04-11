@@ -31,9 +31,10 @@
     <string name="notice_join_group_failed">未安装手Q或当前版本不支持此操作。</string>
     <string name="settings_notification">启用时显示通知</string>
     <string name="settings_check_update">检查更新</string>
-    <string name="settings_update_summary">通过 GitHub 检查更新</string>
-    <string name="notice_checking_update">正在前往 GitHub Releases 页面……</string>
+    <string name="settings_update_summary">前往 GitHub 发布页面。</string>
     <string name="settings_count_number_of_queries">统计 DNS 查询次数</string>
     <string name="notification_queries">DNS 查询次数:</string>
     <string name="notice_legacy_api">当前 Android API 无法支持所有功能。</string>
+    <string name="settings_issue_tracker">提交反馈</string>
+    <string name="settings_issue_summary">前往 GitHub 提交问题反馈。</string>
 </resources>

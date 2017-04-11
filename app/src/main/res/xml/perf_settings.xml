@@ -37,5 +37,9 @@
                 android:key="settings_check_update"
                 android:title="@string/settings_check_update"
                 android:summary="@string/settings_update_summary"/>
+        <org.itxtech.daedalus.view.ClickPreference
+                android:key="settings_issue_tracker"
+                android:title="@string/settings_issue_tracker"
+                android:summary="@string/settings_issue_summary"/>
     </PreferenceCategory>
 </PreferenceScreen>

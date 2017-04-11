@@ -45,7 +45,7 @@ public class StatusBarBroadcastReceiver extends BroadcastReceiver {
                 Method collapse = statusBarManager.getClass().getMethod("collapsePanels");
                 collapse.invoke(statusBarManager);
             } catch (Exception e) {
-                Log.d("DVpn", e.toString());
+                Log.d("DStatusBarRecv", e.toString());
             }
         }
     }
