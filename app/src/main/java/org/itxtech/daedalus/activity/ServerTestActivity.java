@@ -140,6 +140,17 @@ public class ServerTestActivity extends AppCompatActivity {
         mHandler.setViews(startTestBut, textViewTestInfo);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (mThread != null) {
+            mThread.interrupt();
+            mThread = null;
+        }
+        mHandler = null;
+    }
+
     public static class ServerTestHandler extends Handler {
         private Button startTestBtn = null;
         private TextView textViewTestInfo = null;
