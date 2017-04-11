@@ -38,9 +38,9 @@ public class ServerTestActivity extends AppCompatActivity {
     private static final int MSG_DISPLAY_STATUS = 0;
     private static final int MSG_TEST_DONE = 1;
 
-    private boolean testing = false;
-    private Thread mThread = null;
-    private Handler mHandler = null;
+    private static boolean testing = false;
+    private static Thread mThread = null;
+    private ServerTestHandler mHandler = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,15 +77,15 @@ public class ServerTestActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             try {
-                                String testUrl = textViewTestUrl.getText().toString();
-                                if (testUrl.equals("")) {
-                                    testUrl = Daedalus.DEFAULT_TEST_DOMAINS[0];
+                                String testDomain = textViewTestUrl.getText().toString();
+                                if (testDomain.equals("")) {
+                                    testDomain = Daedalus.DEFAULT_TEST_DOMAINS[0];
                                 }
-                                String testText = "";
-                                String[] dnsServers = {DnsServer.getDnsServerAddressByStringDesription(context, spinnerServerChoice.getSelectedItem().toString()), "114.114.114.114", "8.8.8.8"};
+                                StringBuilder testText = new StringBuilder();
+                                String[] dnsServers = {DnsServer.getDnsServerAddressByStringDescription(context, spinnerServerChoice.getSelectedItem().toString()), "114.114.114.114", "8.8.8.8"};
                                 DNSClient client = new DNSClient(null);
                                 for (String dnsServer : dnsServers) {
-                                    testText = testServer(client, dnsServer, testUrl, testText);
+                                    testText = testServer(client, dnsServer, testDomain, testText);
                                 }
                                 mHandler.obtainMessage(MSG_TEST_DONE).sendToTarget();
                             } catch (Exception e) {
@@ -93,12 +93,12 @@ public class ServerTestActivity extends AppCompatActivity {
                             }
                         }
 
-                        private String testServer(DNSClient client, String dnsServer, String testUrl, String testText) {
+                        private StringBuilder testServer(DNSClient client, String dnsServer, String testUrl, StringBuilder testText) {
                             Log.d("Dvpn", "Testing DNS " + dnsServer);
-                            testText += getResources().getString(R.string.test_domain) + " " + testUrl + "\n"
-                                    + getResources().getString(R.string.test_dns_server) + " " + dnsServer;
+                            testText.append(getResources().getString(R.string.test_domain)).append(" ").append(testUrl).append("\n"
+                            ).append(getResources().getString(R.string.test_dns_server)).append(" ").append(dnsServer);
 
-                            mHandler.obtainMessage(MSG_DISPLAY_STATUS, testText).sendToTarget();
+                            mHandler.obtainMessage(MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
 
                             Question question = new Question(testUrl, Record.TYPE.getType(A.class));
                             DNSMessage.Builder message = DNSMessage.builder();
@@ -115,17 +115,17 @@ public class ServerTestActivity extends AppCompatActivity {
                                 Set<A> answers = responseMessage.getAnswersFor(question);
                                 for (A a : answers) {
                                     InetAddress inetAddress = a.getInetAddress();
-                                    testText += "\n" + getResources().getString(R.string.test_result_resolved) + " " + inetAddress.getHostAddress();
+                                    testText.append("\n").append(getResources().getString(R.string.test_result_resolved)).append(" ").append(inetAddress.getHostAddress());
                                 }
-                                testText += "\n" + getResources().getString(R.string.test_time_used) + " " + String.valueOf(endTime - startTime) + " ms\n\n";
+                                testText.append("\n").append(getResources().getString(R.string.test_time_used)).append(" ").append(String.valueOf(endTime - startTime)).append(" ms\n\n");
 
                             } catch (Exception e) {
-                                testText += "\n" + getResources().getString(R.string.test_failed) + "\n\n";
+                                testText.append("\n").append(getResources().getString(R.string.test_failed)).append("\n\n");
 
                                 Log.e("DVpn", e.toString());
                             }
 
-                            mHandler.obtainMessage(MSG_DISPLAY_STATUS, testText).sendToTarget();
+                            mHandler.obtainMessage(MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
                             return testText;
                         }
                     };
@@ -136,22 +136,33 @@ public class ServerTestActivity extends AppCompatActivity {
         });
 
 
-        mHandler = new Handler() {
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
+        mHandler = new ServerTestHandler();
+        mHandler.setViews(startTestBut, textViewTestInfo);
+    }
 
-                switch (msg.what) {
-                    case MSG_DISPLAY_STATUS:
-                        textViewTestInfo.setText((String) msg.obj);
-                        break;
-                    case MSG_TEST_DONE:
-                        testing = false;
-                        startTestBut.setVisibility(View.VISIBLE);
-                        mThread = null;
-                        break;
-                }
+    public static class ServerTestHandler extends Handler {
+        private Button startTestBtn = null;
+        private TextView textViewTestInfo = null;
+
+        void setViews(Button startTestButton, TextView textViewTestInfo) {
+            this.startTestBtn = startTestButton;
+            this.textViewTestInfo = textViewTestInfo;
+        }
+
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            switch (msg.what) {
+                case MSG_DISPLAY_STATUS:
+                    textViewTestInfo.setText((String) msg.obj);
+                    break;
+                case MSG_TEST_DONE:
+                    testing = false;
+                    startTestBtn.setVisibility(View.VISIBLE);
+                    mThread = null;
+                    break;
             }
-        };
+        }
     }
 
     @Override

@@ -51,7 +51,7 @@ public class DnsServer {
         return Daedalus.DNS_SERVERS.get(0).getAddress();
     }
 
-    public static String getDnsServerAddressByStringDesription(Context context, String description) {
+    public static String getDnsServerAddressByStringDescription(Context context, String description) {
         for (DnsServer server : Daedalus.DNS_SERVERS) {
             if (server.getStringDescription(context).equals(description)) {
                 return server.getAddress();

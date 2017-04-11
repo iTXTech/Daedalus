@@ -40,6 +40,13 @@ public class Daedalus extends Application {
         instance = this;
     }
 
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+
+        instance = null;
+    }
+
     public static Daedalus getInstance() {
         return instance;
     }
