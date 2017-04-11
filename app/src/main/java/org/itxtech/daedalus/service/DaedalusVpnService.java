@@ -18,6 +18,7 @@ import android.system.StructPollfd;
 import android.util.Log;
 import de.measite.minidns.DNSMessage;
 import de.measite.minidns.util.InetAddressUtil;
+import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.activity.SettingsActivity;
@@ -122,6 +123,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                         this.running = true;
                         this.mThread.start();
                     }
+                    Daedalus.updateShortcut(this);
                     return START_STICKY;
                 case ACTION_DEACTIVATE:
                     stopThread();
@@ -163,7 +165,14 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             Log.d(TAG, e.toString());
         }
         stopSelf();
+
+        if (MainActivity.getInstance() != null && MainActivity.getInstance().isAppOnForeground()) {
+            startActivity(new Intent(this, MainActivity.class).putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_NONE));
+        } else {
+            Daedalus.updateShortcut(this);
+        }
     }
+
 
     @Override
     public void onRevoke() {

@@ -1,7 +1,6 @@
 package org.itxtech.daedalus.activity;
 
 import android.app.ActivityManager;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,9 +13,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.DnsServer;
+
+import java.util.List;
 
 /**
  * Daedalus Project
@@ -29,6 +31,11 @@ import org.itxtech.daedalus.util.DnsServer;
  * the Free Software Foundation, version 3.
  */
 public class MainActivity extends AppCompatActivity {
+    public static final String LAUNCH_ACTION = "org.itxtech.daedalus.activity.MainActivity.LAUNCH_ACTION";
+    public static final int LAUNCH_ACTION_NONE = 0;
+    public static final int LAUNCH_ACTION_ACTIVATE = 1;
+    public static final int LAUNCH_ACTION_DEACTIVATE = 2;
+
     private static MainActivity instance = null;
     private SharedPreferences prefs;
 
@@ -67,13 +74,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (isServiceActivated()) {
-                    but.setText(R.string.button_text_activate);
                     deactivateService();
                 } else {
                     activateService();
                 }
             }
         });
+
+        updateUserInterface(getIntent());
     }
 
     @Override
@@ -84,17 +92,62 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
 
-        final Button but = (Button) findViewById(R.id.button_activate);
+        updateUserInterface(intent);
+    }
+
+    private void updateUserInterface(Intent intent) {
+        int launchAction = intent.getIntExtra(LAUNCH_ACTION, LAUNCH_ACTION_NONE);
+        if (launchAction == LAUNCH_ACTION_ACTIVATE) {
+            Daedalus.updateShortcut(this);
+            activateService();
+        } else if (launchAction == LAUNCH_ACTION_DEACTIVATE) {
+            deactivateService();
+        } else {
+            updateUserInterface();
+            Daedalus.updateShortcut(this);
+        }
+    }
+
+    public boolean isAppOnForeground() {
+        // Returns a list of application processes that are running on the
+        // device
+
+        ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+        String packageName = getApplicationContext().getPackageName();
+
+        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
+                .getRunningAppProcesses();
+        if (appProcesses == null)
+            return false;
+
+        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+            // The name of the process that this object is associated with.
+            if (appProcess.processName.equals(packageName)
+                    && appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void updateUserInterface() {
+        Button but = (Button) findViewById(R.id.button_activate);
         if (isServiceActivated()) {
             but.setText(R.string.button_text_deactivate);
         } else {
             but.setText(R.string.button_text_activate);
-            NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancelAll();
         }
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        updateUserInterface();
     }
 
     private void initConfig() {

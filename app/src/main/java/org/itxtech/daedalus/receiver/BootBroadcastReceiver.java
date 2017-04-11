@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.net.VpnService;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.DnsServer;
@@ -40,5 +41,7 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
 
             Log.d("DBootRecv", "Triggered boot receiver");
         }
+
+        Daedalus.updateShortcut(context);
     }
 }
