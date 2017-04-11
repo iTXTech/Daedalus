@@ -45,6 +45,9 @@ public class SettingsFragment extends PreferenceFragment {
             SwitchPreference countQueryTimes = (SwitchPreference) findPreference("settings_count_query_times");
             countQueryTimes.setChecked(false);
             countQueryTimes.setEnabled(false);
+            SwitchPreference autoBoot = (SwitchPreference) findPreference("settings_boot");
+            autoBoot.setChecked(false);
+            autoBoot.setEnabled(false);
         }
     }
 
