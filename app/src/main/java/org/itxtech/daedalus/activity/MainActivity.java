@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -99,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUserInterface(Intent intent) {
+        Log.d("MainActivity", "Updating user interface");
         int launchAction = intent.getIntExtra(LAUNCH_ACTION, LAUNCH_ACTION_NONE);
         if (launchAction == LAUNCH_ACTION_ACTIVATE) {
             Daedalus.updateShortcut(this);

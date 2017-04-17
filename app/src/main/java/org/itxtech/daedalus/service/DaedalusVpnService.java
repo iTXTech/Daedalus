@@ -140,12 +140,14 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void stopThread() {
+        boolean shouldRefresh = false;
         try {
             if (this.descriptor != null) {
                 this.descriptor.close();
                 this.descriptor = null;
             }
             if (this.mThread != null) {
+                shouldRefresh = true;
                 this.running = false;
                 this.mThread.interrupt();
                 if (mInterruptFd != null) {
@@ -166,9 +168,9 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         }
         stopSelf();
 
-        if (MainActivity.getInstance() != null && MainActivity.getInstance().isAppOnForeground()) {
+        if (shouldRefresh && MainActivity.getInstance() != null && MainActivity.getInstance().isAppOnForeground()) {
             startActivity(new Intent(this, MainActivity.class).putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_NONE));
-        } else {
+        } else if (shouldRefresh) {
             Daedalus.updateShortcut(this);
         }
     }
