@@ -187,7 +187,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         try {
             Builder builder = new Builder();
             String format = null;
-            for (String prefix : new String[]{"192.0.2", "198.51.100", "203.0.113", "10.0.0.", "192.168.50"}) {
+            for (String prefix : new String[]{"192.0.2", "198.51.100", "203.0.113", "10.0.0", "192.168.50"}) {
                 try {
                     builder.addAddress(prefix + ".1", 24);
                 } catch (IllegalArgumentException e) {
