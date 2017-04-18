@@ -4,10 +4,12 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.service.DaedalusVpnService;
@@ -28,7 +30,7 @@ import java.util.List;
  * the Free Software Foundation, version 3.
  */
 public class Daedalus extends Application {
-    public static final String SHORTCUT_ID_ACTIVATE = "activate";
+    private static final String SHORTCUT_ID_ACTIVATE = "shortcut_activate";
 
     public static final List<DnsServer> DNS_SERVERS = new ArrayList<DnsServer>() {{
         add(new DnsServer("0", "113.107.249.56", R.string.server_north_china));
@@ -45,12 +47,24 @@ public class Daedalus extends Application {
     };
 
     private static Daedalus instance = null;
+    private static SharedPreferences prefs;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
+        initConfig();
+
         instance = this;
+    }
+
+    private void initConfig() {
+        PreferenceManager.setDefaultValues(this, R.xml.perf_settings, false);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    }
+
+    public static SharedPreferences getPrefs() {
+        return prefs;
     }
 
     @Override

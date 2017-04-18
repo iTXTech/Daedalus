@@ -21,6 +21,7 @@ import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.util.DnsServer;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
 
@@ -84,7 +85,15 @@ public class ServerTestActivity extends AppCompatActivity {
                                     testDomain = Daedalus.DEFAULT_TEST_DOMAINS[0];
                                 }
                                 StringBuilder testText = new StringBuilder();
-                                String[] dnsServers = {DnsServer.getDnsServerAddressByStringDescription(context, spinnerServerChoice.getSelectedItem().toString()), "114.114.114.114", "8.8.8.8"};
+                                ArrayList<String> dnsServers = new ArrayList<String>() {{
+                                    add(DnsServer.getDnsServerAddressByStringDescription(context, spinnerServerChoice.getSelectedItem().toString()));
+                                    String servers = Daedalus.getPrefs().getString("dns_test_servers", "");
+                                    if (!servers.equals("")) {
+                                        for (String server : servers.split(",")) {
+                                            add(server);
+                                        }
+                                    }
+                                }};
                                 DNSClient client = new DNSClient(null);
                                 for (String dnsServer : dnsServers) {
                                     testText = testServer(client, dnsServer, testDomain, testText);

@@ -3,10 +3,8 @@ package org.itxtech.daedalus.activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.VpnService;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -38,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
     public static final int LAUNCH_ACTION_DEACTIVATE = 2;
 
     private static MainActivity instance = null;
-    private SharedPreferences prefs;
 
     public static MainActivity getInstance() {
         return instance;
@@ -49,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         instance = this;
-
-        initConfig();
 
         setContentView(R.layout.activity_main);
         /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -152,11 +147,6 @@ public class MainActivity extends AppCompatActivity {
         updateUserInterface();
     }
 
-    private void initConfig() {
-        PreferenceManager.setDefaultValues(this, R.xml.perf_settings, false);
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    }
-
     private void activateService() {
         Intent intent = VpnService.prepare(this);
         if (intent != null) {
@@ -188,8 +178,8 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onActivityResult(int request, int result, Intent data) {
         if (result == RESULT_OK) {
-            DaedalusVpnService.primaryServer = DnsServer.getDnsServerAddressById(prefs.getString("primary_server", "0"));
-            DaedalusVpnService.secondaryServer = DnsServer.getDnsServerAddressById(prefs.getString("secondary_server", "1"));
+            DaedalusVpnService.primaryServer = DnsServer.getDnsServerAddressById(Daedalus.getPrefs().getString("primary_server", "0"));
+            DaedalusVpnService.secondaryServer = DnsServer.getDnsServerAddressById(Daedalus.getPrefs().getString("secondary_server", "1"));
 
             startService(getServiceIntent().setAction(DaedalusVpnService.ACTION_ACTIVATE));
 

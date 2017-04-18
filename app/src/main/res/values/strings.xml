@@ -37,4 +37,5 @@
     <string name="notice_legacy_api">The current Android API can not support all the features.</string>
     <string name="settings_issue_tracker">Issue tracker</string>
     <string name="settings_issue_summary">Submit an issue in GitHub Issues page.</string>
+    <string name="settings_dns_test_servers">DNS test servers</string>
 </resources>

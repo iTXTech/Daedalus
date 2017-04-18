@@ -16,6 +16,12 @@
                 android:title="@string/secondary_server"
                 android:defaultValue="1">
         </ListPreference>
+        <EditTextPreference
+                android:key="dns_test_servers"
+                android:defaultValue="114.114.114.114,8.8.8.8"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:title="@string/settings_dns_test_servers"/>
     </PreferenceCategory>
     <PreferenceCategory
             android:key="settings_system"

@@ -37,4 +37,5 @@
     <string name="notice_legacy_api">当前 Android API 无法支持所有功能。</string>
     <string name="settings_issue_tracker">提交反馈</string>
     <string name="settings_issue_summary">前往 GitHub 提交问题反馈。</string>
+    <string name="settings_dns_test_servers">DNS 测试服务器</string>
 </resources>
