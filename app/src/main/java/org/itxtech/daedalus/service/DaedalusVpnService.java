@@ -54,7 +54,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
     private static final int NOTIFICATION_ACTIVATED = 0;
 
-    private static final String TAG = "Daedalus";
+    private static final String TAG = "DaedalusVpnService";
 
     public static String primaryServer;
     public static String secondaryServer;
@@ -169,7 +169,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         stopSelf();
 
         if (shouldRefresh && MainActivity.getInstance() != null && MainActivity.getInstance().isAppOnForeground()) {
-            startActivity(new Intent(this, MainActivity.class).putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_NONE));
+            MainActivity.getInstance().startActivity(new Intent(this, MainActivity.class).putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_NONE));
         } else if (shouldRefresh) {
             Daedalus.updateShortcut(this.getApplicationContext());
         }
