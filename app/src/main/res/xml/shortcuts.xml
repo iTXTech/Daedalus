@@ -2,7 +2,7 @@
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut
             android:enabled="true"
-            android:icon="@mipmap/ic_settings_applications_grey600_36dp"
+            android:icon="@mipmap/ic_settings_grey600_36dp"
             android:shortcutDisabledMessage="@string/action_settings"
             android:shortcutId="settings"
             android:shortcutLongLabel="@string/action_settings"

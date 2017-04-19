@@ -38,4 +38,9 @@
     <string name="settings_issue_tracker">Issue tracker</string>
     <string name="settings_issue_summary">Submit an issue in GitHub Issues page.</string>
     <string name="settings_dns_test_servers">DNS test servers</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_home">Home</string>
+    <string name="nav_version">Version:</string>
+    <string name="nav_git_commit">Git commit:</string>
 </resources>

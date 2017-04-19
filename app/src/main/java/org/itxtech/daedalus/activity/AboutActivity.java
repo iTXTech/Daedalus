@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import org.itxtech.daedalus.BuildConfig;
@@ -28,6 +29,7 @@ import java.util.Locale;
  * the Free Software Foundation, version 3.
  */
 public class AboutActivity extends AppCompatActivity {
+    private WebView mWebView = null;
 
     @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled", "addJavascriptInterface"})
     @Override
@@ -35,13 +37,14 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
-        WebView view = (WebView) findViewById(R.id.webView_about);
+        mWebView = new WebView(this.getApplicationContext());
+        ((ViewGroup) findViewById(R.id.activity_about)).addView(mWebView);
 
-        view.getSettings().setJavaScriptEnabled(true);
-        view.setBackgroundColor(0);
-        view.addJavascriptInterface(this, "JavascriptInterface");
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.setBackgroundColor(0);
+        mWebView.addJavascriptInterface(this, "JavascriptInterface");
 
-        view.setOnLongClickListener(new View.OnLongClickListener() {
+        mWebView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 return true;
@@ -49,22 +52,39 @@ public class AboutActivity extends AppCompatActivity {
         });
 
         if (Locale.getDefault().getLanguage().equals("zh")) {
-            view.loadUrl("file:///android_asset/about_html/index_zh.html");
+            mWebView.loadUrl("file:///android_asset/about_html/index_zh.html");
         } else {
-            view.loadUrl("file:///android_asset/about_html/index.html");
+            mWebView.loadUrl("file:///android_asset/about_html/index.html");
         }
 
-        view.setWebViewClient(new WebViewClient() {
+        mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 try {
-                    view.loadUrl("javascript:changeVersionInfo('" + getPackageManager().getPackageInfo(getPackageName(), 0).versionName + "', '" + BuildConfig.BUILD_TIME + "', '" + BuildConfig.GIT_COMMIT + "')");
+                    mWebView.loadUrl("javascript:changeVersionInfo('" + getPackageManager().getPackageInfo(getPackageName(), 0).versionName + "', '" + BuildConfig.BUILD_TIME + "', '" + BuildConfig.GIT_COMMIT + "')");
                 } catch (Exception e) {
                     Log.e("DAboutActivity", e.toString());
                 }
             }
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (mWebView != null) {
+            Log.d("DAboutActivity", "onDestroy");
+
+            mWebView.removeAllViews();
+            mWebView.setWebViewClient(null);
+            ((ViewGroup) mWebView.getParent()).removeView(mWebView);
+            mWebView.setTag(null);
+            mWebView.clearHistory();
+            mWebView.destroy();
+            mWebView = null;
+        }
     }
 
     @Override

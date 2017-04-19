@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single"
+           android:id="@+id/nav_group_main">
+        <item android:id="@+id/nav_home"
+              android:title="@string/action_home"
+              android:checked="true"
+              android:icon="@mipmap/ic_home_grey600_36dp"/>
+    </group>
+
+    <group android:id="@+id/nav_group_more">
+        <item android:id="@+id/action_settings"
+              android:title="@string/action_settings"
+              android:icon="@mipmap/ic_settings_grey600_36dp"/>
+        <item android:id="@+id/action_about"
+              android:title="@string/action_about"
+              android:icon="@mipmap/ic_info_grey600_36dp"/>
+    </group>
+</menu>

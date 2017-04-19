@@ -38,4 +38,9 @@
     <string name="settings_issue_tracker">提交反馈</string>
     <string name="settings_issue_summary">前往 GitHub 提交问题反馈。</string>
     <string name="settings_dns_test_servers">DNS 测试服务器</string>
+    <string name="navigation_drawer_close">关闭导航栏</string>
+    <string name="navigation_drawer_open">开启导航栏</string>
+    <string name="action_home">主页</string>
+    <string name="nav_version">版本:</string>
+    <string name="nav_git_commit">Git commit:</string>
 </resources>
