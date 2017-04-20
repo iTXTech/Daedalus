@@ -33,9 +33,11 @@ public class Daedalus extends Application {
     private static final String SHORTCUT_ID_ACTIVATE = "shortcut_activate";
 
     public static final List<DnsServer> DNS_SERVERS = new ArrayList<DnsServer>() {{
-        add(new DnsServer("0", "113.107.249.56", R.string.server_north_china));
-        add(new DnsServer("1", "120.27.103.230", R.string.server_east_china));
-        add(new DnsServer("2", "123.206.61.167", R.string.server_south_china));
+        add(new DnsServer("0", "113.107.249.56", R.string.server_cutedns_north_china));
+        add(new DnsServer("1", "120.27.103.230", R.string.server_cutedns_east_china));
+        add(new DnsServer("2", "123.206.61.167", R.string.server_cutedns_south_china));
+        add(new DnsServer("3", "115.159.220.214", R.string.server_puredns_east_china));
+        add(new DnsServer("4", "123.207.137.88", R.string.server_puredns_north_china));
     }};
 
     public static final String[] DEFAULT_TEST_DOMAINS = new String[]{

@@ -10,9 +10,9 @@
     <string name="settings_boot">Auto activate on boot</string>
     <string name="settings_server">Server settings</string>
     <string name="primary_server">Primary DNS server</string>
-    <string name="server_south_china">CuteDNS! South China</string>
-    <string name="server_east_china">CuteDNS! East China</string>
-    <string name="server_north_china">CuteDNS! North China</string>
+    <string name="server_cutedns_south_china">CuteDNS! South China</string>
+    <string name="server_cutedns_east_china">CuteDNS! East China</string>
+    <string name="server_cutedns_north_china">CuteDNS! North China</string>
     <string name="secondary_server">Secondary DNS server</string>
     <string name="notice_start_test">Testing specified DNS server …</string>
     <string name="action_server_test">Server test</string>
@@ -44,4 +44,6 @@
     <string name="nav_version">Version:</string>
     <string name="nav_git_commit">Git commit:</string>
     <string name="settings_help_and_support">Help &amp; Support</string>
+    <string name="server_puredns_north_china">Pure DNS North China</string>
+    <string name="server_puredns_east_china">Pure DNS East China</string>
 </resources>
