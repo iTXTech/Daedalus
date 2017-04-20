@@ -4,10 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.SwitchPreference;
+import android.preference.*;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,10 +33,36 @@ public class SettingsFragment extends PreferenceFragment {
         ListPreference primaryServer = (ListPreference) findPreference("primary_server");
         primaryServer.setEntries(DnsServer.getDnsServerNames(Daedalus.getInstance()));
         primaryServer.setEntryValues(DnsServer.getDnsServerIds());
+        primaryServer.setSummary(DnsServer.getDnsServerById(primaryServer.getValue()).getStringDescription(Daedalus.getInstance()));
+        primaryServer.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                preference.setSummary(DnsServer.getDnsServerById((String) newValue).getStringDescription(Daedalus.getInstance()));
+                return true;
+            }
+        });
 
         ListPreference secondaryServer = (ListPreference) findPreference("secondary_server");
         secondaryServer.setEntries(DnsServer.getDnsServerNames(Daedalus.getInstance()));
         secondaryServer.setEntryValues(DnsServer.getDnsServerIds());
+        secondaryServer.setSummary(DnsServer.getDnsServerById(primaryServer.getValue()).getStringDescription(Daedalus.getInstance()));
+        secondaryServer.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                preference.setSummary(DnsServer.getDnsServerById((String) newValue).getStringDescription(Daedalus.getInstance()));
+                return true;
+            }
+        });
+
+        EditTextPreference testDNSServers = (EditTextPreference) findPreference("dns_test_servers");
+        testDNSServers.setSummary(testDNSServers.getText());
+        testDNSServers.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                preference.setSummary((String) newValue);
+                return true;
+            }
+        });
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             SwitchPreference countQueryTimes = (SwitchPreference) findPreference("settings_count_query_times");

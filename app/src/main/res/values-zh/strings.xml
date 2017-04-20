@@ -35,12 +35,13 @@
     <string name="settings_count_number_of_queries">统计 DNS 查询次数</string>
     <string name="notification_queries">DNS 查询次数:</string>
     <string name="notice_legacy_api">当前 Android API 无法支持所有功能。</string>
-    <string name="settings_issue_tracker">提交反馈</string>
-    <string name="settings_issue_summary">前往 GitHub 提交问题反馈。</string>
+    <string name="settings_bug_report">提交一个 Bug</string>
+    <string name="settings_issue_summary">前往 GitHub 提交 Bug 反馈。</string>
     <string name="settings_dns_test_servers">DNS 测试服务器</string>
     <string name="navigation_drawer_close">关闭导航栏</string>
     <string name="navigation_drawer_open">开启导航栏</string>
     <string name="action_home">主页</string>
     <string name="nav_version">版本:</string>
     <string name="nav_git_commit">Git commit:</string>
+    <string name="settings_help_and_support">支持和帮助</string>
 </resources>

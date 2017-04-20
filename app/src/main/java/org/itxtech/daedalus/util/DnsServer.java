@@ -77,4 +77,14 @@ public class DnsServer {
         String[] stringServers = new String[Daedalus.DNS_SERVERS.size()];
         return servers.toArray(stringServers);
     }
+
+    public static DnsServer getDnsServerById(String id) {
+        for (DnsServer server : Daedalus.DNS_SERVERS) {
+            if (server.getId().equals(id)) {
+                return server;
+            }
+        }
+        return Daedalus.DNS_SERVERS.get(0);
+
+    }
 }

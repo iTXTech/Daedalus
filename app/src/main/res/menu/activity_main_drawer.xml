@@ -17,4 +17,13 @@
               android:title="@string/action_about"
               android:icon="@mipmap/ic_info_grey600_36dp"/>
     </group>
+
+    <group android:id="@+id/nav_group_help_and_support">
+        <item android:id="@+id/action_check_update"
+              android:title="@string/settings_check_update"
+              android:icon="@mipmap/ic_file_upload_grey600_36dp"/>
+        <item android:id="@+id/action_bug_report"
+              android:title="@string/settings_bug_report"
+              android:icon="@mipmap/ic_bug_report_grey600_36dp"/>
+    </group>
 </menu>

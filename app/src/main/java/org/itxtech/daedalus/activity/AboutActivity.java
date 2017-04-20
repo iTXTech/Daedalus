@@ -85,6 +85,8 @@ public class AboutActivity extends AppCompatActivity {
             mWebView.destroy();
             mWebView = null;
         }
+
+        System.exit(0);
     }
 
     @Override

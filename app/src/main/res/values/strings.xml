@@ -35,7 +35,7 @@
     <string name="settings_count_number_of_queries">Count DNS query times</string>
     <string name="notification_queries">DNS query times:</string>
     <string name="notice_legacy_api">The current Android API can not support all the features.</string>
-    <string name="settings_issue_tracker">Issue tracker</string>
+    <string name="settings_bug_report">Report a bug</string>
     <string name="settings_issue_summary">Submit an issue in GitHub Issues page.</string>
     <string name="settings_dns_test_servers">DNS test servers</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -43,4 +43,5 @@
     <string name="action_home">Home</string>
     <string name="nav_version">Version:</string>
     <string name="nav_git_commit">Git commit:</string>
+    <string name="settings_help_and_support">Help &amp; Support</string>
 </resources>

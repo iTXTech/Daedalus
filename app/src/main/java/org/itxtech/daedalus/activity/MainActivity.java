@@ -3,6 +3,7 @@ package org.itxtech.daedalus.activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.net.VpnService;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -241,12 +242,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
-            return true;
         }
 
         if (id == R.id.action_about) {
             startActivity(new Intent(this, AboutActivity.class));
-            return true;
+        }
+
+        if (id == R.id.action_check_update) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus/releases")));
+        }
+
+        if (id == R.id.action_bug_report) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus/issues")));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_drawer_layout);
