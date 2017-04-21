@@ -41,8 +41,8 @@ public class ServerTestActivity extends AppCompatActivity {
 
     private static final String TAG = "DServerTest";
 
-    private static boolean testing = false;
     private static Thread mThread = null;
+    private static Runnable mRunnable = null;
     private ServerTestHandler mHandler = null;
 
     @Override
@@ -63,6 +63,70 @@ public class ServerTestActivity extends AppCompatActivity {
 
         final Context context = this;
 
+        mRunnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String testDomain = textViewTestUrl.getText().toString();
+                    if (testDomain.equals("")) {
+                        testDomain = Daedalus.DEFAULT_TEST_DOMAINS[0];
+                    }
+                    StringBuilder testText = new StringBuilder();
+                    ArrayList<String> dnsServers = new ArrayList<String>() {{
+                        add(DnsServer.getDnsServerAddressByStringDescription(context, spinnerServerChoice.getSelectedItem().toString()));
+                        String servers = Daedalus.getPrefs().getString("dns_test_servers", "");
+                        if (!servers.equals("")) {
+                            for (String server : servers.split(",")) {
+                                add(server);
+                            }
+                        }
+                    }};
+                    DNSClient client = new DNSClient(null);
+                    for (String dnsServer : dnsServers) {
+                        testText = testServer(client, dnsServer, testDomain, testText);
+                    }
+                    mHandler.obtainMessage(MSG_TEST_DONE).sendToTarget();
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
+            }
+
+            private StringBuilder testServer(DNSClient client, String dnsServer, String testUrl, StringBuilder testText) {
+                Log.d(TAG, "Testing DNS " + dnsServer);
+                testText.append(getResources().getString(R.string.test_domain)).append(" ").append(testUrl).append("\n").append(getResources().getString(R.string.test_dns_server)).append(" ").append(dnsServer);
+
+                mHandler.obtainMessage(MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
+
+                Question question = new Question(testUrl, Record.TYPE.getType(A.class));
+                DNSMessage.Builder message = DNSMessage.builder();
+                message.setQuestion(question);
+                message.setId((new Random()).nextInt());
+                message.setRecursionDesired(true);
+                message.getEdnsBuilder().setUdpPayloadSize(1024).setDnssecOk(false);
+
+                try {
+                    long startTime = System.currentTimeMillis();
+                    DNSMessage responseMessage = client.query(message.build(), InetAddressUtil.ipv4From(dnsServer));
+                    long endTime = System.currentTimeMillis();
+
+                    Set<A> answers = responseMessage.getAnswersFor(question);
+                    for (A a : answers) {
+                        InetAddress inetAddress = a.getInetAddress();
+                        testText.append("\n").append(getResources().getString(R.string.test_result_resolved)).append(" ").append(inetAddress.getHostAddress());
+                    }
+                    testText.append("\n").append(getResources().getString(R.string.test_time_used)).append(" ").append(String.valueOf(endTime - startTime)).append(" ms\n\n");
+
+                } catch (Exception e) {
+                    testText.append("\n").append(getResources().getString(R.string.test_failed)).append("\n\n");
+
+                    Log.e(TAG, e.toString());
+                }
+
+                mHandler.obtainMessage(MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
+                return testText;
+            }
+        };
+
         final Button startTestBut = (Button) findViewById(R.id.button_start_test);
         startTestBut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,70 +141,7 @@ public class ServerTestActivity extends AppCompatActivity {
                 textViewTestInfo.setText("");
 
                 if (mThread == null) {
-                    Runnable runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                String testDomain = textViewTestUrl.getText().toString();
-                                if (testDomain.equals("")) {
-                                    testDomain = Daedalus.DEFAULT_TEST_DOMAINS[0];
-                                }
-                                StringBuilder testText = new StringBuilder();
-                                ArrayList<String> dnsServers = new ArrayList<String>() {{
-                                    add(DnsServer.getDnsServerAddressByStringDescription(context, spinnerServerChoice.getSelectedItem().toString()));
-                                    String servers = Daedalus.getPrefs().getString("dns_test_servers", "");
-                                    if (!servers.equals("")) {
-                                        for (String server : servers.split(",")) {
-                                            add(server);
-                                        }
-                                    }
-                                }};
-                                DNSClient client = new DNSClient(null);
-                                for (String dnsServer : dnsServers) {
-                                    testText = testServer(client, dnsServer, testDomain, testText);
-                                }
-                                mHandler.obtainMessage(MSG_TEST_DONE).sendToTarget();
-                            } catch (Exception e) {
-                                Log.e(TAG, e.toString());
-                            }
-                        }
-
-                        private StringBuilder testServer(DNSClient client, String dnsServer, String testUrl, StringBuilder testText) {
-                            Log.d(TAG, "Testing DNS " + dnsServer);
-                            testText.append(getResources().getString(R.string.test_domain)).append(" ").append(testUrl).append("\n").append(getResources().getString(R.string.test_dns_server)).append(" ").append(dnsServer);
-
-                            mHandler.obtainMessage(MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
-
-                            Question question = new Question(testUrl, Record.TYPE.getType(A.class));
-                            DNSMessage.Builder message = DNSMessage.builder();
-                            message.setQuestion(question);
-                            message.setId((new Random()).nextInt());
-                            message.setRecursionDesired(true);
-                            message.getEdnsBuilder().setUdpPayloadSize(1024).setDnssecOk(false);
-
-                            try {
-                                long startTime = System.currentTimeMillis();
-                                DNSMessage responseMessage = client.query(message.build(), InetAddressUtil.ipv4From(dnsServer));
-                                long endTime = System.currentTimeMillis();
-
-                                Set<A> answers = responseMessage.getAnswersFor(question);
-                                for (A a : answers) {
-                                    InetAddress inetAddress = a.getInetAddress();
-                                    testText.append("\n").append(getResources().getString(R.string.test_result_resolved)).append(" ").append(inetAddress.getHostAddress());
-                                }
-                                testText.append("\n").append(getResources().getString(R.string.test_time_used)).append(" ").append(String.valueOf(endTime - startTime)).append(" ms\n\n");
-
-                            } catch (Exception e) {
-                                testText.append("\n").append(getResources().getString(R.string.test_failed)).append("\n\n");
-
-                                Log.e(TAG, e.toString());
-                            }
-
-                            mHandler.obtainMessage(MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
-                            return testText;
-                        }
-                    };
-                    mThread = new Thread(runnable);
+                    mThread = new Thread(mRunnable);
                     mThread.start();
                 }
             }
@@ -155,11 +156,20 @@ public class ServerTestActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        if (mThread != null) {
-            mThread.interrupt();
-            mThread = null;
-        }
+        stopThread();
+        mRunnable = null;
         mHandler = null;
+    }
+
+    private static void stopThread() {
+        try {
+            if (mThread != null) {
+                mThread.join(1);
+                mThread = null;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+        }
     }
 
     public static class ServerTestHandler extends Handler {
@@ -179,20 +189,11 @@ public class ServerTestActivity extends AppCompatActivity {
                     textViewTestInfo.setText((String) msg.obj);
                     break;
                 case MSG_TEST_DONE:
-                    testing = false;
                     startTestBtn.setVisibility(View.VISIBLE);
-                    mThread = null;
+
+                    stopThread();
                     break;
             }
-        }
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        if (testing) {
-            final Button startTestBut = (Button) findViewById(R.id.button_start_test);
-            startTestBut.setVisibility(View.INVISIBLE);
         }
     }
 }
