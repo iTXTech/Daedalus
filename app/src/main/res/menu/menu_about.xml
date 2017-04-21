@@ -14,8 +14,8 @@
           android:title="@string/action_visit_cutedns"
           android:orderInCategory="100"
           app:showAsAction="never"/>
-    <item android:id="@+id/action_join_qqgroup"
+    <!--item android:id="@+id/action_join_qqgroup"
           android:title="@string/action_join_qqgroup"
           android:orderInCategory="100"
-          app:showAsAction="never"/>
+          app:showAsAction="never"!/-->
 </menu>

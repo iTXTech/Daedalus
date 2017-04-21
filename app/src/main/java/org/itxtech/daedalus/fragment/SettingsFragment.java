@@ -45,7 +45,7 @@ public class SettingsFragment extends PreferenceFragment {
         ListPreference secondaryServer = (ListPreference) findPreference("secondary_server");
         secondaryServer.setEntries(DnsServer.getDnsServerNames(Daedalus.getInstance()));
         secondaryServer.setEntryValues(DnsServer.getDnsServerIds());
-        secondaryServer.setSummary(DnsServer.getDnsServerById(primaryServer.getValue()).getStringDescription(Daedalus.getInstance()));
+        secondaryServer.setSummary(DnsServer.getDnsServerById(secondaryServer.getValue()).getStringDescription(Daedalus.getInstance()));
         secondaryServer.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {

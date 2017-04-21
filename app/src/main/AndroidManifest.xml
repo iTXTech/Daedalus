@@ -60,7 +60,6 @@
         </activity>
         <activity
                 android:name=".activity.AboutActivity"
-                android:process=":remote"
                 android:launchMode="singleTask"
                 android:label="@string/action_about">
         </activity>

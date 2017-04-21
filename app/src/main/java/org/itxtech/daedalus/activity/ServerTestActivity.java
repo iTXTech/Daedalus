@@ -55,6 +55,7 @@ public class ServerTestActivity extends AppCompatActivity {
         final Spinner spinnerServerChoice = (Spinner) findViewById(R.id.spinner_server_choice);
         ArrayAdapter spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, DnsServer.getDnsServerNames(this));
         spinnerServerChoice.setAdapter(spinnerArrayAdapter);
+        spinnerServerChoice.setSelection(Integer.valueOf(Daedalus.getPrefs().getString("primary_server", "0")));
 
         final AutoCompleteTextView textViewTestUrl = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView_test_url);
         ArrayAdapter autoCompleteArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, Daedalus.DEFAULT_TEST_DOMAINS);
@@ -106,8 +107,7 @@ public class ServerTestActivity extends AppCompatActivity {
 
                         private StringBuilder testServer(DNSClient client, String dnsServer, String testUrl, StringBuilder testText) {
                             Log.d(TAG, "Testing DNS " + dnsServer);
-                            testText.append(getResources().getString(R.string.test_domain)).append(" ").append(testUrl).append("\n"
-                            ).append(getResources().getString(R.string.test_dns_server)).append(" ").append(dnsServer);
+                            testText.append(getResources().getString(R.string.test_domain)).append(" ").append(testUrl).append("\n").append(getResources().getString(R.string.test_dns_server)).append(" ").append(dnsServer);
 
                             mHandler.obtainMessage(MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
 

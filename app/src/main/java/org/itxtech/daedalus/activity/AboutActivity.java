@@ -59,6 +59,12 @@ public class AboutActivity extends AppCompatActivity {
 
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {//for better compatibility
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                return true;
+            }
+
+            @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 try {
@@ -86,7 +92,7 @@ public class AboutActivity extends AppCompatActivity {
             mWebView = null;
         }
 
-        System.exit(0);
+        //System.exit(0);
     }
 
     @Override
@@ -116,9 +122,9 @@ public class AboutActivity extends AppCompatActivity {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.cutedns.cn")));
         }
 
-        if (id == R.id.action_join_qqgroup) {
+        /*if (id == R.id.action_join_qqgroup) {
             joinQQGroup("q6Lfo_EhAEO1fP6Xg3fmKsP4pd6U5-RE");
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }

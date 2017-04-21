@@ -46,4 +46,6 @@
     <string name="settings_help_and_support">Help &amp; Support</string>
     <string name="server_puredns_north_china">Pure DNS North China</string>
     <string name="server_puredns_east_china">Pure DNS East China</string>
+    <string name="server_aixyz_south_china">AIXYZ DNS South China</string>
+    <string name="server_aixyz_east_china">AIXYZ DNS East China</string>
 </resources>

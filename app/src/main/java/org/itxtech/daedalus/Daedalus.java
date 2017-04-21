@@ -38,6 +38,8 @@ public class Daedalus extends Application {
         add(new DnsServer("2", "123.206.61.167", R.string.server_cutedns_south_china));
         add(new DnsServer("3", "115.159.220.214", R.string.server_puredns_east_china));
         add(new DnsServer("4", "123.207.137.88", R.string.server_puredns_north_china));
+        add(new DnsServer("5", "115.159.146.99", R.string.server_aixyz_east_china));
+        add(new DnsServer("6", "123.206.21.48", R.string.server_aixyz_south_china));
     }};
 
     public static final String[] DEFAULT_TEST_DOMAINS = new String[]{
