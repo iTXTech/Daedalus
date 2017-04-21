@@ -9,8 +9,8 @@ android {
         applicationId "org.itxtech.daedalus"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 2
-        versionName "1.1.0"
+        versionCode 3
+        versionName "1.2.0"
 
         buildConfigField "String", "BUILD_TIME", "\"${System.currentTimeMillis()}\""
         buildConfigField "String", "GIT_COMMIT", "\"${gitCommit}\""
@@ -49,7 +49,6 @@ dependencies {
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:percent:25.3.1'
-
 
     compile 'org.pcap4j:pcap4j-core:1.7.0'
     compile 'org.pcap4j:pcap4j-packetfactory-propertiesbased:1.7.0'
