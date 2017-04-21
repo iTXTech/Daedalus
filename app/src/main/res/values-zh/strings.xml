@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Daedalus</string>
     <string name="action_settings">设置</string>
-    <string name="notice_main">通过 CuteDNS! 去看看外面的世界。</string>
+    <string name="notice_main">通过一个干净的 DNS 服务器去看看外面的世界。</string>
     <string name="button_text_activate">启用</string>
     <string name="button_text_deactivate">停用</string>
     <string name="action_about">关于</string>

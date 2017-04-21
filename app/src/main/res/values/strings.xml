@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Daedalus</string>
     <string name="action_settings">Settings</string>
-    <string name="notice_main">See the world outside through CuteDNS!</string>
+    <string name="notice_main">See the world outside through a CLEAN DNS server.</string>
     <string name="button_text_activate">Activate</string>
     <string name="button_text_deactivate">Deactivate</string>
     <string name="action_about">About</string>
