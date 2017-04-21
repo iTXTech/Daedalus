@@ -33,6 +33,12 @@ Through the DNS server provided by [CuteDNS!](https://www.cutedns.cn), users can
 <br>
 __各位 dalao 见笑了！__
 
+Requirements
+-------------
+* Min Android version: 4.0.3 (API 15)
+* Recommend Android version: >= 5.0 (API 21)
+* Best Android version: >=7.1 (API 25)
+
 Get Daedalus
 -------------
 __[Releases](https://github.com/iTXTech/Daedalus/releases)__
