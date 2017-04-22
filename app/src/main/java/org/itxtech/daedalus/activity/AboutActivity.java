@@ -92,6 +92,8 @@ public class AboutActivity extends AppCompatActivity {
             mWebView = null;
         }
 
+        System.gc();
+
         //System.exit(0);
     }
 
@@ -116,6 +118,10 @@ public class AboutActivity extends AppCompatActivity {
 
         if (id == R.id.action_visit_github) {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus")));
+        }
+
+        if (id == R.id.action_license) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus/blob/master/LICENSE")));
         }
 
         /*if (id == R.id.action_visit_cutedns) {

@@ -10,6 +10,10 @@
           android:title="@string/action_visit_github"
           android:orderInCategory="100"
           app:showAsAction="never"/>
+    <item android:id="@+id/action_license"
+          android:title="@string/action_license"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
     <!--item android:id="@+id/action_visit_cutedns"
           android:title="@string/action_visit_cutedns"
           android:orderInCategory="100"

@@ -48,4 +48,5 @@
     <string name="server_puredns_east_china">Pure DNS East China</string>
     <string name="server_aixyz_south_china">AIXYZ DNS South China</string>
     <string name="server_aixyz_east_china">AIXYZ DNS East China</string>
+    <string name="action_license">Open Source License</string>
 </resources>
