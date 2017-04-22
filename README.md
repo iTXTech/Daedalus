@@ -1,7 +1,7 @@
-Daedalus
+iTXTech Daedalus
 ==============
 
-__See the world outside through a CLEAN DNS server.__
+__See the world outside through a CLEAN DNS.__
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -18,21 +18,23 @@ __See the world outside through a CLEAN DNS server.__
 
 Introduction
 -------------
-This application can create a VPN tunnel to modify the DNS server on Android.<br>
+This application can create a VPN tunnel to modify the DNS settings on Android.<br>
 No root access required, no ads contained and functional under data connection.<br>
-Through the DNS server which are provided by third parties, users can visit Google, Twitter and so on via https directly without a VPN.<br>
+Through the DNS which are provided by third parties, users can visit Google, Twitter and so on via https directly without a VPN.<br>
+<br>
+__Users must comply with local laws and regulations.__<br>
 
-DNS server providers
+DNS providers
 -------------
-* __CuteDNS!__ - *Stopped service because of the police.*
-* __[Pure DNS](http://puredns.cn/)__
-* __[AIXYZ DNS](https://aixyz.com/)__ - *For academic purposes only.*
+* __CuteDNS!__ - *Stop service due to police intervention.*
+* __[Pure DNS](http://puredns.cn/)__ - *可能是迄今最不稳定的DNS。*
+* __[AIXYZ DNS](https://aixyz.com/)__ - __*For academic purposes only.*__
 
 Requirements
 -------------
-* Minimum Android version: 4.0.4 (API 15)
-* Recommended Android version: >= 5.0 (API 21)
-* Best Android version: >= 7.1 (API 25)
+* Minimum Android version: 4.0.4 (API 15) - __*Base VPN functions*__
+* Recommended Android version: >= 5.0 (API 21) - __*Full features*__
+* Best Android version: >= 7.1 (API 25) - __*Launcher shortcuts*__
 
 Get Daedalus
 -------------

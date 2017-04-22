@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Daedalus</string>
     <string name="action_settings">Settings</string>
-    <string name="notice_main">See the world outside through a CLEAN DNS server.</string>
+    <string name="notice_main">See the world outside through a CLEAN DNS.</string>
     <string name="button_text_activate">Activate</string>
     <string name="button_text_deactivate">Deactivate</string>
     <string name="action_about">About</string>
@@ -9,17 +9,17 @@
     <string name="settings_system">System settings</string>
     <string name="settings_boot">Auto activate on boot</string>
     <string name="settings_server">Server settings</string>
-    <string name="primary_server">Primary DNS server</string>
+    <string name="primary_server">Primary DNS</string>
     <string name="server_cutedns_south_china">CuteDNS! South China</string>
     <string name="server_cutedns_east_china">CuteDNS! East China</string>
     <string name="server_cutedns_north_china">CuteDNS! North China</string>
-    <string name="secondary_server">Secondary DNS server</string>
-    <string name="notice_start_test">Testing specified DNS server …</string>
-    <string name="action_server_test">Server test</string>
+    <string name="secondary_server">Secondary DNS</string>
+    <string name="notice_start_test">Testing specified DNS …</string>
+    <string name="action_server_test">DNS test</string>
     <string name="action_start_test">Start test</string>
     <string name="test_domain">Test domain:</string>
     <string name="test_time_used">Time used:</string>
-    <string name="test_dns_server">DNS server:</string>
+    <string name="test_dns_server">DNS:</string>
     <string name="test_result_resolved">Address:</string>
     <string name="test_failed">DNS query failed. Timeout or unknown hostname.</string>
     <string name="test_test_domain">google.com</string>
