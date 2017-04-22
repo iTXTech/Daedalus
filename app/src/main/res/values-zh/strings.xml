@@ -49,4 +49,8 @@
     <string name="server_aixyz_south_china">AIXYZ DNS 华南</string>
     <string name="server_aixyz_east_china">AIXYZ DNS 华东</string>
     <string name="action_license">开源许可证</string>
+    <string name="server_neat_dns_education_network">Neat DNS 教育网</string>
+    <string name="server_neat_dns_education_network_alternative">Neat DNS 教育网备选</string>
+    <string name="server_neat_dns_cmcc">Neat DNS 中国移动</string>
+    <string name="server_neat_dns_china_telecom">Neat DNS 中国电信</string>
 </resources>

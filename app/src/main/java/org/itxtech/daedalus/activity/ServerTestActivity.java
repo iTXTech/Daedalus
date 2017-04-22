@@ -185,7 +185,7 @@ public class ServerTestActivity extends AppCompatActivity {
             this.textViewTestInfo = textViewTestInfo;
         }
 
-        public void shutdown() {
+        void shutdown() {
             startTestBtn = null;
             textViewTestInfo = null;
         }
@@ -199,7 +199,6 @@ public class ServerTestActivity extends AppCompatActivity {
                     break;
                 case MSG_TEST_DONE:
                     startTestBtn.setVisibility(View.VISIBLE);
-
                     stopThread();
                     break;
             }

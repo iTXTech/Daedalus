@@ -49,4 +49,8 @@
     <string name="server_aixyz_south_china">AIXYZ DNS South China</string>
     <string name="server_aixyz_east_china">AIXYZ DNS East China</string>
     <string name="action_license">Open Source License</string>
+    <string name="server_neat_dns_education_network">Neat DNS Education Network</string>
+    <string name="server_neat_dns_education_network_alternative">Neat DNS Education Network Alternative</string>
+    <string name="server_neat_dns_cmcc">Neat DNS CMCC</string>
+    <string name="server_neat_dns_china_telecom">Neat DNS China Telecom</string>
 </resources>

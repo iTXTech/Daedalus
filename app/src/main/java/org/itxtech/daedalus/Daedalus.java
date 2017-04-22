@@ -40,6 +40,10 @@ public class Daedalus extends Application {
         add(new DnsServer("1", "123.207.137.88", R.string.server_puredns_north_china));
         add(new DnsServer("2", "115.159.146.99", R.string.server_aixyz_east_china));
         add(new DnsServer("3", "123.206.21.48", R.string.server_aixyz_south_china));
+        add(new DnsServer("4", "202.141.178.13", R.string.server_neat_dns_cmcc));
+        add(new DnsServer("5", "202.141.162.123", R.string.server_neat_dns_china_telecom));
+        add(new DnsServer("6", "202.38.93.153", R.string.server_neat_dns_education_network));
+        add(new DnsServer("7", "202.38.93.94", R.string.server_neat_dns_education_network_alternative));
     }};
 
     public static final String[] DEFAULT_TEST_DOMAINS = new String[]{
