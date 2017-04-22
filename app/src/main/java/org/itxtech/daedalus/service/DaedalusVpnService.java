@@ -303,10 +303,10 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
                     updateUserInterface();
                 }
-            }
-
-            while (running) {
-                Thread.sleep(1000);
+            } else {
+                while (running) {
+                    Thread.sleep(1000);
+                }
             }
         } catch (Exception e) {
             Log.d(TAG, e.toString());
