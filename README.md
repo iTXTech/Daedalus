@@ -27,12 +27,13 @@ __Users must comply with local laws and regulations.__<br>
 DNS providers
 -------------
 * __CuteDNS!__ - *Stop service due to police intervention.*
-* __[Pure DNS](http://puredns.cn/)__ - *可能是迄今最不稳定的DNS。*
+* __[Pure DNS](http://puredns.cn/)__ - *I DO NOT KNOW HOW TO DESCIBE~~~*
 * __[AIXYZ DNS](https://aixyz.com/)__ - __*For academic purposes only.*__
+* __[Neat DNS](https://groups.google.com/forum/#!forum/neat-dns)__ - *By [LUG@USTC](https://lug.ustc.edu.cn/wiki/)(University of Science and Technology of China)*
 
 Requirements
 -------------
-* Minimum Android version: 4.0.4 (API 15) - __*Base VPN functions*__
+* Minimum Android version: 4.0.4 (API 15) - __*Basic VPN functions*__
 * Recommended Android version: >= 5.0 (API 21) - __*Full features*__
 * Best Android version: >= 7.1 (API 25) - __*Launcher shortcuts*__
 
