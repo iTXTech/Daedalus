@@ -157,6 +157,7 @@ public class ServerTestActivity extends AppCompatActivity {
         super.onDestroy();
 
         stopThread();
+        mHandler.removeCallbacks(mRunnable);
         mRunnable = null;
         mHandler = null;
     }

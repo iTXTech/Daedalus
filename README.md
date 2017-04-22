@@ -48,7 +48,7 @@ DNS server providers
 
 Requirements
 -------------
-* Minimum Android version: 4.0.3 (API 15)
+* Minimum Android version: 4.0.4 (API 15)
 * Recommended Android version: >= 5.0 (API 21)
 * Best Android version: >= 7.1 (API 25)
 

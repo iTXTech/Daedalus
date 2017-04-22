@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), ServerTestActivity.class));
+                startActivity(new Intent(Daedalus.getInstance(), ServerTestActivity.class));
             }
         });
 
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private Intent getServiceIntent() {
-        return new Intent(this, DaedalusVpnService.class);
+        return new Intent(getApplicationContext(), DaedalusVpnService.class);
     }
 
     protected void onActivityResult(int request, int result, Intent data) {

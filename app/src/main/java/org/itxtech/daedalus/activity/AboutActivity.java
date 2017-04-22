@@ -118,9 +118,9 @@ public class AboutActivity extends AppCompatActivity {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus")));
         }
 
-        if (id == R.id.action_visit_cutedns) {
+        /*if (id == R.id.action_visit_cutedns) {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.cutedns.cn")));
-        }
+        }*/
 
         /*if (id == R.id.action_join_qqgroup) {
             joinQQGroup("q6Lfo_EhAEO1fP6Xg3fmKsP4pd6U5-RE");
