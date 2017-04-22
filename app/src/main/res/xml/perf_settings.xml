@@ -8,13 +8,13 @@
         <ListPreference
                 android:key="primary_server"
                 android:title="@string/primary_server"
-                android:defaultValue="3">
+                android:defaultValue="0">
         </ListPreference>
 
         <ListPreference
                 android:key="secondary_server"
                 android:title="@string/secondary_server"
-                android:defaultValue="4">
+                android:defaultValue="1">
         </ListPreference>
         <EditTextPreference
                 android:key="dns_test_servers"

@@ -159,7 +159,10 @@ public class ServerTestActivity extends AppCompatActivity {
         stopThread();
         mHandler.removeCallbacks(mRunnable);
         mRunnable = null;
+        mHandler.obtainMessage(MSG_TEST_DONE).sendToTarget();
         mHandler = null;
+
+        System.gc();
     }
 
     private static void stopThread() {
@@ -193,6 +196,8 @@ public class ServerTestActivity extends AppCompatActivity {
                     startTestBtn.setVisibility(View.VISIBLE);
 
                     stopThread();
+                    startTestBtn = null;
+                    textViewTestInfo = null;
                     break;
             }
         }

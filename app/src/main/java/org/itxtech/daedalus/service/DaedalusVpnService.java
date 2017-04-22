@@ -173,6 +173,8 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         } else if (shouldRefresh) {
             Daedalus.updateShortcut(getApplicationContext());
         }
+
+        System.gc();
     }
 
 

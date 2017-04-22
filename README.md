@@ -22,27 +22,9 @@ This application can create a VPN tunnel to modify the DNS server on Android.<br
 No root access required, no ads contained and functional under data connection.<br>
 Through the DNS server which are provided by third parties, users can visit Google, Twitter and so on via https directly without a VPN.<br>
 
------------------
-
-__CuteDNS! 近期惨遭举报，建议某些人好自为之。__
-
-__AIXYZ DNS 节点仅供学术用途使用！__
-
-__BEYOND THE MATRIX, FREE.__
-
-~~本萌新第一个 Android 应用。~~<br>
-不需要翻墙就能在 Android 上通过 https 协议直连 Google, Twitter, Facebook 等网站。<br>
-通过由第三方 DNS 服务器提供者提供的 DNS 服务器，减少 DNS 劫持。<br>
-~~（当然万能的 *** 想封了你也不是不行）~~ 。<br>
-基于 Android API 提供的 VpnService 实现，不需要 root，数据连接也可用。<br>
-支持开机启动。 ~~BAT流氓软件~~ <br>
-~~好吧故事编不下去了。~~ <br>
-<br>
-__各位 dalao 见笑了！__
-
 DNS server providers
 -------------
-* __CuteDNS!__
+* __CuteDNS!__ - *Stopped service because of the police.*
 * __[Pure DNS](http://puredns.cn/)__
 * __[AIXYZ DNS](https://aixyz.com/)__ - *For academic purposes only.*
 
