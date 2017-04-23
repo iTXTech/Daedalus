@@ -63,11 +63,6 @@
                 android:launchMode="singleTask"
                 android:label="@string/action_about">
         </activity>
-        <activity
-                android:name=".activity.ServerTestActivity"
-                android:launchMode="singleTask"
-                android:label="@string/action_server_test">
-        </activity>
     </application>
 
 </manifest>

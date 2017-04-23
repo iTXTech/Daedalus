@@ -15,7 +15,7 @@
     <string name="server_cutedns_north_china">CuteDNS! North China</string>
     <string name="secondary_server">Secondary DNS</string>
     <string name="notice_start_test">Testing specified DNS …</string>
-    <string name="action_server_test">DNS test</string>
+    <string name="action_dns_test">DNS test</string>
     <string name="action_start_test">Start test</string>
     <string name="test_domain">Test domain:</string>
     <string name="test_time_used">Time used:</string>

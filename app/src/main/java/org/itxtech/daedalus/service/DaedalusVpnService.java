@@ -168,7 +168,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         }
         stopSelf();
 
-        if (shouldRefresh && MainActivity.getInstance() != null && MainActivity.getInstance().isAppOnForeground()) {
+        if (shouldRefresh && MainActivity.getInstance() != null && Daedalus.getInstance().isAppOnForeground()) {
             MainActivity.getInstance().startActivity(new Intent(getApplicationContext(), MainActivity.class).putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_NONE));
         } else if (shouldRefresh) {
             Daedalus.updateShortcut(getApplicationContext());

@@ -1,13 +1,15 @@
-package org.itxtech.daedalus.activity;
+package org.itxtech.daedalus.fragment;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import de.measite.minidns.DNSClient;
@@ -35,7 +37,7 @@ import java.util.Set;
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  */
-public class ServerTestActivity extends AppCompatActivity {
+public class DNSTestFragment extends Fragment {
     private static final int MSG_DISPLAY_STATUS = 0;
     private static final int MSG_TEST_DONE = 1;
 
@@ -46,22 +48,19 @@ public class ServerTestActivity extends AppCompatActivity {
     private ServerTestHandler mHandler = null;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_server_test);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_dns_test, container, false);
 
-        final TextView textViewTestInfo = (TextView) findViewById(R.id.textView_test_info);
+        final TextView textViewTestInfo = (TextView) view.findViewById(R.id.textView_test_info);
 
-        final Spinner spinnerServerChoice = (Spinner) findViewById(R.id.spinner_server_choice);
-        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, DnsServer.getDnsServerNames(this));
+        final Spinner spinnerServerChoice = (Spinner) view.findViewById(R.id.spinner_server_choice);
+        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter<>(Daedalus.getInstance(), android.R.layout.simple_list_item_1, DnsServer.getDnsServerNames(Daedalus.getInstance()));
         spinnerServerChoice.setAdapter(spinnerArrayAdapter);
         spinnerServerChoice.setSelection(Integer.valueOf(Daedalus.getPrefs().getString("primary_server", "0")));
 
-        final AutoCompleteTextView textViewTestUrl = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView_test_url);
-        ArrayAdapter autoCompleteArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, Daedalus.DEFAULT_TEST_DOMAINS);
+        final AutoCompleteTextView textViewTestUrl = (AutoCompleteTextView) view.findViewById(R.id.autoCompleteTextView_test_url);
+        ArrayAdapter autoCompleteArrayAdapter = new ArrayAdapter<>(Daedalus.getInstance(), android.R.layout.simple_list_item_1, Daedalus.DEFAULT_TEST_DOMAINS);
         textViewTestUrl.setAdapter(autoCompleteArrayAdapter);
-
-        final Context context = this;
 
         mRunnable = new Runnable() {
             @Override
@@ -73,7 +72,7 @@ public class ServerTestActivity extends AppCompatActivity {
                     }
                     StringBuilder testText = new StringBuilder();
                     ArrayList<String> dnsServers = new ArrayList<String>() {{
-                        add(DnsServer.getDnsServerAddressByStringDescription(context, spinnerServerChoice.getSelectedItem().toString()));
+                        add(DnsServer.getDnsServerAddressByStringDescription(Daedalus.getInstance(), spinnerServerChoice.getSelectedItem().toString()));
                         String servers = Daedalus.getPrefs().getString("dns_test_servers", "");
                         if (!servers.equals("")) {
                             for (String server : servers.split(",")) {
@@ -127,7 +126,7 @@ public class ServerTestActivity extends AppCompatActivity {
             }
         };
 
-        final Button startTestBut = (Button) findViewById(R.id.button_start_test);
+        final Button startTestBut = (Button) view.findViewById(R.id.button_start_test);
         startTestBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,7 +134,7 @@ public class ServerTestActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
                 startTestBut.setVisibility(View.INVISIBLE);
 
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) Daedalus.getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
                 textViewTestInfo.setText("");
@@ -150,10 +149,12 @@ public class ServerTestActivity extends AppCompatActivity {
 
         mHandler = new ServerTestHandler();
         mHandler.setViews(startTestBut, textViewTestInfo);
+
+        return view;
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
 
         stopThread();
