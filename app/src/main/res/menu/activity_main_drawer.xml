@@ -11,12 +11,12 @@
               android:title="@string/action_dns_test"
               android:checked="false"
               android:icon="@mipmap/ic_verified_user_white_36dp"/>
-    </group>
-
-    <group android:id="@+id/nav_group_more">
         <item android:id="@+id/nav_settings"
               android:title="@string/action_settings"
               android:icon="@mipmap/ic_settings_grey600_36dp"/>
+    </group>
+
+    <group android:id="@+id/nav_group_more">
         <item android:id="@+id/nav_about"
               android:title="@string/action_about"
               android:icon="@mipmap/ic_info_grey600_36dp"/>

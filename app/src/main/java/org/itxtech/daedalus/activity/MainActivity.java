@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import org.itxtech.daedalus.BuildConfig;
@@ -19,6 +20,7 @@ import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.fragment.DNSTestFragment;
 import org.itxtech.daedalus.fragment.MainFragment;
+import org.itxtech.daedalus.fragment.SettingsFragment;
 
 /**
  * Daedalus Project
@@ -35,16 +37,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int LAUNCH_ACTION_NONE = 0;
     public static final int LAUNCH_ACTION_ACTIVATE = 1;
     public static final int LAUNCH_ACTION_DEACTIVATE = 2;
+    public static final String LAUNCH_FRAGMENT = "org.itxtech.daedalus.activity.MainActivity.LAUNCH_FRAGMENT";
 
-    private static final int FRAGMENT_MAIN = 0;
-    private static final int FRAGMENT_DNS_TEST = 1;
+    private static final String TAG = "DMainActivity";
 
-    private static int currentFragment = FRAGMENT_MAIN;
+    public static final int FRAGMENT_NONE = -1;
+    public static final int FRAGMENT_MAIN = 0;
+    public static final int FRAGMENT_DNS_TEST = 1;
+    public static final int FRAGMENT_SETTINGS = 2;
 
     private static MainActivity instance = null;
 
     private MainFragment mMain;
     private DNSTestFragment mDnsTest;
+    private SettingsFragment mSettings;
+    private int currentFragment = FRAGMENT_NONE;
 
     public static MainActivity getInstance() {
         return instance;
@@ -72,19 +79,89 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.textView_nav_version)).setText(getString(R.string.nav_version) + " " + BuildConfig.VERSION_NAME);
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.textView_nav_git_commit)).setText(getString(R.string.nav_git_commit) + " " + BuildConfig.GIT_COMMIT);
 
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
-        if (currentFragment == FRAGMENT_MAIN) {
-            mMain = new MainFragment();
-            transaction.replace(R.id.id_content, mMain);
+        if (getIntent().getIntExtra(LAUNCH_FRAGMENT, FRAGMENT_NONE) == FRAGMENT_NONE) {
+            FragmentManager fm = getFragmentManager();
+            FragmentTransaction transaction = fm.beginTransaction();
+            if (mMain == null) {
+                mMain = new MainFragment();
+            }
+            transaction.replace(R.id.id_content, mMain).commit();
+            currentFragment = FRAGMENT_MAIN;
         }
-        if (currentFragment == FRAGMENT_DNS_TEST) {
-            mDnsTest = new DNSTestFragment();
-            transaction.replace(R.id.id_content, mDnsTest);
-        }
-        transaction.commit();
 
         updateUserInterface(getIntent());
+        Log.d(TAG, "onCreate");
+    }
+
+    @Override
+    public void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        updateTitle();
+        updateNavigationMenu();
+    }
+
+    private void updateNavigationMenu() {
+        Menu menu = ((NavigationView) findViewById(R.id.nav_view)).getMenu();
+        switch (currentFragment) {
+            case FRAGMENT_MAIN:
+                menu.findItem(R.id.nav_home).setChecked(true);
+                break;
+            case FRAGMENT_DNS_TEST:
+                menu.findItem(R.id.nav_dns_test).setChecked(true);
+                break;
+            case FRAGMENT_SETTINGS:
+                menu.findItem(R.id.nav_settings).setChecked(true);
+                break;
+        }
+    }
+
+    private void updateTitle() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        switch (currentFragment) {
+            case FRAGMENT_MAIN:
+                toolbar.setTitle(R.string.action_home);
+                break;
+            case FRAGMENT_DNS_TEST:
+                toolbar.setTitle(R.string.action_dns_test);
+                break;
+            case FRAGMENT_SETTINGS:
+                toolbar.setTitle(R.string.action_settings);
+                break;
+        }
+    }
+
+    private void changeFragment(int fragment) {
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        switch (fragment) {
+            case FRAGMENT_MAIN:
+                if (mMain == null) {
+                    mMain = new MainFragment();
+                }
+                transaction.replace(R.id.id_content, mMain);
+                toolbar.setTitle(R.string.action_home);
+                currentFragment = FRAGMENT_MAIN;
+                break;
+            case FRAGMENT_DNS_TEST:
+                if (mDnsTest == null) {
+                    mDnsTest = new DNSTestFragment();
+                }
+                transaction.replace(R.id.id_content, mDnsTest);
+                toolbar.setTitle(R.string.action_dns_test);
+                currentFragment = FRAGMENT_DNS_TEST;
+                break;
+            case FRAGMENT_SETTINGS:
+                if (mSettings == null) {
+                    mSettings = new SettingsFragment();
+                }
+                transaction.replace(R.id.id_content, mSettings);
+                toolbar.setTitle(R.string.action_settings);
+                currentFragment = FRAGMENT_SETTINGS;
+                break;
+        }
+        transaction.commit();
     }
 
     @Override
@@ -92,6 +169,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (currentFragment != FRAGMENT_MAIN) {
+            changeFragment(FRAGMENT_MAIN);
         } else {
             super.onBackPressed();
         }
@@ -101,9 +180,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onDestroy() {
         super.onDestroy();
 
-        Log.d("DMainActivity", "onDestroy");
+        Log.d(TAG, "onDestroy");
         mMain = null;
         mDnsTest = null;
+        mSettings = null;
         instance = null;
         System.gc();
     }
@@ -115,8 +195,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         updateUserInterface(intent);
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+    }
+
     private void updateUserInterface(Intent intent) {
-        Log.d("MainActivity", "Updating user interface");
+        Log.d(TAG, "Updating user interface");
         int launchAction = intent.getIntExtra(LAUNCH_ACTION, LAUNCH_ACTION_NONE);
         if (launchAction == LAUNCH_ACTION_ACTIVATE) {
             Daedalus.updateShortcut(this.getApplicationContext());
@@ -126,6 +211,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             Daedalus.updateShortcut(this.getApplicationContext());
         }
+
+        int fragment = intent.getIntExtra(LAUNCH_FRAGMENT, FRAGMENT_NONE);
+        if (fragment != FRAGMENT_NONE) {
+            changeFragment(fragment);
+        }
     }
 
     @Override
@@ -134,39 +224,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
+            changeFragment(FRAGMENT_SETTINGS);
         }
 
         if (id == R.id.nav_about) {
             startActivity(new Intent(this, AboutActivity.class));
+            item.setChecked(false);
         }
 
         if (id == R.id.nav_dns_test) {
-            if (mDnsTest == null) {
-                mDnsTest = new DNSTestFragment();
-            }
-            FragmentManager fm = getFragmentManager();
-            FragmentTransaction transaction = fm.beginTransaction();
-            transaction.replace(R.id.id_content, mDnsTest);
-            transaction.commit();
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            toolbar.setTitle(R.string.action_dns_test);
-            currentFragment = FRAGMENT_DNS_TEST;
-            item.setChecked(true);
+            changeFragment(FRAGMENT_DNS_TEST);
         }
 
         if (id == R.id.nav_home) {
-            if (mMain == null) {
-                mMain = new MainFragment();
-            }
-            FragmentManager fm = getFragmentManager();
-            FragmentTransaction transaction = fm.beginTransaction();
-            transaction.replace(R.id.id_content, mMain);
-            transaction.commit();
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            toolbar.setTitle(R.string.app_name);
-            currentFragment = FRAGMENT_MAIN;
-            item.setChecked(true);
+            changeFragment(FRAGMENT_MAIN);
         }
 
         if (id == R.id.nav_check_update) {

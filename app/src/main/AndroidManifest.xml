@@ -54,11 +54,6 @@
                     android:resource="@xml/shortcuts"/>
         </activity>
         <activity
-                android:name=".activity.SettingsActivity"
-                android:launchMode="singleTask"
-                android:label="@string/action_settings">
-        </activity>
-        <activity
                 android:name=".activity.AboutActivity"
                 android:launchMode="singleTask"
                 android:label="@string/action_about">

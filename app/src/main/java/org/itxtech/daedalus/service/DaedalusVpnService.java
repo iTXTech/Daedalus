@@ -21,7 +21,6 @@ import de.measite.minidns.util.InetAddressUtil;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.MainActivity;
-import org.itxtech.daedalus.activity.SettingsActivity;
 import org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver;
 import org.pcap4j.packet.*;
 import org.pcap4j.packet.factory.PacketFactoryPropertiesLoader;
@@ -215,7 +214,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                         .setBlocking(true);
             }
 
-            this.descriptor = builder.setSession("Daedalus").setConfigureIntent(PendingIntent.getActivity(this, 0, new Intent(this, SettingsActivity.class), PendingIntent.FLAG_ONE_SHOT)).establish();
+            this.descriptor = builder.setSession("Daedalus").setConfigureIntent(PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class).putExtra(MainActivity.LAUNCH_FRAGMENT, MainActivity.FRAGMENT_SETTINGS), PendingIntent.FLAG_ONE_SHOT)).establish();
 
             if (statisticQuery) {
                 Log.d(TAG, "Starting count queries");

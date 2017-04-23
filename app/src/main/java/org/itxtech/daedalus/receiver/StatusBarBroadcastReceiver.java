@@ -7,7 +7,6 @@ import android.util.Log;
 import android.widget.Button;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.MainActivity;
-import org.itxtech.daedalus.activity.SettingsActivity;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 
 import java.lang.reflect.Method;
@@ -37,7 +36,7 @@ public class StatusBarBroadcastReceiver extends BroadcastReceiver {
             }
         }
         if (intent.getAction().equals(STATUS_BAR_BTN_SETTINGS_CLICK_ACTION)) {
-            Intent settingsIntent = new Intent(context, SettingsActivity.class);
+            Intent settingsIntent = new Intent(context, MainActivity.class).putExtra(MainActivity.LAUNCH_FRAGMENT, MainActivity.FRAGMENT_SETTINGS);
             settingsIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             context.startActivity(settingsIntent);
             try {
