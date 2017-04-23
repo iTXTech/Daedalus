@@ -30,7 +30,8 @@
             android:textSize="30sp"
             app:layout_marginTopPercent="5%"
             android:layout_below="@id/imageView_icon"
-            android:textAppearance="@android:style/TextAppearance.Material" android:fontFamily="sans-serif"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault"
+            android:fontFamily="sans-serif"
             android:layout_centerHorizontal="true" android:id="@+id/textView_app_name"/>
     <TextView
             android:text="@string/notice_main"
@@ -38,7 +39,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/textView_notice"
             app:layout_marginTopPercent="5%"
-            android:textAppearance="@android:style/TextAppearance.Material" android:fontFamily="sans-serif"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault"
+            android:fontFamily="sans-serif"
             android:layout_below="@+id/textView_app_name" android:layout_centerHorizontal="true"/>
     <Button
             android:text="@string/button_text_activate"
