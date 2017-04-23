@@ -97,15 +97,15 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                         builder.setWhen(0)
                                 .setContentTitle(getResources().getString(R.string.notification_activated))
                                 .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
-                                .setSmallIcon(R.mipmap.ic_security_black_18dp)
+                                .setSmallIcon(R.drawable.ic_security_black_24dp)
                                 .setAutoCancel(false)
                                 .setOngoing(true)
                                 .setTicker(getResources().getString(R.string.notification_activated))
                                 .setContentIntent(pIntent)
-                                .addAction(R.mipmap.ic_security_black_18dp, getResources().getString(R.string.button_text_deactivate),
+                                .addAction(R.drawable.ic_security_black_24dp, getResources().getString(R.string.button_text_deactivate),
                                         PendingIntent.getBroadcast(this, 0,
                                                 new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION), 0))
-                                .addAction(R.mipmap.ic_security_black_18dp, getResources().getString(R.string.action_settings),
+                                .addAction(R.drawable.ic_security_black_24dp, getResources().getString(R.string.action_settings),
                                         PendingIntent.getBroadcast(this, 0,
                                                 new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION), 0));
 

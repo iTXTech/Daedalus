@@ -6,28 +6,26 @@
         <item android:id="@+id/nav_home"
               android:title="@string/action_home"
               android:checked="true"
-              android:icon="@mipmap/ic_home_grey600_36dp"/>
+              android:icon="@drawable/ic_home_black_24dp"/>
         <item android:id="@+id/nav_dns_test"
               android:title="@string/action_dns_test"
               android:checked="false"
-              android:icon="@mipmap/ic_verified_user_white_36dp"/>
-        <item android:id="@+id/nav_settings"
-              android:title="@string/action_settings"
-              android:icon="@mipmap/ic_settings_grey600_36dp"/>
+              android:icon="@drawable/ic_verified_user_black_24dp"/>
     </group>
 
-    <group android:id="@+id/nav_group_more">
+    <group android:checkableBehavior="single"
+           android:id="@+id/nav_group_more">
+        <item android:id="@+id/nav_settings"
+              android:title="@string/action_settings"
+              android:icon="@drawable/ic_settings_black_24dp"/>
         <item android:id="@+id/nav_about"
               android:title="@string/action_about"
-              android:icon="@mipmap/ic_info_grey600_36dp"/>
+              android:icon="@drawable/ic_info_black_24dp"/>
     </group>
 
     <group android:id="@+id/nav_group_help_and_support">
-        <item android:id="@+id/nav_check_update"
-              android:title="@string/settings_check_update"
-              android:icon="@mipmap/ic_file_upload_grey600_36dp"/>
-        <item android:id="@+id/nav_bug_report"
-              android:title="@string/settings_bug_report"
-              android:icon="@mipmap/ic_bug_report_grey600_36dp"/>
+        <item android:id="@+id/nav_github"
+              android:title="@string/nav_github"
+              android:icon="@drawable/ic_github"/>
     </group>
 </menu>

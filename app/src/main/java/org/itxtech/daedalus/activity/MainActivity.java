@@ -18,6 +18,7 @@ import android.widget.TextView;
 import org.itxtech.daedalus.BuildConfig;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
+import org.itxtech.daedalus.fragment.AboutFragment;
 import org.itxtech.daedalus.fragment.DNSTestFragment;
 import org.itxtech.daedalus.fragment.MainFragment;
 import org.itxtech.daedalus.fragment.SettingsFragment;
@@ -45,12 +46,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int FRAGMENT_MAIN = 0;
     public static final int FRAGMENT_DNS_TEST = 1;
     public static final int FRAGMENT_SETTINGS = 2;
+    public static final int FRAGMENT_ABOUT = 3;
 
     private static MainActivity instance = null;
 
     private MainFragment mMain;
     private DNSTestFragment mDnsTest;
     private SettingsFragment mSettings;
+    private AboutFragment mAbout;
     private int currentFragment = FRAGMENT_NONE;
 
     public static MainActivity getInstance() {
@@ -113,6 +116,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case FRAGMENT_SETTINGS:
                 menu.findItem(R.id.nav_settings).setChecked(true);
                 break;
+            case FRAGMENT_ABOUT:
+                menu.findItem(R.id.nav_about).setChecked(true);
+                break;
         }
     }
 
@@ -127,6 +133,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case FRAGMENT_SETTINGS:
                 toolbar.setTitle(R.string.action_settings);
+                break;
+            case FRAGMENT_ABOUT:
+                toolbar.setTitle(R.string.action_about);
                 break;
         }
     }
@@ -160,6 +169,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setTitle(R.string.action_settings);
                 currentFragment = FRAGMENT_SETTINGS;
                 break;
+            case FRAGMENT_ABOUT:
+                if (mAbout == null) {
+                    mAbout = new AboutFragment();
+                }
+                transaction.replace(R.id.id_content, mAbout);
+                toolbar.setTitle(R.string.action_about);
+                currentFragment = FRAGMENT_ABOUT;
+                break;
         }
         transaction.commit();
     }
@@ -171,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         } else if (currentFragment != FRAGMENT_MAIN) {
             changeFragment(FRAGMENT_MAIN);
+            updateNavigationMenu();
         } else {
             super.onBackPressed();
         }
@@ -184,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mMain = null;
         mDnsTest = null;
         mSettings = null;
+        mAbout = null;
         instance = null;
         System.gc();
     }
@@ -193,11 +212,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onNewIntent(intent);
 
         updateUserInterface(intent);
-    }
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
     }
 
     private void updateUserInterface(Intent intent) {
@@ -215,6 +229,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int fragment = intent.getIntExtra(LAUNCH_FRAGMENT, FRAGMENT_NONE);
         if (fragment != FRAGMENT_NONE) {
             changeFragment(fragment);
+            updateNavigationMenu();
         }
     }
 
@@ -228,8 +243,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         if (id == R.id.nav_about) {
-            startActivity(new Intent(this, AboutActivity.class));
-            item.setChecked(false);
+            changeFragment(FRAGMENT_ABOUT);
         }
 
         if (id == R.id.nav_dns_test) {
@@ -240,11 +254,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             changeFragment(FRAGMENT_MAIN);
         }
 
-        if (id == R.id.nav_check_update) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus/releases")));
-        }
-
-        if (id == R.id.nav_bug_report) {
+        if (id == R.id.nav_github) {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus/issues")));
         }
 

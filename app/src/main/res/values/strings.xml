@@ -53,4 +53,5 @@
     <string name="server_neat_dns_education_network_alternative">Neat DNS Education Network Alternative</string>
     <string name="server_neat_dns_cmcc">Neat DNS CMCC</string>
     <string name="server_neat_dns_china_telecom">Neat DNS China Telecom</string>
+    <string name="nav_github">GitHub</string>
 </resources>
