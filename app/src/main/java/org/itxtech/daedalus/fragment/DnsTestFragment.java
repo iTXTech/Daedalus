@@ -37,15 +37,12 @@ import java.util.Set;
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  */
-public class DNSTestFragment extends Fragment {
-    private static final int MSG_DISPLAY_STATUS = 0;
-    private static final int MSG_TEST_DONE = 1;
-
+public class DnsTestFragment extends Fragment {
     private static final String TAG = "DServerTest";
 
     private static Thread mThread = null;
     private static Runnable mRunnable = null;
-    private ServerTestHandler mHandler = null;
+    private DnsTestHandler mHandler = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -84,7 +81,7 @@ public class DNSTestFragment extends Fragment {
                     for (String dnsServer : dnsServers) {
                         testText = testServer(client, dnsServer, testDomain, testText);
                     }
-                    mHandler.obtainMessage(MSG_TEST_DONE).sendToTarget();
+                    mHandler.obtainMessage(DnsTestHandler.MSG_TEST_DONE).sendToTarget();
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
@@ -94,7 +91,7 @@ public class DNSTestFragment extends Fragment {
                 Log.d(TAG, "Testing DNS " + dnsServer);
                 testText.append(getResources().getString(R.string.test_domain)).append(" ").append(testUrl).append("\n").append(getResources().getString(R.string.test_dns_server)).append(" ").append(dnsServer);
 
-                mHandler.obtainMessage(MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
+                mHandler.obtainMessage(DnsTestHandler.MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
 
                 Question question = new Question(testUrl, Record.TYPE.getType(A.class));
                 DNSMessage.Builder message = DNSMessage.builder();
@@ -121,7 +118,7 @@ public class DNSTestFragment extends Fragment {
                     Log.e(TAG, e.toString());
                 }
 
-                mHandler.obtainMessage(MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
+                mHandler.obtainMessage(DnsTestHandler.MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
                 return testText;
             }
         };
@@ -147,7 +144,7 @@ public class DNSTestFragment extends Fragment {
         });
 
 
-        mHandler = new ServerTestHandler();
+        mHandler = new DnsTestHandler();
         mHandler.setViews(startTestBut, textViewTestInfo);
 
         return view;
@@ -177,7 +174,10 @@ public class DNSTestFragment extends Fragment {
         }
     }
 
-    private static class ServerTestHandler extends Handler {
+    private static class DnsTestHandler extends Handler {
+        static final int MSG_DISPLAY_STATUS = 0;
+        static final int MSG_TEST_DONE = 1;
+
         private Button startTestBtn = null;
         private TextView textViewTestInfo = null;
 

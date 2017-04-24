@@ -19,7 +19,7 @@ import org.itxtech.daedalus.BuildConfig;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.fragment.AboutFragment;
-import org.itxtech.daedalus.fragment.DNSTestFragment;
+import org.itxtech.daedalus.fragment.DnsTestFragment;
 import org.itxtech.daedalus.fragment.MainFragment;
 import org.itxtech.daedalus.fragment.SettingsFragment;
 
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int LAUNCH_ACTION_NONE = 0;
     public static final int LAUNCH_ACTION_ACTIVATE = 1;
     public static final int LAUNCH_ACTION_DEACTIVATE = 2;
-    public static final int LAUNCH_ACTION_AFTRER_DEACTIVATE = 3;
+    public static final int LAUNCH_ACTION_AFTER_DEACTIVATE = 3;
     public static final String LAUNCH_FRAGMENT = "org.itxtech.daedalus.activity.MainActivity.LAUNCH_FRAGMENT";
 
     private static final String TAG = "DMainActivity";
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static MainActivity instance = null;
 
     private MainFragment mMain;
-    private DNSTestFragment mDnsTest;
+    private DnsTestFragment mDnsTest;
     private SettingsFragment mSettings;
     private AboutFragment mAbout;
     private int currentFragment = FRAGMENT_NONE;
@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case FRAGMENT_DNS_TEST:
                 if (mDnsTest == null) {
-                    mDnsTest = new DNSTestFragment();
+                    mDnsTest = new DnsTestFragment();
                 }
                 transaction.replace(R.id.id_content, mDnsTest);
                 toolbar.setTitle(R.string.action_dns_test);
@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mMain.activateService();
         } else if (launchAction == LAUNCH_ACTION_DEACTIVATE) {
             Daedalus.getInstance().deactivateService();
-        } else if (launchAction == LAUNCH_ACTION_AFTRER_DEACTIVATE) {
+        } else if (launchAction == LAUNCH_ACTION_AFTER_DEACTIVATE) {
             Daedalus.updateShortcut(this.getApplicationContext());
             mHandler.obtainMessage(MainFragment.MainFragmentHandler.MSG_REFRESH).sendToTarget();
         } else {
