@@ -87,7 +87,6 @@ public class MainFragment extends Fragment {
 
     public void activateService() {
         Intent intent = VpnService.prepare(Daedalus.getInstance());
-        view.findViewById(R.id.button_activate).setVisibility(View.INVISIBLE);
         if (intent != null) {
             startActivityForResult(intent, 0);
         } else {
@@ -104,7 +103,6 @@ public class MainFragment extends Fragment {
 
             Button button = (Button) view.findViewById(R.id.button_activate);
             button.setText(R.string.button_text_deactivate);
-            button.setVisibility(View.VISIBLE);
         }
     }
 

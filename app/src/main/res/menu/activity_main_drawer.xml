@@ -26,6 +26,6 @@
     <group android:id="@+id/nav_group_help_and_support">
         <item android:id="@+id/nav_github"
               android:title="@string/nav_github"
-              android:icon="@drawable/ic_github"/>
+              android:icon="@drawable/ic_github_black_24dp"/>
     </group>
 </menu>
