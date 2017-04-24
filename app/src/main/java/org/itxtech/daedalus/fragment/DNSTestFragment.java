@@ -177,7 +177,7 @@ public class DNSTestFragment extends Fragment {
         }
     }
 
-    public static class ServerTestHandler extends Handler {
+    private static class ServerTestHandler extends Handler {
         private Button startTestBtn = null;
         private TextView textViewTestInfo = null;
 

@@ -4,10 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Button;
-import org.itxtech.daedalus.R;
+import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.activity.MainActivity;
-import org.itxtech.daedalus.service.DaedalusVpnService;
 
 import java.lang.reflect.Method;
 
@@ -28,12 +26,7 @@ public class StatusBarBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION)) {
-            Intent serviceIntent = new Intent(context, DaedalusVpnService.class);
-            context.startService(serviceIntent.setAction(DaedalusVpnService.ACTION_DEACTIVATE));
-            context.stopService(serviceIntent);
-            if (MainActivity.getInstance() != null) {
-                ((Button) MainActivity.getInstance().findViewById(R.id.button_activate)).setText(R.string.button_text_activate);
-            }
+            Daedalus.getInstance().deactivateService();
         }
         if (intent.getAction().equals(STATUS_BAR_BTN_SETTINGS_CLICK_ACTION)) {
             Intent settingsIntent = new Intent(context, MainActivity.class).putExtra(MainActivity.LAUNCH_FRAGMENT, MainActivity.FRAGMENT_SETTINGS);

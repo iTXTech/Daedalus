@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int LAUNCH_ACTION_NONE = 0;
     public static final int LAUNCH_ACTION_ACTIVATE = 1;
     public static final int LAUNCH_ACTION_DEACTIVATE = 2;
+    public static final int LAUNCH_ACTION_AFTRER_DEACTIVATE = 3;
     public static final String LAUNCH_FRAGMENT = "org.itxtech.daedalus.activity.MainActivity.LAUNCH_FRAGMENT";
 
     private static final String TAG = "DMainActivity";
@@ -55,6 +56,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SettingsFragment mSettings;
     private AboutFragment mAbout;
     private int currentFragment = FRAGMENT_NONE;
+
+    private MainFragment.MainFragmentHandler mHandler = null;
+
+    public void setMainFragmentHandler(MainFragment.MainFragmentHandler mHandler) {
+        this.mHandler = mHandler;
+    }
 
     public static MainActivity getInstance() {
         return instance;
@@ -222,6 +229,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mMain.activateService();
         } else if (launchAction == LAUNCH_ACTION_DEACTIVATE) {
             Daedalus.getInstance().deactivateService();
+        } else if (launchAction == LAUNCH_ACTION_AFTRER_DEACTIVATE) {
+            Daedalus.updateShortcut(this.getApplicationContext());
+            mHandler.obtainMessage(MainFragment.MainFragmentHandler.MSG_REFRESH).sendToTarget();
         } else {
             Daedalus.updateShortcut(this.getApplicationContext());
         }
@@ -255,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         if (id == R.id.nav_github) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus/issues")));
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus")));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_drawer_layout);

@@ -2,15 +2,20 @@ package org.itxtech.daedalus.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.net.VpnService;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
+import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.DnsServer;
 
@@ -27,6 +32,7 @@ import org.itxtech.daedalus.util.DnsServer;
 public class MainFragment extends Fragment {
 
     private View view = null;
+    private MainFragmentHandler mHandler = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,11 +44,6 @@ public class MainFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_main, container, false);
 
         final Button but = (Button) view.findViewById(R.id.button_activate);
-        if (Daedalus.getInstance().isServiceActivated()) {
-            but.setText(R.string.button_text_deactivate);
-        } else {
-            but.setText(R.string.button_text_activate);
-        }
         but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +61,24 @@ public class MainFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof MainActivity) {
+            mHandler = (new MainFragmentHandler()).setFragment(this);
+            ((MainActivity) context).setMainFragmentHandler(mHandler);
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        mHandler.shutdown();
+        MainActivity.getInstance().setMainFragmentHandler(null);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
 
@@ -68,6 +87,7 @@ public class MainFragment extends Fragment {
 
     public void activateService() {
         Intent intent = VpnService.prepare(Daedalus.getInstance());
+        view.findViewById(R.id.button_activate).setVisibility(View.INVISIBLE);
         if (intent != null) {
             startActivityForResult(intent, 0);
         } else {
@@ -82,8 +102,9 @@ public class MainFragment extends Fragment {
 
             Daedalus.getInstance().startService(Daedalus.getInstance().getServiceIntent().setAction(DaedalusVpnService.ACTION_ACTIVATE));
 
-
-            ((Button) view.findViewById(R.id.button_activate)).setText(R.string.button_text_deactivate);
+            Button button = (Button) view.findViewById(R.id.button_activate);
+            button.setText(R.string.button_text_deactivate);
+            button.setVisibility(View.VISIBLE);
         }
     }
 
@@ -94,6 +115,7 @@ public class MainFragment extends Fragment {
     }
 
     private void updateUserInterface() {
+        Log.d("DMainFragment", "updateInterface");
         Button but = (Button) view.findViewById(R.id.button_activate);
         if (Daedalus.getInstance().isServiceActivated()) {
             but.setText(R.string.button_text_deactivate);
@@ -101,5 +123,31 @@ public class MainFragment extends Fragment {
             but.setText(R.string.button_text_activate);
         }
 
+    }
+
+    public static class MainFragmentHandler extends Handler {
+        public static final int MSG_REFRESH = 0;
+
+        private MainFragment fragment = null;
+
+        MainFragmentHandler setFragment(MainFragment fragment) {
+            this.fragment = fragment;
+            return this;
+        }
+
+        void shutdown() {
+            fragment = null;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            switch (msg.what) {
+                case MSG_REFRESH:
+                    ((Button) fragment.view.findViewById(R.id.button_activate)).setText(R.string.button_text_activate);
+                    break;
+            }
+        }
     }
 }
