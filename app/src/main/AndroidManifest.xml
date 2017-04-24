@@ -9,6 +9,7 @@
     <application
             android:name=".Daedalus"
             android:allowBackup="true"
+            android:fullBackupContent="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:supportsRtl="true"
@@ -42,6 +43,7 @@
                 android:name=".activity.MainActivity"
                 android:label="@string/app_name"
                 android:launchMode="singleTask"
+                android:configChanges="keyboard|keyboardHidden|screenLayout|uiMode|orientation|screenSize|smallestScreenSize"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -52,11 +54,6 @@
             <meta-data
                     android:name="android.app.shortcuts"
                     android:resource="@xml/shortcuts"/>
-        </activity>
-        <activity
-                android:name=".activity.AboutActivity"
-                android:launchMode="singleTask"
-                android:label="@string/action_about">
         </activity>
     </application>
 
