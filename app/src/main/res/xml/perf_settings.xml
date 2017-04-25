@@ -51,7 +51,7 @@
                 android:enabled="false"/>
         <SwitchPreference
                 android:key="settings_local_host_resolve"
-                android:title="@string/settings_count_number_of_queries"
+                android:title="@string/settings_local_hosts_resolve"
                 android:defaultValue="false"
                 android:enabled="false"/>
     </PreferenceCategory>
