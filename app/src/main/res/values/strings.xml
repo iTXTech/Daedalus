@@ -23,13 +23,7 @@
     <string name="test_result_resolved">Address:</string>
     <string name="test_failed">DNS query failed. Timeout or unknown hostname.</string>
     <string name="test_test_domain">google.com</string>
-    <string name="action_visit_itxtech">Visit iTXTech</string>
-    <string name="action_visit_cutedns">Visit CuteDNS!</string>
-    <string name="action_visit_github">Visit Project home</string>
-    <string name="action_join_qqgroup">Join QQ group</string>
-    <string name="notice_join_group_failed">QQ is not installed or current version does not support this operation.
-    </string>
-    <string name="settings_notification">Show notification when activated</string>
+    <string name="settings_notification">Show notification</string>
     <string name="settings_check_update">Check update</string>
     <string name="settings_update_summary">Visit GitHub releases page.</string>
     <string name="settings_count_number_of_queries">Count DNS query times</string>
@@ -54,4 +48,8 @@
     <string name="server_neat_dns_cmcc">Neat DNS CMCC</string>
     <string name="server_neat_dns_china_telecom">Neat DNS China Telecom</string>
     <string name="nav_github">GitHub</string>
+    <string name="settings_advanced">Advanced system settings</string>
+    <string name="settings_advanced_on">On</string>
+    <string name="settings_local_hosts_resolve">Local hosts resolve (TODO)</string>
+    <string name="notice_need_restart">Re-activate Daedalus to make the settings take effect.</string>
 </resources>

@@ -38,6 +38,8 @@ public class SettingsFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary(DnsServer.getDnsServerById((String) newValue).getStringDescription(Daedalus.getInstance()));
+                Snackbar.make(view, R.string.notice_need_restart, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
                 return true;
             }
         });
@@ -50,6 +52,8 @@ public class SettingsFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary(DnsServer.getDnsServerById((String) newValue).getStringDescription(Daedalus.getInstance()));
+                Snackbar.make(view, R.string.notice_need_restart, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
                 return true;
             }
         });
@@ -71,6 +75,31 @@ public class SettingsFragment extends PreferenceFragment {
             SwitchPreference autoBoot = (SwitchPreference) findPreference("settings_boot");
             autoBoot.setChecked(false);
             autoBoot.setEnabled(false);
+        }
+
+        SwitchPreference advanced = (SwitchPreference) findPreference("settings_advanced_switch");
+        advanced.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                updateAdvancedOptions((boolean) newValue);
+                return true;
+            }
+        });
+        updateAdvancedOptions(advanced.isChecked());
+    }
+
+    private void updateAdvancedOptions(boolean checked) {
+        PreferenceCategory category = (PreferenceCategory) findPreference("settings_advanced");
+        for (int i = 1; i < category.getPreferenceCount(); i++) {
+            Preference preference = category.getPreference(i);
+            if (checked) {
+                preference.setEnabled(true);
+            } else {
+                preference.setEnabled(false);
+                if (preference instanceof SwitchPreference) {
+                    ((SwitchPreference) preference).setChecked(false);
+                }
+            }
         }
     }
 

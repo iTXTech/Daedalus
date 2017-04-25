@@ -173,6 +173,8 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             Daedalus.updateShortcut(getApplicationContext());
         }
 
+        dnsQueryTimes = 0;
+
         System.gc();
     }
 
@@ -201,23 +203,28 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                 this.descriptor.close();
             }
 
-            boolean statisticQuery = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("settings_count_query_times", false);
+            boolean advanced = Daedalus.getPrefs().getBoolean("settings_advanced_switch", false);
+            boolean statisticQuery = Daedalus.getPrefs().getBoolean("settings_count_query_times", false);
             Log.d(TAG, "tun0 add " + format + " pServ " + primaryServer + " sServ " + secondaryServer);
             Inet4Address primaryDNSServer = InetAddressUtil.ipv4From(primaryServer);
             Inet4Address secondaryDNSServer = InetAddressUtil.ipv4From(secondaryServer);
-            builder.addDnsServer(primaryDNSServer);
-            builder.addDnsServer(secondaryDNSServer);
+            builder.setSession("Daedalus")
+                    .addDnsServer(primaryDNSServer)
+                    .addDnsServer(secondaryDNSServer)
+                    .setConfigureIntent(PendingIntent.getActivity(this, 0,
+                            new Intent(this, MainActivity.class).putExtra(MainActivity.LAUNCH_FRAGMENT, MainActivity.FRAGMENT_SETTINGS),
+                            PendingIntent.FLAG_ONE_SHOT));
 
-            if (statisticQuery) {
+            if (advanced) {
                 builder.addRoute(primaryDNSServer, primaryDNSServer.getAddress().length * 8)
                         .addRoute(secondaryDNSServer, secondaryDNSServer.getAddress().length * 8)
                         .setBlocking(true);
             }
 
-            this.descriptor = builder.setSession("Daedalus").setConfigureIntent(PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class).putExtra(MainActivity.LAUNCH_FRAGMENT, MainActivity.FRAGMENT_SETTINGS), PendingIntent.FLAG_ONE_SHOT)).establish();
+            this.descriptor = builder.establish();
 
-            if (statisticQuery) {
-                Log.d(TAG, "Starting count queries");
+            if (advanced) {
+                Log.d(TAG, "Starting advanced DNS proxy.");
                 FileDescriptor[] pipes = Os.pipe();
                 mInterruptFd = pipes[0];
                 mBlockFd = pipes[1];
@@ -300,7 +307,9 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                         }
                     }
 
-                    updateUserInterface();
+                    if (statisticQuery) {
+                        updateUserInterface();
+                    }
                 }
             } else {
                 while (running) {

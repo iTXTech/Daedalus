@@ -32,13 +32,28 @@
                 android:title="@string/settings_boot"
                 android:defaultValue="false"/>
         <SwitchPreference
-                android:key="settings_count_query_times"
-                android:title="@string/settings_count_number_of_queries"
-                android:defaultValue="false"/>
-        <SwitchPreference
                 android:key="settings_notification"
                 android:title="@string/settings_notification"
                 android:defaultValue="true"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            android:key="settings_advanced"
+            android:title="@string/settings_advanced">
+        <SwitchPreference
+                android:key="settings_advanced_switch"
+                android:title="@string/settings_advanced_on"
+                android:defaultValue="false"/>
+        <SwitchPreference
+                android:key="settings_count_query_times"
+                android:title="@string/settings_count_number_of_queries"
+                android:defaultValue="false"
+                android:enabled="false"/>
+        <SwitchPreference
+                android:key="settings_local_host_resolve"
+                android:title="@string/settings_count_number_of_queries"
+                android:defaultValue="false"
+                android:enabled="false"/>
     </PreferenceCategory>
 
     <PreferenceCategory

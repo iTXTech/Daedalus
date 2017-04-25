@@ -24,12 +24,7 @@
     <string name="test_result_resolved">解析地址:</string>
     <string name="test_failed">查询失败。超时或未知的主机。</string>
     <string name="test_test_domain">google.com</string>
-    <string name="action_visit_cutedns">访问 CuteDNS!</string>
-    <string name="action_visit_github">访问 项目主页</string>
-    <string name="action_visit_itxtech">访问 iTXTech</string>
-    <string name="action_join_qqgroup">加入 CuteDNS! QQ群</string>
-    <string name="notice_join_group_failed">未安装手Q或当前版本不支持此操作。</string>
-    <string name="settings_notification">启用时显示通知</string>
+    <string name="settings_notification">显示通知</string>
     <string name="settings_check_update">检查更新</string>
     <string name="settings_update_summary">前往 GitHub 发布页面。</string>
     <string name="settings_count_number_of_queries">统计 DNS 查询次数</string>
@@ -54,4 +49,8 @@
     <string name="server_neat_dns_cmcc">Neat DNS 中国移动</string>
     <string name="server_neat_dns_china_telecom">Neat DNS 中国电信</string>
     <string name="nav_github">GitHub</string>
+    <string name="settings_advanced">高级系统设置</string>
+    <string name="settings_advanced_on">开启</string>
+    <string name="settings_local_hosts_resolve">本地 hosts 解析 （TODO）</string>
+    <string name="notice_need_restart">重新启用 Daedalus 以应用设置。</string>
 </resources>
