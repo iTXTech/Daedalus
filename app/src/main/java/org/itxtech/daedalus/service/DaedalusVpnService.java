@@ -17,11 +17,14 @@ import android.system.OsConstants;
 import android.system.StructPollfd;
 import android.util.Log;
 import de.measite.minidns.DNSMessage;
+import de.measite.minidns.Record;
+import de.measite.minidns.record.A;
 import de.measite.minidns.util.InetAddressUtil;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver;
+import org.itxtech.daedalus.util.HostsResolver;
 import org.pcap4j.packet.*;
 import org.pcap4j.packet.factory.PacketFactoryPropertiesLoader;
 import org.pcap4j.util.PropertiesLoader;
@@ -61,6 +64,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
     private static NotificationCompat.Builder notification = null;
 
     private static long dnsQueryTimes = 0;
+    private static boolean localHostsResolve = false;
 
     private Thread mThread = null;
     private ParcelFileDescriptor descriptor;
@@ -205,6 +209,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
             boolean advanced = Daedalus.getPrefs().getBoolean("settings_advanced_switch", false);
             boolean statisticQuery = Daedalus.getPrefs().getBoolean("settings_count_query_times", false);
+            localHostsResolve = Daedalus.getPrefs().getBoolean("settings_local_host_resolve", false);
             Log.d(TAG, "tun0 add " + format + " pServ " + primaryServer + " sServ " + secondaryServer);
             Inet4Address primaryDNSServer = InetAddressUtil.ipv4From(primaryServer);
             Inet4Address secondaryDNSServer = InetAddressUtil.ipv4From(secondaryServer);
@@ -503,9 +508,30 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             return;
         }
         String dnsQueryName = dnsMsg.getQuestion().name.toString();
-        Log.i(TAG, "handleDnsRequest: DNS Name " + dnsQueryName + " , sending to " + destAddr);
-        DatagramPacket outPacket = new DatagramPacket(dnsRawData, 0, dnsRawData.length, destAddr, parsedUdp.getHeader().getDstPort().valueAsInt());
-        forwardPacket(outPacket, parsedPacket);
+
+        try {
+            if (localHostsResolve && HostsResolver.canResolve(dnsQueryName)) {
+                String response = HostsResolver.resolve(dnsQueryName);
+                Log.i(TAG, "handleDnsRequest: DNS Name " + dnsQueryName + " Address " + response + ", using local hosts to resolve.");
+                DNSMessage.Builder builder = dnsMsg.asBuilder();
+                int[] ip = new int[4];
+                byte i = 0;
+                for (String block : response.split("\\.")) {
+                    ip[i] = Integer.parseInt(block);
+                    i++;
+                }
+                Record<A> answer = new Record<>(dnsQueryName, Record.TYPE.getType(A.class), 1, 255, new A(ip[0], ip[1], ip[2], ip[3]));
+                builder.setQuestions(null);
+                builder.addAnswer(answer);
+                handleDnsResponse(parsedPacket, builder.build().toArray());
+            } else {
+                Log.i(TAG, "handleDnsRequest: DNS Name " + dnsQueryName + " , sending to " + destAddr);
+                DatagramPacket outPacket = new DatagramPacket(dnsRawData, 0, dnsRawData.length, destAddr, parsedUdp.getHeader().getDstPort().valueAsInt());
+                forwardPacket(outPacket, parsedPacket);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+        }
     }
 
     static class VpnNetworkException extends Exception {

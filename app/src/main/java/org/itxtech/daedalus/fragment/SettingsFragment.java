@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
+import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.util.DnsServer;
 
 /**
@@ -69,12 +70,9 @@ public class SettingsFragment extends PreferenceFragment {
         });
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            SwitchPreference countQueryTimes = (SwitchPreference) findPreference("settings_count_query_times");
-            countQueryTimes.setChecked(false);
-            countQueryTimes.setEnabled(false);
-            SwitchPreference autoBoot = (SwitchPreference) findPreference("settings_boot");
-            autoBoot.setChecked(false);
-            autoBoot.setEnabled(false);
+            SwitchPreference advanced = (SwitchPreference) findPreference("settings_advanced_switch");
+            advanced.setEnabled(false);
+            advanced.setChecked(false);
         }
 
         SwitchPreference advanced = (SwitchPreference) findPreference("settings_advanced_switch");
@@ -85,6 +83,16 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             }
         });
+
+        SwitchPreference localHosts = (SwitchPreference) findPreference("settings_local_host_resolve");
+        localHosts.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                MainActivity.getInstance().initHostsResolver();
+                return true;
+            }
+        });
+
         updateAdvancedOptions(advanced.isChecked());
     }
 

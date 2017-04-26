@@ -1,11 +1,16 @@
 package org.itxtech.daedalus.activity;
 
+import android.Manifest;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,6 +27,7 @@ import org.itxtech.daedalus.fragment.AboutFragment;
 import org.itxtech.daedalus.fragment.DnsTestFragment;
 import org.itxtech.daedalus.fragment.MainFragment;
 import org.itxtech.daedalus.fragment.SettingsFragment;
+import org.itxtech.daedalus.util.HostsResolver;
 
 /**
  * Daedalus Project
@@ -49,6 +55,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int FRAGMENT_SETTINGS = 2;
     public static final int FRAGMENT_ABOUT = 3;
 
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
     private static MainActivity instance = null;
 
     private MainFragment mMain;
@@ -71,6 +83,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme_NoActionBar_TransparentStatusBar);
         super.onCreate(savedInstanceState);
+
+        initHostsResolver();
 
         instance = this;
 
@@ -102,6 +116,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         updateUserInterface(getIntent());
         Log.d(TAG, "onCreate");
+    }
+
+    public void initHostsResolver() {
+        if (Daedalus.getPrefs().getBoolean("settings_local_host_resolve", false)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                int permission = ActivityCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if (permission != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
+                }
+            }
+            HostsResolver.startLoad(getExternalFilesDir(null).getPath() + "/hosts");
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override

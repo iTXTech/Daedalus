@@ -14,6 +14,7 @@ import android.util.Log;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.DnsServer;
+import org.itxtech.daedalus.util.HostsResolver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,12 +57,15 @@ public class Daedalus extends Application {
 
     private static Daedalus instance = null;
     private static SharedPreferences prefs;
+    private static Thread mHostsResolver;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         initConfig();
+        mHostsResolver = new Thread(new HostsResolver());
+        mHostsResolver.start();
 
         instance = this;
     }
@@ -81,6 +85,10 @@ public class Daedalus extends Application {
 
         instance = null;
         prefs = null;
+        HostsResolver.shutdown();
+        mHostsResolver.interrupt();
+        HostsResolver.clean();
+        mHostsResolver = null;
     }
 
     public Intent getServiceIntent() {
