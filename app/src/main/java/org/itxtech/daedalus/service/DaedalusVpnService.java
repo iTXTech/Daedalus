@@ -512,7 +512,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         try {
             if (localHostsResolve && HostsResolver.canResolve(dnsQueryName)) {
                 String response = HostsResolver.resolve(dnsQueryName);
-                Log.i(TAG, "handleDnsRequest: DNS Name " + dnsQueryName + " Address " + response + ", using local hosts to resolve.");
+                Log.i(TAG, "handleDnsRequest: DNS Name " + dnsQueryName + " address " + response + ", using local hosts to resolve.");
                 DNSMessage.Builder builder = dnsMsg.asBuilder();
                 int[] ip = new int[4];
                 byte i = 0;
@@ -520,9 +520,8 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                     ip[i] = Integer.parseInt(block);
                     i++;
                 }
-                Record<A> answer = new Record<>(dnsQueryName, Record.TYPE.getType(A.class), 1, 255, new A(ip[0], ip[1], ip[2], ip[3]));
-                builder.setQuestions(null);
-                builder.addAnswer(answer);
+                builder.setQuestions(null)
+                        .addAnswer(new Record<>(dnsQueryName, Record.TYPE.getType(A.class), 1, 1, new A(ip[0], ip[1], ip[2], ip[3])));
                 handleDnsResponse(parsedPacket, builder.build().toArray());
             } else {
                 Log.i(TAG, "handleDnsRequest: DNS Name " + dnsQueryName + " , sending to " + destAddr);
