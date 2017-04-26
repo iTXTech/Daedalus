@@ -2,7 +2,6 @@ package org.itxtech.daedalus.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.net.VpnService;
 import android.os.Bundle;
@@ -56,18 +55,10 @@ public class MainFragment extends Fragment {
         });
 
         updateUserInterface();
+        mHandler = (new MainFragmentHandler()).setFragment(this);
+        MainActivity.getInstance().setMainFragmentHandler(mHandler);
 
         return view;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        if (context instanceof MainActivity) {
-            mHandler = (new MainFragmentHandler()).setFragment(this);
-            ((MainActivity) context).setMainFragmentHandler(mHandler);
-        }
     }
 
     @Override
