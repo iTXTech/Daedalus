@@ -103,6 +103,8 @@ public class MainFragment extends Fragment {
 
             Button button = (Button) view.findViewById(R.id.button_activate);
             button.setText(R.string.button_text_deactivate);
+
+            Daedalus.updateShortcut(Daedalus.getInstance());
         }
     }
 

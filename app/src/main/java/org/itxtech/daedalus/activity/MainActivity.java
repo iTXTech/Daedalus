@@ -226,13 +226,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.d(TAG, "Updating user interface");
         int launchAction = intent.getIntExtra(LAUNCH_ACTION, LAUNCH_ACTION_NONE);
         if (launchAction == LAUNCH_ACTION_ACTIVATE) {
-            Daedalus.updateShortcut(this.getApplicationContext());
             mMain.activateService();
         } else if (launchAction == LAUNCH_ACTION_DEACTIVATE) {
             Daedalus.getInstance().deactivateService();
         } else if (launchAction == LAUNCH_ACTION_AFTER_DEACTIVATE) {
             Daedalus.updateShortcut(this.getApplicationContext());
-            mHandler.obtainMessage(MainFragment.MainFragmentHandler.MSG_REFRESH).sendToTarget();
+            if (currentFragment == FRAGMENT_MAIN) {
+                mHandler.obtainMessage(MainFragment.MainFragmentHandler.MSG_REFRESH).sendToTarget();
+            }
         } else {
             Daedalus.updateShortcut(this.getApplicationContext());
         }
