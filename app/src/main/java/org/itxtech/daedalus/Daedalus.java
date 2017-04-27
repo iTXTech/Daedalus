@@ -1,15 +1,18 @@
 package org.itxtech.daedalus;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.service.DaedalusVpnService;
@@ -71,6 +74,27 @@ public class Daedalus extends Application {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
+    public static final int REQUEST_EXTERNAL_STORAGE = 1;
+    public static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
+    public static void initHostsResolver() {
+        if (Daedalus.getPrefs().getBoolean("settings_local_host_resolve", false)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (MainActivity.getInstance() != null) {
+                    int permission = ActivityCompat.checkSelfPermission(Daedalus.getInstance(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    if (permission != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(MainActivity.getInstance(), PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
+                    }
+                } else {
+                    return;
+                }
+            }
+            HostsResolver.startLoad(instance.getExternalFilesDir(null).getPath() + "/hosts");
+        }
+    }
     public static SharedPreferences getPrefs() {
         return prefs;
     }

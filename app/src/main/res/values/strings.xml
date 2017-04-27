@@ -45,6 +45,9 @@
     <string name="nav_github">GitHub</string>
     <string name="settings_advanced">Advanced system settings</string>
     <string name="settings_advanced_on">On</string>
-    <string name="settings_local_hosts_resolve">Local hosts resolve (TODO)</string>
+    <string name="settings_local_hosts_resolve">Local hosts resolution</string>
     <string name="notice_need_restart">Re-activate Daedalus to make the settings take effect.</string>
+    <string name="notice_need_storage_perm">This application requires access to external storage for local host
+        resolution.
+    </string>
 </resources>

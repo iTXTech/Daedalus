@@ -46,6 +46,7 @@
     <string name="nav_github">GitHub</string>
     <string name="settings_advanced">高级系统设置</string>
     <string name="settings_advanced_on">开启</string>
-    <string name="settings_local_hosts_resolve">本地 hosts 解析 （TODO）</string>
+    <string name="settings_local_hosts_resolve">本地 hosts 解析</string>
     <string name="notice_need_restart">重新启用 Daedalus 以应用设置。</string>
+    <string name="notice_need_storage_perm">本应用需要访问外部储存以实现本地 hosts 解析。</string>
 </resources>

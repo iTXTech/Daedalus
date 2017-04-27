@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
-import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.util.DnsServer;
 
 /**
@@ -84,12 +83,21 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
 
-        SwitchPreference localHosts = (SwitchPreference) findPreference("settings_local_host_resolve");
-        localHosts.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        ListPreference checkUpdate = (ListPreference) findPreference("settings_check_update");
+        checkUpdate.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                MainActivity.getInstance().initHostsResolver();
-                return true;
+            public boolean onPreferenceClick(Preference preference) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus/releases")));
+                return false;
+            }
+        });
+
+        ListPreference issueTracker = (ListPreference) findPreference("settings_issue_tracker");
+        issueTracker.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus/issues")));
+                return false;
             }
         });
 
@@ -114,25 +122,6 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = super.onCreateView(inflater, container, savedInstanceState);
-
-        ListPreference checkUpdate = (ListPreference) findPreference("settings_check_update");
-        checkUpdate.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus/releases")));
-                return false;
-            }
-        });
-
-        ListPreference issueTracker = (ListPreference) findPreference("settings_issue_tracker");
-        issueTracker.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus/issues")));
-                return false;
-            }
-        });
-
         return view;
     }
 

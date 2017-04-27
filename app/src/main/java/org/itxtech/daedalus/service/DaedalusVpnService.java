@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.ParcelFileDescriptor;
-import android.preference.PreferenceManager;
 import android.support.v7.app.NotificationCompat;
 import android.system.ErrnoException;
 import android.system.Os;
@@ -90,7 +89,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         if (intent != null) {
             switch (intent.getAction()) {
                 case ACTION_ACTIVATE:
-                    if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("settings_notification", true)) {
+                    if (Daedalus.getPrefs().getBoolean("settings_notification", true)) {
 
                         NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -119,6 +118,8 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
                         DaedalusVpnService.notification = builder;
                     }
+
+                    Daedalus.initHostsResolver();
 
                     dnsQueryTimes = 0;
                     if (this.mThread == null) {

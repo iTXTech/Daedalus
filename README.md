@@ -22,12 +22,14 @@ This application can create a VPN tunnel to modify the DNS settings on Android.<
 No root access required, no ads contained and functional under data connection.<br>
 Through the DNS which are provided by third parties, users can visit Google, Twitter and so on via https directly without a VPN.<br>
 <br>
+Local hosts is located in SDCard/Android/data/org.itxtech.daedalus/files <br>
+<br>
 __Users must comply with local laws and regulations.__<br>
 
 DNS providers
 -------------
 * __CuteDNS!__ - *Stop service due to police intervention.*
-* __[Pure DNS](http://puredns.cn/)__ - *I DO NOT KNOW HOW TO DESCIBE~~~*
+* __[Pure DNS](http://puredns.cn/)__ - *I DO NOT KNOW HOW TO DESCRIBE~~~*
 * __[AIXYZ DNS](https://aixyz.com/)__ - __*For academic purposes only.*__
 
 Requirements
