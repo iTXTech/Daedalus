@@ -11,9 +11,6 @@
     <string name="settings_boot">开机自动启用</string>
     <string name="settings_server">服务器设置</string>
     <string name="primary_server">首选 DNS 服务器</string>
-    <string name="server_cutedns_south_china">CuteDNS! 华南</string>
-    <string name="server_cutedns_east_china">CuteDNS! 华东</string>
-    <string name="server_cutedns_north_china">CuteDNS! 华北</string>
     <string name="secondary_server">备用 DNS 服务器</string>
     <string name="notice_start_test">正在测试指定的 DNS 服务器……</string>
     <string name="action_dns_test">测试</string>
