@@ -49,6 +49,7 @@ public class Daedalus extends Application {
 
     public static final List<HostsProvider> HOSTS_PROVIDERS = new ArrayList<HostsProvider>() {{
         add(new HostsProvider("racaljk", "https://coding.net/u/scaffrey/p/hosts/git/raw/master/hosts"));
+        add(new HostsProvider("fengixng", "https://raw.githubusercontent.com/fengixng/google-hosts/master/hosts"));
     }};
 
     public static final String[] DEFAULT_TEST_DOMAINS = new String[]{

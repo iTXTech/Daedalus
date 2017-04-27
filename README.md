@@ -46,3 +46,5 @@ Acknowledgements
 -------------
 * __[ClearEditText](https://github.com/MrFuFuFu/ClearEditText)__ by *[MrFuFuFu](https://github.com/MrFuFuFu)*
 * __[DNS66](https://github.com/julian-klode/dns66)__ by *[julian-klode](https://github.com/julian-klode)*
+* __[hosts](https://github.com/racaljk/hosts)__ by *[racaljk](https://github.com/racaljk)* - Licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)
+* __[google-hosts](https://github.com/fengixng/google-hosts)__ by *[fengixng](https://github.com/fengixng)*
