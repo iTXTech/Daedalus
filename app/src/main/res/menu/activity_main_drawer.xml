@@ -11,6 +11,10 @@
               android:title="@string/action_dns_test"
               android:checked="false"
               android:icon="@drawable/ic_verified_user_black_24dp"/>
+        <item android:id="@+id/nav_hosts"
+              android:title="@string/action_hosts"
+              android:checked="false"
+              android:icon="@drawable/ic_description_black_24dp"/>
     </group>
 
     <group android:checkableBehavior="single"

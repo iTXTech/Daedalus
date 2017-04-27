@@ -17,6 +17,7 @@ import android.util.Log;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.DnsServer;
+import org.itxtech.daedalus.util.HostsProvider;
 import org.itxtech.daedalus.util.HostsResolver;
 
 import java.util.ArrayList;
@@ -44,6 +45,10 @@ public class Daedalus extends Application {
         add(new DnsServer("1", "123.207.137.88", R.string.server_puredns_north_china));
         add(new DnsServer("2", "115.159.146.99", R.string.server_aixyz_east_china));
         add(new DnsServer("3", "123.206.21.48", R.string.server_aixyz_south_china));
+    }};
+
+    public static final List<HostsProvider> HOSTS_PROVIDERS = new ArrayList<HostsProvider>() {{
+        add(new HostsProvider("racaljk", "https://coding.net/u/scaffrey/p/hosts/git/raw/master/hosts"));
     }};
 
     public static final String[] DEFAULT_TEST_DOMAINS = new String[]{

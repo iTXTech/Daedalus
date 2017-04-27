@@ -36,6 +36,9 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mHandler = (new MainFragmentHandler()).setFragment(this);
+        MainActivity.getInstance().setMainFragmentHandler(mHandler);
     }
 
     @Override
@@ -53,10 +56,6 @@ public class MainFragment extends Fragment {
                 }
             }
         });
-
-        updateUserInterface();
-        mHandler = (new MainFragmentHandler()).setFragment(this);
-        MainActivity.getInstance().setMainFragmentHandler(mHandler);
 
         return view;
     }

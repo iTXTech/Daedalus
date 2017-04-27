@@ -521,8 +521,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                     ip[i] = Integer.parseInt(block);
                     i++;
                 }
-                builder.setQuestions(null)
-                        .addAnswer(new Record<>(dnsQueryName, Record.TYPE.getType(A.class), 1, 1, new A(ip[0], ip[1], ip[2], ip[3])));
+                builder.addAnswer(new Record<>(dnsQueryName, Record.TYPE.getType(A.class), 1, 64, new A(ip[0], ip[1], ip[2], ip[3])));
                 handleDnsResponse(parsedPacket, builder.build().toArray());
             } else {
                 Log.i(TAG, "handleDnsRequest: DNS Name " + dnsQueryName + " , sending to " + destAddr);

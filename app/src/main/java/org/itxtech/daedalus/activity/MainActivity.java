@@ -24,10 +24,7 @@ import android.widget.TextView;
 import org.itxtech.daedalus.BuildConfig;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
-import org.itxtech.daedalus.fragment.AboutFragment;
-import org.itxtech.daedalus.fragment.DnsTestFragment;
-import org.itxtech.daedalus.fragment.MainFragment;
-import org.itxtech.daedalus.fragment.SettingsFragment;
+import org.itxtech.daedalus.fragment.*;
 
 /**
  * Daedalus Project
@@ -54,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int FRAGMENT_DNS_TEST = 1;
     public static final int FRAGMENT_SETTINGS = 2;
     public static final int FRAGMENT_ABOUT = 3;
+    public static final int FRAGMENT_HOSTS = 4;
 
     private static MainActivity instance = null;
 
@@ -61,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DnsTestFragment mDnsTest;
     private SettingsFragment mSettings;
     private AboutFragment mAbout;
+    private HostsFragment mHosts;
     private int currentFragment = FRAGMENT_NONE;
 
     private MainFragment.MainFragmentHandler mHandler = null;
@@ -160,6 +159,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case FRAGMENT_ABOUT:
                 menu.findItem(R.id.nav_about).setChecked(true);
                 break;
+            case FRAGMENT_HOSTS:
+                menu.findItem(R.id.nav_hosts).setChecked(true);
+                break;
         }
     }
 
@@ -177,6 +179,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case FRAGMENT_ABOUT:
                 toolbar.setTitle(R.string.action_about);
+                break;
+            case FRAGMENT_HOSTS:
+                toolbar.setTitle(R.string.action_hosts);
                 break;
         }
     }
@@ -218,6 +223,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setTitle(R.string.action_about);
                 currentFragment = FRAGMENT_ABOUT;
                 break;
+            case FRAGMENT_HOSTS:
+                if (mHosts == null) {
+                    mHosts = new HostsFragment();
+                }
+                transaction.replace(R.id.id_content, mHosts);
+                toolbar.setTitle(R.string.action_hosts);
+                currentFragment = FRAGMENT_HOSTS;
+                break;
         }
         transaction.commit();
     }
@@ -244,6 +257,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDnsTest = null;
         mSettings = null;
         mAbout = null;
+        mHosts = null;
         instance = null;
         System.gc();
     }
@@ -297,6 +311,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.nav_home) {
             changeFragment(FRAGMENT_MAIN);
+        }
+
+        if (id == R.id.nav_hosts) {
+            changeFragment(FRAGMENT_HOSTS);
         }
 
         if (id == R.id.nav_github) {
