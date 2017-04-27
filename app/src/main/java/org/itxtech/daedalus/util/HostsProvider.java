@@ -39,4 +39,13 @@ public class HostsProvider {
         String[] stringServers = new String[Daedalus.HOSTS_PROVIDERS.size()];
         return servers.toArray(stringServers);
     }
+
+    public static String getDownloadUrlByName(String name) {
+        for (HostsProvider hostsProvider : Daedalus.HOSTS_PROVIDERS) {
+            if (hostsProvider.getName().equals(name)) {
+                return hostsProvider.getDownloadURL();
+            }
+        }
+        return null;
+    }
 }

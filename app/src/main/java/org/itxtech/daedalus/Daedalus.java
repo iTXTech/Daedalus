@@ -59,6 +59,8 @@ public class Daedalus extends Application {
             "wikipedia.org"
     };
 
+    public static String hostsPath;
+
     private static Daedalus instance = null;
     private static SharedPreferences prefs;
     private static Thread mHostsResolver;
@@ -70,6 +72,8 @@ public class Daedalus extends Application {
         initConfig();
         mHostsResolver = new Thread(new HostsResolver());
         mHostsResolver.start();
+
+        hostsPath = getExternalFilesDir(null).getPath() + "/hosts";
 
         instance = this;
     }
@@ -97,7 +101,7 @@ public class Daedalus extends Application {
                     return;
                 }
             }
-            HostsResolver.startLoad(instance.getExternalFilesDir(null).getPath() + "/hosts");
+            HostsResolver.startLoad(hostsPath);
         }
     }
     public static SharedPreferences getPrefs() {
