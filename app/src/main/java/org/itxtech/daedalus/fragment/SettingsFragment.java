@@ -122,6 +122,8 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = super.onCreateView(inflater, container, savedInstanceState);
+        SwitchPreference localHostResolution = (SwitchPreference) findPreference("settings_local_host_resolution");
+        localHostResolution.setSummary(Daedalus.hostsPath);
         return view;
     }
 
