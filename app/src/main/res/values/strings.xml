@@ -51,4 +51,8 @@
     <string name="notice_start_download">Downloading hosts, please wait …</string>
     <string name="notice_downloaded">Hosts has been downloaded.</string>
     <string name="notice_now_downloading">Daedalus is currently downloading hosts, please wait.</string>
+    <string name="hosts_not_found">Local hosts not found.</string>
+    <string name="hosts_path">Local hosts path:</string>
+    <string name="hosts_last_modified">Last modified:</string>
+    <string name="hosts_size">Size:</string>
 </resources>

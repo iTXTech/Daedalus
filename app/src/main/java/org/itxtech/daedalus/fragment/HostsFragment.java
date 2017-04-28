@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.util.HostsProvider;
@@ -18,6 +19,8 @@ import org.itxtech.daedalus.util.HostsProvider;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.DecimalFormat;
+import java.util.Date;
 
 /**
  * Daedalus Project
@@ -39,7 +42,7 @@ public class HostsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_hosts, container, false);
 
-        mHandler = new HostsHandler().setView(view);
+        mHandler = new HostsHandler().setView(view).setHostsFragment(this);
 
         final Spinner spinnerHosts = (Spinner) view.findViewById(R.id.spinner_hosts);
         ArrayAdapter spinnerArrayAdapter = new ArrayAdapter<>(Daedalus.getInstance(), android.R.layout.simple_list_item_1, HostsProvider.getHostsProviderNames());
@@ -84,6 +87,27 @@ public class HostsFragment extends Fragment {
         return view;
     }
 
+    private void updateUserInterface() {
+        File file = new File(Daedalus.hostsPath);
+        TextView info = (TextView) view.findViewById(R.id.textView_hosts);
+        StringBuilder builder = new StringBuilder();
+        builder.append(getString(R.string.hosts_path)).append(" ").append(Daedalus.hostsPath).append("\n\n");
+        if (!file.exists()) {
+            builder.append(getString(R.string.hosts_not_found));
+        } else {
+            builder.append(getString(R.string.hosts_last_modified)).append(" ").append(new Date(file.lastModified()).toString()).append("\n\n")
+                    .append(getString(R.string.hosts_size)).append(" ").append(new DecimalFormat("0.00").format(((float) file.length() / 1024))).append(" KB");
+        }
+        info.setText(builder.toString());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        updateUserInterface();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -105,14 +129,21 @@ public class HostsFragment extends Fragment {
         static final int MSG_DOWNLOADED = 0;
 
         private View view = null;
+        private HostsFragment mFragment = null;
 
         HostsHandler setView(View view) {
             this.view = view;
             return this;
         }
 
+        HostsHandler setHostsFragment(HostsFragment fragment) {
+            mFragment = fragment;
+            return this;
+        }
+
         void shutdown() {
             view = null;
+            mFragment = null;
         }
 
         @Override
@@ -133,6 +164,8 @@ public class HostsFragment extends Fragment {
 
                     Snackbar.make(view, R.string.notice_downloaded, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
+
+                    mFragment.updateUserInterface();
                     break;
             }
         }

@@ -27,5 +27,14 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentLeft="true"/>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_hosts"
+                android:layout_below="@+id/button_download_hosts"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"/>
     </RelativeLayout>
 </ScrollView>
