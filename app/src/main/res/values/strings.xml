@@ -9,14 +9,14 @@
     <string name="settings_system">System settings</string>
     <string name="settings_boot">Auto activate on boot</string>
     <string name="settings_server">Server settings</string>
-    <string name="primary_server">Primary DNS</string>
-    <string name="secondary_server">Secondary DNS</string>
-    <string name="notice_start_test">Testing specified DNS …</string>
+    <string name="primary_server">Primary DNS server</string>
+    <string name="secondary_server">Secondary DNS server</string>
+    <string name="notice_start_test">Testing specified DNS server …</string>
     <string name="action_dns_test">Test</string>
     <string name="action_start_test">Start test</string>
     <string name="test_domain">Test domain:</string>
     <string name="test_time_used">Time used:</string>
-    <string name="test_dns_server">DNS:</string>
+    <string name="test_dns_server">DNS server:</string>
     <string name="test_result_resolved">Address:</string>
     <string name="test_failed">DNS query failed. Timeout or unknown hostname.</string>
     <string name="test_test_domain">google.com</string>
@@ -42,7 +42,7 @@
     <string name="nav_github">GitHub</string>
     <string name="settings_advanced">Advanced system settings</string>
     <string name="settings_advanced_on">On</string>
-    <string name="settings_local_hosts_resolve">Local hosts resolution</string>
+    <string name="settings_local_hosts_resolution">Local hosts resolution</string>
     <string name="notice_need_restart">Re-activate Daedalus to make the settings take effect.</string>
     <string name="notice_need_storage_perm">Daedalus requires access to external storage for local host resolution.
     </string>
@@ -55,4 +55,5 @@
     <string name="hosts_path">Local hosts path:</string>
     <string name="hosts_last_modified">Last modified:</string>
     <string name="hosts_size">Size:</string>
+    <string name="settings_hosts_pan_domain_resolution">Hosts pan domain name resolution</string>
 </resources>

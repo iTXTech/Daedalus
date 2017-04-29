@@ -12,7 +12,7 @@ Local hosts is located in SDCard/Android/data/org.itxtech.daedalus/files <br>
 <br>
 __Users must comply with local laws and regulations.__<br>
 
-DNS providers
+DNS server providers
 -------------
 * __CuteDNS!__ - *Stop service due to police intervention.*
 * __[Pure DNS](http://puredns.cn/)__ - *I DO NOT KNOW HOW TO DESCRIBE~~~*

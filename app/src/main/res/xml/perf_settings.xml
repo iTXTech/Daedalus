@@ -51,7 +51,12 @@
                 android:enabled="false"/>
         <SwitchPreference
                 android:key="settings_local_host_resolution"
-                android:title="@string/settings_local_hosts_resolve"
+                android:title="@string/settings_local_hosts_resolution"
+                android:defaultValue="false"
+                android:enabled="false"/>
+        <SwitchPreference
+                android:key="settings_pan_resolution"
+                android:title="@string/settings_hosts_pan_domain_resolution"
                 android:defaultValue="false"
                 android:enabled="false"/>
     </PreferenceCategory>

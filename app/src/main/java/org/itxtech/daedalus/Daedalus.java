@@ -103,6 +103,7 @@ public class Daedalus extends Application {
                 }
             }
             HostsResolver.startLoad(hostsPath);
+            HostsResolver.setPanResolution(Daedalus.getPrefs().getBoolean("settings_pan_resolution", false));
         }
     }
     public static SharedPreferences getPrefs() {

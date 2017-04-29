@@ -30,6 +30,7 @@ public class HostsResolver implements Runnable {
     private static String fileName;
     private static HashMap<String, String> hosts;
     private static boolean shutdown = false;
+    private static boolean panResolution = false;
 
     public HostsResolver() {
         status = STATUS_NOT_LOADED;
@@ -51,16 +52,50 @@ public class HostsResolver implements Runnable {
         status = STATUS_PENDING_LOAD;
     }
 
+    public static void setPanResolution(boolean resolution) {
+        panResolution = resolution;
+    }
+
     public static void clean() {
         hosts = null;
     }
 
     public static boolean canResolve(String hostname) {
-        return hosts.containsKey(hostname);
+        if (hosts.containsKey(hostname)) {
+            return true;
+        }
+        if (panResolution) {
+            String[] pieces = hostname.split("\\.");
+            StringBuilder builder;
+            builder = new StringBuilder();
+            builder.append("*");
+            for (int i = 1; i < pieces.length; i++) {
+                builder.append(".").append(pieces[i]);
+            }
+            if (hosts.containsKey(builder.toString())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static String resolve(String hostname) {
-        return hosts.get(hostname);
+        if (hosts.containsKey(hostname)) {
+            return hosts.get(hostname);
+        }
+        if (panResolution) {
+            String[] pieces = hostname.split("\\.");
+            StringBuilder builder;
+            builder = new StringBuilder();
+            builder.append("*");
+            for (int i = 1; i < pieces.length; i++) {
+                builder.append(".").append(pieces[i]);
+            }
+            if (hosts.containsKey(builder.toString())) {
+                return hosts.get(builder.toString());
+            }
+        }
+        return "";
     }
 
     private void load() {
