@@ -37,6 +37,7 @@ Open Source Licenses
 * __[MiniDNS](https://github.com/rtreffer/minidns)__ by *[Rene Treffer](https://github.com/rtreffer)* - [LGPLv2.1](https://github.com/rtreffer/minidns/blob/master/LICENCE_LGPL2.1)
 * __[hosts](https://github.com/racaljk/hosts)__ by *[Cthulhu](https://github.com/racaljk)* - [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)
 * __[google-hosts](https://github.com/fengixng/google-hosts)__ by *[fengixng](https://github.com/fengixng)* - None
+* __[hosts](https://github.com/sy618/hosts)__ by *[sy618](https://github.com/sy618)* - [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.zh)
 
 License
 ------------
