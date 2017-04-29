@@ -51,7 +51,7 @@ public class DnsTestFragment extends Fragment {
         final TextView textViewTestInfo = (TextView) view.findViewById(R.id.textView_test_info);
 
         final Spinner spinnerServerChoice = (Spinner) view.findViewById(R.id.spinner_server_choice);
-        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter<>(Daedalus.getInstance(), android.R.layout.simple_list_item_1, DnsServer.getDnsServerNames(Daedalus.getInstance()));
+        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, DnsServer.getDnsServerNames(Daedalus.getInstance()));
         spinnerServerChoice.setAdapter(spinnerArrayAdapter);
         spinnerServerChoice.setSelection(Integer.valueOf(Daedalus.getPrefs().getString("primary_server", "0")));
 

@@ -45,7 +45,7 @@ public class HostsFragment extends Fragment {
         mHandler = new HostsHandler().setView(view).setHostsFragment(this);
 
         final Spinner spinnerHosts = (Spinner) view.findViewById(R.id.spinner_hosts);
-        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter<>(Daedalus.getInstance(), android.R.layout.simple_list_item_1, HostsProvider.getHostsProviderNames());
+        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, HostsProvider.getHostsProviderNames());
         spinnerHosts.setAdapter(spinnerArrayAdapter);
         spinnerHosts.setSelection(0);
 
