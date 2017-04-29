@@ -8,7 +8,8 @@ This application can create a VPN tunnel to modify the DNS settings on Android.<
 No root access required, no ads contained and functional under data connection.<br>
 Through the DNS which are provided by third parties, users can visit Google, Twitter and so on via https directly without a VPN.<br>
 <br>
-Local hosts is located in SDCard/Android/data/org.itxtech.daedalus/files <br>
+Local hosts pan domain name resolution is supported.<br>
+Example: 6.6.6.6 *.google.com<br>
 <br>
 __Users must comply with local laws and regulations.__<br>
 
