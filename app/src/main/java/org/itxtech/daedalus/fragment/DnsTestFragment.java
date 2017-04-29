@@ -106,12 +106,16 @@ public class DnsTestFragment extends Fragment {
                     long endTime = System.currentTimeMillis();
 
                     Set<A> answers = responseMessage.getAnswersFor(question);
-                    for (A a : answers) {
-                        InetAddress inetAddress = a.getInetAddress();
-                        testText.append("\n").append(getResources().getString(R.string.test_result_resolved)).append(" ").append(inetAddress.getHostAddress());
+                    if (answers != null && answers.size() > 0) {
+                        for (A a : answers) {
+                            InetAddress inetAddress = a.getInetAddress();
+                            testText.append("\n").append(getResources().getString(R.string.test_result_resolved)).append(" ").append(inetAddress.getHostAddress());
+                        }
+                        testText.append("\n").append(getResources().getString(R.string.test_time_used)).append(" ").
+                                append(String.valueOf(endTime - startTime)).append(" ms\n\n");
+                    } else {
+                        testText.append("\n").append(getResources().getString(R.string.test_failed)).append("\n\n");
                     }
-                    testText.append("\n").append(getResources().getString(R.string.test_time_used)).append(" ").append(String.valueOf(endTime - startTime)).append(" ms\n\n");
-
                 } catch (Exception e) {
                     testText.append("\n").append(getResources().getString(R.string.test_failed)).append("\n\n");
 
