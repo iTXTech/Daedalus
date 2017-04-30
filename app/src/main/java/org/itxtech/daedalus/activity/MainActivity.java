@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int FRAGMENT_SETTINGS = 2;
     public static final int FRAGMENT_ABOUT = 3;
     public static final int FRAGMENT_HOSTS = 4;
+    public static final int FRAGMENT_DNS_SERVERS = 5;
 
     private static MainActivity instance = null;
 
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SettingsFragment mSettings;
     private AboutFragment mAbout;
     private HostsFragment mHosts;
+    private DnsServersFragment mDnsServers;
     private int currentFragment = FRAGMENT_NONE;
 
     private MainFragment.MainFragmentHandler mHandler = null;
@@ -96,13 +98,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.textView_nav_git_commit)).setText(getString(R.string.nav_git_commit) + " " + BuildConfig.GIT_COMMIT);
 
         if (getIntent().getIntExtra(LAUNCH_FRAGMENT, FRAGMENT_NONE) == FRAGMENT_NONE) {
-            FragmentManager fm = getFragmentManager();
-            FragmentTransaction transaction = fm.beginTransaction();
-            if (mMain == null) {
-                mMain = new MainFragment();
-            }
-            transaction.replace(R.id.id_content, mMain).commit();
-            currentFragment = FRAGMENT_MAIN;
+            switchFragment(FRAGMENT_MAIN);
         }
 
         updateUserInterface(getIntent());
@@ -162,6 +158,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case FRAGMENT_HOSTS:
                 menu.findItem(R.id.nav_hosts).setChecked(true);
                 break;
+            case FRAGMENT_DNS_SERVERS:
+                menu.findItem(R.id.nav_dns_server).setChecked(true);
         }
     }
 
@@ -183,10 +181,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case FRAGMENT_HOSTS:
                 toolbar.setTitle(R.string.action_hosts);
                 break;
+            case FRAGMENT_DNS_SERVERS:
+                toolbar.setTitle(R.string.action_dns_servers);
+                break;
         }
     }
 
-    private void changeFragment(int fragment) {
+    private void switchFragment(int fragment) {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -231,6 +232,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setTitle(R.string.action_hosts);
                 currentFragment = FRAGMENT_HOSTS;
                 break;
+            case FRAGMENT_DNS_SERVERS:
+                if (mDnsServers == null) {
+                    mDnsServers = new DnsServersFragment();
+                }
+                transaction.replace(R.id.id_content, mDnsServers);
+                toolbar.setTitle(R.string.action_dns_servers);
+                currentFragment = FRAGMENT_DNS_SERVERS;
+                break;
         }
         transaction.commit();
     }
@@ -241,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (currentFragment != FRAGMENT_MAIN) {
-            changeFragment(FRAGMENT_MAIN);
+            switchFragment(FRAGMENT_MAIN);
             updateNavigationMenu();
         } else {
             super.onBackPressed();
@@ -287,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         int fragment = intent.getIntExtra(LAUNCH_FRAGMENT, FRAGMENT_NONE);
         if (fragment != FRAGMENT_NONE) {
-            changeFragment(fragment);
+            switchFragment(fragment);
             updateNavigationMenu();
         }
     }
@@ -298,23 +307,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_settings) {
-            changeFragment(FRAGMENT_SETTINGS);
+            switchFragment(FRAGMENT_SETTINGS);
         }
 
         if (id == R.id.nav_about) {
-            changeFragment(FRAGMENT_ABOUT);
+            switchFragment(FRAGMENT_ABOUT);
         }
 
         if (id == R.id.nav_dns_test) {
-            changeFragment(FRAGMENT_DNS_TEST);
+            switchFragment(FRAGMENT_DNS_TEST);
         }
 
         if (id == R.id.nav_home) {
-            changeFragment(FRAGMENT_MAIN);
+            switchFragment(FRAGMENT_MAIN);
         }
 
         if (id == R.id.nav_hosts) {
-            changeFragment(FRAGMENT_HOSTS);
+            switchFragment(FRAGMENT_HOSTS);
+        }
+
+        if (id == R.id.nav_dns_server) {
+            switchFragment(FRAGMENT_DNS_SERVERS);
         }
 
         if (id == R.id.nav_github) {

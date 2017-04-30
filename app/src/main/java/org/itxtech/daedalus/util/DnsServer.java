@@ -16,12 +16,14 @@ import java.util.ArrayList;
  * the Free Software Foundation, version 3.
  */
 public class DnsServer {
+    private static int totalId = 0;
+
     private String id;
     private String address;
-    private int description;
+    private int description = 0;
 
-    public DnsServer(String id, String address, int description) {
-        this.id = id;
+    public DnsServer(String address, int description) {
+        this.id = String.valueOf(totalId++);
         this.address = address;
         this.description = description;
     }

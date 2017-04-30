@@ -14,12 +14,18 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
+import com.google.gson.stream.JsonReader;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.service.DaedalusVpnService;
+import org.itxtech.daedalus.util.Configurations;
 import org.itxtech.daedalus.util.DnsServer;
 import org.itxtech.daedalus.util.HostsProvider;
 import org.itxtech.daedalus.util.HostsResolver;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,14 +43,16 @@ import java.util.List;
 public class Daedalus extends Application {
     private static final String SHORTCUT_ID_ACTIVATE = "shortcut_activate";
 
+    private static final String TAG = "Daedalus";
+
     public static final List<DnsServer> DNS_SERVERS = new ArrayList<DnsServer>() {{
         /*add(new DnsServer("0", "113.107.249.56", R.string.server_cutedns_north_china));
         add(new DnsServer("1", "120.27.103.230", R.string.server_cutedns_east_china));
         add(new DnsServer("2", "123.206.61.167", R.string.server_cutedns_south_china));*/
-        add(new DnsServer("0", "115.159.220.214", R.string.server_puredns_east_china));
-        add(new DnsServer("1", "123.207.137.88", R.string.server_puredns_north_china));
-        add(new DnsServer("2", "115.159.146.99", R.string.server_aixyz_east_china));
-        add(new DnsServer("3", "123.206.21.48", R.string.server_aixyz_south_china));
+        add(new DnsServer("115.159.220.214", R.string.server_puredns_east_china));
+        add(new DnsServer("123.207.137.88", R.string.server_puredns_north_china));
+        add(new DnsServer("115.159.146.99", R.string.server_aixyz_east_china));
+        add(new DnsServer("123.206.21.48", R.string.server_aixyz_south_china));
     }};
 
     public static final List<HostsProvider> HOSTS_PROVIDERS = new ArrayList<HostsProvider>() {{
@@ -61,7 +69,10 @@ public class Daedalus extends Application {
             "wikipedia.org"
     };
 
+    public static Configurations configurations;
+
     public static String hostsPath;
+    public static String configPath;
 
     private static Daedalus instance = null;
     private static SharedPreferences prefs;
@@ -71,18 +82,28 @@ public class Daedalus extends Application {
     public void onCreate() {
         super.onCreate();
 
-        initConfig();
         mHostsResolver = new Thread(new HostsResolver());
         mHostsResolver.start();
 
         hostsPath = getExternalFilesDir(null).getPath() + "/hosts";
+        configPath = getExternalFilesDir(null).getPath() + "/config.json";
+
+        initData();
 
         instance = this;
     }
 
-    private void initConfig() {
+    private void initData() {
         PreferenceManager.setDefaultValues(this, R.xml.perf_settings, false);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        configurations = Configurations.load(new File(configPath));
+    }
+
+    public static <T> T parseJson(Class<T> beanClass, JsonReader reader) throws JsonParseException {
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        return gson.fromJson(reader, beanClass);
     }
 
     public static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -113,6 +134,7 @@ public class Daedalus extends Application {
 
     @Override
     public void onTerminate() {
+        Log.d("Daedalus", "onTerminate");
         super.onTerminate();
 
         instance = null;

@@ -56,4 +56,5 @@
     <string name="hosts_last_modified">最后修改:</string>
     <string name="hosts_size">大小:</string>
     <string name="settings_hosts_pan_domain_resolution">Hosts 域名泛解析</string>
+    <string name="action_dns_servers">服务器</string>
 </resources>
