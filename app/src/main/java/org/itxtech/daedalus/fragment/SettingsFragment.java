@@ -33,11 +33,11 @@ public class SettingsFragment extends PreferenceFragment {
         ListPreference primaryServer = (ListPreference) findPreference("primary_server");
         primaryServer.setEntries(DnsServer.getDnsServerNames(Daedalus.getInstance()));
         primaryServer.setEntryValues(DnsServer.getDnsServerIds());
-        primaryServer.setSummary(DnsServer.getDnsServerById(primaryServer.getValue()).getStringDescription(Daedalus.getInstance()));
+        primaryServer.setSummary(DnsServer.getDnsServerDescription(primaryServer.getValue(), Daedalus.getInstance()));
         primaryServer.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                preference.setSummary(DnsServer.getDnsServerById((String) newValue).getStringDescription(Daedalus.getInstance()));
+                preference.setSummary(DnsServer.getDnsServerDescription((String) newValue, Daedalus.getInstance()));
                 Snackbar.make(view, R.string.notice_need_restart, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 return true;
@@ -47,11 +47,11 @@ public class SettingsFragment extends PreferenceFragment {
         ListPreference secondaryServer = (ListPreference) findPreference("secondary_server");
         secondaryServer.setEntries(DnsServer.getDnsServerNames(Daedalus.getInstance()));
         secondaryServer.setEntryValues(DnsServer.getDnsServerIds());
-        secondaryServer.setSummary(DnsServer.getDnsServerById(secondaryServer.getValue()).getStringDescription(Daedalus.getInstance()));
+        secondaryServer.setSummary(DnsServer.getDnsServerDescription(secondaryServer.getValue(), Daedalus.getInstance()));
         secondaryServer.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                preference.setSummary(DnsServer.getDnsServerById((String) newValue).getStringDescription(Daedalus.getInstance()));
+                preference.setSummary(DnsServer.getDnsServerDescription((String) newValue, Daedalus.getInstance()));
                 Snackbar.make(view, R.string.notice_need_restart, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 return true;
