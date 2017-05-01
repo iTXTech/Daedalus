@@ -108,11 +108,10 @@ public class DnsServerConfigFragment extends PreferenceFragment implements Toolb
                             Integer.parseInt(((EditTextPreference) findPreference("serverPort")).getText())
                     ));
                 } else {
-                    Daedalus.configurations.getCustomDnsServers().set(index, new CustomDnsServer(
-                            ((EditTextPreference) findPreference("serverName")).getText(),
-                            ((EditTextPreference) findPreference("serverAddress")).getText(),
-                            Integer.parseInt(((EditTextPreference) findPreference("serverPort")).getText())
-                    ));
+                    CustomDnsServer server = Daedalus.configurations.getCustomDnsServers().get(index);
+                    server.setName(((EditTextPreference) findPreference("serverName")).getText());
+                    server.setAddress(((EditTextPreference) findPreference("serverAddress")).getText());
+                    server.setPort(Integer.parseInt(((EditTextPreference) findPreference("serverPort")).getText()));
                 }
                 getActivity().finish();
                 break;
