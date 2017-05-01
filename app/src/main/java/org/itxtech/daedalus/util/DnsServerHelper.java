@@ -5,6 +5,7 @@ import org.itxtech.daedalus.Daedalus;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Daedalus Project
@@ -17,19 +18,29 @@ import java.util.ArrayList;
  * the Free Software Foundation, version 3.
  */
 public class DnsServerHelper {
-    public static int getPortOrDefault(InetAddress address, int defaultPort) {
-        String hostAddress = address.getHostAddress();
+    private static HashMap<String, Integer> portCache = null;
 
+    public static void cleanPortCache() {
+        portCache = null;
+    }
+
+    public static void buildPortCache() {
+        portCache = new HashMap<>();
         for (DnsServer server : Daedalus.DNS_SERVERS) {
-            if (server.getAddress().equals(hostAddress)) {
-                return server.getPort();
-            }
+            portCache.put(server.getAddress(), server.getPort());
         }
 
         for (CustomDnsServer server : Daedalus.configurations.getCustomDnsServers()) {
-            if (server.getAddress().equals(hostAddress)) {
-                return server.getPort();
-            }
+            portCache.put(server.getAddress(), server.getPort());
+        }
+
+    }
+
+    public static int getPortOrDefault(InetAddress address, int defaultPort) {
+        String hostAddress = address.getHostAddress();
+
+        if (portCache.containsKey(hostAddress)) {
+            return portCache.get(hostAddress);
         }
 
         return defaultPort;

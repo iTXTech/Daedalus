@@ -272,7 +272,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mAbout = null;
         mHosts = null;
         instance = null;
-        System.gc();
     }
 
     @Override

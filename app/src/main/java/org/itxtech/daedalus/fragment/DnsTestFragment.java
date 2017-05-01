@@ -25,6 +25,7 @@ import org.itxtech.daedalus.util.DnsServerHelper;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Set;
 
@@ -73,9 +74,7 @@ public class DnsTestFragment extends Fragment {
                         add(DnsServerHelper.getAddressByDescription(Daedalus.getInstance(), spinnerServerChoice.getSelectedItem().toString()));
                         String servers = Daedalus.getPrefs().getString("dns_test_servers", "");
                         if (!servers.equals("")) {
-                            for (String server : servers.split(",")) {
-                                add(server);
-                            }
+                            addAll(Arrays.asList(servers.split(",")));
                         }
                     }};
                     DNSClient client = new DNSClient(null);
@@ -164,8 +163,6 @@ public class DnsTestFragment extends Fragment {
         mRunnable = null;
         mHandler.shutdown();
         mHandler = null;
-
-        System.gc();
     }
 
     private static void stopThread() {

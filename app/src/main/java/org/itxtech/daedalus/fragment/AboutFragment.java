@@ -90,7 +90,5 @@ public class AboutFragment extends Fragment {
             mWebView.destroy();
             mWebView = null;
         }
-
-        System.gc();
     }
 }

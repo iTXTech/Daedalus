@@ -121,6 +121,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                     }
 
                     Daedalus.initHostsResolver();
+                    DnsServerHelper.buildPortCache();
 
                     dnsQueryTimes = 0;
                     if (this.mThread == null) {
@@ -181,8 +182,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
         dnsQueryTimes = 0;
         HostsResolver.clean();
-
-        System.gc();
+        DnsServerHelper.cleanPortCache();
     }
 
 
