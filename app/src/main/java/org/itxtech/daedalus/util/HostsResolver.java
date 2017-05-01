@@ -61,6 +61,9 @@ public class HostsResolver implements Runnable {
     }
 
     public static boolean canResolve(String hostname) {
+        if (hosts == null) {
+            return false;
+        }
         if (hosts.containsKey(hostname)) {
             return true;
         }
@@ -80,6 +83,9 @@ public class HostsResolver implements Runnable {
     }
 
     public static String resolve(String hostname) {
+        if (hosts == null) {
+            return "";
+        }
         if (hosts.containsKey(hostname)) {
             return hosts.get(hostname);
         }

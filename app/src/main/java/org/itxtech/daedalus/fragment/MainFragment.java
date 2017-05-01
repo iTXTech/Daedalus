@@ -45,7 +45,7 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        final Button but = (Button) view.findViewById(R.id.button_activate);
+        Button but = (Button) view.findViewById(R.id.button_activate);
         but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

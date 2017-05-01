@@ -31,7 +31,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </receiver>
-
         <receiver
                 android:name=".receiver.StatusBarBroadcastReceiver"
                 android:exported="false">
@@ -43,9 +42,9 @@
 
         <activity
                 android:name=".activity.MainActivity"
+                android:configChanges="keyboard|keyboardHidden|screenLayout|uiMode|orientation|screenSize|smallestScreenSize"
                 android:label="@string/app_name"
                 android:launchMode="singleTask"
-                android:configChanges="keyboard|keyboardHidden|screenLayout|uiMode|orientation|screenSize|smallestScreenSize"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -56,6 +55,12 @@
             <meta-data
                     android:name="android.app.shortcuts"
                     android:resource="@xml/shortcuts"/>
+        </activity>
+        <activity
+                android:name=".activity.DnsServerConfigActivity"
+                android:label=""
+                android:configChanges="keyboard|keyboardHidden|screenLayout|uiMode|orientation|screenSize|smallestScreenSize"
+                android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

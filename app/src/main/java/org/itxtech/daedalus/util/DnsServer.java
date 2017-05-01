@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * the Free Software Foundation, version 3.
  */
 public class DnsServer {
-    private static int totalId = 0;
+    public static int totalId = 0;
 
     private String id;
     private String address;
@@ -51,7 +51,7 @@ public class DnsServer {
             }
         }
         for (CustomDnsServer customDnsServer : Daedalus.configurations.getCustomDnsServers()) {
-            if (customDnsServer.getName().equals(id)) {
+            if (customDnsServer.getId().equals(id)) {
                 return customDnsServer.getAddress();
             }
         }
@@ -78,7 +78,7 @@ public class DnsServer {
             servers.add(server.getId());
         }
         for (CustomDnsServer customDnsServer : Daedalus.configurations.getCustomDnsServers()) {
-            servers.add(customDnsServer.getName());
+            servers.add(customDnsServer.getId());
         }
         String[] stringServers = new String[Daedalus.DNS_SERVERS.size()];
         return servers.toArray(stringServers);
@@ -103,7 +103,7 @@ public class DnsServer {
             }
         }
         for (CustomDnsServer customDnsServer : Daedalus.configurations.getCustomDnsServers()) {
-            if (customDnsServer.getName().equals(id)) {
+            if (customDnsServer.getId().equals(id)) {
                 return customDnsServer.getName();
             }
         }

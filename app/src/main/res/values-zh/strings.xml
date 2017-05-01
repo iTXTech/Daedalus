@@ -57,4 +57,9 @@
     <string name="hosts_size">大小:</string>
     <string name="settings_hosts_pan_domain_resolution">Hosts 域名泛解析</string>
     <string name="action_dns_servers">服务器</string>
+    <string name="settings_server_name">服务器名称</string>
+    <string name="settings_server_address">服务器地址</string>
+    <string name="settings_server_port">服务器端口</string>
+    <string name="delete">删除</string>
+    <string name="apply">应用</string>
 </resources>

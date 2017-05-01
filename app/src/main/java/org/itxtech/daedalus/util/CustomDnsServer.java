@@ -14,11 +14,21 @@ public class CustomDnsServer {
     private String name;
     private String address;
     private int port;
+    private String id;
 
     public CustomDnsServer(String name, String address, int port) {
         this.name = name;
         this.address = address;
         this.port = port;
+        this.id = String.valueOf(DnsServer.totalId++);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

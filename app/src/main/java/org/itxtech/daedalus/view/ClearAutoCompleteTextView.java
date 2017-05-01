@@ -44,7 +44,7 @@ public class ClearAutoCompleteTextView extends AutoCompleteTextView implements V
     }
 
     private void init(final Context context) {
-        final Drawable drawable = ContextCompat.getDrawable(context, R.drawable.ic_clear_black_24dp);
+        final Drawable drawable = ContextCompat.getDrawable(context, R.drawable.ic_clear);
         final Drawable wrappedDrawable = DrawableCompat.wrap(drawable); //Wrap the drawable so that it can be tinted pre Lollipop
         DrawableCompat.setTint(wrappedDrawable, getCurrentHintTextColor());
         mClearTextIcon = wrappedDrawable;

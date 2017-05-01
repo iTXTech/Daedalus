@@ -6,9 +6,9 @@
     <string name="button_text_deactivate">Deactivate</string>
     <string name="action_about">About</string>
     <string name="notification_activated">iTXTech Daedalus is activated.</string>
-    <string name="settings_system">System settings</string>
+    <string name="settings_system">System Settings</string>
     <string name="settings_boot">Auto activate on boot</string>
-    <string name="settings_server">Server settings</string>
+    <string name="settings_server">Server Settings</string>
     <string name="primary_server">Primary DNS server</string>
     <string name="secondary_server">Secondary DNS server</string>
     <string name="notice_start_test">Testing specified DNS server …</string>
@@ -40,7 +40,7 @@
     <string name="server_aixyz_south_china">AIXYZ DNS South China</string>
     <string name="server_aixyz_east_china">AIXYZ DNS East China</string>
     <string name="nav_github">GitHub</string>
-    <string name="settings_advanced">Advanced system settings</string>
+    <string name="settings_advanced">Advanced system Settings</string>
     <string name="settings_advanced_on">On</string>
     <string name="settings_local_hosts_resolution">Local hosts resolution</string>
     <string name="notice_need_restart">Re-activate Daedalus to make the settings take effect.</string>
@@ -57,4 +57,9 @@
     <string name="hosts_size">Size:</string>
     <string name="settings_hosts_pan_domain_resolution">Hosts pan domain name resolution</string>
     <string name="action_dns_servers">Servers</string>
+    <string name="settings_server_name">Server Name</string>
+    <string name="settings_server_address">Server Address</string>
+    <string name="settings_server_port">Server Port</string>
+    <string name="delete">Delete</string>
+    <string name="apply">Apply</string>
 </resources>

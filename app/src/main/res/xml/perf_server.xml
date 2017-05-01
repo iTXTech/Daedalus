@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+            android:key="serverName"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/settings_server_name"/>
+    <PreferenceCategory
+            android:key="serverSettings"
+            android:title="@string/settings_server">
+        <EditTextPreference
+                android:key="serverAddress"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:title="@string/settings_server_address"/>
+        <EditTextPreference
+                android:key="serverPort"
+                android:selectAllOnFocus="false"
+                android:singleLine="true"
+                android:numeric="integer"
+                android:title="@string/settings_server_port"/>
+    </PreferenceCategory>
+</PreferenceScreen>

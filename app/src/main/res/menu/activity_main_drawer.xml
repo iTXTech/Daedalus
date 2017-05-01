@@ -8,37 +8,37 @@
         <item android:id="@+id/nav_home"
               android:title="@string/action_home"
               android:checked="true"
-              android:icon="@drawable/ic_home_black_24dp"/>
+              android:icon="@drawable/ic_home"/>
         <item android:id="@+id/nav_dns_test"
               android:title="@string/action_dns_test"
               android:checked="false"
-              android:icon="@drawable/ic_verified_user_black_24dp"/>
+              android:icon="@drawable/ic_verified_user"/>
     </group>
 
     <group android:checkableBehavior="single"
            android:id="@+id/nav_group_profiles">
         <item android:id="@+id/nav_dns_server"
               android:title="@string/action_dns_servers"
-              android:icon="@drawable/ic_device_hub_black_24dp"/>
+              android:icon="@drawable/ic_device_hub"/>
         <item android:id="@+id/nav_hosts"
               android:title="@string/action_hosts"
               android:checked="false"
-              android:icon="@drawable/ic_description_black_24dp"/>
+              android:icon="@drawable/ic_description"/>
     </group>
 
     <group android:checkableBehavior="single"
            android:id="@+id/nav_group_more">
         <item android:id="@+id/nav_settings"
               android:title="@string/action_settings"
-              android:icon="@drawable/ic_settings_black_24dp"/>
+              android:icon="@drawable/ic_settings"/>
         <item android:id="@+id/nav_about"
               android:title="@string/action_about"
-              android:icon="@drawable/ic_info_black_24dp"/>
+              android:icon="@drawable/ic_info"/>
     </group>
 
     <group android:id="@+id/nav_group_help_and_support">
         <item android:id="@+id/nav_github"
               android:title="@string/nav_github"
-              android:icon="@drawable/ic_github_black_24dp"/>
+              android:icon="@drawable/ic_github"/>
     </group>
 </menu>
