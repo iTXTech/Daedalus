@@ -38,6 +38,7 @@ Open Source Licenses
 * __[hosts](https://github.com/racaljk/hosts)__ by *[Cthulhu](https://github.com/racaljk)* - [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)
 * __[google-hosts](https://github.com/fengixng/google-hosts)__ by *[fengixng](https://github.com/fengixng)* - None
 * __[hosts](https://github.com/sy618/hosts)__ by *[sy618](https://github.com/sy618)* - [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.zh)
+* __[Gson](https://github.com/google/gson)__ by *[Google](https://github.com/google)* - [APL 2.0](https://github.com/google/gson/blob/master/LICENSE)
 
 License
 ------------
