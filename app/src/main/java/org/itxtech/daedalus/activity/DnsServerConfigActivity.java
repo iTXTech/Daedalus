@@ -2,7 +2,11 @@ package org.itxtech.daedalus.activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -31,7 +35,10 @@ public class DnsServerConfigActivity extends AppCompatActivity {
         DnsServerConfigFragment fragment = new DnsServerConfigFragment();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_config);
-        toolbar.setNavigationIcon(R.drawable.ic_clear);
+        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_clear);
+        Drawable wrappedDrawable = DrawableCompat.wrap(drawable);
+        DrawableCompat.setTint(wrappedDrawable, Color.WHITE);
+        toolbar.setNavigationIcon(drawable);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
