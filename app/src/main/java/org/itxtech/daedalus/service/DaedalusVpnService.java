@@ -179,6 +179,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         }
 
         dnsQueryTimes = 0;
+        HostsResolver.clean();
 
         System.gc();
     }
@@ -210,7 +211,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
             boolean advanced = Daedalus.getPrefs().getBoolean("settings_advanced_switch", false);
             boolean statisticQuery = Daedalus.getPrefs().getBoolean("settings_count_query_times", false);
-            localHostsResolve = Daedalus.getPrefs().getBoolean("settings_local_host_resolve", false);
+            localHostsResolve = Daedalus.getPrefs().getBoolean("settings_local_host_resolution", false);
             Log.d(TAG, "tun0 add " + format + " pServ " + primaryServer + " sServ " + secondaryServer);
             Inet4Address primaryDNSServer = InetAddressUtil.ipv4From(primaryServer);
             Inet4Address secondaryDNSServer = InetAddressUtil.ipv4From(secondaryServer);

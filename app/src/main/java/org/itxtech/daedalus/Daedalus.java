@@ -113,14 +113,14 @@ public class Daedalus extends Application {
     };
 
     public static void initHostsResolver() {
-        if (Daedalus.getPrefs().getBoolean("settings_local_host_resolve", false)) {
+        if (Daedalus.getPrefs().getBoolean("settings_local_host_resolution", false)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                int permission = ActivityCompat.checkSelfPermission(Daedalus.getInstance(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 if (MainActivity.getInstance() != null) {
-                    int permission = ActivityCompat.checkSelfPermission(Daedalus.getInstance(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
                     if (permission != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(MainActivity.getInstance(), PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
                     }
-                } else {
+                } else if (permission != PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
             }
