@@ -16,7 +16,7 @@ import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.service.DaedalusVpnService;
-import org.itxtech.daedalus.util.DnsServer;
+import org.itxtech.daedalus.util.DnsServerHelper;
 
 /**
  * Daedalus Project
@@ -86,8 +86,8 @@ public class MainFragment extends Fragment {
 
     public void onActivityResult(int request, int result, Intent data) {
         if (result == Activity.RESULT_OK) {
-            DaedalusVpnService.primaryServer = DnsServer.getDnsServerAddressById(Daedalus.getPrefs().getString("primary_server", "0"));
-            DaedalusVpnService.secondaryServer = DnsServer.getDnsServerAddressById(Daedalus.getPrefs().getString("secondary_server", "1"));
+            DaedalusVpnService.primaryServer = DnsServerHelper.getDnsServerAddressById(DnsServerHelper.getPrimaryDnsServer());
+            DaedalusVpnService.secondaryServer = DnsServerHelper.getDnsServerAddressById(DnsServerHelper.getSecondaryDnsServer());
 
             Daedalus.getInstance().startService(Daedalus.getInstance().getServiceIntent().setAction(DaedalusVpnService.ACTION_ACTIVATE));
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -27,6 +28,7 @@ import org.itxtech.daedalus.util.CustomDnsServer;
  */
 public class DnsServerConfigFragment extends PreferenceFragment implements Toolbar.OnMenuItemClickListener {
     private Intent intent = null;
+    private View view;
     private int index;
 
     public void setIntent(Intent intent) {
@@ -38,6 +40,7 @@ public class DnsServerConfigFragment extends PreferenceFragment implements Toolb
         super.onDestroy();
 
         intent = null;
+        view = null;
     }
 
     @Override
@@ -48,7 +51,7 @@ public class DnsServerConfigFragment extends PreferenceFragment implements Toolb
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+        view = super.onCreateView(inflater, container, savedInstanceState);
 
         EditTextPreference serverName = (EditTextPreference) findPreference("serverName");
         serverName.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -101,17 +104,23 @@ public class DnsServerConfigFragment extends PreferenceFragment implements Toolb
 
         switch (id) {
             case R.id.action_apply:
+                String serverName = ((EditTextPreference) findPreference("serverName")).getText();
+                String serverAddress = ((EditTextPreference) findPreference("serverAddress")).getText();
+                String serverPort = ((EditTextPreference) findPreference("serverPort")).getText();
+
+                if (serverName.equals("") | serverAddress.equals("") | serverPort.equals("")) {
+                    Snackbar.make(view, R.string.notice_fill_in_all, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    break;
+                }
+
                 if (index == DnsServerConfigActivity.CUSTOM_DNS_SERVER_ID_NONE) {
-                    Daedalus.configurations.getCustomDnsServers().add(new CustomDnsServer(
-                            ((EditTextPreference) findPreference("serverName")).getText(),
-                            ((EditTextPreference) findPreference("serverAddress")).getText(),
-                            Integer.parseInt(((EditTextPreference) findPreference("serverPort")).getText())
-                    ));
+                    Daedalus.configurations.getCustomDnsServers().add(new CustomDnsServer(serverName, serverAddress, Integer.parseInt(serverPort)));
                 } else {
                     CustomDnsServer server = Daedalus.configurations.getCustomDnsServers().get(index);
-                    server.setName(((EditTextPreference) findPreference("serverName")).getText());
-                    server.setAddress(((EditTextPreference) findPreference("serverAddress")).getText());
-                    server.setPort(Integer.parseInt(((EditTextPreference) findPreference("serverPort")).getText()));
+                    server.setName(serverName);
+                    server.setAddress(serverAddress);
+                    server.setPort(Integer.parseInt(serverPort));
                 }
                 getActivity().finish();
                 break;
