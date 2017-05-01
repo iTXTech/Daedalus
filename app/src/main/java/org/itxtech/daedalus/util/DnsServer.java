@@ -17,12 +17,22 @@ public class DnsServer {
 
     private String id;
     private String address;
+    private int port;
     private int description = 0;
 
-    public DnsServer(String address, int description) {
+    public DnsServer(String address, int description, int port) {
         this.id = String.valueOf(totalId++);
         this.address = address;
         this.description = description;
+        this.port = port;
+    }
+
+    public DnsServer(String address, int description) {
+        this(address, description, 53);
+    }
+
+    public int getPort() {
+        return port;
     }
 
     public String getId() {

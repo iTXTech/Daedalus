@@ -52,9 +52,9 @@ public class DnsTestFragment extends Fragment {
         final TextView textViewTestInfo = (TextView) view.findViewById(R.id.textView_test_info);
 
         final Spinner spinnerServerChoice = (Spinner) view.findViewById(R.id.spinner_server_choice);
-        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, DnsServerHelper.getDnsServerNames(Daedalus.getInstance()));
+        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, DnsServerHelper.getNames(Daedalus.getInstance()));
         spinnerServerChoice.setAdapter(spinnerArrayAdapter);
-        spinnerServerChoice.setSelection(Integer.parseInt(DnsServerHelper.getPrimaryDnsServer()));
+        spinnerServerChoice.setSelection(Integer.parseInt(DnsServerHelper.getPrimary()));
 
         final AutoCompleteTextView textViewTestUrl = (AutoCompleteTextView) view.findViewById(R.id.autoCompleteTextView_test_url);
         ArrayAdapter autoCompleteArrayAdapter = new ArrayAdapter<>(Daedalus.getInstance(), android.R.layout.simple_list_item_1, Daedalus.DEFAULT_TEST_DOMAINS);
@@ -70,7 +70,7 @@ public class DnsTestFragment extends Fragment {
                     }
                     StringBuilder testText = new StringBuilder();
                     ArrayList<String> dnsServers = new ArrayList<String>() {{
-                        add(DnsServerHelper.getDnsServerAddressByStringDescription(Daedalus.getInstance(), spinnerServerChoice.getSelectedItem().toString()));
+                        add(DnsServerHelper.getAddressByDescription(Daedalus.getInstance(), spinnerServerChoice.getSelectedItem().toString()));
                         String servers = Daedalus.getPrefs().getString("dns_test_servers", "");
                         if (!servers.equals("")) {
                             for (String server : servers.split(",")) {

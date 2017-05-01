@@ -23,6 +23,7 @@ import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver;
+import org.itxtech.daedalus.util.DnsServerHelper;
 import org.itxtech.daedalus.util.HostsResolver;
 import org.pcap4j.packet.*;
 import org.pcap4j.packet.factory.PacketFactoryPropertiesLoader;
@@ -492,7 +493,8 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             // Let's be nice to Firefox. Firefox uses an empty UDP packet to
             // the gateway to reduce the RTT. For further details, please see
             // https://bugzilla.mozilla.org/show_bug.cgi?id=888268
-            DatagramPacket outPacket = new DatagramPacket(new byte[0], 0, 0, destAddr, parsedUdp.getHeader().getDstPort().valueAsInt());
+            DatagramPacket outPacket = new DatagramPacket(new byte[0], 0, 0, destAddr,
+                    DnsServerHelper.getPortOrDefault(destAddr, parsedUdp.getHeader().getDstPort().valueAsInt()));
             forwardPacket(outPacket, null);
             return;
         }
@@ -526,7 +528,8 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                 handleDnsResponse(parsedPacket, builder.build().toArray());
             } else {
                 Log.i(TAG, "handleDnsRequest: DNS Name " + dnsQueryName + " , sending to " + destAddr);
-                DatagramPacket outPacket = new DatagramPacket(dnsRawData, 0, dnsRawData.length, destAddr, parsedUdp.getHeader().getDstPort().valueAsInt());
+                DatagramPacket outPacket = new DatagramPacket(dnsRawData, 0, dnsRawData.length, destAddr,
+                        DnsServerHelper.getPortOrDefault(destAddr, parsedUdp.getHeader().getDstPort().valueAsInt()));
                 forwardPacket(outPacket, parsedPacket);
             }
         } catch (Exception e) {

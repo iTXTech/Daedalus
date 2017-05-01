@@ -86,8 +86,8 @@ public class MainFragment extends Fragment {
 
     public void onActivityResult(int request, int result, Intent data) {
         if (result == Activity.RESULT_OK) {
-            DaedalusVpnService.primaryServer = DnsServerHelper.getDnsServerAddressById(DnsServerHelper.getPrimaryDnsServer());
-            DaedalusVpnService.secondaryServer = DnsServerHelper.getDnsServerAddressById(DnsServerHelper.getSecondaryDnsServer());
+            DaedalusVpnService.primaryServer = DnsServerHelper.getAddressById(DnsServerHelper.getPrimary());
+            DaedalusVpnService.secondaryServer = DnsServerHelper.getAddressById(DnsServerHelper.getSecondary());
 
             Daedalus.getInstance().startService(Daedalus.getInstance().getServiceIntent().setAction(DaedalusVpnService.ACTION_ACTIVATE));
 

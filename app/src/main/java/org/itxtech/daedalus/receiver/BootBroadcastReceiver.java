@@ -28,8 +28,8 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
                 context.startActivity(vIntent);
             }
 
-            DaedalusVpnService.primaryServer = DnsServerHelper.getDnsServerAddressById(DnsServerHelper.getPrimaryDnsServer());
-            DaedalusVpnService.secondaryServer = DnsServerHelper.getDnsServerAddressById(DnsServerHelper.getSecondaryDnsServer());
+            DaedalusVpnService.primaryServer = DnsServerHelper.getAddressById(DnsServerHelper.getPrimary());
+            DaedalusVpnService.secondaryServer = DnsServerHelper.getAddressById(DnsServerHelper.getSecondary());
 
             context.startService((new Intent(context, DaedalusVpnService.class)).setAction(DaedalusVpnService.ACTION_ACTIVATE));
 
