@@ -59,6 +59,11 @@
                 android:title="@string/settings_hosts_pan_domain_resolution"
                 android:defaultValue="false"
                 android:enabled="false"/>
+        <SwitchPreference
+                android:key="settings_dns_over_tcp"
+                android:title="@string/settings_dns_over_tcp"
+                android:defaultValue="false"
+                android:enabled="false"/>
     </PreferenceCategory>
 
     <PreferenceCategory
