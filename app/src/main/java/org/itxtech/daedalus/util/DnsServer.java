@@ -13,6 +13,9 @@ import android.content.Context;
  * the Free Software Foundation, version 3.
  */
 public class DnsServer {
+    public static int DNS_SERVER_DEFAULT_PORT = 53;
+
+
     private static int totalId = 0;
 
     private String id;
@@ -28,7 +31,7 @@ public class DnsServer {
     }
 
     public DnsServer(String address, int description) {
-        this(address, description, 53);
+        this(address, description, DNS_SERVER_DEFAULT_PORT);
     }
 
     public int getPort() {
