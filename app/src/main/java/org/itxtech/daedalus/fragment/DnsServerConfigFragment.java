@@ -15,6 +15,7 @@ import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.DnsServerConfigActivity;
 import org.itxtech.daedalus.util.CustomDnsServer;
+import org.itxtech.daedalus.util.DnsServer;
 
 /**
  * Daedalus Project
@@ -93,7 +94,9 @@ public class DnsServerConfigFragment extends PreferenceFragment implements Toolb
         } else {
             serverName.setText("");
             serverAddress.setText("");
-            serverPort.setText("");
+            String port = String.valueOf(DnsServer.DNS_SERVER_DEFAULT_PORT);
+            serverPort.setText(port);
+            serverPort.setSummary(port);
         }
         return view;
     }

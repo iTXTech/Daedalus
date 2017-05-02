@@ -75,6 +75,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                                 .setContentTitle(getResources().getString(R.string.notification_activated))
                                 .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
                                 .setSmallIcon(R.drawable.ic_security)
+                                .setColor(getResources().getColor(R.color.colorPrimary)) //backward compatibility
                                 .setAutoCancel(false)
                                 .setOngoing(true)
                                 .setTicker(getResources().getString(R.string.notification_activated))
