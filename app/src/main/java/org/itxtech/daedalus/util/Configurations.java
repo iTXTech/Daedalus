@@ -21,9 +21,20 @@ import java.util.ArrayList;
  * the Free Software Foundation, version 3.
  */
 public class Configurations {
+    private static final int CUSTOM_DNS_ID_START = 32;
+
     private static File file;
 
     private ArrayList<CustomDnsServer> customDnsServers;
+
+    private int totalId;
+
+    public int getNextId() {
+        if (totalId < CUSTOM_DNS_ID_START) {
+            totalId = CUSTOM_DNS_ID_START;
+        }
+        return totalId++;
+    }
 
     public ArrayList<CustomDnsServer> getCustomDnsServers() {
         if (customDnsServers == null) {

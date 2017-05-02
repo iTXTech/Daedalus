@@ -13,7 +13,7 @@ import android.content.Context;
  * the Free Software Foundation, version 3.
  */
 public class DnsServer {
-    public static int totalId = 0;
+    private static int totalId = 0;
 
     private String id;
     private String address;

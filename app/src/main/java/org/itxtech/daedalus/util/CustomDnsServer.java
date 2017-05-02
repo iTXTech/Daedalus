@@ -1,5 +1,7 @@
 package org.itxtech.daedalus.util;
 
+import org.itxtech.daedalus.Daedalus;
+
 /**
  * Daedalus Project
  *
@@ -20,7 +22,7 @@ public class CustomDnsServer {
         this.name = name;
         this.address = address;
         this.port = port;
-        this.id = String.valueOf(DnsServer.totalId++);
+        this.id = String.valueOf(Daedalus.configurations.getNextId());
     }
 
     public String getId() {
