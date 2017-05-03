@@ -21,7 +21,8 @@ import org.itxtech.daedalus.fragment.DnsServerConfigFragment;
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, version 3.
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  */
 public class DnsServerConfigActivity extends AppCompatActivity {
     public static final String LAUNCH_ACTION_CUSTOM_DNS_SERVER_ID = "org.itxtech.daedalus.activity.DnsServerConfigActivity.LAUNCH_ACTION_CUSTOM_DNS_SERVER_ID";
