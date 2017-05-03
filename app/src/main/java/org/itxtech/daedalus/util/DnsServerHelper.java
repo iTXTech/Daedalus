@@ -46,6 +46,20 @@ public class DnsServerHelper {
         return defaultPort;
     }
 
+    public static int getPosition(String id) {
+        int intId = Integer.parseInt(id);
+        if (intId < Daedalus.DNS_SERVERS.size()) {
+            return intId;
+        }
+
+        for (int i = 0; i < Daedalus.configurations.getCustomDnsServers().size(); i++) {
+            if (Daedalus.configurations.getCustomDnsServers().get(i).getId().equals(id)) {
+                return i + Daedalus.DNS_SERVERS.size();
+            }
+        }
+        return 0;
+    }
+
     public static String getPrimary() {
         return String.valueOf(DnsServerHelper.checkServerId(Integer.parseInt(Daedalus.getPrefs().getString("primary_server", "0"))));
     }
