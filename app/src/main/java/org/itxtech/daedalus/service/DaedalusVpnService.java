@@ -16,6 +16,7 @@ import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.provider.DnsProvider;
+import org.itxtech.daedalus.provider.TcpDnsProvider;
 import org.itxtech.daedalus.provider.UdpDnsProvider;
 import org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver;
 import org.itxtech.daedalus.util.DnsServerHelper;
@@ -31,7 +32,8 @@ import java.net.Inet4Address;
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, version 3.
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  */
 public class DaedalusVpnService extends VpnService implements Runnable {
     public static final String ACTION_ACTIVATE = "org.itxtech.daedalus.service.DaedalusVpnService.ACTION_ACTIVATE";
@@ -191,7 +193,11 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             ParcelFileDescriptor descriptor = builder.establish();
 
             if (advanced) {
-                provider = new UdpDnsProvider(descriptor, this);
+                if (Daedalus.getPrefs().getBoolean("settings_dns_over_tcp", false)) {
+                    provider = new TcpDnsProvider(descriptor, this);
+                } else {
+                    provider = new UdpDnsProvider(descriptor, this);
+                }
                 provider.start();
                 provider.process();
             } else {

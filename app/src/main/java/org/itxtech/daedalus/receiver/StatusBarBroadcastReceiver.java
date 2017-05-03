@@ -17,7 +17,8 @@ import java.lang.reflect.Method;
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, version 3.
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  */
 public class StatusBarBroadcastReceiver extends BroadcastReceiver {
     public static String STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION = "org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION";

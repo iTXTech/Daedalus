@@ -37,15 +37,16 @@ import java.util.Queue;
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, version 3.
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  */
 public class UdpDnsProvider extends DnsProvider {
     private static final String TAG = "UdpDnsProvider";
 
     private final WospList dnsIn = new WospList();
-    private FileDescriptor mBlockFd = null;
-    private FileDescriptor mInterruptFd = null;
-    private final Queue<byte[]> deviceWrites = new LinkedList<>();
+    FileDescriptor mBlockFd = null;
+    FileDescriptor mInterruptFd = null;
+    final Queue<byte[]> deviceWrites = new LinkedList<>();
 
     /**
      * Number of iterations since we last cleared the pcap4j cache
@@ -73,7 +74,7 @@ public class UdpDnsProvider extends DnsProvider {
         }
     }
 
-    private void queueDeviceWrite(IpPacket ipOutPacket) {
+    void queueDeviceWrite(IpPacket ipOutPacket) {
         dnsQueryTimes++;
         Log.i(TAG, "QT " + dnsQueryTimes);
         deviceWrites.add(ipOutPacket.getRawData());
@@ -132,7 +133,7 @@ public class UdpDnsProvider extends DnsProvider {
                         i++;
                         WaitingOnSocketPacket wosp = iter.next();
                         if ((polls[i + 2].revents & OsConstants.POLLIN) != 0) {
-                            Log.d(TAG, "Read from DNS socket" + wosp.socket);
+                            Log.d(TAG, "Read from UDP DNS socket" + wosp.socket);
                             iter.remove();
                             handleRawDnsResponse(wosp.packet, wosp.socket);
                             wosp.socket.close();
@@ -148,22 +149,7 @@ public class UdpDnsProvider extends DnsProvider {
                     readPacketFromDevice(inputStream, packet);
                 }
 
-                // pcap4j has some sort of properties cache in the packet factory. This cache leaks, so
-                // we need to clean it up.
-                if (++pcap4jFactoryClearCacheCounter % 1024 == 0) {
-                    try {
-                        PacketFactoryPropertiesLoader l = PacketFactoryPropertiesLoader.getInstance();
-                        Field field = l.getClass().getDeclaredField("loader");
-                        field.setAccessible(true);
-                        PropertiesLoader loader = (PropertiesLoader) field.get(l);
-                        Log.d(TAG, "Cleaning cache");
-                        loader.clearCache();
-                    } catch (NoSuchFieldException e) {
-                        Log.e(TAG, "Cannot find declared loader field", e);
-                    } catch (IllegalAccessException e) {
-                        Log.e(TAG, "Cannot get declared loader field", e);
-                    }
-                }
+                checkCache();
                 service.providerLoopCallback();
             }
         } catch (Exception e) {
@@ -171,8 +157,26 @@ public class UdpDnsProvider extends DnsProvider {
         }
     }
 
+    void checkCache() {
+        // pcap4j has some sort of properties cache in the packet factory. This cache leaks, so
+        // we need to clean it up.
+        if (++pcap4jFactoryClearCacheCounter % 1024 == 0) {
+            try {
+                PacketFactoryPropertiesLoader l = PacketFactoryPropertiesLoader.getInstance();
+                Field field = l.getClass().getDeclaredField("loader");
+                field.setAccessible(true);
+                PropertiesLoader loader = (PropertiesLoader) field.get(l);
+                Log.d(TAG, "Cleaning cache");
+                loader.clearCache();
+            } catch (NoSuchFieldException e) {
+                Log.e(TAG, "Cannot find declared loader field", e);
+            } catch (IllegalAccessException e) {
+                Log.e(TAG, "Cannot get declared loader field", e);
+            }
+        }
+    }
 
-    private void writeToDevice(FileOutputStream outFd) throws DaedalusVpnService.VpnNetworkException {
+    void writeToDevice(FileOutputStream outFd) throws DaedalusVpnService.VpnNetworkException {
         try {
             outFd.write(deviceWrites.poll());
         } catch (IOException e) {
@@ -181,7 +185,7 @@ public class UdpDnsProvider extends DnsProvider {
         }
     }
 
-    private void readPacketFromDevice(FileInputStream inputStream, byte[] packet) throws DaedalusVpnService.VpnNetworkException, SocketException {
+    void readPacketFromDevice(FileInputStream inputStream, byte[] packet) throws DaedalusVpnService.VpnNetworkException, SocketException {
         // Read the outgoing packet from the input stream.
         int length;
 
@@ -203,7 +207,7 @@ public class UdpDnsProvider extends DnsProvider {
         handleDnsRequest(readPacket);
     }
 
-    private void forwardPacket(DatagramPacket outPacket, IpPacket parsedPacket) throws DaedalusVpnService.VpnNetworkException {
+    void forwardPacket(DatagramPacket outPacket, IpPacket parsedPacket) throws DaedalusVpnService.VpnNetworkException {
         DatagramSocket dnsSocket;
         try {
             // Packets to be sent to the real DNS server will need to be protected from the VPN
