@@ -8,13 +8,15 @@ import android.system.Os;
 import android.system.OsConstants;
 import android.system.StructPollfd;
 import android.util.Log;
-import de.measite.minidns.DNSMessage;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.DnsServerHelper;
-import org.pcap4j.packet.*;
+import org.pcap4j.packet.IpPacket;
 
 import java.io.*;
-import java.net.*;
+import java.net.DatagramPacket;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -151,8 +153,8 @@ public class TcpDnsProvider extends UdpDnsProvider {
         }
     }
 
-    private void handleRawDnsResponse(IpPacket parsedPacket, Socket dnsSocket) throws IOException, IllegalRawDataException {
-        if (!dnsSocket.isClosed()) {
+    private void handleRawDnsResponse(IpPacket parsedPacket, Socket dnsSocket) {
+        try {
             DataInputStream stream = new DataInputStream(dnsSocket.getInputStream());
             int length = stream.readUnsignedShort();
             Log.d(TAG, "Reading length: " + String.valueOf(length));
@@ -160,54 +162,9 @@ public class TcpDnsProvider extends UdpDnsProvider {
             stream.read(data);
             dnsSocket.close();
             handleDnsResponse(parsedPacket, data);
+        } catch (Exception ignored) {
+
         }
-    }
-
-
-    /**
-     * Handles a responsePayload from an upstream DNS server
-     *
-     * @param requestPacket   The original request packet
-     * @param responsePayload The payload of the response
-     */
-    private void handleDnsResponse(IpPacket requestPacket, byte[] responsePayload) throws IllegalRawDataException, IOException {
-        DNSMessage message = new DNSMessage(responsePayload);
-        Log.d(TAG, message.toString());
-
-        UdpPacket udpOutPacket = (UdpPacket) requestPacket.getPayload();
-        UdpPacket.Builder payLoadBuilder = new UdpPacket.Builder(udpOutPacket)
-                .srcPort(udpOutPacket.getHeader().getDstPort())
-                .dstPort(udpOutPacket.getHeader().getSrcPort())
-                .srcAddr(requestPacket.getHeader().getDstAddr())
-                .dstAddr(requestPacket.getHeader().getSrcAddr())
-                .correctChecksumAtBuild(true)
-                .correctLengthAtBuild(true)
-                .payloadBuilder(
-                        new UnknownPacket.Builder()
-                                .rawData(responsePayload)
-                );
-
-
-        IpPacket ipOutPacket;
-        if (requestPacket instanceof IpV4Packet) {
-            ipOutPacket = new IpV4Packet.Builder((IpV4Packet) requestPacket)
-                    .srcAddr((Inet4Address) requestPacket.getHeader().getDstAddr())
-                    .dstAddr((Inet4Address) requestPacket.getHeader().getSrcAddr())
-                    .correctChecksumAtBuild(true)
-                    .correctLengthAtBuild(true)
-                    .payloadBuilder(payLoadBuilder)
-                    .build();
-
-        } else {
-            ipOutPacket = new IpV6Packet.Builder((IpV6Packet) requestPacket)
-                    .srcAddr((Inet6Address) requestPacket.getHeader().getDstAddr())
-                    .dstAddr((Inet6Address) requestPacket.getHeader().getSrcAddr())
-                    .correctLengthAtBuild(true)
-                    .payloadBuilder(payLoadBuilder)
-                    .build();
-        }
-
-        queueDeviceWrite(ipOutPacket);
     }
 
     /**

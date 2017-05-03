@@ -247,7 +247,7 @@ public class UdpDnsProvider extends DnsProvider {
      * @param requestPacket   The original request packet
      * @param responsePayload The payload of the response
      */
-    private void handleDnsResponse(IpPacket requestPacket, byte[] responsePayload) {
+    void handleDnsResponse(IpPacket requestPacket, byte[] responsePayload) {
         UdpPacket udpOutPacket = (UdpPacket) requestPacket.getPayload();
         UdpPacket.Builder payLoadBuilder = new UdpPacket.Builder(udpOutPacket)
                 .srcPort(udpOutPacket.getHeader().getDstPort())
