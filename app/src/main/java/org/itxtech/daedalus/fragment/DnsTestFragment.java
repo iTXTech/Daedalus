@@ -12,17 +12,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
-import de.measite.minidns.DNSClient;
 import de.measite.minidns.DNSMessage;
 import de.measite.minidns.Question;
 import de.measite.minidns.Record;
 import de.measite.minidns.record.A;
+import de.measite.minidns.source.NetworkDataSource;
 import de.measite.minidns.util.InetAddressUtil;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.util.DnsServerHelper;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,9 +79,9 @@ public class DnsTestFragment extends Fragment {
                             addAll(Arrays.asList(servers.split(",")));
                         }
                     }};
-                    DNSClient client = new DNSClient(null);
+                    DNSQuery dnsQuery = new DNSQuery();
                     for (String dnsServer : dnsServers) {
-                        testText = testServer(client, dnsServer, testDomain, testText);
+                        testText = testServer(dnsQuery, dnsServer, testDomain, testText);
                     }
                     mHandler.obtainMessage(DnsTestHandler.MSG_TEST_DONE).sendToTarget();
                 } catch (Exception e) {
@@ -88,7 +89,7 @@ public class DnsTestFragment extends Fragment {
                 }
             }
 
-            private StringBuilder testServer(DNSClient client, String dnsServer, String testUrl, StringBuilder testText) {
+            private StringBuilder testServer(DNSQuery dnsQuery, String dnsServer, String testUrl, StringBuilder testText) {
                 Log.d(TAG, "Testing DNS " + dnsServer);
                 testText.append(getResources().getString(R.string.test_domain)).append(" ").append(testUrl).append("\n").append(getResources().getString(R.string.test_dns_server)).append(" ").append(dnsServer);
 
@@ -103,7 +104,7 @@ public class DnsTestFragment extends Fragment {
 
                 try {
                     long startTime = System.currentTimeMillis();
-                    DNSMessage responseMessage = client.query(message.build(), InetAddressUtil.ipv4From(dnsServer));
+                    DNSMessage responseMessage = dnsQuery.query(message.build(), InetAddressUtil.ipv4From(dnsServer), 53);//Auto forward ports
                     long endTime = System.currentTimeMillis();
 
                     Set<A> answers = responseMessage.getAnswersFor(question);
@@ -210,6 +211,12 @@ public class DnsTestFragment extends Fragment {
                     stopThread();
                     break;
             }
+        }
+    }
+
+    private class DNSQuery extends NetworkDataSource {
+        public DNSMessage query(DNSMessage message, InetAddress address, int port) throws IOException {
+            return queryUdp(message, address, port);
         }
     }
 }

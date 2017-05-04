@@ -22,7 +22,15 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- * @author PeratX
+ * Daedalus Project
+ *
+ * @author iTXTech
+ * @link https://itxtech.org
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  */
 public class TcpDnsProvider extends UdpDnsProvider {
 
@@ -125,7 +133,7 @@ public class TcpDnsProvider extends UdpDnsProvider {
             // Packets to be sent to the real DNS server will need to be protected from the VPN
             dnsSocket = SocketChannel.open().socket();
 
-            Log.d(TAG, String.valueOf(service.protect(dnsSocket)));
+            service.protect(dnsSocket);
 
             SocketAddress address = new InetSocketAddress(outPacket.getAddress(), DnsServerHelper.getPortOrDefault(outPacket.getAddress(), outPacket.getPort()));
             dnsSocket.connect(address, 5000);
