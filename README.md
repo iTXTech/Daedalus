@@ -21,7 +21,7 @@ DNS server providers
 
 Requirements
 -------------
-* Minimum Android version: 4.0.4 (API 15) - __*Basic VPN functions*__
+* Minimum Android version: 4.0.3 (API 15) - __*Basic VPN functions*__
 * Recommended Android version: >= 5.0 (API 21) - __*Full features*__
 * Best Android version: >= 7.1 (API 25) - __*Launcher shortcuts*__
 

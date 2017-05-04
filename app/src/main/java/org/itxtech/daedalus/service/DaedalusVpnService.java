@@ -52,6 +52,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
     private long lastUpdate = 0;
     private boolean statisticQuery;
     private DnsProvider provider;
+    private ParcelFileDescriptor descriptor;
 
     private Thread mThread = null;
 
@@ -121,14 +122,21 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void stopThread() {
-        boolean shouldRefresh = false;
         try {
+            if (this.descriptor != null) {
+                this.descriptor.close();
+                this.descriptor = null;
+            }
             if (mThread != null) {
                 running = false;
-                shouldRefresh = true;
-                provider.shutdown();
-                mThread.interrupt();
-                provider.stop();
+                if (provider != null) {
+                    provider.shutdown();
+                    mThread.interrupt();
+                    provider.stop();
+                } else {
+                    mThread.interrupt();
+                }
+                mThread = null;
             }
             if (notification != null) {
                 NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -137,17 +145,18 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             }
         } catch (Exception e) {
             Log.d(TAG, e.toString());
-        }
-        stopSelf();
+        } finally {
+            stopSelf();
 
-        if (shouldRefresh && MainActivity.getInstance() != null && Daedalus.getInstance().isAppOnForeground()) {
-            MainActivity.getInstance().startActivity(new Intent(getApplicationContext(), MainActivity.class).putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_AFTER_DEACTIVATE));
-        } else if (shouldRefresh) {
-            Daedalus.updateShortcut(getApplicationContext());
-        }
+            if (MainActivity.getInstance() != null && Daedalus.getInstance().isAppOnForeground()) {
+                MainActivity.getInstance().startActivity(new Intent(getApplicationContext(), MainActivity.class).putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_AFTER_DEACTIVATE));
+            } else {
+                Daedalus.updateShortcut(getApplicationContext());
+            }
 
-        HostsResolver.clean();
-        DnsServerHelper.cleanPortCache();
+            HostsResolver.clean();
+            DnsServerHelper.cleanPortCache();
+        }
     }
 
 
@@ -190,7 +199,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                         .setBlocking(true);
             }
 
-            ParcelFileDescriptor descriptor = builder.establish();
+            descriptor = builder.establish();
 
             if (advanced) {
                 if (Daedalus.getPrefs().getBoolean("settings_dns_over_tcp", false)) {
