@@ -291,7 +291,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Daedalus.getInstance().deactivateService();
         } else if (launchAction == LAUNCH_ACTION_AFTER_DEACTIVATE) {
             Daedalus.updateShortcut(this.getApplicationContext());
-            if (currentFragment == FRAGMENT_MAIN) {
+            if (currentFragment == FRAGMENT_MAIN && mHandler != null) {
                 mHandler.obtainMessage(MainFragment.MainFragmentHandler.MSG_REFRESH).sendToTarget();
             }
         } else {
