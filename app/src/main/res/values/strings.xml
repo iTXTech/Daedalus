@@ -64,4 +64,6 @@
     <string name="apply">Apply</string>
     <string name="notice_fill_in_all">Please fill in all configuration items.</string>
     <string name="settings_dns_over_tcp">DNS over TCP</string>
+    <string name="action_removed">Removed.</string>
+    <string name="action_undo">Undo</string>
 </resources>

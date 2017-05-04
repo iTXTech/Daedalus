@@ -6,7 +6,7 @@ import org.itxtech.daedalus.service.DaedalusVpnService;
 /**
  * Daedalus Project
  *
- * @author iTXTech
+ * @author iTX Technologies
  * @link https://itxtech.org
  * <p>
  * This program is free software: you can redistribute it and/or modify

@@ -64,4 +64,6 @@
     <string name="apply">应用</string>
     <string name="notice_fill_in_all">请填写所有配置项。</string>
     <string name="settings_dns_over_tcp">DNS over TCP</string>
+    <string name="action_removed">已移除。</string>
+    <string name="action_undo">撤销</string>
 </resources>

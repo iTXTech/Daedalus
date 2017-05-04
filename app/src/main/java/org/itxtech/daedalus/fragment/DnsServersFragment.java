@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -19,7 +20,7 @@ import org.itxtech.daedalus.util.CustomDnsServer;
 /**
  * Daedalus Project
  *
- * @author iTXTech
+ * @author iTX Technologies
  * @link https://itxtech.org
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -29,10 +30,11 @@ import org.itxtech.daedalus.util.CustomDnsServer;
  */
 public class DnsServersFragment extends Fragment {
     private DnsServersFragment.DnsServerAdapter adapter;
+    private CustomDnsServer server = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dns_servers, container, false);
+        final View view = inflater.inflate(R.layout.fragment_dns_servers, container, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_dns_servers);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(manager);
@@ -52,8 +54,11 @@ public class DnsServersFragment extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
-                adapter.notifyItemRemoved(position);
+                server = Daedalus.configurations.getCustomDnsServers().get(position);
                 Daedalus.configurations.getCustomDnsServers().remove(position);
+                Snackbar.make(view, R.string.action_removed, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.action_undo, new SnackbarClickListener(position)).show();
+                adapter.notifyItemRemoved(position);
             }
         });
         itemTouchHelper.attachToRecyclerView(recyclerView);
@@ -69,12 +74,27 @@ public class DnsServersFragment extends Fragment {
         return view;
     }
 
+    private class SnackbarClickListener implements View.OnClickListener {
+        private final int position;
+
+        private SnackbarClickListener(int position) {
+            this.position = position;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Daedalus.configurations.getCustomDnsServers().add(position, server);
+            adapter.notifyItemInserted(position);
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
 
         Daedalus.configurations.save();
         adapter = null;
+        server = null;
     }
 
     @Override
@@ -100,7 +120,7 @@ public class DnsServersFragment extends Fragment {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_dns_servers, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_server, parent, false);
             return new ViewHolder(view);
         }
     }

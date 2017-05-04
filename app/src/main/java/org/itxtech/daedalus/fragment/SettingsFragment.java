@@ -16,7 +16,7 @@ import org.itxtech.daedalus.util.DnsServerHelper;
 /**
  * Daedalus Project
  *
- * @author iTXTech
+ * @author iTX Technologies
  * @link https://itxtech.org
  * <p>
  * This program is free software: you can redistribute it and/or modify
