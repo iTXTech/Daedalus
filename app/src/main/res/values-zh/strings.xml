@@ -43,19 +43,18 @@
     <string name="nav_github">GitHub</string>
     <string name="settings_advanced">高级系统设置</string>
     <string name="settings_advanced_on">开启</string>
-    <string name="settings_local_hosts_resolution">本地 hosts 解析</string>
+    <string name="settings_local_rules_resolution">本地规则解析</string>
     <string name="notice_need_restart">重新启用 Daedalus 以应用设置。</string>
-    <string name="notice_need_storage_perm">Daedalus 需要访问外部储存以实现本地 hosts 解析。</string>
-    <string name="action_hosts">Hosts</string>
+    <string name="notice_need_storage_perm">Daedalus 需要访问外部储存以实现本地规则解析。</string>
+    <string name="action_rules">规则</string>
     <string name="button_text_download_hosts">下载 hosts</string>
-    <string name="notice_start_download">正在下载 hosts，请稍等 ……</string>
+    <string name="notice_start_download">正在下载 rules，请稍等 ……</string>
     <string name="notice_downloaded">已下载 hosts 。</string>
-    <string name="notice_now_downloading">Daedalus 当前正在下载hosts，请稍等。</string>
+    <string name="notice_now_downloading">Daedalus 当前正在下载规则，请稍等。</string>
     <string name="hosts_not_found">找不到本地 hosts 文件。</string>
     <string name="hosts_path">本地 hosts 路径:</string>
     <string name="hosts_last_modified">最后修改:</string>
     <string name="hosts_size">大小:</string>
-    <string name="settings_hosts_pan_domain_resolution">Hosts 域名泛解析</string>
     <string name="action_dns_servers">服务器</string>
     <string name="settings_server_name">服务器名称</string>
     <string name="settings_server_address">服务器地址</string>
@@ -66,4 +65,5 @@
     <string name="settings_dns_over_tcp">DNS over TCP</string>
     <string name="action_removed">已移除。</string>
     <string name="action_undo">撤销</string>
+    <string name="settings_use_dnsmasq">使用 DNSMasq 替代 Hosts</string>
 </resources>

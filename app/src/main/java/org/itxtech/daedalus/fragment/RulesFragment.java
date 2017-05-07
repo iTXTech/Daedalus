@@ -14,7 +14,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
-import org.itxtech.daedalus.util.HostsProvider;
+import org.itxtech.daedalus.util.RulesProvider;
 
 import java.io.*;
 import java.net.URL;
@@ -33,7 +33,7 @@ import java.util.Date;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class HostsFragment extends Fragment {
+public class RulesFragment extends Fragment {
 
     private Thread mThread = null;
     private View view = null;
@@ -46,7 +46,7 @@ public class HostsFragment extends Fragment {
         mHandler = new HostsHandler().setView(view).setHostsFragment(this);
 
         final Spinner spinnerHosts = (Spinner) view.findViewById(R.id.spinner_hosts);
-        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, HostsProvider.getHostsProviderNames());
+        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, RulesProvider.getHostsProviderNames());
         spinnerHosts.setAdapter(spinnerArrayAdapter);
         spinnerHosts.setSelection(0);
 
@@ -61,7 +61,7 @@ public class HostsFragment extends Fragment {
                         @Override
                         public void run() {
                             try {
-                                URLConnection connection = new URL(HostsProvider.getDownloadUrlByName(spinnerHosts.getSelectedItem().toString())).openConnection();
+                                URLConnection connection = new URL(RulesProvider.getDownloadUrlByName(spinnerHosts.getSelectedItem().toString())).openConnection();
                                 InputStream inputStream = connection.getInputStream();
                                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                                 StringBuilder builder = new StringBuilder();
@@ -130,14 +130,14 @@ public class HostsFragment extends Fragment {
         static final int MSG_DOWNLOADED = 0;
 
         private View view = null;
-        private HostsFragment mFragment = null;
+        private RulesFragment mFragment = null;
 
         HostsHandler setView(View view) {
             this.view = view;
             return this;
         }
 
-        HostsHandler setHostsFragment(HostsFragment fragment) {
+        HostsHandler setHostsFragment(RulesFragment fragment) {
             mFragment = fragment;
             return this;
         }

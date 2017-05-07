@@ -13,7 +13,7 @@ import de.measite.minidns.Record;
 import de.measite.minidns.record.A;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.DnsServerHelper;
-import org.itxtech.daedalus.util.HostsResolver;
+import org.itxtech.daedalus.util.RulesResolver;
 import org.pcap4j.packet.*;
 import org.pcap4j.packet.factory.PacketFactoryPropertiesLoader;
 import org.pcap4j.util.PropertiesLoader;
@@ -74,7 +74,7 @@ public class UdpDnsProvider extends DnsProvider {
         }
     }
 
-    void queueDeviceWrite(IpPacket ipOutPacket) {
+    private void queueDeviceWrite(IpPacket ipOutPacket) {
         dnsQueryTimes++;
         Log.i(TAG, "QT " + dnsQueryTimes);
         deviceWrites.add(ipOutPacket.getRawData());
@@ -340,8 +340,8 @@ public class UdpDnsProvider extends DnsProvider {
         String dnsQueryName = dnsMsg.getQuestion().name.toString();
 
         try {
-            if (HostsResolver.canResolve(dnsQueryName)) {
-                String response = HostsResolver.resolve(dnsQueryName);
+            if (RulesResolver.canResolve(dnsQueryName)) {
+                String response = RulesResolver.resolve(dnsQueryName);
                 Log.i(TAG, "handleDnsRequest: DNS Name " + dnsQueryName + " address " + response + ", using local hosts to resolve.");
                 DNSMessage.Builder builder = dnsMsg.asBuilder();
                 int[] ip = new int[4];

@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int FRAGMENT_DNS_TEST = 1;
     public static final int FRAGMENT_SETTINGS = 2;
     public static final int FRAGMENT_ABOUT = 3;
-    public static final int FRAGMENT_HOSTS = 4;
+    public static final int FRAGMENT_RULES = 4;
     public static final int FRAGMENT_DNS_SERVERS = 5;
 
     private static MainActivity instance = null;
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DnsTestFragment mDnsTest;
     private SettingsFragment mSettings;
     private AboutFragment mAbout;
-    private HostsFragment mHosts;
+    private RulesFragment mHosts;
     private DnsServersFragment mDnsServers;
     private int currentFragment = FRAGMENT_NONE;
 
@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case FRAGMENT_ABOUT:
                 menu.findItem(R.id.nav_about).setChecked(true);
                 break;
-            case FRAGMENT_HOSTS:
+            case FRAGMENT_RULES:
                 menu.findItem(R.id.nav_hosts).setChecked(true);
                 break;
             case FRAGMENT_DNS_SERVERS:
@@ -183,8 +183,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case FRAGMENT_ABOUT:
                 toolbar.setTitle(R.string.action_about);
                 break;
-            case FRAGMENT_HOSTS:
-                toolbar.setTitle(R.string.action_hosts);
+            case FRAGMENT_RULES:
+                toolbar.setTitle(R.string.action_rules);
                 break;
             case FRAGMENT_DNS_SERVERS:
                 toolbar.setTitle(R.string.action_dns_servers);
@@ -229,13 +229,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setTitle(R.string.action_about);
                 currentFragment = FRAGMENT_ABOUT;
                 break;
-            case FRAGMENT_HOSTS:
+            case FRAGMENT_RULES:
                 if (mHosts == null) {
-                    mHosts = new HostsFragment();
+                    mHosts = new RulesFragment();
                 }
                 transaction.replace(R.id.id_content, mHosts);
-                toolbar.setTitle(R.string.action_hosts);
-                currentFragment = FRAGMENT_HOSTS;
+                toolbar.setTitle(R.string.action_rules);
+                currentFragment = FRAGMENT_RULES;
                 break;
             case FRAGMENT_DNS_SERVERS:
                 if (mDnsServers == null) {
@@ -327,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         if (id == R.id.nav_hosts) {
-            switchFragment(FRAGMENT_HOSTS);
+            switchFragment(FRAGMENT_RULES);
         }
 
         if (id == R.id.nav_dns_server) {

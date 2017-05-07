@@ -21,7 +21,7 @@
               android:title="@string/action_dns_servers"
               android:icon="@drawable/ic_device_hub"/>
         <item android:id="@+id/nav_hosts"
-              android:title="@string/action_hosts"
+              android:title="@string/action_rules"
               android:checked="false"
               android:icon="@drawable/ic_description"/>
     </group>

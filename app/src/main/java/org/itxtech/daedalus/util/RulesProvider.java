@@ -15,11 +15,11 @@ import java.util.ArrayList;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class HostsProvider {
+public class RulesProvider {
     private String name;
     private String downloadURL;
 
-    public HostsProvider(String name, String downloadURL) {
+    public RulesProvider(String name, String downloadURL) {
         this.name = name;
         this.downloadURL = downloadURL;
     }
@@ -34,7 +34,7 @@ public class HostsProvider {
 
     public static String[] getHostsProviderNames() {
         ArrayList<String> servers = new ArrayList<>(Daedalus.HOSTS_PROVIDERS.size());
-        for (HostsProvider hostsProvider : Daedalus.HOSTS_PROVIDERS) {
+        for (RulesProvider hostsProvider : Daedalus.HOSTS_PROVIDERS) {
             servers.add(hostsProvider.getName());
         }
         String[] stringServers = new String[Daedalus.HOSTS_PROVIDERS.size()];
@@ -42,7 +42,7 @@ public class HostsProvider {
     }
 
     public static String getDownloadUrlByName(String name) {
-        for (HostsProvider hostsProvider : Daedalus.HOSTS_PROVIDERS) {
+        for (RulesProvider hostsProvider : Daedalus.HOSTS_PROVIDERS) {
             if (hostsProvider.getName().equals(name)) {
                 return hostsProvider.getDownloadURL();
             }

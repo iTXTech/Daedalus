@@ -20,7 +20,7 @@ import org.itxtech.daedalus.provider.TcpDnsProvider;
 import org.itxtech.daedalus.provider.UdpDnsProvider;
 import org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver;
 import org.itxtech.daedalus.util.DnsServerHelper;
-import org.itxtech.daedalus.util.HostsResolver;
+import org.itxtech.daedalus.util.RulesResolver;
 
 import java.net.Inet4Address;
 
@@ -146,7 +146,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             Daedalus.updateShortcut(getApplicationContext());
         }
 
-        HostsResolver.clean();
+        RulesResolver.clean();
         DnsServerHelper.cleanPortCache();
     }
 
