@@ -121,6 +121,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void stopThread() {
+        Log.d(TAG, "stopThread");
         boolean shouldRefresh = false;
         try {
             if (mThread != null) {
@@ -129,6 +130,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                 provider.shutdown();
                 mThread.interrupt();
                 provider.stop();
+                mThread = null;
             }
             if (notification != null) {
                 NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);

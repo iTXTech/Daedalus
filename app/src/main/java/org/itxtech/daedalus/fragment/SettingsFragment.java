@@ -6,9 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.*;
 import android.support.design.widget.Snackbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.util.DnsServerHelper;
@@ -124,14 +122,6 @@ public class SettingsFragment extends PreferenceFragment {
                 }
             }
         }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = super.onCreateView(inflater, container, savedInstanceState);
-        SwitchPreference localHostResolution = (SwitchPreference) findPreference("settings_local_rules_resolution");
-        localHostResolution.setSummary(Daedalus.hostsPath);
-        return view;
     }
 
     @Override

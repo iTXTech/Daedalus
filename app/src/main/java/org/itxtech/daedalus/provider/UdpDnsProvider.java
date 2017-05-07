@@ -340,8 +340,8 @@ public class UdpDnsProvider extends DnsProvider {
         String dnsQueryName = dnsMsg.getQuestion().name.toString();
 
         try {
-            if (RulesResolver.canResolve(dnsQueryName)) {
-                String response = RulesResolver.resolve(dnsQueryName);
+            String response;
+            if ((response = RulesResolver.resolve(dnsQueryName)) != null) {
                 Log.i(TAG, "handleDnsRequest: DNS Name " + dnsQueryName + " address " + response + ", using local hosts to resolve.");
                 DNSMessage.Builder builder = dnsMsg.asBuilder();
                 int[] ip = new int[4];

@@ -38,15 +38,15 @@ import org.itxtech.daedalus.fragment.*;
  * (at your option) any later version.
  */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String TAG = "DMainActivity";
+
     public static final String LAUNCH_ACTION = "org.itxtech.daedalus.activity.MainActivity.LAUNCH_ACTION";
     public static final int LAUNCH_ACTION_NONE = 0;
     public static final int LAUNCH_ACTION_ACTIVATE = 1;
     public static final int LAUNCH_ACTION_DEACTIVATE = 2;
     public static final int LAUNCH_ACTION_AFTER_DEACTIVATE = 3;
+
     public static final String LAUNCH_FRAGMENT = "org.itxtech.daedalus.activity.MainActivity.LAUNCH_FRAGMENT";
-
-    private static final String TAG = "DMainActivity";
-
     public static final int FRAGMENT_NONE = -1;
     public static final int FRAGMENT_MAIN = 0;
     public static final int FRAGMENT_DNS_TEST = 1;
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 menu.findItem(R.id.nav_about).setChecked(true);
                 break;
             case FRAGMENT_RULES:
-                menu.findItem(R.id.nav_hosts).setChecked(true);
+                menu.findItem(R.id.nav_rules).setChecked(true);
                 break;
             case FRAGMENT_DNS_SERVERS:
                 menu.findItem(R.id.nav_dns_server).setChecked(true);
@@ -294,8 +294,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (currentFragment == FRAGMENT_MAIN) {
                 mHandler.obtainMessage(MainFragment.MainFragmentHandler.MSG_REFRESH).sendToTarget();
             }
-        } else {
-            Daedalus.updateShortcut(this.getApplicationContext());
         }
 
         int fragment = intent.getIntExtra(LAUNCH_FRAGMENT, FRAGMENT_NONE);
@@ -310,32 +308,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_settings) {
-            switchFragment(FRAGMENT_SETTINGS);
-        }
-
-        if (id == R.id.nav_about) {
-            switchFragment(FRAGMENT_ABOUT);
-        }
-
-        if (id == R.id.nav_dns_test) {
-            switchFragment(FRAGMENT_DNS_TEST);
-        }
-
-        if (id == R.id.nav_home) {
-            switchFragment(FRAGMENT_MAIN);
-        }
-
-        if (id == R.id.nav_hosts) {
-            switchFragment(FRAGMENT_RULES);
-        }
-
-        if (id == R.id.nav_dns_server) {
-            switchFragment(FRAGMENT_DNS_SERVERS);
-        }
-
-        if (id == R.id.nav_github) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus")));
+        switch (id) {
+            case R.id.nav_about:
+                switchFragment(FRAGMENT_ABOUT);
+                break;
+            case R.id.nav_dns_server:
+                switchFragment(FRAGMENT_DNS_SERVERS);
+                break;
+            case R.id.nav_dns_test:
+                switchFragment(FRAGMENT_DNS_TEST);
+                break;
+            case R.id.nav_github:
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus")));
+                break;
+            case R.id.nav_home:
+                switchFragment(FRAGMENT_MAIN);
+                break;
+            case R.id.nav_rules:
+                switchFragment(FRAGMENT_RULES);
+                break;
+            case R.id.nav_settings:
+                switchFragment(FRAGMENT_SETTINGS);
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_drawer_layout);

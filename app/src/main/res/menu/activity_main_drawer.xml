@@ -20,7 +20,7 @@
         <item android:id="@+id/nav_dns_server"
               android:title="@string/action_dns_servers"
               android:icon="@drawable/ic_device_hub"/>
-        <item android:id="@+id/nav_hosts"
+        <item android:id="@+id/nav_rules"
               android:title="@string/action_rules"
               android:checked="false"
               android:icon="@drawable/ic_description"/>

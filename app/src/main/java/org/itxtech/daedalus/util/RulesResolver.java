@@ -70,30 +70,9 @@ public class RulesResolver implements Runnable {
         rules = null;
     }
 
-    public static boolean canResolve(String hostname) {
-        if (rules == null) {
-            return false;
-        }
-        if (rules.containsKey(hostname)) {
-            return true;
-        }
-        if (mode == MODE_DNSMASQ) {
-            String[] pieces = hostname.split("\\.");
-            StringBuilder builder;
-            builder = new StringBuilder();
-            for (int i = 1; i < pieces.length; i++) {
-                builder.append(".").append(pieces[i]);
-            }
-            if (rules.containsKey(builder.toString())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static String resolve(String hostname) {
         if (rules == null) {
-            return "";
+            return null;
         }
         if (rules.containsKey(hostname)) {
             return rules.get(hostname);
@@ -101,15 +80,20 @@ public class RulesResolver implements Runnable {
         if (mode == MODE_DNSMASQ) {
             String[] pieces = hostname.split("\\.");
             StringBuilder builder;
-            builder = new StringBuilder();
             for (int i = 1; i < pieces.length; i++) {
-                builder.append(".").append(pieces[i]);
-            }
-            if (rules.containsKey(builder.toString())) {
-                return rules.get(builder.toString());
+                builder = new StringBuilder();
+                for (int j = i; j < pieces.length; j++) {
+                    builder.append(pieces[j]);
+                    if (j < pieces.length - 1) {
+                        builder.append(".");
+                    }
+                }
+                if (rules.containsKey(builder.toString())) {
+                    return rules.get(builder.toString());
+                }
             }
         }
-        return "";
+        return null;
     }
 
     private void load() {
@@ -147,8 +131,11 @@ public class RulesResolver implements Runnable {
                         if (!strLine.equals("") && !strLine.startsWith("#")) {
                             data = strLine.split("/");
                             if (data.length == 3 && data[0].equals("address=")) {
+                                if (data[1].startsWith(".")) {
+                                    data[1] = data[1].substring(1, data[1].length());
+                                }
                                 rules.put(data[1], data[2]);
-                                Log.d(TAG, "Putting " + data[0] + " " + data[1]);
+                                Log.d(TAG, "Putting " + data[1] + " " + data[2]);
                             }
                         }
                     }
