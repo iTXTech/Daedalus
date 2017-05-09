@@ -79,6 +79,9 @@ public class SettingsFragment extends PreferenceFragment {
             SwitchPreference advanced = (SwitchPreference) findPreference("settings_advanced_switch");
             advanced.setEnabled(false);
             advanced.setChecked(false);
+            SwitchPreference boot = (SwitchPreference) findPreference("settings_boot");
+            boot.setEnabled(false);
+            boot.setChecked(false);
         }
 
         SwitchPreference advanced = (SwitchPreference) findPreference("settings_advanced_switch");
