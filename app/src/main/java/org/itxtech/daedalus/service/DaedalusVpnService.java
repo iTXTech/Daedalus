@@ -20,7 +20,7 @@ import org.itxtech.daedalus.provider.TcpDnsProvider;
 import org.itxtech.daedalus.provider.UdpDnsProvider;
 import org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver;
 import org.itxtech.daedalus.util.DnsServerHelper;
-import org.itxtech.daedalus.util.HostsResolver;
+import org.itxtech.daedalus.util.RulesResolver;
 
 import java.net.Inet4Address;
 
@@ -122,6 +122,8 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void stopThread() {
+        Log.d(TAG, "stopThread");
+        boolean shouldRefresh = false;
         try {
             if (this.descriptor != null) {
                 this.descriptor.close();
@@ -129,6 +131,11 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             }
             if (mThread != null) {
                 running = false;
+                shouldRefresh = true;
+                provider.shutdown();
+                mThread.interrupt();
+                provider.stop();
+                mThread = null;
                 if (provider != null) {
                     provider.shutdown();
                     mThread.interrupt();
@@ -145,18 +152,17 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             }
         } catch (Exception e) {
             Log.d(TAG, e.toString());
-        } finally {
-            stopSelf();
-
-            if (MainActivity.getInstance() != null && Daedalus.getInstance().isAppOnForeground()) {
-                MainActivity.getInstance().startActivity(new Intent(getApplicationContext(), MainActivity.class).putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_AFTER_DEACTIVATE));
-            } else {
-                Daedalus.updateShortcut(getApplicationContext());
-            }
-
-            HostsResolver.clean();
-            DnsServerHelper.cleanPortCache();
         }
+        stopSelf();
+
+        if (shouldRefresh && MainActivity.getInstance() != null && Daedalus.getInstance().isAppOnForeground()) {
+            MainActivity.getInstance().startActivity(new Intent(getApplicationContext(), MainActivity.class).putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_AFTER_DEACTIVATE));
+        } else if (shouldRefresh) {
+            Daedalus.updateShortcut(getApplicationContext());
+        }
+
+        RulesResolver.clean();
+        DnsServerHelper.cleanPortCache();
     }
 
 

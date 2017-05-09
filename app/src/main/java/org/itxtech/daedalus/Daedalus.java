@@ -22,8 +22,8 @@ import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Configurations;
 import org.itxtech.daedalus.util.DnsServer;
-import org.itxtech.daedalus.util.HostsProvider;
-import org.itxtech.daedalus.util.HostsResolver;
+import org.itxtech.daedalus.util.RulesProvider;
+import org.itxtech.daedalus.util.RulesResolver;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -56,10 +56,14 @@ public class Daedalus extends Application {
         add(new DnsServer("123.206.21.48", R.string.server_aixyz_south_china));
     }};
 
-    public static final List<HostsProvider> HOSTS_PROVIDERS = new ArrayList<HostsProvider>() {{
-        add(new HostsProvider("racaljk/hosts", "https://coding.net/u/scaffrey/p/hosts/git/raw/master/hosts"));
-        add(new HostsProvider("fengixng/google-hosts", "https://raw.githubusercontent.com/fengixng/google-hosts/master/hosts"));
-        add(new HostsProvider("sy618/hosts", "https://raw.githubusercontent.com/sy618/hosts/master/ADFQ"));
+    public static final List<RulesProvider> HOSTS_PROVIDERS = new ArrayList<RulesProvider>() {{
+        add(new RulesProvider("racaljk/hosts", "https://coding.net/u/scaffrey/p/hosts/git/raw/master/hosts"));
+        add(new RulesProvider("fengixng/google-hosts", "https://raw.githubusercontent.com/fengixng/google-hosts/master/hosts"));
+        add(new RulesProvider("sy618/hosts", "https://raw.githubusercontent.com/sy618/hosts/master/ADFQ"));
+    }};
+
+    public static final List<RulesProvider> DNSMASQ_PROVIDERS = new ArrayList<RulesProvider>() {{
+
     }};
 
     public static final String[] DEFAULT_TEST_DOMAINS = new String[]{
@@ -73,6 +77,7 @@ public class Daedalus extends Application {
     public static Configurations configurations;
 
     public static String hostsPath;
+    public static String dnsmasqPath;
     public static String configPath;
 
     private static Daedalus instance = null;
@@ -83,10 +88,11 @@ public class Daedalus extends Application {
     public void onCreate() {
         super.onCreate();
 
-        mHostsResolver = new Thread(new HostsResolver());
+        mHostsResolver = new Thread(new RulesResolver());
         mHostsResolver.start();
 
         hostsPath = getExternalFilesDir(null).getPath() + "/hosts";
+        dnsmasqPath = getExternalFilesDir(null).getPath() + "/dnsmasq";
         configPath = getExternalFilesDir(null).getPath() + "/config.json";
 
         initData();
@@ -114,7 +120,7 @@ public class Daedalus extends Application {
     };
 
     public static void initHostsResolver() {
-        if (Daedalus.getPrefs().getBoolean("settings_local_host_resolution", false)) {
+        if (Daedalus.getPrefs().getBoolean("settings_local_rules_resolution", false)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 int permission = ActivityCompat.checkSelfPermission(Daedalus.getInstance(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 if (MainActivity.getInstance() != null) {
@@ -125,8 +131,11 @@ public class Daedalus extends Application {
                     return;
                 }
             }
-            HostsResolver.startLoad(hostsPath);
-            HostsResolver.setPanResolution(Daedalus.getPrefs().getBoolean("settings_pan_resolution", false));
+            if (Daedalus.getPrefs().getBoolean("settings_use_dnsmasq", false)) {
+                RulesResolver.startLoadDnsmasq(dnsmasqPath);
+            } else {
+                RulesResolver.startLoadHosts(hostsPath);
+            }
         }
     }
     public static SharedPreferences getPrefs() {
@@ -140,9 +149,9 @@ public class Daedalus extends Application {
 
         instance = null;
         prefs = null;
-        HostsResolver.shutdown();
+        RulesResolver.shutdown();
         mHostsResolver.interrupt();
-        HostsResolver.clean();
+        RulesResolver.clean();
         mHostsResolver = null;
     }
 
