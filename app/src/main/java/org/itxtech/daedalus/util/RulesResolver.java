@@ -33,14 +33,14 @@ public class RulesResolver implements Runnable {
     private static int status = STATUS_NOT_LOADED;
     private static int mode = MODE_HOSTS;
     private static String hostsFile;
-    private static String dnsmasqFile;
+    private static String dnsmasqPath;
     private static HashMap<String, String> rules;
     private static boolean shutdown = false;
 
     public RulesResolver() {
         status = STATUS_NOT_LOADED;
         hostsFile = "";
-        dnsmasqFile = "";
+        dnsmasqPath = "";
         shutdown = false;
     }
 
@@ -59,9 +59,9 @@ public class RulesResolver implements Runnable {
         status = STATUS_PENDING_LOAD;
     }
 
-    public static void startLoadDnsmasq(String loadFile) {
-        Log.d(TAG, "Loading DNSMasq file " + loadFile);
-        dnsmasqFile = loadFile;
+    public static void startLoadDnsmasq(String loadPath) {
+        Log.d(TAG, "Loading DNSMasq file " + loadPath);
+        dnsmasqPath = loadPath;
         mode = MODE_DNSMASQ;
         status = STATUS_PENDING_LOAD;
     }
@@ -118,30 +118,39 @@ public class RulesResolver implements Runnable {
 
                     dataIO.close();
                     stream.close();
+                } else {
+                    status = STATUS_NOT_LOADED;
+                    return;
                 }
             } else if (mode == MODE_DNSMASQ) {
-                File file = new File(dnsmasqFile);
-                if (file.exists() && file.canRead()) {
-                    FileInputStream stream = new FileInputStream(file);
-                    BufferedReader dataIO = new BufferedReader(new InputStreamReader(stream));
-                    String strLine;
-                    String[] data;
-                    while ((strLine = dataIO.readLine()) != null) {
-                        //Log.d(TAG, strLine);
-                        if (!strLine.equals("") && !strLine.startsWith("#")) {
-                            data = strLine.split("/");
-                            if (data.length == 3 && data[0].equals("address=")) {
-                                if (data[1].startsWith(".")) {
-                                    data[1] = data[1].substring(1, data[1].length());
+                File file = new File(dnsmasqPath);
+                if (!file.mkdirs() && !file.exists()) {
+                    status = STATUS_NOT_LOADED;
+                    return;
+                }
+                for (File conf : file.listFiles()) {
+                    if (file.canRead()) {
+                        Log.d(TAG, "load: Loading DNSMasq configuration " + conf.toString());
+                        FileInputStream stream = new FileInputStream(conf);
+                        BufferedReader dataIO = new BufferedReader(new InputStreamReader(stream));
+                        String strLine;
+                        String[] data;
+                        while ((strLine = dataIO.readLine()) != null) {
+                            if (!strLine.equals("") && !strLine.startsWith("#")) {
+                                data = strLine.split("/");
+                                if (data.length == 3 && data[0].equals("address=")) {
+                                    if (data[1].startsWith(".")) {
+                                        data[1] = data[1].substring(1, data[1].length());
+                                    }
+                                    rules.put(data[1], data[2]);
+                                    Log.d(TAG, "Putting " + data[1] + " " + data[2]);
                                 }
-                                rules.put(data[1], data[2]);
-                                Log.d(TAG, "Putting " + data[1] + " " + data[2]);
                             }
                         }
-                    }
 
-                    dataIO.close();
-                    stream.close();
+                        dataIO.close();
+                        stream.close();
+                    }
                 }
             }
             status = STATUS_LOADED;

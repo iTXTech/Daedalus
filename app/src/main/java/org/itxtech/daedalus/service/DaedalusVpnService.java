@@ -132,10 +132,6 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             if (mThread != null) {
                 running = false;
                 shouldRefresh = true;
-                provider.shutdown();
-                mThread.interrupt();
-                provider.stop();
-                mThread = null;
                 if (provider != null) {
                     provider.shutdown();
                     mThread.interrupt();

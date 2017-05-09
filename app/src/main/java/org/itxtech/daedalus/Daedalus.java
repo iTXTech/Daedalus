@@ -92,8 +92,11 @@ public class Daedalus extends Application {
         mHostsResolver.start();
 
         hostsPath = getExternalFilesDir(null).getPath() + "/hosts";
-        dnsmasqPath = getExternalFilesDir(null).getPath() + "/dnsmasq";
+        dnsmasqPath = getExternalFilesDir(null).getPath() + "/dnsmasq/";
         configPath = getExternalFilesDir(null).getPath() + "/config.json";
+
+        File file = new File(dnsmasqPath);
+        Log.d(TAG, "mkdir result: " + file.mkdirs());
 
         initData();
 
