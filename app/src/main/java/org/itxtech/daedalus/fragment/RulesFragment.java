@@ -37,21 +37,26 @@ public class RulesFragment extends Fragment {
 
     private Thread mThread = null;
     private View view = null;
-    private HostsHandler mHandler = null;
+    private RulesHandler mHandler = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_hosts, container, false);
+        view = inflater.inflate(R.layout.fragment_rules, container, false);
 
-        mHandler = new HostsHandler().setView(view).setHostsFragment(this);
+        mHandler = new RulesHandler().setView(view).setHostsFragment(this);
 
         final Spinner spinnerHosts = (Spinner) view.findViewById(R.id.spinner_hosts);
-        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, RulesProvider.getHostsProviderNames());
-        spinnerHosts.setAdapter(spinnerArrayAdapter);
+        ArrayAdapter hostsArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, RulesProvider.getHostsProviderNames());
+        spinnerHosts.setAdapter(hostsArrayAdapter);
         spinnerHosts.setSelection(0);
 
-        Button buttonDownload = (Button) view.findViewById(R.id.button_download_hosts);
-        buttonDownload.setOnClickListener(new View.OnClickListener() {
+        final Spinner spinnerDnsmasq = (Spinner) view.findViewById(R.id.spinner_dnsmasq);
+        ArrayAdapter dnsmasqArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, RulesProvider.getDnsmasqProviderNames());
+        spinnerDnsmasq.setAdapter(dnsmasqArrayAdapter);
+        spinnerDnsmasq.setSelection(0);
+
+        Button buttonDownloadHosts = (Button) view.findViewById(R.id.button_download_hosts);
+        buttonDownloadHosts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mThread == null) {
@@ -71,7 +76,45 @@ public class RulesFragment extends Fragment {
                                 }
                                 reader.close();
 
-                                mHandler.obtainMessage(HostsHandler.MSG_DOWNLOADED, builder.toString()).sendToTarget();
+                                mHandler.obtainMessage(RulesHandler.MSG_HOSTS_DOWNLOADED, builder.toString()).sendToTarget();
+                                stopThread();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    mThread.start();
+                } else {
+                    Snackbar.make(view, R.string.notice_now_downloading, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            }
+        });
+
+        Button buttonDownloadDnsmasq = (Button) view.findViewById(R.id.button_download_dnsmasq);
+        buttonDownloadDnsmasq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mThread == null) {
+                    Snackbar.make(view, R.string.notice_start_download, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    mThread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                RulesProvider provider = RulesProvider.getProviderByName(spinnerDnsmasq.getSelectedItem().toString());
+                                URLConnection connection = new URL(provider.getDownloadURL()).openConnection();
+                                InputStream inputStream = connection.getInputStream();
+                                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                                StringBuilder builder = new StringBuilder();
+                                String result;
+                                while ((result = reader.readLine()) != null) {
+                                    builder.append("\n").append(result);
+                                }
+                                reader.close();
+
+                                provider.setData(builder.toString());
+                                mHandler.obtainMessage(RulesHandler.MSG_DNSMASQ_DOWNLOADED, provider).sendToTarget();
                                 stopThread();
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -89,15 +132,24 @@ public class RulesFragment extends Fragment {
     }
 
     private void updateUserInterface() {
-        File file = new File(Daedalus.hostsPath);
+        File hosts = new File(Daedalus.hostsPath);
         TextView info = (TextView) view.findViewById(R.id.textView_hosts);
         StringBuilder builder = new StringBuilder();
-        builder.append(getString(R.string.hosts_path)).append(" ").append(Daedalus.hostsPath).append("\n\n");
-        if (!file.exists()) {
+        builder.append(getString(R.string.hosts_path)).append(" ").append(Daedalus.hostsPath).append("\n");
+        if (!hosts.exists()) {
             builder.append(getString(R.string.hosts_not_found));
         } else {
-            builder.append(getString(R.string.hosts_last_modified)).append(" ").append(new Date(file.lastModified()).toString()).append("\n\n")
-                    .append(getString(R.string.hosts_size)).append(" ").append(new DecimalFormat("0.00").format(((float) file.length() / 1024))).append(" KB");
+            builder.append(getString(R.string.hosts_last_modified)).append(" ").append(new Date(hosts.lastModified()).toString()).append("\n")
+                    .append(getString(R.string.hosts_size)).append(" ").append(new DecimalFormat("0.00").format(((float) hosts.length() / 1024))).append(" KB");
+        }
+        builder.append("\n");
+        File dnsmasq = new File(Daedalus.dnsmasqPath);
+        builder.append(getString(R.string.dnsmasq_path)).append(" ").append(Daedalus.dnsmasqPath);
+        if (dnsmasq.exists()) {
+            for (File conf : dnsmasq.listFiles()) {
+                builder.append("\n").append(conf.getName()).append(" ")
+                        .append(new DecimalFormat("0.00").format(((float) conf.length() / 1024))).append(" KB");
+            }
         }
         info.setText(builder.toString());
     }
@@ -126,18 +178,19 @@ public class RulesFragment extends Fragment {
         }
     }
 
-    private static class HostsHandler extends Handler {
-        static final int MSG_DOWNLOADED = 0;
+    private static class RulesHandler extends Handler {
+        static final int MSG_HOSTS_DOWNLOADED = 0;
+        static final int MSG_DNSMASQ_DOWNLOADED = 1;
 
         private View view = null;
         private RulesFragment mFragment = null;
 
-        HostsHandler setView(View view) {
+        RulesHandler setView(View view) {
             this.view = view;
             return this;
         }
 
-        HostsHandler setHostsFragment(RulesFragment fragment) {
+        RulesHandler setHostsFragment(RulesFragment fragment) {
             mFragment = fragment;
             return this;
         }
@@ -152,12 +205,28 @@ public class RulesFragment extends Fragment {
             super.handleMessage(msg);
 
             switch (msg.what) {
-                case MSG_DOWNLOADED:
+                case MSG_HOSTS_DOWNLOADED:
                     try {
                         String result = (String) msg.obj;
                         File file = new File(Daedalus.hostsPath);
                         FileOutputStream stream = new FileOutputStream(file);
                         stream.write(result.getBytes());
+                        stream.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    Snackbar.make(view, R.string.notice_downloaded, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+
+                    mFragment.updateUserInterface();
+                    break;
+                case MSG_DNSMASQ_DOWNLOADED:
+                    try {
+                        RulesProvider provider = (RulesProvider) msg.obj;
+                        File file = new File(Daedalus.dnsmasqPath + provider.getFileName());
+                        FileOutputStream stream = new FileOutputStream(file);
+                        stream.write(provider.getData().getBytes());
                         stream.close();
                     } catch (Exception e) {
                         e.printStackTrace();

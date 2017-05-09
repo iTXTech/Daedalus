@@ -5,7 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     <RelativeLayout
-            android:id="@+id/fragment_hosts"
+            android:id="@+id/fragment_rules"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_vertical_margin"
@@ -27,13 +27,32 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentLeft="true"/>
+        <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_dnsmasq"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/button_download_hosts"/>
+        <Button
+                android:text="@string/button_text_download_dnsmasq"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/spinner_dnsmasq"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="10dp"
+                android:id="@+id/button_download_dnsmasq"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentLeft="true"/>
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView_hosts"
-                android:layout_below="@+id/button_download_hosts"
+                android:layout_below="@+id/button_download_dnsmasq"
                 android:layout_marginTop="10dp"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"/>
     </RelativeLayout>

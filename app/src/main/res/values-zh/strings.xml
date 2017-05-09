@@ -49,7 +49,7 @@
     <string name="action_rules">规则</string>
     <string name="button_text_download_hosts">下载 hosts</string>
     <string name="notice_start_download">正在下载 rules，请稍等 ……</string>
-    <string name="notice_downloaded">已下载 hosts 。</string>
+    <string name="notice_downloaded">已下载规则。</string>
     <string name="notice_now_downloading">Daedalus 当前正在下载规则，请稍等。</string>
     <string name="hosts_not_found">找不到本地 hosts 文件。</string>
     <string name="hosts_path">本地 hosts 路径:</string>
@@ -66,4 +66,6 @@
     <string name="action_removed">已移除。</string>
     <string name="action_undo">撤销</string>
     <string name="settings_use_dnsmasq">使用 DNSMasq 替代 Hosts</string>
+    <string name="button_text_download_dnsmasq">下载 DNSMasq 配置文件</string>
+    <string name="dnsmasq_path">本地 DNSMasq 配置路径:</string>
 </resources>

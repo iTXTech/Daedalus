@@ -48,9 +48,9 @@
     </string>
     <string name="action_rules">Rules</string>
     <string name="button_text_download_hosts">Download hosts</string>
-    <string name="notice_start_download">Downloading rules, please wait …</string>
-    <string name="notice_downloaded">Hosts has been downloaded.</string>
-    <string name="notice_now_downloading">Daedalus is currently downloading rules, please wait.</string>
+    <string name="notice_start_download">Downloading rule, please wait …</string>
+    <string name="notice_downloaded">Rule has been downloaded.</string>
+    <string name="notice_now_downloading">Daedalus is currently downloading rule, please wait.</string>
     <string name="hosts_not_found">Local hosts not found.</string>
     <string name="hosts_path">Local hosts path:</string>
     <string name="hosts_last_modified">Last modified:</string>
@@ -66,4 +66,6 @@
     <string name="action_removed">Removed.</string>
     <string name="action_undo">Undo</string>
     <string name="settings_use_dnsmasq">Use DNSMasq instead of Hosts</string>
+    <string name="button_text_download_dnsmasq">Download DNSMasq configuration</string>
+    <string name="dnsmasq_path">Local DNSMasq configurations path:</string>
 </resources>

@@ -63,7 +63,8 @@ public class Daedalus extends Application {
     }};
 
     public static final List<RulesProvider> DNSMASQ_PROVIDERS = new ArrayList<RulesProvider>() {{
-
+        add(new RulesProvider("sy618/hosts/dnsad", "https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsad", "dnsad"));
+        add(new RulesProvider("sy618/hosts/dnsfq", "https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsfq", "dnsfq"));
     }};
 
     public static final String[] DEFAULT_TEST_DOMAINS = new String[]{

@@ -18,10 +18,17 @@ import java.util.ArrayList;
 public class RulesProvider {
     private String name;
     private String downloadURL;
+    private String fileName;
+    private String data;
 
     public RulesProvider(String name, String downloadURL) {
+        this(name, downloadURL, "Unknown");
+    }
+
+    public RulesProvider(String name, String downloadURL, String fileName) {
         this.name = name;
         this.downloadURL = downloadURL;
+        this.fileName = fileName;
     }
 
     public String getName() {
@@ -32,19 +39,51 @@ public class RulesProvider {
         return downloadURL;
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public String getData() {
+        String temp = data;
+        data = null;
+        return temp;
+    }
+
     public static String[] getHostsProviderNames() {
         ArrayList<String> servers = new ArrayList<>(Daedalus.HOSTS_PROVIDERS.size());
-        for (RulesProvider hostsProvider : Daedalus.HOSTS_PROVIDERS) {
-            servers.add(hostsProvider.getName());
+        for (RulesProvider provider : Daedalus.HOSTS_PROVIDERS) {
+            servers.add(provider.getName());
         }
         String[] stringServers = new String[Daedalus.HOSTS_PROVIDERS.size()];
         return servers.toArray(stringServers);
     }
 
+    public static String[] getDnsmasqProviderNames() {
+        ArrayList<String> servers = new ArrayList<>(Daedalus.DNSMASQ_PROVIDERS.size());
+        for (RulesProvider provider : Daedalus.DNSMASQ_PROVIDERS) {
+            servers.add(provider.getName());
+        }
+        String[] stringServers = new String[Daedalus.DNSMASQ_PROVIDERS.size()];
+        return servers.toArray(stringServers);
+    }
+
     public static String getDownloadUrlByName(String name) {
-        for (RulesProvider hostsProvider : Daedalus.HOSTS_PROVIDERS) {
-            if (hostsProvider.getName().equals(name)) {
-                return hostsProvider.getDownloadURL();
+        for (RulesProvider provider : Daedalus.HOSTS_PROVIDERS) {
+            if (provider.getName().equals(name)) {
+                return provider.getDownloadURL();
+            }
+        }
+        return null;
+    }
+
+    public static RulesProvider getProviderByName(String name) {
+        for (RulesProvider provider : Daedalus.DNSMASQ_PROVIDERS) {
+            if (provider.getName().equals(name)) {
+                return provider;
             }
         }
         return null;
