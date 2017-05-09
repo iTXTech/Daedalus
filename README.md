@@ -5,12 +5,19 @@ __See the world outside through a CLEAN DNS.__
 Introduction
 -------------
 This application can create a VPN tunnel to modify the DNS settings on Android.<br>
-No root access required, no ads contained and functional under data connection.<br>
 Through the DNS which are provided by third parties, users can visit Google, Twitter and so on via https directly without a VPN.<br>
 <br>
-Local hosts pan domain name resolution is supported.<br>
-Example: 6.6.6.6 *.google.com<br>
+Features:
+* No root access required, no ads contained
+* Functional under data connection
+* DNS over TCP
+* A tester for DNS servers
+* Custom DNS server
+* Custom hosts and DNSMasq configuration
+* EXTREME LOW power consume
+* Material Design
 <br>
+
 __Users must comply with local laws and regulations.__<br>
 
 DNS server providers
