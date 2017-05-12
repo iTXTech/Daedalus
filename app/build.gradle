@@ -1,10 +1,11 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 def gitCommit = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
     defaultConfig {
         applicationId "org.itxtech.daedalus"
         minSdkVersion 15
@@ -55,6 +56,8 @@ dependencies {
     compile 'org.pcap4j:pcap4j-packetfactory-propertiesbased:1.7.0'
     compile 'de.measite.minidns:minidns-core:0.2.1'
     compile 'com.google.code.gson:gson:2.8.0'
+
+    compile 'com.google.firebase:firebase-crash:10.0.1'
     
     testCompile 'junit:junit:4.12'
 }
