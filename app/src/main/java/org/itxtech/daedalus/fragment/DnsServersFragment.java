@@ -16,6 +16,7 @@ import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.DnsServerConfigActivity;
 import org.itxtech.daedalus.util.CustomDnsServer;
+import org.itxtech.daedalus.util.DnsServerHelper;
 
 /**
  * Daedalus Project
@@ -43,6 +44,11 @@ public class DnsServersFragment extends Fragment {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
             @Override
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                if (viewHolder instanceof ViewHolder) {
+                    if (DnsServerHelper.isInUsing(Daedalus.configurations.getCustomDnsServers().get(((ViewHolder) viewHolder).getIndex()))) {
+                        return 0;
+                    }
+                }
                 return makeMovementFlags(0, ItemTouchHelper.START | ItemTouchHelper.END);
             }
 
@@ -141,10 +147,16 @@ public class DnsServersFragment extends Fragment {
             this.index = index;
         }
 
+        int getIndex() {
+            return index;
+        }
+
         @Override
         public void onClick(View v) {
-            Daedalus.getInstance().startActivity(new Intent(Daedalus.getInstance(), DnsServerConfigActivity.class)
-                    .putExtra(DnsServerConfigActivity.LAUNCH_ACTION_CUSTOM_DNS_SERVER_ID, index));
+            if (!DnsServerHelper.isInUsing(Daedalus.configurations.getCustomDnsServers().get(index))) {
+                Daedalus.getInstance().startActivity(new Intent(Daedalus.getInstance(), DnsServerConfigActivity.class)
+                        .putExtra(DnsServerConfigActivity.LAUNCH_ACTION_CUSTOM_DNS_SERVER_ID, index));
+            }
         }
     }
 }

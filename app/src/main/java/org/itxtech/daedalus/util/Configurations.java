@@ -30,7 +30,7 @@ public class Configurations {
 
     private int totalId;
 
-    public int getNextId() {
+    int getNextId() {
         if (totalId < CUSTOM_DNS_ID_START) {
             totalId = CUSTOM_DNS_ID_START;
         }

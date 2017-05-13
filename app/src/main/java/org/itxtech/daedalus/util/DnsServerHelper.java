@@ -146,4 +146,8 @@ public class DnsServerHelper {
         }
         return Daedalus.DNS_SERVERS.get(0).getStringDescription(context);
     }
+
+    public static boolean isInUsing(CustomDnsServer server) {
+        return Daedalus.getInstance().isServiceActivated() && (server.getId().equals(getPrimary()) || server.getId().equals(getSecondary()));
+    }
 }
