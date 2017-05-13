@@ -68,4 +68,7 @@
     <string name="settings_use_dnsmasq">Use DNSMasq instead of Hosts</string>
     <string name="button_text_download_dnsmasq">Download DNSMasq configuration</string>
     <string name="dnsmasq_path">Local DNSMasq configurations path:</string>
+    <string name="notice_delete_confirm_prompt">Are you sure you want to remove this DNS server?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

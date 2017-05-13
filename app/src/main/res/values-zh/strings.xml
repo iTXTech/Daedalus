@@ -68,4 +68,7 @@
     <string name="settings_use_dnsmasq">使用 DNSMasq 替代 Hosts</string>
     <string name="button_text_download_dnsmasq">下载 DNSMasq 配置文件</string>
     <string name="dnsmasq_path">本地 DNSMasq 配置路径:</string>
+    <string name="notice_delete_confirm_prompt">您确定要删除此 DNS 服务器？</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
 </resources>

@@ -1,5 +1,7 @@
 package org.itxtech.daedalus.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -130,9 +132,21 @@ public class DnsServerConfigFragment extends PreferenceFragment implements Toolb
                 break;
             case R.id.action_delete:
                 if (index != DnsServerConfigActivity.CUSTOM_DNS_SERVER_ID_NONE) {
-                    Daedalus.configurations.getCustomDnsServers().remove(index);
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.notice_delete_confirm_prompt)
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Daedalus.configurations.getCustomDnsServers().remove(index);
+                                    getActivity().finish();
+                                }
+                            })
+                            .setNegativeButton(R.string.no, null)
+                            .create()
+                            .show();
+                } else {
+                    getActivity().finish();
                 }
-                getActivity().finish();
                 break;
         }
 
