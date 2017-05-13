@@ -26,6 +26,7 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
         if (Daedalus.getPrefs().getBoolean("settings_boot", false)) {
             Intent vIntent = VpnService.prepare(context);
             if (vIntent != null) {
+                vIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(vIntent);
             }
 

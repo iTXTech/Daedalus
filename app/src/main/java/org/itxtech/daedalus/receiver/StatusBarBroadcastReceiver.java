@@ -31,7 +31,7 @@ public class StatusBarBroadcastReceiver extends BroadcastReceiver {
         }
         if (intent.getAction().equals(STATUS_BAR_BTN_SETTINGS_CLICK_ACTION)) {
             Intent settingsIntent = new Intent(context, MainActivity.class).putExtra(MainActivity.LAUNCH_FRAGMENT, MainActivity.FRAGMENT_SETTINGS);
-            settingsIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(settingsIntent);
             try {
                 Object statusBarManager = context.getSystemService("statusbar");

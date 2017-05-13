@@ -78,9 +78,9 @@ public class Daedalus extends Application {
 
     public static Configurations configurations;
 
-    public static String hostsPath;
-    public static String dnsmasqPath;
-    private static String configPath;
+    public static String hostsPath = null;
+    public static String dnsmasqPath = null;
+    private static String configPath = null;
 
     private static Daedalus instance = null;
     private static SharedPreferences prefs;
@@ -93,12 +93,14 @@ public class Daedalus extends Application {
         mHostsResolver = new Thread(new RulesResolver());
         mHostsResolver.start();
 
-        hostsPath = getExternalFilesDir(null).getPath() + "/hosts";
-        dnsmasqPath = getExternalFilesDir(null).getPath() + "/dnsmasq/";
-        configPath = getExternalFilesDir(null).getPath() + "/config.json";
+        if (getExternalFilesDir(null) != null) {
+            hostsPath = getExternalFilesDir(null).getPath() + "/hosts";
+            dnsmasqPath = getExternalFilesDir(null).getPath() + "/dnsmasq/";
+            configPath = getExternalFilesDir(null).getPath() + "/config.json";
 
-        File file = new File(dnsmasqPath);
-        Log.d(TAG, "mkdir result: " + file.mkdirs());
+            File file = new File(dnsmasqPath);
+            Log.d(TAG, "mkdir result: " + file.mkdirs());
+        }
 
         initData();
 
@@ -109,7 +111,11 @@ public class Daedalus extends Application {
         PreferenceManager.setDefaultValues(this, R.xml.perf_settings, false);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        configurations = Configurations.load(new File(configPath));
+        if (configPath != null) {
+            configurations = Configurations.load(new File(configPath));
+        } else {
+            configurations = new Configurations();
+        }
     }
 
     public static <T> T parseJson(Class<T> beanClass, JsonReader reader) throws JsonParseException {
