@@ -2,11 +2,13 @@ package org.itxtech.daedalus.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.VpnService;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,6 +84,36 @@ public class MainFragment extends Fragment {
             startActivityForResult(intent, 0);
         } else {
             onActivityResult(0, Activity.RESULT_OK, null);
+        }
+
+        long activateCounter = Daedalus.configurations.getActivateCounter();
+        if (activateCounter == -1) {
+            return;
+        }
+        activateCounter++;
+        Daedalus.configurations.setActivateCounter(activateCounter);
+        if (activateCounter % 20 == 0) {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("觉得还不错？")
+                    .setMessage("您的支持是我动力来源！\n请考虑为我买杯咖啡醒醒脑，甚至其他…… ;)")
+                    .setPositiveButton("为我买杯咖啡", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Daedalus.donate();
+                            new AlertDialog.Builder(getActivity())
+                                    .setMessage("感谢您的支持！;)\n我会再接再厉！")
+                                    .setPositiveButton("确认", null)
+                                    .show();
+                        }
+                    })
+                    .setNeutralButton("不再显示", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Daedalus.configurations.setActivateCounter(-1);
+                        }
+                    })
+                    .setNegativeButton("取消", null)
+                    .show();
         }
     }
 

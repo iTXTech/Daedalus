@@ -30,11 +30,21 @@ public class Configurations {
 
     private int totalId;
 
+    private long activateCounter;
+
     int getNextId() {
         if (totalId < CUSTOM_DNS_ID_START) {
             totalId = CUSTOM_DNS_ID_START;
         }
         return totalId++;
+    }
+
+    public long getActivateCounter() {
+        return activateCounter;
+    }
+
+    public void setActivateCounter(long activateCounter) {
+        this.activateCounter = activateCounter;
     }
 
     public ArrayList<CustomDnsServer> getCustomDnsServers() {

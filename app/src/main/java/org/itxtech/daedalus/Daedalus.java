@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
@@ -27,7 +28,7 @@ import org.itxtech.daedalus.util.RulesResolver;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -79,7 +80,7 @@ public class Daedalus extends Application {
 
     public static String hostsPath;
     public static String dnsmasqPath;
-    public static String configPath;
+    private static String configPath;
 
     private static Daedalus instance = null;
     private static SharedPreferences prefs;
@@ -118,7 +119,7 @@ public class Daedalus extends Application {
     }
 
     public static final int REQUEST_EXTERNAL_STORAGE = 1;
-    public static String[] PERMISSIONS_STORAGE = {
+    public static final String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
@@ -218,12 +219,18 @@ public class Daedalus extends Application {
                     .setLongLabel(notice)
                     .setShortLabel(notice)
                     .setIcon(Icon.createWithResource(context, R.mipmap.ic_launcher))
-                    .setIntent(new Intent(context, MainActivity.class).setAction(Intent.ACTION_VIEW).putExtra(MainActivity.LAUNCH_ACTION, activate ? MainActivity.LAUNCH_ACTION_ACTIVATE : MainActivity.LAUNCH_ACTION_DEACTIVATE))
+                    .setIntent(new Intent(context, MainActivity.class).setAction(Intent.ACTION_VIEW)
+                            .putExtra(MainActivity.LAUNCH_ACTION, activate ? MainActivity.LAUNCH_ACTION_ACTIVATE : MainActivity.LAUNCH_ACTION_DEACTIVATE))
                     .build();
 
             ShortcutManager shortcutManager = (ShortcutManager) context.getSystemService(SHORTCUT_SERVICE);
-            shortcutManager.addDynamicShortcuts(Arrays.asList(info));
+            shortcutManager.addDynamicShortcuts(Collections.singletonList(info));
         }
+    }
+
+    public static void donate() {
+        instance.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://qr.alipay.com/a6x07022gffiehykicipv1a"))
+                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
     }
 
     public static Daedalus getInstance() {

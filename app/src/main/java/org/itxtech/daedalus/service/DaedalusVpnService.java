@@ -234,8 +234,9 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         long time = System.currentTimeMillis();
         if (time - lastUpdate >= 1000) {
             lastUpdate = time;
-            Log.i(TAG, "notify");
-            notification.setContentTitle(getResources().getString(R.string.notification_queries) + " " + String.valueOf(provider.getDnsQueryTimes()));
+            if (notification != null) {
+                notification.setContentTitle(getResources().getString(R.string.notification_queries) + " " + String.valueOf(provider.getDnsQueryTimes()));
+            }
 
             NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
             manager.notify(NOTIFICATION_ACTIVATED, notification.build());
