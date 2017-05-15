@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
-import org.itxtech.daedalus.activity.DnsServerConfigActivity;
+import org.itxtech.daedalus.activity.ConfigActivity;
 import org.itxtech.daedalus.util.CustomDnsServer;
 import org.itxtech.daedalus.util.DnsServerHelper;
 
@@ -73,8 +73,8 @@ public class DnsServersFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), DnsServerConfigActivity.class).putExtra(DnsServerConfigActivity.LAUNCH_ACTION_CUSTOM_DNS_SERVER_ID,
-                        DnsServerConfigActivity.CUSTOM_DNS_SERVER_ID_NONE));
+                startActivity(new Intent(getActivity(), ConfigActivity.class).putExtra(ConfigActivity.LAUNCH_ACTION_CUSTOM_DNS_SERVER_ID,
+                        ConfigActivity.CUSTOM_DNS_SERVER_ID_NONE));
             }
         });
         return view;
@@ -154,8 +154,8 @@ public class DnsServersFragment extends Fragment {
         @Override
         public void onClick(View v) {
             if (!DnsServerHelper.isInUsing(Daedalus.configurations.getCustomDnsServers().get(index))) {
-                Daedalus.getInstance().startActivity(new Intent(Daedalus.getInstance(), DnsServerConfigActivity.class)
-                        .putExtra(DnsServerConfigActivity.LAUNCH_ACTION_CUSTOM_DNS_SERVER_ID, index));
+                Daedalus.getInstance().startActivity(new Intent(Daedalus.getInstance(), ConfigActivity.class)
+                        .putExtra(ConfigActivity.LAUNCH_ACTION_CUSTOM_DNS_SERVER_ID, index));
             }
         }
     }

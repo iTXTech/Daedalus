@@ -1,4 +1,4 @@
-package org.itxtech.daedalus.view;
+package org.itxtech.daedalus.widget;
 
 import android.annotation.TargetApi;
 import android.content.Context;

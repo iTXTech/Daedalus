@@ -28,6 +28,8 @@ public class Configurations {
 
     private ArrayList<CustomDnsServer> customDnsServers;
 
+    private ArrayList<Rule> rules;
+
     private int totalId;
 
     private long activateCounter;
@@ -52,6 +54,13 @@ public class Configurations {
             customDnsServers = new ArrayList<>();
         }
         return customDnsServers;
+    }
+
+    public ArrayList<Rule> getRules() {
+        if (rules == null) {
+            rules = new ArrayList<>();
+        }
+        return rules;
     }
 
     public static Configurations load(File file) {

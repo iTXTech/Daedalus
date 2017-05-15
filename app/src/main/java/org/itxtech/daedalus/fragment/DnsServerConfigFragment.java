@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
-import org.itxtech.daedalus.activity.DnsServerConfigActivity;
+import org.itxtech.daedalus.activity.ConfigActivity;
 import org.itxtech.daedalus.util.CustomDnsServer;
 import org.itxtech.daedalus.util.DnsServer;
 
@@ -85,8 +85,8 @@ public class DnsServerConfigFragment extends PreferenceFragment implements Toolb
         });
 
 
-        index = intent.getIntExtra(DnsServerConfigActivity.LAUNCH_ACTION_CUSTOM_DNS_SERVER_ID, DnsServerConfigActivity.CUSTOM_DNS_SERVER_ID_NONE);
-        if (index != DnsServerConfigActivity.CUSTOM_DNS_SERVER_ID_NONE) {
+        index = intent.getIntExtra(ConfigActivity.LAUNCH_ACTION_CUSTOM_DNS_SERVER_ID, ConfigActivity.CUSTOM_DNS_SERVER_ID_NONE);
+        if (index != ConfigActivity.CUSTOM_DNS_SERVER_ID_NONE) {
             CustomDnsServer server = Daedalus.configurations.getCustomDnsServers().get(index);
             serverName.setText(server.getName());
             serverName.setSummary(server.getName());
@@ -120,7 +120,7 @@ public class DnsServerConfigFragment extends PreferenceFragment implements Toolb
                     break;
                 }
 
-                if (index == DnsServerConfigActivity.CUSTOM_DNS_SERVER_ID_NONE) {
+                if (index == ConfigActivity.CUSTOM_DNS_SERVER_ID_NONE) {
                     Daedalus.configurations.getCustomDnsServers().add(new CustomDnsServer(serverName, serverAddress, Integer.parseInt(serverPort)));
                 } else {
                     CustomDnsServer server = Daedalus.configurations.getCustomDnsServers().get(index);
@@ -131,7 +131,7 @@ public class DnsServerConfigFragment extends PreferenceFragment implements Toolb
                 getActivity().finish();
                 break;
             case R.id.action_delete:
-                if (index != DnsServerConfigActivity.CUSTOM_DNS_SERVER_ID_NONE) {
+                if (index != ConfigActivity.CUSTOM_DNS_SERVER_ID_NONE) {
                     new AlertDialog.Builder(getActivity())
                             .setTitle(R.string.notice_delete_confirm_prompt)
                             .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {

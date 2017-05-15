@@ -2,242 +2,144 @@ package org.itxtech.daedalus.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
-import org.itxtech.daedalus.util.RulesProvider;
-
-import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
-import java.text.DecimalFormat;
-import java.util.Date;
+import org.itxtech.daedalus.util.Rule;
 
 /**
- * Daedalus Project
- *
- * @author iTX Technologies
- * @link https://itxtech.org
- * <p>
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * @author PeratX
  */
 public class RulesFragment extends Fragment {
 
-    private Thread mThread = null;
     private View view = null;
-    private RulesHandler mHandler = null;
+    private RuleAdapter adapter;
+    private Rule rule = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_rules, container, false);
 
-        mHandler = new RulesHandler().setView(view).setHostsFragment(this);
-
-        final Spinner spinnerHosts = (Spinner) view.findViewById(R.id.spinner_hosts);
-        ArrayAdapter hostsArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, RulesProvider.getHostsProviderNames());
-        spinnerHosts.setAdapter(hostsArrayAdapter);
-        spinnerHosts.setSelection(0);
-
-        final Spinner spinnerDnsmasq = (Spinner) view.findViewById(R.id.spinner_dnsmasq);
-        ArrayAdapter dnsmasqArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, RulesProvider.getDnsmasqProviderNames());
-        spinnerDnsmasq.setAdapter(dnsmasqArrayAdapter);
-        spinnerDnsmasq.setSelection(0);
-
-        Button buttonDownloadHosts = (Button) view.findViewById(R.id.button_download_hosts);
-        buttonDownloadHosts.setOnClickListener(new View.OnClickListener() {
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_rules);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(manager);
+        adapter = new RuleAdapter();
+        recyclerView.setAdapter(adapter);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
             @Override
-            public void onClick(View v) {
-                if (mThread == null) {
-                    Snackbar.make(view, R.string.notice_start_download, Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                    mThread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                URLConnection connection = new URL(RulesProvider.getDownloadUrlByName(spinnerHosts.getSelectedItem().toString())).openConnection();
-                                InputStream inputStream = connection.getInputStream();
-                                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                                StringBuilder builder = new StringBuilder();
-                                String result;
-                                while ((result = reader.readLine()) != null) {
-                                    builder.append("\n").append(result);
-                                }
-                                reader.close();
-
-                                mHandler.obtainMessage(RulesHandler.MSG_HOSTS_DOWNLOADED, builder.toString()).sendToTarget();
-                                stopThread();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                    mThread.start();
-                } else {
-                    Snackbar.make(view, R.string.notice_now_downloading, Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                if (viewHolder instanceof RulesFragment.ViewHolder) {
+                    if (Daedalus.configurations.getRules().get(((ViewHolder) viewHolder).getIndex()).isUsing()) {
+                        return 0;
+                    }
                 }
+                return makeMovementFlags(0, ItemTouchHelper.START | ItemTouchHelper.END);
+            }
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                rule = Daedalus.configurations.getRules().get(position);
+                Daedalus.configurations.getRules().remove(position);
+                Snackbar.make(view, R.string.action_removed, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.action_undo, new SnackbarClickListener(position)).show();
+                adapter.notifyItemRemoved(position);
             }
         });
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
-        Button buttonDownloadDnsmasq = (Button) view.findViewById(R.id.button_download_dnsmasq);
-        buttonDownloadDnsmasq.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mThread == null) {
-                    Snackbar.make(view, R.string.notice_start_download, Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                    mThread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                RulesProvider provider = RulesProvider.getProviderByName(spinnerDnsmasq.getSelectedItem().toString());
-                                URLConnection connection = new URL(provider.getDownloadURL()).openConnection();
-                                InputStream inputStream = connection.getInputStream();
-                                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                                StringBuilder builder = new StringBuilder();
-                                String result;
-                                while ((result = reader.readLine()) != null) {
-                                    builder.append("\n").append(result);
-                                }
-                                reader.close();
-
-                                provider.setData(builder.toString());
-                                mHandler.obtainMessage(RulesHandler.MSG_DNSMASQ_DOWNLOADED, provider).sendToTarget();
-                                stopThread();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                    mThread.start();
-                } else {
-                    Snackbar.make(view, R.string.notice_now_downloading, Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
-            }
-        });
         return view;
     }
 
-    private void updateUserInterface() {
-        File hosts = new File(Daedalus.hostsPath);
-        TextView info = (TextView) view.findViewById(R.id.textView_hosts);
-        StringBuilder builder = new StringBuilder();
-        builder.append(getString(R.string.hosts_path)).append(" ").append(Daedalus.hostsPath).append("\n");
-        if (!hosts.exists()) {
-            builder.append(getString(R.string.hosts_not_found));
-        } else {
-            builder.append(getString(R.string.hosts_last_modified)).append(" ").append(new Date(hosts.lastModified()).toString()).append("\n")
-                    .append(getString(R.string.hosts_size)).append(" ").append(new DecimalFormat("0.00").format(((float) hosts.length() / 1024))).append(" KB");
-        }
-        builder.append("\n");
-        File dnsmasq = new File(Daedalus.dnsmasqPath);
-        builder.append(getString(R.string.dnsmasq_path)).append(" ").append(Daedalus.dnsmasqPath);
-        if (dnsmasq.exists()) {
-            for (File conf : dnsmasq.listFiles()) {
-                builder.append("\n").append(conf.getName()).append(" ")
-                        .append(new DecimalFormat("0.00").format(((float) conf.length() / 1024))).append(" KB");
-            }
-        }
-        info.setText(builder.toString());
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        Daedalus.configurations.save();
+        adapter = null;
+        rule = null;
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        updateUserInterface();
+        adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    private class SnackbarClickListener implements View.OnClickListener {
+        private final int position;
 
-        stopThread();
-        mHandler.shutdown();
-        mHandler = null;
-        view = null;
-    }
-
-    private void stopThread() {
-        if (mThread != null) {
-            mThread.interrupt();
-            mThread = null;
-        }
-    }
-
-    private static class RulesHandler extends Handler {
-        static final int MSG_HOSTS_DOWNLOADED = 0;
-        static final int MSG_DNSMASQ_DOWNLOADED = 1;
-
-        private View view = null;
-        private RulesFragment mFragment = null;
-
-        RulesHandler setView(View view) {
-            this.view = view;
-            return this;
-        }
-
-        RulesHandler setHostsFragment(RulesFragment fragment) {
-            mFragment = fragment;
-            return this;
-        }
-
-        void shutdown() {
-            view = null;
-            mFragment = null;
+        private SnackbarClickListener(int position) {
+            this.position = position;
         }
 
         @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
+        public void onClick(View v) {
+            Daedalus.configurations.getRules().add(position, rule);
+            adapter.notifyItemInserted(position);
+        }
+    }
 
-            switch (msg.what) {
-                case MSG_HOSTS_DOWNLOADED:
-                    try {
-                        String result = (String) msg.obj;
-                        File file = new File(Daedalus.hostsPath);
-                        FileOutputStream stream = new FileOutputStream(file);
-                        stream.write(result.getBytes());
-                        stream.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+    private class RuleAdapter extends RecyclerView.Adapter<ViewHolder> {
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            Rule rule = Daedalus.configurations.getRules().get(position);
+            holder.setIndex(position);
+            holder.textViewName.setText(rule.getName());
+            holder.textViewAddress.setText(rule.getFileName());
+        }
 
-                    Snackbar.make(view, R.string.notice_downloaded, Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+        @Override
+        public int getItemCount() {
+            return Daedalus.configurations.getCustomDnsServers().size();
+        }
 
-                    mFragment.updateUserInterface();
-                    break;
-                case MSG_DNSMASQ_DOWNLOADED:
-                    try {
-                        RulesProvider provider = (RulesProvider) msg.obj;
-                        File file = new File(Daedalus.dnsmasqPath + provider.getFileName());
-                        FileOutputStream stream = new FileOutputStream(file);
-                        stream.write(provider.getData().getBytes());
-                        stream.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_server, parent, false);
+            return new ViewHolder(view);
+        }
+    }
 
-                    Snackbar.make(view, R.string.notice_downloaded, Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+    private static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private final TextView textViewName;
+        private final TextView textViewAddress;
+        private int index;
 
-                    mFragment.updateUserInterface();
-                    break;
-            }
+        ViewHolder(View view) {
+            super(view);
+            textViewName = (TextView) view.findViewById(R.id.textView_rule_name);
+            textViewAddress = (TextView) view.findViewById(R.id.textView_rule_detail);
+            view.setOnClickListener(this);
+        }
+
+        void setIndex(int index) {
+            this.index = index;
+        }
+
+        int getIndex() {
+            return index;
+        }
+
+        @Override
+        public void onClick(View v) {
+            /*if (!DnsServerHelper.isInUsing(Daedalus.configurations.getCustomDnsServers().get(index))) {
+                Daedalus.getInstance().startActivity(new Intent(Daedalus.getInstance(), DnsServerConfigActivity.class)
+                        .putExtra(DnsServerConfigActivity.LAUNCH_ACTION_CUSTOM_DNS_SERVER_ID, index));
+            }*/
         }
     }
 }

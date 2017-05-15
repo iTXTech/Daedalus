@@ -25,7 +25,7 @@ import org.itxtech.daedalus.fragment.DnsServerConfigFragment;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class DnsServerConfigActivity extends AppCompatActivity {
+public class ConfigActivity extends AppCompatActivity {
     public static final String LAUNCH_ACTION_CUSTOM_DNS_SERVER_ID = "org.itxtech.daedalus.activity.DnsServerConfigActivity.LAUNCH_ACTION_CUSTOM_DNS_SERVER_ID";
     public static final int CUSTOM_DNS_SERVER_ID_NONE = -1;
 

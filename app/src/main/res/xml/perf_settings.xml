@@ -69,11 +69,11 @@
     <PreferenceCategory
             android:key="settings_help"
             android:title="@string/settings_help_and_support">
-        <org.itxtech.daedalus.view.ClickPreference
+        <org.itxtech.daedalus.widget.ClickPreference
                 android:key="settings_check_update"
                 android:title="@string/settings_check_update"
                 android:summary="@string/settings_update_summary"/>
-        <org.itxtech.daedalus.view.ClickPreference
+        <org.itxtech.daedalus.widget.ClickPreference
                 android:key="settings_issue_tracker"
                 android:title="@string/settings_bug_report"
                 android:summary="@string/settings_issue_summary"/>
