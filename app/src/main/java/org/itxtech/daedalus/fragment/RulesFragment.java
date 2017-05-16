@@ -1,7 +1,9 @@
 package org.itxtech.daedalus.fragment;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,10 +14,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
+import org.itxtech.daedalus.activity.ConfigActivity;
 import org.itxtech.daedalus.util.Rule;
 
 /**
- * @author PeratX
+ * Daedalus Project
+ *
+ * @author iTX Technologies
+ * @link https://itxtech.org
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  */
 public class RulesFragment extends Fragment {
 
@@ -60,6 +71,15 @@ public class RulesFragment extends Fragment {
         });
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_add_rule);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), ConfigActivity.class)
+                        .putExtra(ConfigActivity.LAUNCH_ACTION_ID, ConfigActivity.ID_NONE)
+                        .putExtra(ConfigActivity.LAUNCH_ACTION_FRAGMENT, ConfigActivity.LAUNCH_FRAGMENT_RULE));
+            }
+        });
         return view;
     }
 
@@ -104,17 +124,17 @@ public class RulesFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return Daedalus.configurations.getCustomDnsServers().size();
+            return Daedalus.configurations.getRules().size();
         }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_server, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_rule, parent, false);
             return new ViewHolder(view);
         }
     }
 
-    private static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private final TextView textViewName;
         private final TextView textViewAddress;
         private int index;
@@ -124,6 +144,8 @@ public class RulesFragment extends Fragment {
             textViewName = (TextView) view.findViewById(R.id.textView_rule_name);
             textViewAddress = (TextView) view.findViewById(R.id.textView_rule_detail);
             view.setOnClickListener(this);
+            view.setOnLongClickListener(this);
+            view.setBackgroundResource(R.drawable.background_selectable);
         }
 
         void setIndex(int index) {
@@ -136,10 +158,17 @@ public class RulesFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            /*if (!DnsServerHelper.isInUsing(Daedalus.configurations.getCustomDnsServers().get(index))) {
-                Daedalus.getInstance().startActivity(new Intent(Daedalus.getInstance(), DnsServerConfigActivity.class)
-                        .putExtra(DnsServerConfigActivity.LAUNCH_ACTION_CUSTOM_DNS_SERVER_ID, index));
-            }*/
+            v.setSelected(!v.isSelected());
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (!Daedalus.configurations.getRules().get(index).isUsing()) {
+                Daedalus.getInstance().startActivity(new Intent(Daedalus.getInstance(), ConfigActivity.class)
+                        .putExtra(ConfigActivity.LAUNCH_ACTION_ID, index)
+                        .putExtra(ConfigActivity.LAUNCH_ACTION_FRAGMENT, ConfigActivity.LAUNCH_FRAGMENT_RULE));
+            }
+            return true;
         }
     }
 }

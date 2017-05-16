@@ -5,7 +5,8 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:clickable="true"
-        android:foreground="?attr/selectableItemBackground"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:focusable="true"
         app:cardCornerRadius="10dp"
         app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="true">

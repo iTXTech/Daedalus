@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +13,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
+import org.itxtech.daedalus.fragment.ConfigFragment;
 import org.itxtech.daedalus.fragment.DnsServerConfigFragment;
+import org.itxtech.daedalus.fragment.RuleConfigFragment;
 
 /**
  * Daedalus Project
@@ -26,15 +29,30 @@ import org.itxtech.daedalus.fragment.DnsServerConfigFragment;
  * (at your option) any later version.
  */
 public class ConfigActivity extends AppCompatActivity {
-    public static final String LAUNCH_ACTION_CUSTOM_DNS_SERVER_ID = "org.itxtech.daedalus.activity.DnsServerConfigActivity.LAUNCH_ACTION_CUSTOM_DNS_SERVER_ID";
-    public static final int CUSTOM_DNS_SERVER_ID_NONE = -1;
+    public static final String LAUNCH_ACTION_FRAGMENT = "org.itxtech.daedalus.activity.ConfigActivity.LAUNCH_ACTION_FRAGMENT";
+    public static final int LAUNCH_FRAGMENT_DNS_SERVER = 0;
+    public static final int LAUNCH_FRAGMENT_RULE = 1;
+
+    public static final String LAUNCH_ACTION_ID = "org.itxtech.daedalus.activity.ConfigActivity.LAUNCH_ACTION_ID";
+    public static final int ID_NONE = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dns_server_config);
 
-        DnsServerConfigFragment fragment = new DnsServerConfigFragment();
+        ConfigFragment fragment;
+        switch (getIntent().getIntExtra(LAUNCH_ACTION_FRAGMENT, LAUNCH_FRAGMENT_DNS_SERVER)) {
+            case LAUNCH_FRAGMENT_DNS_SERVER:
+                fragment = new DnsServerConfigFragment();
+                break;
+            case LAUNCH_FRAGMENT_RULE:
+                fragment = new RuleConfigFragment();
+                break;
+            default://should never reach this
+                fragment = new DnsServerConfigFragment();
+                break;
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_config);
         Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_clear);
@@ -55,6 +73,23 @@ public class ConfigActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = manager.beginTransaction();
         fragmentTransaction.replace(R.id.id_config, fragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onPostCreate(savedInstanceState, persistentState);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_config);
+        switch (getIntent().getIntExtra(LAUNCH_ACTION_FRAGMENT, LAUNCH_FRAGMENT_DNS_SERVER)) {
+            case LAUNCH_FRAGMENT_DNS_SERVER:
+                toolbar.setTitle(R.string.config_dns_server);
+                break;
+            case LAUNCH_FRAGMENT_RULE:
+                toolbar.setTitle(R.string.config_rule);
+                break;
+            default://should never reach this
+                break;
+        }
     }
 
     @Override

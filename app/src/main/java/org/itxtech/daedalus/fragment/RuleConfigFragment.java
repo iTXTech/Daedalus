@@ -2,8 +2,10 @@ package org.itxtech.daedalus.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
@@ -13,8 +15,7 @@ import android.view.ViewGroup;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.ConfigActivity;
-import org.itxtech.daedalus.util.CustomDnsServer;
-import org.itxtech.daedalus.util.DnsServer;
+import org.itxtech.daedalus.util.Rule;
 
 /**
  * Daedalus Project
@@ -27,29 +28,35 @@ import org.itxtech.daedalus.util.DnsServer;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class DnsServerConfigFragment extends ConfigFragment {
+public class RuleConfigFragment extends ConfigFragment {
+    private Intent intent = null;
     private View view;
     private int index;
+
+    public void setIntent(Intent intent) {
+        this.intent = intent;
+    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
+        intent = null;
         view = null;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.perf_server);
+        addPreferencesFromResource(R.xml.perf_rule);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = super.onCreateView(inflater, container, savedInstanceState);
 
-        EditTextPreference serverName = (EditTextPreference) findPreference("serverName");
-        serverName.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        EditTextPreference ruleName = (EditTextPreference) findPreference("ruleName");
+        ruleName.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary((String) newValue);
@@ -57,8 +64,21 @@ public class DnsServerConfigFragment extends ConfigFragment {
             }
         });
 
-        EditTextPreference serverAddress = (EditTextPreference) findPreference("serverAddress");
-        serverAddress.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        ListPreference ruleType = (ListPreference) findPreference("ruleType");
+        final String[] entries = {"hosts", "DNSMasq"};
+        String[] values = {"0", "1"};
+        ruleType.setEntries(entries);
+        ruleType.setEntryValues(values);
+        ruleType.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                preference.setSummary(entries[Integer.parseInt((String) newValue)]);
+                return true;
+            }
+        });
+
+        EditTextPreference ruleDownloadUrl = (EditTextPreference) findPreference("ruleDownloadUrl");
+        ruleDownloadUrl.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary((String) newValue);
@@ -66,8 +86,8 @@ public class DnsServerConfigFragment extends ConfigFragment {
             }
         });
 
-        EditTextPreference serverPort = (EditTextPreference) findPreference("serverPort");
-        serverPort.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        EditTextPreference ruleFilename = (EditTextPreference) findPreference("ruleFilename");
+        ruleFilename.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary((String) newValue);
@@ -78,19 +98,25 @@ public class DnsServerConfigFragment extends ConfigFragment {
 
         index = intent.getIntExtra(ConfigActivity.LAUNCH_ACTION_ID, ConfigActivity.ID_NONE);
         if (index != ConfigActivity.ID_NONE) {
-            CustomDnsServer server = Daedalus.configurations.getCustomDnsServers().get(index);
-            serverName.setText(server.getName());
-            serverName.setSummary(server.getName());
-            serverAddress.setText(server.getAddress());
-            serverAddress.setSummary(server.getAddress());
-            serverPort.setText(String.valueOf(server.getPort()));
-            serverPort.setSummary(String.valueOf(server.getPort()));
+            Rule rule = Daedalus.configurations.getRules().get(index);
+            ruleName.setText(rule.getName());
+            ruleName.setSummary(rule.getName());
+            int type = rule.getType();
+            ruleType.setValue(String.valueOf(type));
+            ruleType.setSummary(entries[type]);
+            ruleFilename.setText(rule.getFileName());
+            ruleFilename.setSummary(rule.getFileName());
+            ruleDownloadUrl.setText(rule.getDownloadUrl());
+            ruleDownloadUrl.setSummary(rule.getDownloadUrl());
         } else {
-            serverName.setText("");
-            serverAddress.setText("");
-            String port = String.valueOf(DnsServer.DNS_SERVER_DEFAULT_PORT);
-            serverPort.setText(port);
-            serverPort.setSummary(port);
+            ruleName.setText("");
+            ruleName.setSummary("");
+            ruleType.setValue("0");
+            ruleType.setSummary(entries[Rule.TYPE_HOSTS]);
+            ruleFilename.setText("");
+            ruleFilename.setSummary("");
+            ruleDownloadUrl.setText("");
+            ruleDownloadUrl.setSummary("");
         }
         return view;
     }
@@ -101,23 +127,25 @@ public class DnsServerConfigFragment extends ConfigFragment {
 
         switch (id) {
             case R.id.action_apply:
-                String serverName = ((EditTextPreference) findPreference("serverName")).getText();
-                String serverAddress = ((EditTextPreference) findPreference("serverAddress")).getText();
-                String serverPort = ((EditTextPreference) findPreference("serverPort")).getText();
+                String ruleName = ((EditTextPreference) findPreference("ruleName")).getText();
+                String ruleType = ((ListPreference) findPreference("ruleType")).getValue();
+                String ruleFilename = ((EditTextPreference) findPreference("ruleFilename")).getText();
+                String ruleDownloadUrl = ((EditTextPreference) findPreference("ruleDownloadUrl")).getText();
 
-                if (serverName.equals("") | serverAddress.equals("") | serverPort.equals("")) {
+                if (ruleName.equals("") | ruleType.equals("") | ruleFilename.equals("") | ruleDownloadUrl.equals("")) {
                     Snackbar.make(view, R.string.notice_fill_in_all, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                     break;
                 }
 
                 if (index == ConfigActivity.ID_NONE) {
-                    Daedalus.configurations.getCustomDnsServers().add(new CustomDnsServer(serverName, serverAddress, Integer.parseInt(serverPort)));
+                    Daedalus.configurations.getRules().add(new Rule(ruleName, ruleFilename, Integer.parseInt(ruleType), ruleDownloadUrl));
                 } else {
-                    CustomDnsServer server = Daedalus.configurations.getCustomDnsServers().get(index);
-                    server.setName(serverName);
-                    server.setAddress(serverAddress);
-                    server.setPort(Integer.parseInt(serverPort));
+                    Rule rule = Daedalus.configurations.getRules().get(index);
+                    rule.setName(ruleName);
+                    rule.setType(Integer.parseInt(ruleType));
+                    rule.setFileName(ruleFilename);
+                    rule.setDownloadUrl(ruleDownloadUrl);
                 }
                 getActivity().finish();
                 break;
@@ -128,7 +156,7 @@ public class DnsServerConfigFragment extends ConfigFragment {
                             .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Daedalus.configurations.getCustomDnsServers().remove(index);
+                                    Daedalus.configurations.getRules().remove(index);
                                     getActivity().finish();
                                 }
                             })

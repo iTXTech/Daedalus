@@ -73,8 +73,9 @@ public class DnsServersFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), ConfigActivity.class).putExtra(ConfigActivity.LAUNCH_ACTION_CUSTOM_DNS_SERVER_ID,
-                        ConfigActivity.CUSTOM_DNS_SERVER_ID_NONE));
+                startActivity(new Intent(getActivity(), ConfigActivity.class)
+                        .putExtra(ConfigActivity.LAUNCH_ACTION_ID, ConfigActivity.ID_NONE)
+                        .putExtra(ConfigActivity.LAUNCH_ACTION_FRAGMENT, ConfigActivity.LAUNCH_FRAGMENT_DNS_SERVER));
             }
         });
         return view;
@@ -155,7 +156,7 @@ public class DnsServersFragment extends Fragment {
         public void onClick(View v) {
             if (!DnsServerHelper.isInUsing(Daedalus.configurations.getCustomDnsServers().get(index))) {
                 Daedalus.getInstance().startActivity(new Intent(Daedalus.getInstance(), ConfigActivity.class)
-                        .putExtra(ConfigActivity.LAUNCH_ACTION_CUSTOM_DNS_SERVER_ID, index));
+                        .putExtra(ConfigActivity.LAUNCH_ACTION_ID, index));
             }
         }
     }

@@ -48,7 +48,7 @@
     <string name="notice_need_storage_perm">Daedalus 需要访问外部储存以实现本地规则解析。</string>
     <string name="action_rules">规则</string>
     <string name="button_text_download_hosts">下载 hosts</string>
-    <string name="notice_start_download">正在下载 rules，请稍等 ……</string>
+    <string name="notice_start_download">正在下载规则，请稍等 ……</string>
     <string name="notice_downloaded">已下载规则。</string>
     <string name="notice_now_downloading">Daedalus 当前正在下载规则，请稍等。</string>
     <string name="hosts_not_found">找不到本地 hosts 文件。</string>
@@ -68,7 +68,15 @@
     <string name="settings_use_dnsmasq">使用 DNSMasq 替代 Hosts</string>
     <string name="button_text_download_dnsmasq">下载 DNSMasq 配置文件</string>
     <string name="dnsmasq_path">本地 DNSMasq 配置路径:</string>
-    <string name="notice_delete_confirm_prompt">您确定要删除此 DNS 服务器？</string>
+    <string name="notice_delete_confirm_prompt">您确定要删除此配置项？</string>
     <string name="yes">是</string>
     <string name="no">否</string>
+    <string name="config_dns_server">配置 DNS 服务器</string>
+    <string name="config_rule">配置规则</string>
+    <string name="settings_rule_name">规则名称</string>
+    <string name="settings_rule_type">规则类型</string>
+    <string name="settings_rule">规则设置</string>
+    <string name="settings_rule_download_url">规则下载地址</string>
+    <string name="settings_rule_sync">同步规则</string>
+    <string name="settings_rule_filename" translatable="false">规则文件名</string>
 </resources>

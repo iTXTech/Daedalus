@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+            android:key="ruleName"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/settings_rule_name"/>
+    <PreferenceCategory
+            android:key="Rule Settings"
+            android:title="@string/settings_rule">
+        <ListPreference
+                android:key="ruleType"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:title="@string/settings_rule_type"/>
+        <EditTextPreference
+                android:key="ruleFilename"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:title="@string/settings_rule_filename"/>
+        <EditTextPreference
+                android:key="ruleDownloadUrl"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:title="@string/settings_rule_download_url"/>
+        <org.itxtech.daedalus.widget.ClickPreference
+                android:key="ruleSync"
+                android:title="@string/settings_rule_sync"/>
+    </PreferenceCategory>
+</PreferenceScreen>
