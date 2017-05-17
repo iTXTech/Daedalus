@@ -80,7 +80,8 @@ public class RulesFragment extends Fragment {
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), ConfigActivity.class)
                         .putExtra(ConfigActivity.LAUNCH_ACTION_ID, ConfigActivity.ID_NONE)
-                        .putExtra(ConfigActivity.LAUNCH_ACTION_FRAGMENT, ConfigActivity.LAUNCH_FRAGMENT_RULE));
+                        .putExtra(ConfigActivity.LAUNCH_ACTION_FRAGMENT, ConfigActivity.LAUNCH_FRAGMENT_RULE)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
         return view;
@@ -184,7 +185,8 @@ public class RulesFragment extends Fragment {
             if (!Daedalus.configurations.getRules().get(index).isUsing()) {
                 Daedalus.getInstance().startActivity(new Intent(Daedalus.getInstance(), ConfigActivity.class)
                         .putExtra(ConfigActivity.LAUNCH_ACTION_ID, index)
-                        .putExtra(ConfigActivity.LAUNCH_ACTION_FRAGMENT, ConfigActivity.LAUNCH_FRAGMENT_RULE));
+                        .putExtra(ConfigActivity.LAUNCH_ACTION_FRAGMENT, ConfigActivity.LAUNCH_FRAGMENT_RULE)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
             return true;
         }
