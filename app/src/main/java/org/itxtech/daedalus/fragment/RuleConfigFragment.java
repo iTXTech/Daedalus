@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -16,6 +18,11 @@ import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.ConfigActivity;
 import org.itxtech.daedalus.util.Rule;
+import org.itxtech.daedalus.widget.ClickPreference;
+
+import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * Daedalus Project
@@ -30,6 +37,8 @@ import org.itxtech.daedalus.util.Rule;
  */
 public class RuleConfigFragment extends ConfigFragment {
     private Intent intent = null;
+    private Thread mThread = null;
+    private RuleConfigHandler mHandler = null;
     private View view;
     private int index;
 
@@ -41,9 +50,20 @@ public class RuleConfigFragment extends ConfigFragment {
     public void onDestroy() {
         super.onDestroy();
 
+        stopThread();
         intent = null;
+        mHandler.shutdown();
+        mHandler = null;
         view = null;
     }
+
+    private void stopThread() {
+        if (mThread != null) {
+            mThread.interrupt();
+            mThread = null;
+        }
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,6 +74,8 @@ public class RuleConfigFragment extends ConfigFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = super.onCreateView(inflater, container, savedInstanceState);
+
+        mHandler = new RuleConfigHandler().setView(view);
 
         EditTextPreference ruleName = (EditTextPreference) findPreference("ruleName");
         ruleName.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -77,7 +99,7 @@ public class RuleConfigFragment extends ConfigFragment {
             }
         });
 
-        EditTextPreference ruleDownloadUrl = (EditTextPreference) findPreference("ruleDownloadUrl");
+        final EditTextPreference ruleDownloadUrl = (EditTextPreference) findPreference("ruleDownloadUrl");
         ruleDownloadUrl.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -86,7 +108,7 @@ public class RuleConfigFragment extends ConfigFragment {
             }
         });
 
-        EditTextPreference ruleFilename = (EditTextPreference) findPreference("ruleFilename");
+        final EditTextPreference ruleFilename = (EditTextPreference) findPreference("ruleFilename");
         ruleFilename.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -95,6 +117,46 @@ public class RuleConfigFragment extends ConfigFragment {
             }
         });
 
+        ClickPreference ruleSync = (ClickPreference) findPreference("ruleSync");
+        ruleSync.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                save();
+                if (mThread == null) {
+                    Snackbar.make(view, R.string.notice_start_download, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    mThread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                URLConnection connection = new URL(ruleDownloadUrl.getText()).openConnection();
+                                InputStream inputStream = connection.getInputStream();
+                                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                                StringBuilder builder = new StringBuilder();
+                                String result;
+                                while ((result = reader.readLine()) != null) {
+                                    builder.append("\n").append(result);
+                                }
+                                reader.close();
+
+                                mHandler.obtainMessage(RuleConfigHandler.MSG_RULE_DOWNLOADED,
+                                        new RuleData(ruleFilename.getText(), builder.toString())).sendToTarget();
+                                stopThread();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            } finally {
+                                stopThread();
+                            }
+                        }
+                    });
+                    mThread.start();
+                } else {
+                    Snackbar.make(view, R.string.notice_now_downloading, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+                return false;
+            }
+        });
 
         index = intent.getIntExtra(ConfigActivity.LAUNCH_ACTION_ID, ConfigActivity.ID_NONE);
         if (index != ConfigActivity.ID_NONE) {
@@ -121,32 +183,36 @@ public class RuleConfigFragment extends ConfigFragment {
         return view;
     }
 
+    private void save() {
+        String ruleName = ((EditTextPreference) findPreference("ruleName")).getText();
+        String ruleType = ((ListPreference) findPreference("ruleType")).getValue();
+        String ruleFilename = ((EditTextPreference) findPreference("ruleFilename")).getText();
+        String ruleDownloadUrl = ((EditTextPreference) findPreference("ruleDownloadUrl")).getText();
+
+        if (ruleName.equals("") | ruleType.equals("") | ruleFilename.equals("") | ruleDownloadUrl.equals("")) {
+            Snackbar.make(view, R.string.notice_fill_in_all, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            return;
+        }
+
+        if (index == ConfigActivity.ID_NONE) {
+            Daedalus.configurations.getRules().add(new Rule(ruleName, ruleFilename, Integer.parseInt(ruleType), ruleDownloadUrl));
+        } else {
+            Rule rule = Daedalus.configurations.getRules().get(index);
+            rule.setName(ruleName);
+            rule.setType(Integer.parseInt(ruleType));
+            rule.setFileName(ruleFilename);
+            rule.setDownloadUrl(ruleDownloadUrl);
+        }
+    }
+
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         int id = item.getItemId();
 
         switch (id) {
             case R.id.action_apply:
-                String ruleName = ((EditTextPreference) findPreference("ruleName")).getText();
-                String ruleType = ((ListPreference) findPreference("ruleType")).getValue();
-                String ruleFilename = ((EditTextPreference) findPreference("ruleFilename")).getText();
-                String ruleDownloadUrl = ((EditTextPreference) findPreference("ruleDownloadUrl")).getText();
-
-                if (ruleName.equals("") | ruleType.equals("") | ruleFilename.equals("") | ruleDownloadUrl.equals("")) {
-                    Snackbar.make(view, R.string.notice_fill_in_all, Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                    break;
-                }
-
-                if (index == ConfigActivity.ID_NONE) {
-                    Daedalus.configurations.getRules().add(new Rule(ruleName, ruleFilename, Integer.parseInt(ruleType), ruleDownloadUrl));
-                } else {
-                    Rule rule = Daedalus.configurations.getRules().get(index);
-                    rule.setName(ruleName);
-                    rule.setType(Integer.parseInt(ruleType));
-                    rule.setFileName(ruleFilename);
-                    rule.setDownloadUrl(ruleDownloadUrl);
-                }
+                save();
                 getActivity().finish();
                 break;
             case R.id.action_delete:
@@ -170,5 +236,60 @@ public class RuleConfigFragment extends ConfigFragment {
         }
 
         return true;
+    }
+
+    private class RuleData {
+        private String data;
+        private String filename;
+
+        RuleData(String filename, String data) {
+            this.data = data;
+            this.filename = filename;
+        }
+
+        String getData() {
+            return data;
+        }
+
+        String getFilename() {
+            return filename;
+        }
+    }
+
+    private static class RuleConfigHandler extends Handler {
+        static final int MSG_RULE_DOWNLOADED = 0;
+
+        private View view = null;
+
+        RuleConfigHandler setView(View view) {
+            this.view = view;
+            return this;
+        }
+
+        void shutdown() {
+            view = null;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            switch (msg.what) {
+                case MSG_RULE_DOWNLOADED:
+                    try {
+                        RuleData ruleData = (RuleData) msg.obj;
+                        File file = new File(Daedalus.rulesPath + ruleData.getFilename());
+                        FileOutputStream stream = new FileOutputStream(file);
+                        stream.write(ruleData.getData().getBytes());
+                        stream.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    Snackbar.make(view, R.string.notice_downloaded, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    break;
+            }
+        }
     }
 }

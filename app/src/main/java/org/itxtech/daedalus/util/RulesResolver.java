@@ -32,15 +32,15 @@ public class RulesResolver implements Runnable {
 
     private static int status = STATUS_NOT_LOADED;
     private static int mode = MODE_HOSTS;
-    private static String hostsFile;
-    private static String dnsmasqPath;
+    private static String[] hostsFiles;
+    private static String[] dnsmasqFiles;
     private static HashMap<String, String> rules;
     private static boolean shutdown = false;
 
     public RulesResolver() {
         status = STATUS_NOT_LOADED;
-        hostsFile = "";
-        dnsmasqPath = "";
+        hostsFiles = new String[0];
+        dnsmasqFiles = new String[0];
         shutdown = false;
     }
 
@@ -52,16 +52,16 @@ public class RulesResolver implements Runnable {
         return status == STATUS_LOADED;
     }
 
-    public static void startLoadHosts(String loadFile) {
-        Log.d(TAG, "Loading hosts file " + loadFile);
-        hostsFile = loadFile;
+    public static void startLoadHosts(String[] loadFile) {
+        Log.d(TAG, "Loading hosts file " + loadFile.length);
+        hostsFiles = loadFile;
         mode = MODE_HOSTS;
         status = STATUS_PENDING_LOAD;
     }
 
-    public static void startLoadDnsmasq(String loadPath) {
-        Log.d(TAG, "Loading DNSMasq file " + loadPath);
-        dnsmasqPath = loadPath;
+    public static void startLoadDnsmasq(String[] loadPath) {
+        Log.d(TAG, "Loading DNSMasq file " + loadPath.length);
+        dnsmasqFiles = loadPath;
         mode = MODE_DNSMASQ;
         status = STATUS_PENDING_LOAD;
     }
@@ -101,37 +101,32 @@ public class RulesResolver implements Runnable {
             status = STATUS_LOADING;
             rules = new HashMap<>();
             if (mode == MODE_HOSTS) {
-                File file = new File(hostsFile);
-                if (file.exists() && file.canRead()) {
-                    FileInputStream stream = new FileInputStream(file);
-                    BufferedReader dataIO = new BufferedReader(new InputStreamReader(stream));
-                    String strLine;
-                    String[] data;
-                    while ((strLine = dataIO.readLine()) != null) {
-                        //Log.d(TAG, strLine);
-                        if (!strLine.equals("") && !strLine.startsWith("#")) {
-                            data = strLine.split("\\s+");
-                            rules.put(data[1], data[0]);
-                            Log.d(TAG, "Putting " + data[0] + " " + data[1]);
+                for (String hostsFile : hostsFiles) {
+                    File file = new File(hostsFile);
+                    if (file.canRead()) {
+                        FileInputStream stream = new FileInputStream(file);
+                        BufferedReader dataIO = new BufferedReader(new InputStreamReader(stream));
+                        String strLine;
+                        String[] data;
+                        while ((strLine = dataIO.readLine()) != null) {
+                            //Log.d(TAG, strLine);
+                            if (!strLine.equals("") && !strLine.startsWith("#")) {
+                                data = strLine.split("\\s+");
+                                rules.put(data[1], data[0]);
+                                Log.d(TAG, "Putting " + data[0] + " " + data[1]);
+                            }
                         }
-                    }
 
-                    dataIO.close();
-                    stream.close();
-                } else {
-                    status = STATUS_NOT_LOADED;
-                    return;
+                        dataIO.close();
+                        stream.close();
+                    }
                 }
             } else if (mode == MODE_DNSMASQ) {
-                File file = new File(dnsmasqPath);
-                if (!file.mkdirs() && !file.exists()) {
-                    status = STATUS_NOT_LOADED;
-                    return;
-                }
-                for (File conf : file.listFiles()) {
+                for (String dnsmasqFile : dnsmasqFiles) {
+                    File file = new File(dnsmasqFile);
                     if (file.canRead()) {
-                        Log.d(TAG, "load: Loading DNSMasq configuration " + conf.toString());
-                        FileInputStream stream = new FileInputStream(conf);
+                        Log.d(TAG, "load: Loading DNSMasq configuration " + file.toString());
+                        FileInputStream stream = new FileInputStream(file);
                         BufferedReader dataIO = new BufferedReader(new InputStreamReader(stream));
                         String strLine;
                         String[] data;

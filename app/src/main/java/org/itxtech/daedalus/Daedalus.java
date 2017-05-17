@@ -21,10 +21,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.stream.JsonReader;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.service.DaedalusVpnService;
-import org.itxtech.daedalus.util.Configurations;
-import org.itxtech.daedalus.util.DnsServer;
-import org.itxtech.daedalus.util.RulesProvider;
-import org.itxtech.daedalus.util.RulesResolver;
+import org.itxtech.daedalus.util.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -78,8 +75,7 @@ public class Daedalus extends Application {
 
     public static Configurations configurations;
 
-    public static String hostsPath = null;
-    public static String dnsmasqPath = null;
+    public static String rulesPath = null;
     private static String configPath = null;
 
     private static Daedalus instance = null;
@@ -94,11 +90,10 @@ public class Daedalus extends Application {
         mHostsResolver.start();
 
         if (getExternalFilesDir(null) != null) {
-            hostsPath = getExternalFilesDir(null).getPath() + "/hosts";
-            dnsmasqPath = getExternalFilesDir(null).getPath() + "/dnsmasq/";
+            rulesPath = getExternalFilesDir(null).getPath() + "/rules/";
             configPath = getExternalFilesDir(null).getPath() + "/config.json";
 
-            File file = new File(dnsmasqPath);
+            File file = new File(rulesPath);
             Log.d(TAG, "mkdir result: " + file.mkdirs());
         }
 
@@ -142,10 +137,23 @@ public class Daedalus extends Application {
                     return;
                 }
             }
-            if (Daedalus.getPrefs().getBoolean("settings_use_dnsmasq", false)) {
-                RulesResolver.startLoadDnsmasq(dnsmasqPath);
-            } else {
-                RulesResolver.startLoadHosts(hostsPath);
+            ArrayList<String> pendingLoad = new ArrayList<>();
+            int type = Rule.TYPE_HOSTS;
+            for (Rule rule : configurations.getRules()) {
+                if (rule.isUsing()) {
+                    pendingLoad.add(rulesPath + rule.getFileName());
+                    type = rule.getType(); //Only one type and they should the same
+                }
+            }
+            String[] arr = new String[pendingLoad.size()];
+            pendingLoad.toArray(arr);
+            switch (type) {
+                case Rule.TYPE_HOSTS:
+                    RulesResolver.startLoadHosts(arr);
+                    break;
+                case Rule.TYPE_DNAMASQ:
+                    RulesResolver.startLoadDnsmasq(arr);
+                    break;
             }
         }
     }

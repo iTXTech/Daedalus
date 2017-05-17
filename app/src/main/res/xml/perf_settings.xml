@@ -55,11 +55,6 @@
                 android:defaultValue="false"
                 android:enabled="false"/>
         <SwitchPreference
-                android:key="settings_use_dnsmasq"
-                android:title="@string/settings_use_dnsmasq"
-                android:defaultValue="false"
-                android:enabled="false"/>
-        <SwitchPreference
                 android:key="settings_dns_over_tcp"
                 android:title="@string/settings_dns_over_tcp"
                 android:defaultValue="false"

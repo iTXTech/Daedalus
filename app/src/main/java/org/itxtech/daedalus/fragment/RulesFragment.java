@@ -17,6 +17,9 @@ import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.ConfigActivity;
 import org.itxtech.daedalus.util.Rule;
 
+import java.io.File;
+import java.text.DecimalFormat;
+
 /**
  * Daedalus Project
  *
@@ -120,6 +123,15 @@ public class RulesFragment extends Fragment {
             holder.setIndex(position);
             holder.textViewName.setText(rule.getName());
             holder.textViewAddress.setText(rule.getFileName());
+
+            File file = new File(Daedalus.rulesPath + rule.getFileName());
+            StringBuilder builder = new StringBuilder();
+            if (file.exists()) {
+                builder.append(new DecimalFormat("0.00").format(((float) file.length() / 1024)));
+            } else {
+                builder.append("0");
+            }
+            holder.textViewSize.setText(builder.append(" KB").toString());
         }
 
         @Override
@@ -137,12 +149,16 @@ public class RulesFragment extends Fragment {
     private static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private final TextView textViewName;
         private final TextView textViewAddress;
+        private final TextView textViewSize;
+        private final View view;
         private int index;
 
         ViewHolder(View view) {
             super(view);
+            this.view = view;
             textViewName = (TextView) view.findViewById(R.id.textView_rule_name);
             textViewAddress = (TextView) view.findViewById(R.id.textView_rule_detail);
+            textViewSize = (TextView) view.findViewById(R.id.textView_rule_size);
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
             view.setBackgroundResource(R.drawable.background_selectable);
@@ -150,6 +166,7 @@ public class RulesFragment extends Fragment {
 
         void setIndex(int index) {
             this.index = index;
+            view.setSelected(Daedalus.configurations.getRules().get(index).isUsing());
         }
 
         int getIndex() {
@@ -158,6 +175,7 @@ public class RulesFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
+            Daedalus.configurations.getRules().get(index).setUsing(!v.isSelected());
             v.setSelected(!v.isSelected());
         }
 

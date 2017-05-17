@@ -65,7 +65,6 @@
     <string name="settings_dns_over_tcp">DNS over TCP</string>
     <string name="action_removed">已移除。</string>
     <string name="action_undo">撤销</string>
-    <string name="settings_use_dnsmasq">使用 DNSMasq 替代 Hosts</string>
     <string name="button_text_download_dnsmasq">下载 DNSMasq 配置文件</string>
     <string name="dnsmasq_path">本地 DNSMasq 配置路径:</string>
     <string name="notice_delete_confirm_prompt">您确定要删除此配置项？</string>
