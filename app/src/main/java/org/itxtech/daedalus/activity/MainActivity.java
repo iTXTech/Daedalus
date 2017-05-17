@@ -65,12 +65,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DnsServersFragment mDnsServers;
     private int currentFragment = FRAGMENT_NONE;
 
-    private MainFragment.MainFragmentHandler mHandler = null;
-
-    public void setMainFragmentHandler(MainFragment.MainFragmentHandler mHandler) {
-        this.mHandler = mHandler;
-    }
-
     public static MainActivity getInstance() {
         return instance;
     }
@@ -291,8 +285,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Daedalus.getInstance().deactivateService();
         } else if (launchAction == LAUNCH_ACTION_AFTER_DEACTIVATE) {
             Daedalus.updateShortcut(this.getApplicationContext());
-            if (currentFragment == FRAGMENT_MAIN && mHandler != null) {
-                mHandler.obtainMessage(MainFragment.MainFragmentHandler.MSG_REFRESH).sendToTarget();
+            if (currentFragment == FRAGMENT_MAIN && MainFragment.mHandler != null) {
+                MainFragment.mHandler.obtainMessage(MainFragment.MainFragmentHandler.MSG_REFRESH).sendToTarget();
             }
         }
 

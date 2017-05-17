@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
-import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.DnsServerHelper;
 
@@ -34,14 +33,13 @@ import org.itxtech.daedalus.util.DnsServerHelper;
 public class MainFragment extends Fragment {
 
     private View view = null;
-    private MainFragmentHandler mHandler = null;
+    public static MainFragmentHandler mHandler = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mHandler = (new MainFragmentHandler()).setFragment(this);
-        MainActivity.getInstance().setMainFragmentHandler(mHandler);
     }
 
     @Override
@@ -68,7 +66,7 @@ public class MainFragment extends Fragment {
         super.onDetach();
 
         mHandler.shutdown();
-        MainActivity.getInstance().setMainFragmentHandler(null);
+        mHandler = null;
     }
 
     @Override
