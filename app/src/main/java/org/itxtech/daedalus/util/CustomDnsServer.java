@@ -23,7 +23,7 @@ public class CustomDnsServer {
         this.name = name;
         this.address = address;
         this.port = port;
-        this.id = String.valueOf(Daedalus.configurations.getNextId());
+        this.id = String.valueOf(Daedalus.configurations.getNextDnsId());
     }
 
     public String getId() {

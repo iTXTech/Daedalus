@@ -21,7 +21,10 @@ import com.google.gson.JsonParseException;
 import com.google.gson.stream.JsonReader;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.service.DaedalusVpnService;
-import org.itxtech.daedalus.util.*;
+import org.itxtech.daedalus.util.Configurations;
+import org.itxtech.daedalus.util.DnsServer;
+import org.itxtech.daedalus.util.Rule;
+import org.itxtech.daedalus.util.RulesResolver;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -54,15 +57,20 @@ public class Daedalus extends Application {
         add(new DnsServer("123.206.21.48", R.string.server_aixyz_south_china));
     }};
 
-    public static final List<RulesProvider> HOSTS_PROVIDERS = new ArrayList<RulesProvider>() {{
-        add(new RulesProvider("racaljk/hosts", "https://coding.net/u/scaffrey/p/hosts/git/raw/master/hosts"));
-        add(new RulesProvider("fengixng/google-hosts", "https://raw.githubusercontent.com/fengixng/google-hosts/master/hosts"));
-        add(new RulesProvider("sy618/hosts", "https://raw.githubusercontent.com/sy618/hosts/master/ADFQ"));
-    }};
+    public static final List<Rule> RULES = new ArrayList<Rule>() {{
+        //Build-in Hosts rule providers
+        add(new Rule("racaljk/hosts", "racaljk.hosts", Rule.TYPE_HOSTS,
+                "https://coding.net/u/scaffrey/p/hosts/git/raw/master/hosts", false));
+        add(new Rule("fengixng/google-hosts", "fengixng.hosts", Rule.TYPE_HOSTS,
+                "https://raw.githubusercontent.com/fengixng/google-hosts/master/hosts", false));
+        add(new Rule("sy618/hosts", "sy618.hosts", Rule.TYPE_HOSTS,
+                "https://raw.githubusercontent.com/sy618/hosts/master/ADFQ", false));
+        //Build-in DNSMasq rule providers
+        add(new Rule("sy618/hosts/dnsad", "dnsad.dnsmasq", Rule.TYPE_DNAMASQ,
+                "https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsad", false));
+        add(new Rule("sy618/hosts/dnsfq", "dnsfq.dnsmasq", Rule.TYPE_DNAMASQ,
+                "https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsfq", false));
 
-    public static final List<RulesProvider> DNSMASQ_PROVIDERS = new ArrayList<RulesProvider>() {{
-        add(new RulesProvider("sy618/hosts/dnsad", "https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsad", "dnsad"));
-        add(new RulesProvider("sy618/hosts/dnsfq", "https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsfq", "dnsfq"));
     }};
 
     public static final String[] DEFAULT_TEST_DOMAINS = new String[]{

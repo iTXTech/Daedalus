@@ -77,5 +77,7 @@
     <string name="settings_rule">规则设置</string>
     <string name="settings_rule_download_url">规则下载地址</string>
     <string name="settings_rule_sync">同步规则</string>
-    <string name="settings_rule_filename" translatable="false">规则文件名</string>
+    <string name="settings_rule_filename">规则文件名</string>
+    <string name="settings_rule_import">导入</string>
+    <string name="settings_rule_import_build_in">从内置规则导入</string>
 </resources>

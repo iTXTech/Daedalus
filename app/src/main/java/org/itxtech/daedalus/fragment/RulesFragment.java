@@ -50,7 +50,8 @@ public class RulesFragment extends Fragment {
             @Override
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 if (viewHolder instanceof RulesFragment.ViewHolder) {
-                    if (Daedalus.configurations.getRules().get(((ViewHolder) viewHolder).getIndex()).isUsing()) {
+                    Rule rule = Rule.getRuleById(((ViewHolder) viewHolder).getId());
+                    if (rule != null && rule.isServiceAndUsing()) {
                         return 0;
                     }
                 }
@@ -121,7 +122,7 @@ public class RulesFragment extends Fragment {
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             Rule rule = Daedalus.configurations.getRules().get(position);
-            holder.setIndex(position);
+            holder.setId(rule.getId());
             holder.textViewName.setText(rule.getName());
             holder.textViewAddress.setText(rule.getFileName());
 
@@ -145,14 +146,23 @@ public class RulesFragment extends Fragment {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_rule, parent, false);
             return new ViewHolder(view);
         }
+
+        void checkType(Rule rule) {
+            for (Rule check : Daedalus.configurations.getRules()) {
+                if (check.getType() != rule.getType()) {
+                    check.setUsing(false);
+                }
+            }
+            notifyDataSetChanged();
+        }
     }
 
-    private static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    private class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private final TextView textViewName;
         private final TextView textViewAddress;
         private final TextView textViewSize;
         private final View view;
-        private int index;
+        private String id;
 
         ViewHolder(View view) {
             super(view);
@@ -162,29 +172,37 @@ public class RulesFragment extends Fragment {
             textViewSize = (TextView) view.findViewById(R.id.textView_rule_size);
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
-            view.setBackgroundResource(R.drawable.background_selectable);
+            view.findViewById(R.id.cardView_indicator).setBackgroundResource(R.drawable.background_selectable);
         }
 
-        void setIndex(int index) {
-            this.index = index;
-            view.setSelected(Daedalus.configurations.getRules().get(index).isUsing());
+        void setId(String id) {
+            this.id = id;
+            Rule rule = Rule.getRuleById(id);
+            if (rule != null) {
+                view.setSelected(rule.isUsing());
+            }
         }
 
-        int getIndex() {
-            return index;
+        String getId() {
+            return id;
         }
 
         @Override
         public void onClick(View v) {
-            Daedalus.configurations.getRules().get(index).setUsing(!v.isSelected());
-            v.setSelected(!v.isSelected());
+            Rule rule = Rule.getRuleById(id);
+            if (rule != null) {
+                rule.setUsing(!v.isSelected());
+                v.setSelected(!v.isSelected());
+                adapter.checkType(rule);
+            }
         }
 
         @Override
         public boolean onLongClick(View v) {
-            if (!Daedalus.configurations.getRules().get(index).isUsing()) {
+            Rule rule = Rule.getRuleById(id);
+            if (rule != null && rule.isServiceAndUsing()) {
                 Daedalus.getInstance().startActivity(new Intent(Daedalus.getInstance(), ConfigActivity.class)
-                        .putExtra(ConfigActivity.LAUNCH_ACTION_ID, index)
+                        .putExtra(ConfigActivity.LAUNCH_ACTION_ID, Integer.parseInt(id))
                         .putExtra(ConfigActivity.LAUNCH_ACTION_FRAGMENT, ConfigActivity.LAUNCH_FRAGMENT_RULE)
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }

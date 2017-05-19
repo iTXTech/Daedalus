@@ -138,7 +138,7 @@ public class RulesResolver implements Runnable {
                                         data[1] = data[1].substring(1, data[1].length());
                                     }
                                     rules.put(data[1], data[2]);
-                                    Log.d(TAG, "Putting " + data[1] + " " + data[2]);
+                                    //Log.d(TAG, "Putting " + data[1] + " " + data[2]);
                                 }
                             }
                         }

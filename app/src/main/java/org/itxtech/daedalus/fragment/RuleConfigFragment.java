@@ -40,7 +40,7 @@ public class RuleConfigFragment extends ConfigFragment {
     private Thread mThread = null;
     private RuleConfigHandler mHandler = null;
     private View view;
-    private int index;
+    private int id;
 
     public void setIntent(Intent intent) {
         this.intent = intent;
@@ -77,7 +77,7 @@ public class RuleConfigFragment extends ConfigFragment {
 
         mHandler = new RuleConfigHandler().setView(view);
 
-        EditTextPreference ruleName = (EditTextPreference) findPreference("ruleName");
+        final EditTextPreference ruleName = (EditTextPreference) findPreference("ruleName");
         ruleName.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -86,7 +86,7 @@ public class RuleConfigFragment extends ConfigFragment {
             }
         });
 
-        ListPreference ruleType = (ListPreference) findPreference("ruleType");
+        final ListPreference ruleType = (ListPreference) findPreference("ruleType");
         final String[] entries = {"hosts", "DNSMasq"};
         String[] values = {"0", "1"};
         ruleType.setEntries(entries);
@@ -158,9 +158,31 @@ public class RuleConfigFragment extends ConfigFragment {
             }
         });
 
-        index = intent.getIntExtra(ConfigActivity.LAUNCH_ACTION_ID, ConfigActivity.ID_NONE);
-        if (index != ConfigActivity.ID_NONE) {
-            Rule rule = Daedalus.configurations.getRules().get(index);
+        ListPreference ruleImportBuildIn = (ListPreference) findPreference("ruleImportBuildIn");
+        ruleImportBuildIn.setEntries(Rule.getBuildInRuleNames());
+        ruleImportBuildIn.setEntryValues(Rule.getBuildInRuleEntries());
+        ruleImportBuildIn.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                Rule rule = Daedalus.RULES.get(Integer.parseInt((String) newValue));
+                ruleName.setText(rule.getName());
+                ruleName.setSummary(rule.getName());
+                ruleType.setValue(String.valueOf(rule.getType()));
+                ruleType.setSummary(Rule.getTypeById(rule.getType()));
+                ruleFilename.setText(rule.getFileName());
+                ruleFilename.setSummary(rule.getFileName());
+                ruleDownloadUrl.setText(rule.getDownloadUrl());
+                ruleDownloadUrl.setSummary(rule.getDownloadUrl());
+                return true;
+            }
+        });
+
+
+        ruleImportBuildIn.setValue("0");
+        id = intent.getIntExtra(ConfigActivity.LAUNCH_ACTION_ID, ConfigActivity.ID_NONE);
+        Rule rule;
+        if (id != ConfigActivity.ID_NONE && (rule = Rule.getRuleById(String.valueOf(id))) != null) {
+            Rule.getRuleById(String.valueOf(id));
             ruleName.setText(rule.getName());
             ruleName.setSummary(rule.getName());
             int type = rule.getType();
@@ -180,6 +202,7 @@ public class RuleConfigFragment extends ConfigFragment {
             ruleDownloadUrl.setText("");
             ruleDownloadUrl.setSummary("");
         }
+
         return view;
     }
 
@@ -195,14 +218,18 @@ public class RuleConfigFragment extends ConfigFragment {
             return;
         }
 
-        if (index == ConfigActivity.ID_NONE) {
-            Daedalus.configurations.getRules().add(new Rule(ruleName, ruleFilename, Integer.parseInt(ruleType), ruleDownloadUrl));
+        if (id == ConfigActivity.ID_NONE) {
+            Rule rule = new Rule(ruleName, ruleFilename, Integer.parseInt(ruleType), ruleDownloadUrl);
+            Daedalus.configurations.getRules().add(rule);
+            id = Integer.parseInt(rule.getId());
         } else {
-            Rule rule = Daedalus.configurations.getRules().get(index);
-            rule.setName(ruleName);
-            rule.setType(Integer.parseInt(ruleType));
-            rule.setFileName(ruleFilename);
-            rule.setDownloadUrl(ruleDownloadUrl);
+            Rule rule = Rule.getRuleById(String.valueOf(id));
+            if (rule != null) {
+                rule.setName(ruleName);
+                rule.setType(Integer.parseInt(ruleType));
+                rule.setFileName(ruleFilename);
+                rule.setDownloadUrl(ruleDownloadUrl);
+            }
         }
     }
 
@@ -216,13 +243,13 @@ public class RuleConfigFragment extends ConfigFragment {
                 getActivity().finish();
                 break;
             case R.id.action_delete:
-                if (index != ConfigActivity.ID_NONE) {
+                if (this.id != ConfigActivity.ID_NONE) {
                     new AlertDialog.Builder(getActivity())
                             .setTitle(R.string.notice_delete_confirm_prompt)
                             .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Daedalus.configurations.getRules().remove(index);
+                                    Daedalus.configurations.getRules().remove(RuleConfigFragment.this.id);
                                     getActivity().finish();
                                 }
                             })

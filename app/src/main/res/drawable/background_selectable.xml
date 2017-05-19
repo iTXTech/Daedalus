@@ -3,6 +3,9 @@
           android:enterFadeDuration="@android:integer/config_mediumAnimTime"
           android:exitFadeDuration="@android:integer/config_mediumAnimTime">
     <item android:state_selected="true">
-        <color android:color="@color/colorPrimaryDark"/>
+        <color android:color="#ddff00"/>
+    </item>
+    <item android:state_selected="false">
+        <color android:color="@android:color/white"/>
     </item>
 </selector>
