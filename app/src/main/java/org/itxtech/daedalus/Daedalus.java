@@ -23,7 +23,7 @@ import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Configurations;
 import org.itxtech.daedalus.util.DnsServer;
-import org.itxtech.daedalus.util.RulesProvider;
+import org.itxtech.daedalus.util.Rule;
 import org.itxtech.daedalus.util.RulesResolver;
 
 import java.io.File;
@@ -57,15 +57,20 @@ public class Daedalus extends Application {
         add(new DnsServer("123.206.21.48", R.string.server_aixyz_south_china));
     }};
 
-    public static final List<RulesProvider> HOSTS_PROVIDERS = new ArrayList<RulesProvider>() {{
-        add(new RulesProvider("racaljk/hosts", "https://coding.net/u/scaffrey/p/hosts/git/raw/master/hosts"));
-        add(new RulesProvider("fengixng/google-hosts", "https://raw.githubusercontent.com/fengixng/google-hosts/master/hosts"));
-        add(new RulesProvider("sy618/hosts", "https://raw.githubusercontent.com/sy618/hosts/master/ADFQ"));
-    }};
+    public static final List<Rule> RULES = new ArrayList<Rule>() {{
+        //Build-in Hosts rule providers
+        add(new Rule("racaljk/hosts", "racaljk.hosts", Rule.TYPE_HOSTS,
+                "https://coding.net/u/scaffrey/p/hosts/git/raw/master/hosts", false));
+        add(new Rule("fengixng/google-hosts", "fengixng.hosts", Rule.TYPE_HOSTS,
+                "https://raw.githubusercontent.com/fengixng/google-hosts/master/hosts", false));
+        add(new Rule("sy618/hosts", "sy618.hosts", Rule.TYPE_HOSTS,
+                "https://raw.githubusercontent.com/sy618/hosts/master/ADFQ", false));
+        //Build-in DNSMasq rule providers
+        add(new Rule("sy618/hosts/dnsad", "dnsad.dnsmasq", Rule.TYPE_DNAMASQ,
+                "https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsad", false));
+        add(new Rule("sy618/hosts/dnsfq", "dnsfq.dnsmasq", Rule.TYPE_DNAMASQ,
+                "https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsfq", false));
 
-    public static final List<RulesProvider> DNSMASQ_PROVIDERS = new ArrayList<RulesProvider>() {{
-        add(new RulesProvider("sy618/hosts/dnsad", "https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsad", "dnsad"));
-        add(new RulesProvider("sy618/hosts/dnsfq", "https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsfq", "dnsfq"));
     }};
 
     public static final String[] DEFAULT_TEST_DOMAINS = new String[]{
@@ -78,8 +83,7 @@ public class Daedalus extends Application {
 
     public static Configurations configurations;
 
-    public static String hostsPath = null;
-    public static String dnsmasqPath = null;
+    public static String rulesPath = null;
     private static String configPath = null;
 
     private static Daedalus instance = null;
@@ -94,11 +98,10 @@ public class Daedalus extends Application {
         mHostsResolver.start();
 
         if (getExternalFilesDir(null) != null) {
-            hostsPath = getExternalFilesDir(null).getPath() + "/hosts";
-            dnsmasqPath = getExternalFilesDir(null).getPath() + "/dnsmasq/";
+            rulesPath = getExternalFilesDir(null).getPath() + "/rules/";
             configPath = getExternalFilesDir(null).getPath() + "/config.json";
 
-            File file = new File(dnsmasqPath);
+            File file = new File(rulesPath);
             Log.d(TAG, "mkdir result: " + file.mkdirs());
         }
 
@@ -142,10 +145,23 @@ public class Daedalus extends Application {
                     return;
                 }
             }
-            if (Daedalus.getPrefs().getBoolean("settings_use_dnsmasq", false)) {
-                RulesResolver.startLoadDnsmasq(dnsmasqPath);
-            } else {
-                RulesResolver.startLoadHosts(hostsPath);
+            ArrayList<String> pendingLoad = new ArrayList<>();
+            int type = Rule.TYPE_HOSTS;
+            for (Rule rule : configurations.getRules()) {
+                if (rule.isUsing()) {
+                    pendingLoad.add(rulesPath + rule.getFileName());
+                    type = rule.getType(); //Only one type and they should the same
+                }
+            }
+            String[] arr = new String[pendingLoad.size()];
+            pendingLoad.toArray(arr);
+            switch (type) {
+                case Rule.TYPE_HOSTS:
+                    RulesResolver.startLoadHosts(arr);
+                    break;
+                case Rule.TYPE_DNAMASQ:
+                    RulesResolver.startLoadDnsmasq(arr);
+                    break;
             }
         }
     }

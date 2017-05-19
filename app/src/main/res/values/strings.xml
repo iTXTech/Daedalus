@@ -65,10 +65,19 @@
     <string name="settings_dns_over_tcp">DNS over TCP</string>
     <string name="action_removed">Removed.</string>
     <string name="action_undo">Undo</string>
-    <string name="settings_use_dnsmasq">Use DNSMasq instead of Hosts</string>
     <string name="button_text_download_dnsmasq">Download DNSMasq configuration</string>
     <string name="dnsmasq_path">Local DNSMasq configurations path:</string>
-    <string name="notice_delete_confirm_prompt">Are you sure you want to remove this DNS server?</string>
+    <string name="notice_delete_confirm_prompt">Are you sure you want to remove this configuration?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="config_dns_server">DNS server config</string>
+    <string name="config_rule">Rule config</string>
+    <string name="settings_rule_name">Rule Name</string>
+    <string name="settings_rule_type">Rule Type</string>
+    <string name="settings_rule">Rule Settings</string>
+    <string name="settings_rule_download_url">Rule Download Url</string>
+    <string name="settings_rule_sync">Sync Rule</string>
+    <string name="settings_rule_filename">Rule Filename</string>
+    <string name="settings_rule_import">Import</string>
+    <string name="settings_rule_import_build_in">Import from build in rules</string>
 </resources>

@@ -37,7 +37,7 @@
                 android:layout_marginTop="10dp"
                 android:id="@+id/textView_test_info"
                 android:textSize="18sp"/>
-        <org.itxtech.daedalus.view.ClearAutoCompleteTextView
+        <org.itxtech.daedalus.widget.ClearAutoCompleteTextView
                 android:completionThreshold="1"
                 android:singleLine="true"
                 android:hint="@string/test_test_domain"

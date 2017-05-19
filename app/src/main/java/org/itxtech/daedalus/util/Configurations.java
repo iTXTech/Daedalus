@@ -22,21 +22,31 @@ import java.util.ArrayList;
  * (at your option) any later version.
  */
 public class Configurations {
-    private static final int CUSTOM_DNS_ID_START = 32;
+    private static final int CUSTOM_ID_START = 32;
 
     private static File file;
 
     private ArrayList<CustomDnsServer> customDnsServers;
 
-    private int totalId;
+    private ArrayList<Rule> rules;
+
+    private int totalDnsId;
+    private int totalRuleId;
 
     private long activateCounter;
 
-    int getNextId() {
-        if (totalId < CUSTOM_DNS_ID_START) {
-            totalId = CUSTOM_DNS_ID_START;
+    int getNextDnsId() {
+        if (totalDnsId < CUSTOM_ID_START) {
+            totalDnsId = CUSTOM_ID_START;
         }
-        return totalId++;
+        return totalDnsId++;
+    }
+
+    int getNextRuleId() {
+        if (totalRuleId < 0) {
+            totalRuleId = 0;
+        }
+        return totalRuleId++;
     }
 
     public long getActivateCounter() {
@@ -52,6 +62,13 @@ public class Configurations {
             customDnsServers = new ArrayList<>();
         }
         return customDnsServers;
+    }
+
+    public ArrayList<Rule> getRules() {
+        if (rules == null) {
+            rules = new ArrayList<>();
+        }
+        return rules;
     }
 
     public static Configurations load(File file) {
