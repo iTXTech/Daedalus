@@ -19,18 +19,17 @@
                 android:layout_height="wrap_content"
                 android:focusable="true"
                 android:orientation="vertical"
-                android:padding="@dimen/margin_small"
                 android:background="?android:attr/selectableItemBackground">
             <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_small">
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:layout_marginLeft="@dimen/margin_small">
 
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="@dimen/margin_small"
-                        android:paddingBottom="@dimen/margin_small"
+                        android:padding="@dimen/margin_small"
                         android:id="@+id/textView_rule_name"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:layout_alignParentTop="true"
@@ -40,8 +39,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/textView_rule_name"
-                        android:paddingTop="@dimen/margin_small"
-                        android:paddingBottom="@dimen/margin_small"
+                        android:padding="@dimen/margin_small"
                         android:id="@+id/textView_rule_detail"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:layout_alignParentBottom="true"
@@ -51,9 +49,7 @@
                           android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           android:layout_gravity="bottom"
-                          android:paddingBottom="@dimen/margin_small"
-                          android:paddingRight="@dimen/margin_small"
-                          android:paddingEnd="@dimen/margin_small"
+                          android:padding="@dimen/margin_small"
                           android:layout_alignParentEnd="true"
                           android:layout_alignParentRight="true"
                           android:ellipsize="end"

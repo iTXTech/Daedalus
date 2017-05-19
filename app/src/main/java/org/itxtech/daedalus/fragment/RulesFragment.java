@@ -193,14 +193,14 @@ public class RulesFragment extends Fragment {
             if (rule != null) {
                 rule.setUsing(!v.isSelected());
                 v.setSelected(!v.isSelected());
-                adapter.checkType(rule);
+                //adapter.checkType(rule);
             }
         }
 
         @Override
         public boolean onLongClick(View v) {
             Rule rule = Rule.getRuleById(id);
-            if (rule != null && rule.isServiceAndUsing()) {
+            if (rule != null && !rule.isServiceAndUsing()) {
                 Daedalus.getInstance().startActivity(new Intent(Daedalus.getInstance(), ConfigActivity.class)
                         .putExtra(ConfigActivity.LAUNCH_ACTION_ID, Integer.parseInt(id))
                         .putExtra(ConfigActivity.LAUNCH_ACTION_FRAGMENT, ConfigActivity.LAUNCH_FRAGMENT_RULE)
