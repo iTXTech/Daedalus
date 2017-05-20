@@ -149,6 +149,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                 notificationManager.cancel(NOTIFICATION_ACTIVATED);
                 notification = null;
             }
+            dnsServers = null;
         } catch (Exception e) {
             Log.d(TAG, e.toString());
         }

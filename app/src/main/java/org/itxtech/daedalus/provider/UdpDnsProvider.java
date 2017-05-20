@@ -314,7 +314,6 @@ public class UdpDnsProvider extends DnsProvider {
 
         UdpPacket parsedUdp = (UdpPacket) parsedPacket.getPayload();
 
-
         if (parsedUdp.getPayload() == null) {
             Log.i(TAG, "handleDnsRequest: Sending UDP packet without payload: " + parsedUdp);
 
