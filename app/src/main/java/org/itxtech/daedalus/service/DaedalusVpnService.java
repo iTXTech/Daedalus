@@ -193,11 +193,18 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             statisticQuery = Daedalus.getPrefs().getBoolean("settings_count_query_times", false);
             Log.d(TAG, "tun0 add " + format + " pServ " + primaryServer + " sServ " + secondaryServer);
 
-            dnsServers = new HashMap<>();
-            String aliasPrimary = String.format(format, dnsServers.size() + 1);
-            dnsServers.put(aliasPrimary, primaryServer);
-            String aliasSecondary = String.format(format, dnsServers.size() + 1);
-            dnsServers.put(aliasSecondary, secondaryServer);
+            String aliasPrimary;
+            String aliasSecondary;
+            if (advanced) {
+                dnsServers = new HashMap<>();
+                aliasPrimary = String.format(format, dnsServers.size() + 1);
+                dnsServers.put(aliasPrimary, primaryServer);
+                aliasSecondary = String.format(format, dnsServers.size() + 1);
+                dnsServers.put(aliasSecondary, secondaryServer);
+            } else {
+                aliasPrimary = primaryServer;
+                aliasSecondary = secondaryServer;
+            }
 
             Inet4Address primaryDNSServer = InetAddressUtil.ipv4From(aliasPrimary);
             Inet4Address secondaryDNSServer = InetAddressUtil.ipv4From(aliasSecondary);
