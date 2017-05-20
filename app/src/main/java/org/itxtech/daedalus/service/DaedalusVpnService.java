@@ -23,6 +23,7 @@ import org.itxtech.daedalus.util.DnsServerHelper;
 import org.itxtech.daedalus.util.RulesResolver;
 
 import java.net.Inet4Address;
+import java.util.HashMap;
 
 /**
  * Daedalus Project
@@ -55,6 +56,8 @@ public class DaedalusVpnService extends VpnService implements Runnable {
     private ParcelFileDescriptor descriptor;
 
     private Thread mThread = null;
+
+    public HashMap<String, String> dnsServers;
 
     @Override
     public void onCreate() {
@@ -180,15 +183,24 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                 } catch (IllegalArgumentException e) {
                     continue;
                 }
-                format = prefix;
+
+                format = prefix + ".%d";
                 break;
             }
 
             boolean advanced = Daedalus.getPrefs().getBoolean("settings_advanced_switch", false);
             statisticQuery = Daedalus.getPrefs().getBoolean("settings_count_query_times", false);
             Log.d(TAG, "tun0 add " + format + " pServ " + primaryServer + " sServ " + secondaryServer);
-            Inet4Address primaryDNSServer = InetAddressUtil.ipv4From(primaryServer);
-            Inet4Address secondaryDNSServer = InetAddressUtil.ipv4From(secondaryServer);
+
+            dnsServers = new HashMap<>();
+            String aliasPrimary = String.format(format, dnsServers.size() + 1);
+            dnsServers.put(aliasPrimary, primaryServer);
+            String aliasSecondary = String.format(format, dnsServers.size() + 1);
+            dnsServers.put(aliasSecondary, secondaryServer);
+
+            Inet4Address primaryDNSServer = InetAddressUtil.ipv4From(aliasPrimary);
+            Inet4Address secondaryDNSServer = InetAddressUtil.ipv4From(aliasSecondary);
+            Log.d(TAG, "listening on " + format + " pServ " + primaryDNSServer.getHostAddress() + " sServ " + secondaryDNSServer.getHostAddress());
             builder.setSession("Daedalus")
                     .addDnsServer(primaryDNSServer)
                     .addDnsServer(secondaryDNSServer)
