@@ -197,9 +197,9 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             String aliasSecondary;
             if (advanced) {
                 dnsServers = new HashMap<>();
-                aliasPrimary = String.format(format, dnsServers.size() + 1);
+                aliasPrimary = String.format(format, 2);
                 dnsServers.put(aliasPrimary, primaryServer);
-                aliasSecondary = String.format(format, dnsServers.size() + 1);
+                aliasSecondary = String.format(format, 3);
                 dnsServers.put(aliasSecondary, secondaryServer);
             } else {
                 aliasPrimary = primaryServer;

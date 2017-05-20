@@ -18,7 +18,7 @@
         </ListPreference>
         <EditTextPreference
                 android:key="dns_test_servers"
-                android:defaultValue="114.114.114.114,8.8.8.8"
+                android:defaultValue="10.0.0.2,10.0.0.3"
                 android:selectAllOnFocus="true"
                 android:singleLine="true"
                 android:title="@string/settings_dns_test_servers"/>
