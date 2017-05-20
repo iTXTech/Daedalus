@@ -1,6 +1,16 @@
 iTXTech Daedalus
 ===============
-__See the world outside through a CLEAN DNS.__
+__No root required Android DNS modifier and hosts/DNSMasq resolver.__
+
+[![Build Status](https://travis-ci.org/iTXTech/Daedalus.svg?branch=master)](https://travis-ci.org/iTXTech/Daedalus)
+
+Installation
+-------------
+__[Releases](https://github.com/iTXTech/Daedalus/releases)__
+
+[<img alt='Get it on Google Play'
+      src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'
+      height="80">](https://play.google.com/store/apps/details?id=org.itxtech.daedalus)
 
 Introduction
 -------------
@@ -31,10 +41,6 @@ Requirements
 * Minimum Android version: 4.0.3 (API 15) - __*Basic VPN functions*__
 * Recommended Android version: >= 5.0 (API 21) - __*Full features*__
 * Best Android version: >= 7.1 (API 25) - __*Launcher shortcuts*__
-
-Get Daedalus
--------------
-__[Releases](https://github.com/iTXTech/Daedalus/releases)__
 
 Open Source Licenses
 -------------
