@@ -206,7 +206,7 @@ public class RuleConfigFragment extends ConfigFragment {
         return view;
     }
 
-    private void save() {
+    private boolean save() {
         String ruleName = ((EditTextPreference) findPreference("ruleName")).getText();
         String ruleType = ((ListPreference) findPreference("ruleType")).getValue();
         String ruleFilename = ((EditTextPreference) findPreference("ruleFilename")).getText();
@@ -215,7 +215,7 @@ public class RuleConfigFragment extends ConfigFragment {
         if (ruleName.equals("") | ruleType.equals("") | ruleFilename.equals("") | ruleDownloadUrl.equals("")) {
             Snackbar.make(view, R.string.notice_fill_in_all, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
-            return;
+            return false;
         }
 
         if (id == ConfigActivity.ID_NONE) {
@@ -231,6 +231,7 @@ public class RuleConfigFragment extends ConfigFragment {
                 rule.setDownloadUrl(ruleDownloadUrl);
             }
         }
+        return true;
     }
 
     @Override
@@ -239,8 +240,9 @@ public class RuleConfigFragment extends ConfigFragment {
 
         switch (id) {
             case R.id.action_apply:
-                save();
-                getActivity().finish();
+                if (save()) {
+                    getActivity().finish();
+                }
                 break;
             case R.id.action_delete:
                 if (this.id != ConfigActivity.ID_NONE) {

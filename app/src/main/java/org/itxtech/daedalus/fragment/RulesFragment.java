@@ -19,6 +19,7 @@ import org.itxtech.daedalus.util.Rule;
 
 import java.io.File;
 import java.text.DecimalFormat;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Daedalus Project
@@ -119,6 +120,8 @@ public class RulesFragment extends Fragment {
     }
 
     private class RuleAdapter extends RecyclerView.Adapter<ViewHolder> {
+        private CopyOnWriteArrayList<ViewHolder> selectedItems = new CopyOnWriteArrayList<>();
+
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             Rule rule = Daedalus.configurations.getRules().get(position);
@@ -147,13 +150,17 @@ public class RulesFragment extends Fragment {
             return new ViewHolder(view);
         }
 
-        void checkType(Rule rule) {
-            for (Rule check : Daedalus.configurations.getRules()) {
-                if (check.getType() != rule.getType()) {
+        void checkType(Rule rule, ViewHolder holder) {
+            for (ViewHolder viewHolder : selectedItems) {
+                Rule check = Rule.getRuleById(viewHolder.getId());
+                if (check != null && check.getType() != rule.getType()) {
+                    viewHolder.view.setSelected(false);
                     check.setUsing(false);
+                    selectedItems.remove(viewHolder);
+                    notifyItemChanged(viewHolder.getLayoutPosition());
                 }
             }
-            notifyDataSetChanged();
+            selectedItems.add(holder);
         }
     }
 
@@ -180,6 +187,9 @@ public class RulesFragment extends Fragment {
             Rule rule = Rule.getRuleById(id);
             if (rule != null) {
                 view.setSelected(rule.isUsing());
+                if (view.isSelected()) {
+                    adapter.selectedItems.add(this);
+                }
             }
         }
 
@@ -189,11 +199,18 @@ public class RulesFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Rule rule = Rule.getRuleById(id);
-            if (rule != null) {
-                rule.setUsing(!v.isSelected());
-                v.setSelected(!v.isSelected());
-                //adapter.checkType(rule);
+            if (!Daedalus.getInstance().isServiceActivated()) {
+                Rule rule = Rule.getRuleById(id);
+                if (rule != null && !rule.isUsing()) {
+                    rule.setUsing(!v.isSelected());
+                    v.setSelected(!v.isSelected());
+                    if (v.isSelected()) {
+                        adapter.checkType(rule, this);
+                    }
+                }
+            } else {
+                Snackbar.make(view, R.string.notice_after_stop, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         }
 

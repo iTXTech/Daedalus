@@ -80,4 +80,5 @@
     <string name="settings_rule_filename">规则文件名</string>
     <string name="settings_rule_import">导入</string>
     <string name="settings_rule_import_build_in">从内置规则导入</string>
+    <string name="notice_after_stop">请在服务停止后更改启用的规则。</string>
 </resources>
