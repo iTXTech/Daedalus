@@ -201,7 +201,7 @@ public class RulesFragment extends Fragment {
         public void onClick(View v) {
             if (!Daedalus.getInstance().isServiceActivated()) {
                 Rule rule = Rule.getRuleById(id);
-                if (rule != null && !rule.isUsing()) {
+                if (rule != null) {
                     rule.setUsing(!v.isSelected());
                     v.setSelected(!v.isSelected());
                     if (v.isSelected()) {
