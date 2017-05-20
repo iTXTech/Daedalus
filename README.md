@@ -15,7 +15,7 @@ __[Releases](https://github.com/iTXTech/Daedalus/releases)__
 Introduction
 -------------
 This application can create a VPN tunnel to modify the DNS settings on Android.<br>
-Through the DNS which are provided by third parties, users can visit Google, Twitter and so on via https directly without a VPN.<br>
+Through the DNS server and rules which are provided by third parties, users can visit Google, Twitter and so on via https protocol directly without a VPN.<br>
 <br>
 Features:
 * No root access required, no ads contained

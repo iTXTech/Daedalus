@@ -15,6 +15,6 @@ android:
     - '.+'
 script:
   - chmod 777 gradlew
-  - ./gradlew clean assemble test jacocoTestReport
+  - ./gradlew clean assembleDebug
 after_success:
   - bash <(curl -s https://codecov.io/bash)
