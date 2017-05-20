@@ -1,0 +1,19 @@
+language: android
+jdk: oraclejdk8
+
+android:
+  components:
+    - tools # repository-11
+    - tools # upgrade tools
+    - platform-tools
+    - build-tools-25.0.3
+    - android-25
+    - extra-android-support
+    - extra-google-m2repository
+    - extra-android-m2repository
+  licenses:
+    - '.+'
+script:
+  - ./gradlew clean assemble test jacocoTestReport
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
