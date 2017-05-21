@@ -220,7 +220,7 @@ public class RuleConfigFragment extends ConfigFragment {
 
         if (id == ConfigActivity.ID_NONE) {
             Rule rule = new Rule(ruleName, ruleFilename, Integer.parseInt(ruleType), ruleDownloadUrl);
-            Daedalus.configurations.getRules().add(rule);
+            rule.addToConfig();
             id = Integer.parseInt(rule.getId());
         } else {
             Rule rule = Rule.getRuleById(String.valueOf(id));
@@ -251,7 +251,10 @@ public class RuleConfigFragment extends ConfigFragment {
                             .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Daedalus.configurations.getRules().remove(RuleConfigFragment.this.id);
+                                    Rule rule = Rule.getRuleById(String.valueOf(RuleConfigFragment.this.id));
+                                    if (rule != null) {
+                                        rule.removeFromConfig();
+                                    }
                                     getActivity().finish();
                                 }
                             })

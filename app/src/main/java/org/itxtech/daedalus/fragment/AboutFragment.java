@@ -1,7 +1,6 @@
 package org.itxtech.daedalus.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,7 +27,7 @@ import java.util.Locale;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class AboutFragment extends Fragment {
+public class AboutFragment extends ToolbarFragment {
     private WebView mWebView = null;
 
     @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled", "addJavascriptInterface"})
@@ -74,6 +73,12 @@ public class AboutFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    @Override
+    public void checkStatus() {
+        menu.findItem(R.id.nav_about).setChecked(true);
+        toolbar.setTitle(R.string.action_about);
     }
 
     @Override

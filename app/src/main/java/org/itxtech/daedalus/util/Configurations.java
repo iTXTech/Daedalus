@@ -28,7 +28,8 @@ public class Configurations {
 
     private ArrayList<CustomDnsServer> customDnsServers;
 
-    private ArrayList<Rule> rules;
+    private ArrayList<Rule> hostsRules;
+    private ArrayList<Rule> dnsmasqRules;
 
     private int totalDnsId;
     private int totalRuleId;
@@ -64,11 +65,36 @@ public class Configurations {
         return customDnsServers;
     }
 
-    public ArrayList<Rule> getRules() {
-        if (rules == null) {
-            rules = new ArrayList<>();
+    public ArrayList<Rule> getHostsRules() {
+        if (hostsRules == null) {
+            hostsRules = new ArrayList<>();
         }
-        return rules;
+        return hostsRules;
+    }
+
+    public ArrayList<Rule> getDnsmasqRules() {
+        if (dnsmasqRules == null) {
+            dnsmasqRules = new ArrayList<>();
+        }
+        return dnsmasqRules;
+    }
+
+    public ArrayList<Rule> getUsingRules() {
+        if (hostsRules != null && hostsRules.size() > 0) {
+            for (Rule rule : hostsRules) {
+                if (rule.isUsing()) {
+                    return hostsRules;
+                }
+            }
+        }
+        if (dnsmasqRules != null && dnsmasqRules.size() > 0) {
+            for (Rule rule : dnsmasqRules) {
+                if (rule.isUsing()) {
+                    return dnsmasqRules;
+                }
+            }
+        }
+        return hostsRules;
     }
 
     public static Configurations load(File file) {

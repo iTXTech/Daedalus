@@ -1,6 +1,5 @@
 package org.itxtech.daedalus.fragment;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -29,7 +28,7 @@ import org.itxtech.daedalus.util.DnsServerHelper;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class DnsServersFragment extends Fragment {
+public class DnsServersFragment extends ToolbarFragment {
     private DnsServersFragment.DnsServerAdapter adapter;
     private CustomDnsServer server = null;
 
@@ -80,6 +79,12 @@ public class DnsServersFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    @Override
+    public void checkStatus() {
+        menu.findItem(R.id.nav_dns_server).setChecked(true);
+        toolbar.setTitle(R.string.action_dns_servers);
     }
 
     private class SnackbarClickListener implements View.OnClickListener {

@@ -129,22 +129,23 @@ public class Daedalus extends Application {
     public static void initHostsResolver() {
         if (Daedalus.getPrefs().getBoolean("settings_local_rules_resolution", false)) {
             ArrayList<String> pendingLoad = new ArrayList<>();
-            int type = Rule.TYPE_HOSTS;
-            for (Rule rule : configurations.getRules()) {
+            ArrayList<Rule> usingRules = configurations.getUsingRules();
+            for (Rule rule : usingRules) {
                 if (rule.isUsing()) {
                     pendingLoad.add(rulesPath + rule.getFileName());
-                    type = rule.getType(); //Only one type and they should the same
                 }
             }
-            String[] arr = new String[pendingLoad.size()];
-            pendingLoad.toArray(arr);
-            switch (type) {
-                case Rule.TYPE_HOSTS:
-                    RulesResolver.startLoadHosts(arr);
-                    break;
-                case Rule.TYPE_DNAMASQ:
-                    RulesResolver.startLoadDnsmasq(arr);
-                    break;
+            if (pendingLoad.size() > 0) {
+                String[] arr = new String[pendingLoad.size()];
+                pendingLoad.toArray(arr);
+                switch (usingRules.get(0).getType()) {
+                    case Rule.TYPE_HOSTS:
+                        RulesResolver.startLoadHosts(arr);
+                        break;
+                    case Rule.TYPE_DNAMASQ:
+                        RulesResolver.startLoadDnsmasq(arr);
+                        break;
+                }
             }
         }
     }

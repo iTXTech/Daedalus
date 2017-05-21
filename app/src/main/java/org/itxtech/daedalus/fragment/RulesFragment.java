@@ -1,14 +1,15 @@
 package org.itxtech.daedalus.fragment;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -19,7 +20,7 @@ import org.itxtech.daedalus.util.Rule;
 
 import java.io.File;
 import java.text.DecimalFormat;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
 
 /**
  * Daedalus Project
@@ -32,15 +33,24 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class RulesFragment extends Fragment {
-
+public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItemClickListener {
     private View view = null;
     private RuleAdapter adapter;
     private Rule rule = null;
+    private int currentType;
+
+    private ArrayList<Rule> getRules() {
+        if (currentType == Rule.TYPE_HOSTS) {
+            return Daedalus.configurations.getHostsRules();
+        } else {
+            return Daedalus.configurations.getDnsmasqRules();
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_rules, container, false);
+        currentType = Rule.TYPE_HOSTS;
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_rules);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
@@ -69,8 +79,8 @@ public class RulesFragment extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
-                rule = Daedalus.configurations.getRules().get(position);
-                Daedalus.configurations.getRules().remove(position);
+                rule = getRules().get(position);
+                getRules().remove(position);
                 Snackbar.make(view, R.string.action_removed, Snackbar.LENGTH_LONG)
                         .setAction(R.string.action_undo, new SnackbarClickListener(position)).show();
                 adapter.notifyItemRemoved(position);
@@ -89,6 +99,31 @@ public class RulesFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    @Override
+    public void checkStatus() {
+        menu.findItem(R.id.nav_rules).setChecked(true);
+        toolbar.inflateMenu(R.menu.rules);
+        toolbar.setTitle(R.string.action_rules);
+        toolbar.setOnMenuItemClickListener(this);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_change_type) {
+            if (currentType == Rule.TYPE_HOSTS) {
+                currentType = Rule.TYPE_DNAMASQ;
+                item.setTitle("DNSMasq");
+            } else if (currentType == Rule.TYPE_DNAMASQ) {
+                currentType = Rule.TYPE_HOSTS;
+                item.setTitle("Hosts");
+            }
+            adapter.notifyDataSetChanged();
+        }
+        return true;
     }
 
     @Override
@@ -117,17 +152,21 @@ public class RulesFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Daedalus.configurations.getRules().add(position, rule);
-            adapter.notifyItemInserted(position);
+            if (rule.getType() == Rule.TYPE_HOSTS) {
+                Daedalus.configurations.getHostsRules().add(position, rule);
+            } else if (rule.getType() == Rule.TYPE_DNAMASQ) {
+                Daedalus.configurations.getDnsmasqRules().add(position, rule);
+            }
+            if (currentType == rule.getType()) {
+                adapter.notifyItemInserted(position);
+            }
         }
     }
 
     private class RuleAdapter extends RecyclerView.Adapter<ViewHolder> {
-        private CopyOnWriteArrayList<ViewHolder> selectedItems = new CopyOnWriteArrayList<>();
-
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            Rule rule = Daedalus.configurations.getRules().get(position);
+            Rule rule = getRules().get(position);
             holder.setId(rule.getId());
             holder.textViewName.setText(rule.getName());
             holder.textViewAddress.setText(rule.getFileName());
@@ -144,26 +183,13 @@ public class RulesFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return Daedalus.configurations.getRules().size();
+            return getRules().size();
         }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_rule, parent, false);
             return new ViewHolder(view);
-        }
-
-        void checkType(Rule rule, ViewHolder holder) {
-            for (ViewHolder viewHolder : selectedItems) {
-                Rule check = Rule.getRuleById(viewHolder.getId());
-                if (check != null && check.getType() != rule.getType()) {
-                    viewHolder.view.setSelected(false);
-                    check.setUsing(false);
-                    selectedItems.remove(viewHolder);
-                    notifyItemChanged(viewHolder.getLayoutPosition());
-                }
-            }
-            selectedItems.add(holder);
         }
     }
 
@@ -190,9 +216,6 @@ public class RulesFragment extends Fragment {
             Rule rule = Rule.getRuleById(id);
             if (rule != null) {
                 view.setSelected(rule.isUsing());
-                if (view.isSelected()) {
-                    adapter.selectedItems.add(this);
-                }
             }
         }
 
@@ -207,9 +230,6 @@ public class RulesFragment extends Fragment {
                 if (rule != null) {
                     rule.setUsing(!v.isSelected());
                     v.setSelected(!v.isSelected());
-                    if (v.isSelected()) {
-                        adapter.checkType(rule, this);
-                    }
                 }
             } else {
                 Snackbar.make(view, R.string.notice_after_stop, Snackbar.LENGTH_LONG)

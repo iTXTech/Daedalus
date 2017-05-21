@@ -51,6 +51,17 @@ public class Rule {
 
     public void setUsing(boolean using) {
         this.using = using;
+        if (using) {
+            if (type == TYPE_HOSTS) {
+                for (Rule rule : Daedalus.configurations.getDnsmasqRules()) {
+                    rule.setUsing(false);
+                }
+            } else if (type == TYPE_DNAMASQ) {
+                for (Rule rule : Daedalus.configurations.getHostsRules()) {
+                    rule.setUsing(false);
+                }
+            }
+        }
     }
 
     public boolean isUsing() {
@@ -82,7 +93,9 @@ public class Rule {
     }
 
     public void setType(int type) {
+        this.removeFromConfig();
         this.type = type;
+        this.addToConfig();
     }
 
     public void setDownloadUrl(String downloadUrl) {
@@ -91,6 +104,22 @@ public class Rule {
 
     public boolean isServiceAndUsing() {
         return Daedalus.getInstance().isServiceActivated() && isUsing();
+    }
+
+    public void addToConfig() {
+        if (getType() == Rule.TYPE_HOSTS) {
+            Daedalus.configurations.getHostsRules().add(this);
+        } else if (getType() == Rule.TYPE_DNAMASQ) {
+            Daedalus.configurations.getDnsmasqRules().add(this);
+        }
+    }
+
+    public void removeFromConfig() {
+        if (getType() == Rule.TYPE_HOSTS) {
+            Daedalus.configurations.getHostsRules().remove(this);
+        } else if (getType() == Rule.TYPE_DNAMASQ) {
+            Daedalus.configurations.getDnsmasqRules().remove(this);
+        }
     }
 
 
@@ -114,7 +143,12 @@ public class Rule {
     }
 
     public static Rule getRuleById(String id) {
-        for (Rule rule : Daedalus.configurations.getRules()) {
+        for (Rule rule : Daedalus.configurations.getHostsRules()) {
+            if (rule.getId().equals(id)) {
+                return rule;
+            }
+        }
+        for (Rule rule : Daedalus.configurations.getDnsmasqRules()) {
             if (rule.getId().equals(id)) {
                 return rule;
             }

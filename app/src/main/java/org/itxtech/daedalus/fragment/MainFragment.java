@@ -1,7 +1,6 @@
 package org.itxtech.daedalus.fragment;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.VpnService;
@@ -30,7 +29,7 @@ import org.itxtech.daedalus.util.DnsServerHelper;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class MainFragment extends Fragment {
+public class MainFragment extends ToolbarFragment {
 
     private View view = null;
     public static MainFragmentHandler mHandler = null;
@@ -59,6 +58,12 @@ public class MainFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void checkStatus() {
+        menu.findItem(R.id.nav_home).setChecked(true);
+        toolbar.setTitle(R.string.action_home);
     }
 
     @Override

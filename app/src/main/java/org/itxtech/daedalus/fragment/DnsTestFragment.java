@@ -1,6 +1,5 @@
 package org.itxtech.daedalus.fragment;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,7 +40,7 @@ import java.util.Set;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class DnsTestFragment extends Fragment {
+public class DnsTestFragment extends ToolbarFragment {
     private static final String TAG = "DServerTest";
 
     private static Thread mThread = null;
@@ -154,6 +153,12 @@ public class DnsTestFragment extends Fragment {
         mHandler.setViews(startTestBut, textViewTestInfo);
 
         return view;
+    }
+
+    @Override
+    public void checkStatus() {
+        menu.findItem(R.id.nav_dns_test).setChecked(true);
+        toolbar.setTitle(R.string.action_dns_test);
     }
 
     @Override

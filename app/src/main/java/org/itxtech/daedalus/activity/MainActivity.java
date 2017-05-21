@@ -14,7 +14,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DnsTestFragment mDnsTest;
     private SettingsFragment mSettings;
     private AboutFragment mAbout;
-    private RulesFragment mHosts;
+    private RulesFragment mRules;
     private DnsServersFragment mDnsServers;
     private int currentFragment = FRAGMENT_NONE;
 
@@ -105,68 +104,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        updateTitle();
-        updateNavigationMenu();
-    }
-
-    private void updateNavigationMenu() {
-        Menu menu = ((NavigationView) findViewById(R.id.nav_view)).getMenu();
         switch (currentFragment) {
             case FRAGMENT_MAIN:
-                menu.findItem(R.id.nav_home).setChecked(true);
+                mMain.checkStatus();
                 break;
             case FRAGMENT_DNS_TEST:
-                menu.findItem(R.id.nav_dns_test).setChecked(true);
+                mDnsTest.checkStatus();
                 break;
             case FRAGMENT_SETTINGS:
-                menu.findItem(R.id.nav_settings).setChecked(true);
+                mSettings.checkStatus();
                 break;
             case FRAGMENT_ABOUT:
-                menu.findItem(R.id.nav_about).setChecked(true);
+                mAbout.checkStatus();
                 break;
             case FRAGMENT_RULES:
-                menu.findItem(R.id.nav_rules).setChecked(true);
+                mRules.checkStatus();
                 break;
             case FRAGMENT_DNS_SERVERS:
-                menu.findItem(R.id.nav_dns_server).setChecked(true);
-        }
-    }
-
-    private void updateTitle() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        switch (currentFragment) {
-            case FRAGMENT_MAIN:
-                toolbar.setTitle(R.string.action_home);
-                break;
-            case FRAGMENT_DNS_TEST:
-                toolbar.setTitle(R.string.action_dns_test);
-                break;
-            case FRAGMENT_SETTINGS:
-                toolbar.setTitle(R.string.action_settings);
-                break;
-            case FRAGMENT_ABOUT:
-                toolbar.setTitle(R.string.action_about);
-                break;
-            case FRAGMENT_RULES:
-                toolbar.setTitle(R.string.action_rules);
-                break;
-            case FRAGMENT_DNS_SERVERS:
-                toolbar.setTitle(R.string.action_dns_servers);
-                break;
+                mDnsServers.checkStatus();
         }
     }
 
     private void switchFragment(int fragment) {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         switch (fragment) {
             case FRAGMENT_MAIN:
                 if (mMain == null) {
                     mMain = new MainFragment();
                 }
                 transaction.replace(R.id.id_content, mMain);
-                toolbar.setTitle(R.string.action_home);
                 currentFragment = FRAGMENT_MAIN;
                 break;
             case FRAGMENT_DNS_TEST:
@@ -174,7 +141,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     mDnsTest = new DnsTestFragment();
                 }
                 transaction.replace(R.id.id_content, mDnsTest);
-                toolbar.setTitle(R.string.action_dns_test);
                 currentFragment = FRAGMENT_DNS_TEST;
                 break;
             case FRAGMENT_SETTINGS:
@@ -182,7 +148,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     mSettings = new SettingsFragment();
                 }
                 transaction.replace(R.id.id_content, mSettings);
-                toolbar.setTitle(R.string.action_settings);
                 currentFragment = FRAGMENT_SETTINGS;
                 break;
             case FRAGMENT_ABOUT:
@@ -190,15 +155,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     mAbout = new AboutFragment();
                 }
                 transaction.replace(R.id.id_content, mAbout);
-                toolbar.setTitle(R.string.action_about);
                 currentFragment = FRAGMENT_ABOUT;
                 break;
             case FRAGMENT_RULES:
-                if (mHosts == null) {
-                    mHosts = new RulesFragment();
+                if (mRules == null) {
+                    mRules = new RulesFragment();
                 }
-                transaction.replace(R.id.id_content, mHosts);
-                toolbar.setTitle(R.string.action_rules);
+                transaction.replace(R.id.id_content, mRules);
                 currentFragment = FRAGMENT_RULES;
                 break;
             case FRAGMENT_DNS_SERVERS:
@@ -206,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     mDnsServers = new DnsServersFragment();
                 }
                 transaction.replace(R.id.id_content, mDnsServers);
-                toolbar.setTitle(R.string.action_dns_servers);
                 currentFragment = FRAGMENT_DNS_SERVERS;
                 break;
         }
@@ -220,7 +182,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         } else if (currentFragment != FRAGMENT_MAIN) {
             switchFragment(FRAGMENT_MAIN);
-            updateNavigationMenu();
         } else {
             super.onBackPressed();
         }
@@ -235,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDnsTest = null;
         mSettings = null;
         mAbout = null;
-        mHosts = null;
+        mRules = null;
         instance = null;
     }
 
@@ -263,7 +224,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int fragment = intent.getIntExtra(LAUNCH_FRAGMENT, FRAGMENT_NONE);
         if (fragment != FRAGMENT_NONE) {
             switchFragment(fragment);
-            updateNavigationMenu();
         }
     }
 
