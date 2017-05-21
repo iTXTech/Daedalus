@@ -65,6 +65,8 @@ public class Daedalus extends Application {
                 "https://raw.githubusercontent.com/fengixng/google-hosts/master/hosts", false));
         add(new Rule("sy618/hosts", "sy618.hosts", Rule.TYPE_HOSTS,
                 "https://raw.githubusercontent.com/sy618/hosts/master/ADFQ", false));
+        add(new Rule("vokins/yhosts", "vokins.hosts", Rule.TYPE_HOSTS,
+                "https://raw.githubusercontent.com/vokins/yhosts/master/hosts", false));
         //Build-in DNSMasq rule providers
         add(new Rule("sy618/hosts/dnsad", "dnsad.dnsmasq", Rule.TYPE_DNAMASQ,
                 "https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsad", false));
