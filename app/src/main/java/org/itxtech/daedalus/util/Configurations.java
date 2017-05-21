@@ -97,6 +97,24 @@ public class Configurations {
         return hostsRules;
     }
 
+    public int getUsingRuleType() {
+        if (hostsRules != null && hostsRules.size() > 0) {
+            for (Rule rule : hostsRules) {
+                if (rule.isUsing()) {
+                    return Rule.TYPE_HOSTS;
+                }
+            }
+        }
+        if (dnsmasqRules != null && dnsmasqRules.size() > 0) {
+            for (Rule rule : dnsmasqRules) {
+                if (rule.isUsing()) {
+                    return Rule.TYPE_DNAMASQ;
+                }
+            }
+        }
+        return Rule.TYPE_HOSTS;
+    }
+
     public static Configurations load(File file) {
         Configurations.file = file;
         Configurations config = null;

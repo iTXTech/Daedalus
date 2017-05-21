@@ -50,7 +50,7 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_rules, container, false);
-        currentType = Rule.TYPE_HOSTS;
+        currentType = Daedalus.configurations.getUsingRuleType();
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_rules);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
@@ -107,6 +107,7 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
         toolbar.inflateMenu(R.menu.rules);
         toolbar.setTitle(R.string.action_rules);
         toolbar.setOnMenuItemClickListener(this);
+        toolbar.getMenu().findItem(R.id.action_change_type).setTitle(Rule.getTypeById(currentType));
     }
 
     @Override
@@ -116,11 +117,10 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
         if (id == R.id.action_change_type) {
             if (currentType == Rule.TYPE_HOSTS) {
                 currentType = Rule.TYPE_DNAMASQ;
-                item.setTitle("DNSMasq");
             } else if (currentType == Rule.TYPE_DNAMASQ) {
                 currentType = Rule.TYPE_HOSTS;
-                item.setTitle("Hosts");
             }
+            toolbar.getMenu().findItem(R.id.action_change_type).setTitle(Rule.getTypeById(currentType));
             adapter.notifyDataSetChanged();
         }
         return true;

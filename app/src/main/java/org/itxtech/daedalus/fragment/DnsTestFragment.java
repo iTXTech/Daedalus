@@ -175,11 +175,10 @@ public class DnsTestFragment extends ToolbarFragment {
     private static void stopThread() {
         try {
             if (mThread != null) {
-                mThread.join(1);
+                mThread.interrupt();
                 mThread = null;
             }
-        } catch (Exception e) {
-            Log.e(TAG, e.toString());
+        } catch (Exception ignored) {
         }
     }
 

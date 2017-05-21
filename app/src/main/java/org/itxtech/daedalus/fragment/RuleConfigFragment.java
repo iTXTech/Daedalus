@@ -213,7 +213,7 @@ public class RuleConfigFragment extends ConfigFragment {
         String ruleDownloadUrl = ((EditTextPreference) findPreference("ruleDownloadUrl")).getText();
 
         if (ruleName.equals("") | ruleType.equals("") | ruleFilename.equals("") | ruleDownloadUrl.equals("")) {
-            Snackbar.make(view, R.string.notice_fill_in_all, Snackbar.LENGTH_LONG)
+            Snackbar.make(view, R.string.notice_fill_in_all, Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show();
             return false;
         }
@@ -318,7 +318,7 @@ public class RuleConfigFragment extends ConfigFragment {
                         e.printStackTrace();
                     }
 
-                    Snackbar.make(view, R.string.notice_downloaded, Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, R.string.notice_downloaded, Snackbar.LENGTH_SHORT)
                             .setAction("Action", null).show();
                     break;
             }
