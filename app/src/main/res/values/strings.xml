@@ -42,17 +42,12 @@
     <string name="nav_github">GitHub</string>
     <string name="settings_advanced">Advanced System Settings</string>
     <string name="settings_advanced_on">On</string>
-    <string name="settings_local_rules_resolution">Local hosts resolution</string>
+    <string name="settings_local_rules_resolution">Local rules resolution</string>
     <string name="notice_need_restart">Re-activate Daedalus to make the settings take effect.</string>
     <string name="action_rules">Rules</string>
-    <string name="button_text_download_hosts">Download hosts</string>
     <string name="notice_start_download">Downloading rule, please wait …</string>
     <string name="notice_downloaded">Rule has been downloaded.</string>
     <string name="notice_now_downloading">Daedalus is currently downloading rule, please wait.</string>
-    <string name="hosts_not_found">Local hosts not found.</string>
-    <string name="hosts_path">Local hosts path:</string>
-    <string name="hosts_last_modified">Last modified:</string>
-    <string name="hosts_size">Size:</string>
     <string name="action_dns_servers">Servers</string>
     <string name="settings_server_name">Server Name</string>
     <string name="settings_server_address">Server Address</string>
@@ -64,7 +59,6 @@
     <string name="action_removed">Removed.</string>
     <string name="action_undo">Undo</string>
     <string name="button_text_download_dnsmasq">Download DNSMasq configuration</string>
-    <string name="dnsmasq_path">Local DNSMasq configurations path:</string>
     <string name="notice_delete_confirm_prompt">Are you sure you want to remove this configuration?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>

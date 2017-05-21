@@ -46,14 +46,9 @@
     <string name="settings_local_rules_resolution">本地规则解析</string>
     <string name="notice_need_restart">重新启用 Daedalus 以应用设置。</string>
     <string name="action_rules">规则</string>
-    <string name="button_text_download_hosts">下载 hosts</string>
     <string name="notice_start_download">正在下载规则，请稍等 ……</string>
     <string name="notice_downloaded">已下载规则。</string>
     <string name="notice_now_downloading">Daedalus 当前正在下载规则，请稍等。</string>
-    <string name="hosts_not_found">找不到本地 hosts 文件。</string>
-    <string name="hosts_path">本地 hosts 路径:</string>
-    <string name="hosts_last_modified">最后修改:</string>
-    <string name="hosts_size">大小:</string>
     <string name="action_dns_servers">服务器</string>
     <string name="settings_server_name">服务器名称</string>
     <string name="settings_server_address">服务器地址</string>
