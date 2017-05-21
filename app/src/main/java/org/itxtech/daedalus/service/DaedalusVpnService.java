@@ -257,10 +257,9 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             lastUpdate = time;
             if (notification != null) {
                 notification.setContentTitle(getResources().getString(R.string.notification_queries) + " " + String.valueOf(provider.getDnsQueryTimes()));
+                NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.notify(NOTIFICATION_ACTIVATED, notification.build());
             }
-
-            NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-            manager.notify(NOTIFICATION_ACTIVATED, notification.build());
         }
     }
 
