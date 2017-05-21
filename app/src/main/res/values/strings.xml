@@ -81,4 +81,6 @@
     <string name="settings_rule_import">Import</string>
     <string name="settings_rule_import_build_in">Import from build in rules</string>
     <string name="notice_after_stop">Please modify activated rules after stopping service.</string>
+    <string name="settings_manual">Manual</string>
+    <string name="settings_manual_summary">Visit GitHub wiki page.</string>
 </resources>

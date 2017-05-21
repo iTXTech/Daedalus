@@ -72,5 +72,9 @@
                 android:key="settings_issue_tracker"
                 android:title="@string/settings_bug_report"
                 android:summary="@string/settings_issue_summary"/>
+        <org.itxtech.daedalus.widget.ClickPreference
+                android:key="settings_manual"
+                android:title="@string/settings_manual"
+                android:summary="@string/settings_manual_summary"/>
     </PreferenceCategory>
 </PreferenceScreen>

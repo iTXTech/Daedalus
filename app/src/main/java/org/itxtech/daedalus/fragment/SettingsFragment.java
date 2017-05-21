@@ -93,8 +93,7 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
 
-        ListPreference checkUpdate = (ListPreference) findPreference("settings_check_update");
-        checkUpdate.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        findPreference("settings_check_update").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus/releases")));
@@ -102,11 +101,18 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
 
-        ListPreference issueTracker = (ListPreference) findPreference("settings_issue_tracker");
-        issueTracker.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        findPreference("settings_issue_tracker").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus/issues")));
+                return false;
+            }
+        });
+
+        findPreference("settings_manual").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus/wiki")));
                 return false;
             }
         });

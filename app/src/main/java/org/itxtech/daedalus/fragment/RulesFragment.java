@@ -53,6 +53,8 @@ public class RulesFragment extends Fragment {
                 if (viewHolder instanceof RulesFragment.ViewHolder) {
                     Rule rule = Rule.getRuleById(((ViewHolder) viewHolder).getId());
                     if (rule != null && rule.isServiceAndUsing()) {
+                        Snackbar.make(view, R.string.notice_after_stop, Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
                         return 0;
                     }
                 }
@@ -94,6 +96,7 @@ public class RulesFragment extends Fragment {
         super.onDestroyView();
 
         Daedalus.configurations.save();
+        view = null;
         adapter = null;
         rule = null;
     }
@@ -222,6 +225,9 @@ public class RulesFragment extends Fragment {
                         .putExtra(ConfigActivity.LAUNCH_ACTION_ID, Integer.parseInt(id))
                         .putExtra(ConfigActivity.LAUNCH_ACTION_FRAGMENT, ConfigActivity.LAUNCH_FRAGMENT_RULE)
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            } else {
+                Snackbar.make(view, R.string.notice_after_stop, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
             return true;
         }

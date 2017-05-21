@@ -36,6 +36,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_marginTop="10dp"
                 android:id="@+id/textView_test_info"
+                android:textIsSelectable="true"
                 android:textSize="18sp"/>
         <org.itxtech.daedalus.widget.ClearAutoCompleteTextView
                 android:completionThreshold="1"

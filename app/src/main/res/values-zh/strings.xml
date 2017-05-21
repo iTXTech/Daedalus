@@ -27,7 +27,7 @@
     <string name="settings_count_number_of_queries">统计 DNS 查询次数</string>
     <string name="notification_queries">DNS 查询次数:</string>
     <string name="notice_legacy_api">当前 Android API 无法支持所有功能。</string>
-    <string name="settings_bug_report">提交一个 Bug</string>
+    <string name="settings_bug_report">提交反馈</string>
     <string name="settings_issue_summary">前往 GitHub 提交 Bug 反馈。</string>
     <string name="settings_dns_test_servers">DNS 测试服务器</string>
     <string name="navigation_drawer_close">关闭导航栏</string>
@@ -81,4 +81,6 @@
     <string name="settings_rule_import">导入</string>
     <string name="settings_rule_import_build_in">从内置规则导入</string>
     <string name="notice_after_stop">请在服务停止后更改启用的规则。</string>
+    <string name="settings_manual">使用手册</string>
+    <string name="settings_manual_summary">访问 GitHub wiki 页面。</string>
 </resources>
