@@ -44,8 +44,6 @@
     <string name="settings_advanced_on">On</string>
     <string name="settings_local_rules_resolution">Local hosts resolution</string>
     <string name="notice_need_restart">Re-activate Daedalus to make the settings take effect.</string>
-    <string name="notice_need_storage_perm">Daedalus requires access to external storage for local rules resolution.
-    </string>
     <string name="action_rules">Rules</string>
     <string name="button_text_download_hosts">Download hosts</string>
     <string name="notice_start_download">Downloading rule, please wait …</string>

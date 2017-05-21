@@ -1,19 +1,16 @@
 package org.itxtech.daedalus;
 
-import android.Manifest;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -129,24 +126,8 @@ public class Daedalus extends Application {
         return gson.fromJson(reader, beanClass);
     }
 
-    public static final int REQUEST_EXTERNAL_STORAGE = 1;
-    public static final String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
-
     public static void initHostsResolver() {
         if (Daedalus.getPrefs().getBoolean("settings_local_rules_resolution", false)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                int permission = ActivityCompat.checkSelfPermission(Daedalus.getInstance(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                if (MainActivity.getInstance() != null) {
-                    if (permission != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(MainActivity.getInstance(), PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
-                    }
-                } else if (permission != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-            }
             ArrayList<String> pendingLoad = new ArrayList<>();
             int type = Rule.TYPE_HOSTS;
             for (Rule rule : configurations.getRules()) {

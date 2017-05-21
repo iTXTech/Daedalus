@@ -1,18 +1,13 @@
 package org.itxtech.daedalus.activity;
 
-import android.Manifest;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -106,39 +101,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.d(TAG, "onCreate");
     }
 
-    private void checkStorage() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int permission = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            if (permission != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, Daedalus.PERMISSIONS_STORAGE, Daedalus.REQUEST_EXTERNAL_STORAGE);
-            }
-        }
-        getExternalFilesDir(null);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case Daedalus.REQUEST_EXTERNAL_STORAGE:
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Snackbar.make(findViewById(R.id.id_content), R.string.notice_need_storage_perm, Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-
-    }
-
     @Override
     public void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
         updateTitle();
         updateNavigationMenu();
-
-        checkStorage();
     }
 
     private void updateNavigationMenu() {

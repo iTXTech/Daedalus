@@ -45,7 +45,6 @@
     <string name="settings_advanced_on">开启</string>
     <string name="settings_local_rules_resolution">本地规则解析</string>
     <string name="notice_need_restart">重新启用 Daedalus 以应用设置。</string>
-    <string name="notice_need_storage_perm">Daedalus 需要访问外部储存以实现本地规则解析。</string>
     <string name="action_rules">规则</string>
     <string name="button_text_download_hosts">下载 hosts</string>
     <string name="notice_start_download">正在下载规则，请稍等 ……</string>
