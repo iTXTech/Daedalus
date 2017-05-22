@@ -204,12 +204,12 @@ public class DnsTestFragment extends ToolbarFragment {
 
             switch (msg.what) {
                 case MSG_DISPLAY_STATUS:
-                    if (MainActivity.getInstance().getCurrentFragment() == MainActivity.FRAGMENT_DNS_TEST) {
+                    if (MainActivity.getInstance().getCurrentFragment() instanceof DnsTestFragment) {
                         textViewTestInfo.setText((String) msg.obj);
                     }
                     break;
                 case MSG_TEST_DONE:
-                    if (MainActivity.getInstance().getCurrentFragment() == MainActivity.FRAGMENT_DNS_TEST) {
+                    if (MainActivity.getInstance().getCurrentFragment() instanceof DnsTestFragment) {
                         startTestBtn.setVisibility(View.VISIBLE);
                     }
                     stopThread();

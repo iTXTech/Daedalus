@@ -1,26 +1,32 @@
 package org.itxtech.daedalus.activity;
 
+import android.app.Activity;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.net.VpnService;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.TextView;
 import org.itxtech.daedalus.BuildConfig;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.fragment.*;
+import org.itxtech.daedalus.service.DaedalusVpnService;
+import org.itxtech.daedalus.util.DnsServerHelper;
 
 /**
  * Daedalus Project
@@ -53,19 +59,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private static MainActivity instance = null;
 
-    private MainFragment mMain;
-    private DnsTestFragment mDnsTest;
-    private SettingsFragment mSettings;
-    private AboutFragment mAbout;
-    private RulesFragment mRules;
-    private DnsServersFragment mDnsServers;
-    private int currentFragment = FRAGMENT_NONE;
+    private ToolbarFragment currentFragment;
 
     public static MainActivity getInstance() {
         return instance;
     }
 
-    public int getCurrentFragment() {
+    public ToolbarFragment getCurrentFragment() {
         return currentFragment;
     }
 
@@ -92,10 +92,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.textView_nav_version)).setText(getString(R.string.nav_version) + " " + BuildConfig.VERSION_NAME);
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.textView_nav_git_commit)).setText(getString(R.string.nav_git_commit) + " " + BuildConfig.GIT_COMMIT);
 
-        if (getIntent().getIntExtra(LAUNCH_FRAGMENT, FRAGMENT_NONE) == FRAGMENT_NONE) {
-            switchFragment(FRAGMENT_MAIN);
-        }
-
         updateUserInterface(getIntent());
         Log.d(TAG, "onCreate");
     }
@@ -104,75 +100,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        switch (currentFragment) {
-            case FRAGMENT_MAIN:
-                mMain.checkStatus();
-                break;
-            case FRAGMENT_DNS_TEST:
-                mDnsTest.checkStatus();
-                break;
-            case FRAGMENT_SETTINGS:
-                mSettings.checkStatus();
-                break;
-            case FRAGMENT_ABOUT:
-                mAbout.checkStatus();
-                break;
-            case FRAGMENT_RULES:
-                mRules.checkStatus();
-                break;
-            case FRAGMENT_DNS_SERVERS:
-                mDnsServers.checkStatus();
-        }
+        currentFragment.checkStatus();
     }
 
-    private void switchFragment(int fragment) {
+    private void switchFragment(ToolbarFragment fragment) {
         FragmentManager fm = getFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
-        switch (fragment) {
-            case FRAGMENT_MAIN:
-                if (mMain == null) {
-                    mMain = new MainFragment();
-                }
-                transaction.replace(R.id.id_content, mMain);
-                currentFragment = FRAGMENT_MAIN;
-                break;
-            case FRAGMENT_DNS_TEST:
-                if (mDnsTest == null) {
-                    mDnsTest = new DnsTestFragment();
-                }
-                transaction.replace(R.id.id_content, mDnsTest);
-                currentFragment = FRAGMENT_DNS_TEST;
-                break;
-            case FRAGMENT_SETTINGS:
-                if (mSettings == null) {
-                    mSettings = new SettingsFragment();
-                }
-                transaction.replace(R.id.id_content, mSettings);
-                currentFragment = FRAGMENT_SETTINGS;
-                break;
-            case FRAGMENT_ABOUT:
-                if (mAbout == null) {
-                    mAbout = new AboutFragment();
-                }
-                transaction.replace(R.id.id_content, mAbout);
-                currentFragment = FRAGMENT_ABOUT;
-                break;
-            case FRAGMENT_RULES:
-                if (mRules == null) {
-                    mRules = new RulesFragment();
-                }
-                transaction.replace(R.id.id_content, mRules);
-                currentFragment = FRAGMENT_RULES;
-                break;
-            case FRAGMENT_DNS_SERVERS:
-                if (mDnsServers == null) {
-                    mDnsServers = new DnsServersFragment();
-                }
-                transaction.replace(R.id.id_content, mDnsServers);
-                currentFragment = FRAGMENT_DNS_SERVERS;
-                break;
-        }
-        transaction.commit();
+        fm.beginTransaction().replace(R.id.id_content, fragment).commit();
+        currentFragment = fragment;
     }
 
     @Override
@@ -180,8 +114,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (currentFragment != FRAGMENT_MAIN) {
-            switchFragment(FRAGMENT_MAIN);
+        } else if (!(currentFragment instanceof MainFragment)) {
+            switchFragment(new MainFragment());
         } else {
             super.onBackPressed();
         }
@@ -192,11 +126,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onDestroy();
 
         Log.d(TAG, "onDestroy");
-        mMain = null;
-        mDnsTest = null;
-        mSettings = null;
-        mAbout = null;
-        mRules = null;
         instance = null;
     }
 
@@ -207,23 +136,100 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         updateUserInterface(intent);
     }
 
+    public void activateService() {
+        Intent intent = VpnService.prepare(Daedalus.getInstance());
+        if (intent != null) {
+            startActivityForResult(intent, 0);
+        } else {
+            onActivityResult(0, Activity.RESULT_OK, null);
+        }
+
+        long activateCounter = Daedalus.configurations.getActivateCounter();
+        if (activateCounter == -1) {
+            return;
+        }
+        activateCounter++;
+        Daedalus.configurations.setActivateCounter(activateCounter);
+        if (activateCounter % 20 == 0) {
+            new AlertDialog.Builder(this)
+                    .setTitle("觉得还不错？")
+                    .setMessage("您的支持是我动力来源！\n请考虑为我买杯咖啡醒醒脑，甚至其他…… ;)")
+                    .setPositiveButton("为我买杯咖啡", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Daedalus.donate();
+                            new AlertDialog.Builder(MainActivity.this)
+                                    .setMessage("感谢您的支持！;)\n我会再接再厉！")
+                                    .setPositiveButton("确认", null)
+                                    .show();
+                        }
+                    })
+                    .setNeutralButton("不再显示", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Daedalus.configurations.setActivateCounter(-1);
+                        }
+                    })
+                    .setNegativeButton("取消", null)
+                    .show();
+        }
+    }
+
+    public void onActivityResult(int request, int result, Intent data) {
+        if (result == Activity.RESULT_OK) {
+            DaedalusVpnService.primaryServer = DnsServerHelper.getAddressById(DnsServerHelper.getPrimary());
+            DaedalusVpnService.secondaryServer = DnsServerHelper.getAddressById(DnsServerHelper.getSecondary());
+
+            Daedalus.getInstance().startService(Daedalus.getInstance().getServiceIntent().setAction(DaedalusVpnService.ACTION_ACTIVATE));
+
+            updateMainButton(R.string.button_text_deactivate);
+
+            Daedalus.updateShortcut(Daedalus.getInstance());
+        }
+    }
+
+    private void updateMainButton(int id) {
+        if (currentFragment instanceof MainFragment) {
+            Button button = (Button) currentFragment.getView().findViewById(R.id.button_activate);
+            button.setText(id);
+        }
+    }
+
     private void updateUserInterface(Intent intent) {
         Log.d(TAG, "Updating user interface");
         int launchAction = intent.getIntExtra(LAUNCH_ACTION, LAUNCH_ACTION_NONE);
         if (launchAction == LAUNCH_ACTION_ACTIVATE) {
-            mMain.activateService();
+            this.activateService();
         } else if (launchAction == LAUNCH_ACTION_DEACTIVATE) {
             Daedalus.getInstance().deactivateService();
         } else if (launchAction == LAUNCH_ACTION_AFTER_DEACTIVATE) {
             Daedalus.updateShortcut(this.getApplicationContext());
-            if (currentFragment == FRAGMENT_MAIN && MainFragment.mHandler != null) {
-                MainFragment.mHandler.obtainMessage(MainFragment.MainFragmentHandler.MSG_REFRESH).sendToTarget();
-            }
+            updateMainButton(R.string.button_text_activate);
         }
 
-        int fragment = intent.getIntExtra(LAUNCH_FRAGMENT, FRAGMENT_NONE);
-        if (fragment != FRAGMENT_NONE) {
-            switchFragment(fragment);
+        if (currentFragment == null) {
+            switchFragment(new MainFragment());
+        } else {
+            int fragment = intent.getIntExtra(LAUNCH_FRAGMENT, FRAGMENT_NONE);
+            switch (fragment) {
+                case FRAGMENT_ABOUT:
+                    switchFragment(new AboutFragment());
+                    break;
+                case FRAGMENT_DNS_SERVERS:
+                    switchFragment(new DnsServersFragment());
+                    break;
+                case FRAGMENT_DNS_TEST:
+                    switchFragment(new DnsTestFragment());
+                    break;
+                case FRAGMENT_MAIN:
+                    switchFragment(new MainFragment());
+                    break;
+                case FRAGMENT_RULES:
+                    switchFragment(new RulesFragment());
+                    break;
+                case FRAGMENT_SETTINGS:
+                    switchFragment(new SettingsFragment());
+            }
         }
     }
 
@@ -234,25 +240,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (id) {
             case R.id.nav_about:
-                switchFragment(FRAGMENT_ABOUT);
+                switchFragment(new AboutFragment());
                 break;
             case R.id.nav_dns_server:
-                switchFragment(FRAGMENT_DNS_SERVERS);
+                switchFragment(new DnsServersFragment());
                 break;
             case R.id.nav_dns_test:
-                switchFragment(FRAGMENT_DNS_TEST);
+                switchFragment(new DnsTestFragment());
                 break;
             case R.id.nav_github:
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus")));
                 break;
             case R.id.nav_home:
-                switchFragment(FRAGMENT_MAIN);
+                switchFragment(new MainFragment());
                 break;
             case R.id.nav_rules:
-                switchFragment(FRAGMENT_RULES);
+                switchFragment(new RulesFragment());
                 break;
             case R.id.nav_settings:
-                switchFragment(FRAGMENT_SETTINGS);
+                switchFragment(new SettingsFragment());
                 break;
         }
 
