@@ -96,8 +96,8 @@ public class Daedalus extends Application {
     private static String configPath = null;
 
     private static Daedalus instance = null;
-    private static SharedPreferences prefs;
-    private static Thread mHostsResolver;
+    private SharedPreferences prefs;
+    private Thread mHostsResolver;
 
     @Override
     public void onCreate() {
@@ -159,8 +159,9 @@ public class Daedalus extends Application {
             }
         }
     }
+
     public static SharedPreferences getPrefs() {
-        return prefs;
+        return getInstance().prefs;
     }
 
     @Override

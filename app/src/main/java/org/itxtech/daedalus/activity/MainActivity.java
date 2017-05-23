@@ -207,29 +207,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             updateMainButton(R.string.button_text_activate);
         }
 
+        int fragment = intent.getIntExtra(LAUNCH_FRAGMENT, FRAGMENT_NONE);
+        switch (fragment) {
+            case FRAGMENT_ABOUT:
+                switchFragment(new AboutFragment());
+                break;
+            case FRAGMENT_DNS_SERVERS:
+                switchFragment(new DnsServersFragment());
+                break;
+            case FRAGMENT_DNS_TEST:
+                switchFragment(new DnsTestFragment());
+                break;
+            case FRAGMENT_MAIN:
+                switchFragment(new MainFragment());
+                break;
+            case FRAGMENT_RULES:
+                switchFragment(new RulesFragment());
+                break;
+            case FRAGMENT_SETTINGS:
+                switchFragment(new SettingsFragment());
+        }
         if (currentFragment == null) {
             switchFragment(new MainFragment());
-        } else {
-            int fragment = intent.getIntExtra(LAUNCH_FRAGMENT, FRAGMENT_NONE);
-            switch (fragment) {
-                case FRAGMENT_ABOUT:
-                    switchFragment(new AboutFragment());
-                    break;
-                case FRAGMENT_DNS_SERVERS:
-                    switchFragment(new DnsServersFragment());
-                    break;
-                case FRAGMENT_DNS_TEST:
-                    switchFragment(new DnsTestFragment());
-                    break;
-                case FRAGMENT_MAIN:
-                    switchFragment(new MainFragment());
-                    break;
-                case FRAGMENT_RULES:
-                    switchFragment(new RulesFragment());
-                    break;
-                case FRAGMENT_SETTINGS:
-                    switchFragment(new SettingsFragment());
-            }
         }
     }
 

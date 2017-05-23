@@ -47,7 +47,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
     public static String primaryServer;
     public static String secondaryServer;
 
-    private static NotificationCompat.Builder notification = null;
+    private NotificationCompat.Builder notification = null;
 
     private boolean running = false;
     private long lastUpdate = 0;
@@ -97,7 +97,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
                         manager.notify(NOTIFICATION_ACTIVATED, notification);
 
-                        DaedalusVpnService.notification = builder;
+                        this.notification = builder;
                     }
 
                     Daedalus.initHostsResolver();
