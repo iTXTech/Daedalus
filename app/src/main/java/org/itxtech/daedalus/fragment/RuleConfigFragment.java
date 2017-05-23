@@ -248,7 +248,7 @@ public class RuleConfigFragment extends ConfigFragment {
                 if (this.id != ConfigActivity.ID_NONE) {
                     new AlertDialog.Builder(getActivity())
                             .setTitle(R.string.notice_delete_confirm_prompt)
-                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Rule rule = Rule.getRuleById(String.valueOf(RuleConfigFragment.this.id));
@@ -258,7 +258,7 @@ public class RuleConfigFragment extends ConfigFragment {
                                     getActivity().finish();
                                 }
                             })
-                            .setNegativeButton(R.string.no, null)
+                            .setNegativeButton(android.R.string.no, null)
                             .create()
                             .show();
                 } else {

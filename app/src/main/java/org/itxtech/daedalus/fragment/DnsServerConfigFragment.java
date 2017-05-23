@@ -125,14 +125,14 @@ public class DnsServerConfigFragment extends ConfigFragment {
                 if (index != ConfigActivity.ID_NONE) {
                     new AlertDialog.Builder(getActivity())
                             .setTitle(R.string.notice_delete_confirm_prompt)
-                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Daedalus.configurations.getCustomDnsServers().remove(index);
                                     getActivity().finish();
                                 }
                             })
-                            .setNegativeButton(R.string.no, null)
+                            .setNegativeButton(android.R.string.no, null)
                             .create()
                             .show();
                 } else {

@@ -59,11 +59,7 @@
     <string name="settings_dns_over_tcp">DNS over TCP</string>
     <string name="action_removed">已移除。</string>
     <string name="action_undo">撤销</string>
-    <string name="button_text_download_dnsmasq">下载 DNSMasq 配置文件</string>
-    <string name="dnsmasq_path">本地 DNSMasq 配置路径:</string>
     <string name="notice_delete_confirm_prompt">您确定要删除此配置项？</string>
-    <string name="yes">是</string>
-    <string name="no">否</string>
     <string name="config_dns_server">配置 DNS 服务器</string>
     <string name="config_rule">配置规则</string>
     <string name="settings_rule_name">规则名称</string>
