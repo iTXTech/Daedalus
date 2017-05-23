@@ -19,7 +19,6 @@ import de.measite.minidns.source.NetworkDataSource;
 import de.measite.minidns.util.InetAddressUtil;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
-import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.util.DnsServerHelper;
 
 import java.io.IOException;
@@ -204,14 +203,10 @@ public class DnsTestFragment extends ToolbarFragment {
 
             switch (msg.what) {
                 case MSG_DISPLAY_STATUS:
-                    if (MainActivity.getInstance().getCurrentFragment() instanceof DnsTestFragment) {
-                        textViewTestInfo.setText((String) msg.obj);
-                    }
+                    textViewTestInfo.setText((String) msg.obj);
                     break;
                 case MSG_TEST_DONE:
-                    if (MainActivity.getInstance().getCurrentFragment() instanceof DnsTestFragment) {
-                        startTestBtn.setVisibility(View.VISIBLE);
-                    }
+                    startTestBtn.setVisibility(View.VISIBLE);
                     stopThread();
                     break;
             }

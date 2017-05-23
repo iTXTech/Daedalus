@@ -65,10 +65,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return instance;
     }
 
-    public ToolbarFragment getCurrentFragment() {
-        return currentFragment;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme_NoActionBar_TransparentStatusBar);
