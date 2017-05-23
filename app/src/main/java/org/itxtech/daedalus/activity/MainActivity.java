@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Log.d(TAG, "onDestroy");
         instance = null;
+        currentFragment = null;
     }
 
     @Override
