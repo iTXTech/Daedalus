@@ -20,6 +20,7 @@ import org.itxtech.daedalus.provider.TcpDnsProvider;
 import org.itxtech.daedalus.provider.UdpDnsProvider;
 import org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver;
 import org.itxtech.daedalus.util.DnsServerHelper;
+import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.RulesResolver;
 
 import java.net.Inet4Address;
@@ -151,9 +152,13 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             }
             dnsServers = null;
         } catch (Exception e) {
-            Log.d(TAG, e.toString());
+            Logger.logException(e);
         }
         stopSelf();
+
+        if (shouldRefresh) {
+            Logger.info("Daedalus VPN service has stopped");
+        }
 
         if (shouldRefresh && MainActivity.getInstance() != null && Daedalus.getInstance().isAppOnForeground()) {
             MainActivity.getInstance().startActivity(new Intent(getApplicationContext(), MainActivity.class)
@@ -191,7 +196,6 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
             boolean advanced = Daedalus.getPrefs().getBoolean("settings_advanced_switch", false);
             statisticQuery = Daedalus.getPrefs().getBoolean("settings_count_query_times", false);
-            Log.d(TAG, "tun0 add " + format + " pServ " + primaryServer + " sServ " + secondaryServer);
 
             String aliasPrimary;
             String aliasSecondary;
@@ -208,7 +212,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
             Inet4Address primaryDNSServer = InetAddressUtil.ipv4From(aliasPrimary);
             Inet4Address secondaryDNSServer = InetAddressUtil.ipv4From(aliasSecondary);
-            Log.d(TAG, "listening on " + format + " pServ " + primaryDNSServer.getHostAddress() + " sServ " + secondaryDNSServer.getHostAddress());
+            Logger.info("Daedalus VPN service is listening on " + primaryDNSServer.getHostAddress() + " and " + secondaryDNSServer.getHostAddress());
             builder.setSession("Daedalus")
                     .addDnsServer(primaryDNSServer)
                     .addDnsServer(secondaryDNSServer)
@@ -223,6 +227,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             }
 
             descriptor = builder.establish();
+            Logger.info("Daedalus VPN service is started");
 
             if (advanced) {
                 if (Daedalus.getPrefs().getBoolean("settings_dns_over_tcp", false)) {
@@ -238,7 +243,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                 }
             }
         } catch (Exception e) {
-            Log.d(TAG, e.toString());
+            Logger.logException(e);
         } finally {
             Log.d(TAG, "quit");
             stopThread();

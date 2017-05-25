@@ -34,7 +34,6 @@ import java.util.ArrayList;
  * (at your option) any later version.
  */
 public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItemClickListener {
-    private View view = null;
     private RuleAdapter adapter;
     private Rule rule = null;
     private int currentType;
@@ -49,7 +48,7 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_rules, container, false);
+        View view = inflater.inflate(R.layout.fragment_rules, container, false);
         currentType = Daedalus.configurations.getUsingRuleType();
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_rules);
@@ -63,7 +62,7 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
                 if (viewHolder instanceof RulesFragment.ViewHolder) {
                     Rule rule = Rule.getRuleById(((ViewHolder) viewHolder).getId());
                     if (rule != null && rule.isServiceAndUsing()) {
-                        Snackbar.make(view, R.string.notice_after_stop, Snackbar.LENGTH_LONG)
+                        Snackbar.make(getView(), R.string.notice_after_stop, Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                         return 0;
                     }
@@ -81,7 +80,7 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
                 int position = viewHolder.getAdapterPosition();
                 rule = getRules().get(position);
                 getRules().remove(position);
-                Snackbar.make(view, R.string.action_removed, Snackbar.LENGTH_LONG)
+                Snackbar.make(getView(), R.string.action_removed, Snackbar.LENGTH_LONG)
                         .setAction(R.string.action_undo, new SnackbarClickListener(position)).show();
                 adapter.notifyItemRemoved(position);
             }
@@ -131,7 +130,6 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
         super.onDestroyView();
 
         Daedalus.configurations.save();
-        view = null;
         adapter = null;
         rule = null;
     }

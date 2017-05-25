@@ -73,4 +73,6 @@
     <string name="notice_after_stop">请在服务停止后更改启用的规则。</string>
     <string name="settings_manual">使用手册</string>
     <string name="settings_manual_summary">访问 GitHub wiki 页面。</string>
+    <string name="action_log">日志</string>
+    <string name="action_refresh">刷新</string>
 </resources>

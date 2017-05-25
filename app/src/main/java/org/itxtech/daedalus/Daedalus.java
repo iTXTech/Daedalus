@@ -19,10 +19,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.stream.JsonReader;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.service.DaedalusVpnService;
-import org.itxtech.daedalus.util.Configurations;
-import org.itxtech.daedalus.util.DnsServer;
-import org.itxtech.daedalus.util.Rule;
-import org.itxtech.daedalus.util.RulesResolver;
+import org.itxtech.daedalus.util.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -97,21 +94,22 @@ public class Daedalus extends Application {
 
     private static Daedalus instance = null;
     private SharedPreferences prefs;
-    private Thread mHostsResolver;
+    private Thread mResolver;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        mHostsResolver = new Thread(new RulesResolver());
-        mHostsResolver.start();
+        Logger.init();
+
+        mResolver = new Thread(new RulesResolver());
+        mResolver.start();
 
         if (getExternalFilesDir(null) != null) {
             rulesPath = getExternalFilesDir(null).getPath() + "/rules/";
             configPath = getExternalFilesDir(null).getPath() + "/config.json";
 
             File file = new File(rulesPath);
-            Log.d(TAG, "mkdir result: " + file.mkdirs());
         }
 
         initData();
@@ -172,9 +170,10 @@ public class Daedalus extends Application {
         instance = null;
         prefs = null;
         RulesResolver.shutdown();
-        mHostsResolver.interrupt();
+        mResolver.interrupt();
         RulesResolver.clean();
-        mHostsResolver = null;
+        mResolver = null;
+        Logger.shutdown();
     }
 
     public Intent getServiceIntent() {

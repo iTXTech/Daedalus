@@ -14,6 +14,7 @@ import de.measite.minidns.record.A;
 import de.measite.minidns.util.InetAddressUtil;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.DnsServerHelper;
+import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.RulesResolver;
 import org.pcap4j.packet.*;
 import org.pcap4j.packet.factory.PacketFactoryPropertiesLoader;
@@ -77,7 +78,6 @@ public class UdpDnsProvider extends DnsProvider {
 
     private void queueDeviceWrite(IpPacket ipOutPacket) {
         dnsQueryTimes++;
-        Log.i(TAG, "QT " + dnsQueryTimes);
         deviceWrites.add(ipOutPacket.getRawData());
     }
 
@@ -343,7 +343,7 @@ public class UdpDnsProvider extends DnsProvider {
         try {
             String response;
             if ((response = RulesResolver.resolve(dnsQueryName)) != null) {
-                Log.i(TAG, "handleDnsRequest: DNS Name " + dnsQueryName + " address " + response + ", using local hosts to resolve.");
+                Logger.info("DnsProvider: Resolved " + dnsQueryName + ". Local resolver response: " + response);
                 DNSMessage.Builder builder = dnsMsg.asBuilder();
                 int[] ip = new int[4];
                 byte i = 0;
@@ -354,13 +354,13 @@ public class UdpDnsProvider extends DnsProvider {
                 builder.addAnswer(new Record<>(dnsQueryName, Record.TYPE.getType(A.class), 1, 64, new A(ip[0], ip[1], ip[2], ip[3])));
                 handleDnsResponse(parsedPacket, builder.build().toArray());
             } else {
-                Log.i(TAG, "handleDnsRequest: DNS Name " + dnsQueryName + " , sending to " + destAddr);
+                Logger.info("DnsProvider: Resolving " + dnsQueryName + ". Sending to " + destAddr);
                 DatagramPacket outPacket = new DatagramPacket(dnsRawData, 0, dnsRawData.length, destAddr,
                         DnsServerHelper.getPortOrDefault(destAddr, parsedUdp.getHeader().getDstPort().valueAsInt()));
                 forwardPacket(outPacket, parsedPacket);
             }
         } catch (Exception e) {
-            Log.e(TAG, e.toString());
+            Logger.logException(e);
         }
     }
 

@@ -72,4 +72,6 @@
     <string name="notice_after_stop">Please modify activated rules after stopping service.</string>
     <string name="settings_manual">Manual</string>
     <string name="settings_manual_summary">Visit GitHub wiki page.</string>
+    <string name="action_log">Log</string>
+    <string name="action_refresh">Refresh</string>
 </resources>

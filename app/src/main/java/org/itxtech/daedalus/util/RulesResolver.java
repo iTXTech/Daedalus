@@ -48,19 +48,13 @@ public class RulesResolver implements Runnable {
         shutdown = true;
     }
 
-    public static boolean isLoaded() {
-        return status == STATUS_LOADED;
-    }
-
     public static void startLoadHosts(String[] loadFile) {
-        Log.d(TAG, "Loading hosts file " + loadFile.length);
         hostsFiles = loadFile;
         mode = MODE_HOSTS;
         status = STATUS_PENDING_LOAD;
     }
 
     public static void startLoadDnsmasq(String[] loadPath) {
-        Log.d(TAG, "Loading DNSMasq file " + loadPath.length);
         dnsmasqFiles = loadPath;
         mode = MODE_DNSMASQ;
         status = STATUS_PENDING_LOAD;
@@ -104,32 +98,36 @@ public class RulesResolver implements Runnable {
                 for (String hostsFile : hostsFiles) {
                     File file = new File(hostsFile);
                     if (file.canRead()) {
+                        Logger.info("Loading hosts " + file.toString());
                         FileInputStream stream = new FileInputStream(file);
                         BufferedReader dataIO = new BufferedReader(new InputStreamReader(stream));
                         String strLine;
                         String[] data;
+                        int count = 0;
                         while ((strLine = dataIO.readLine()) != null) {
-                            //Log.d(TAG, strLine);
                             if (!strLine.equals("") && !strLine.startsWith("#")) {
                                 data = strLine.split("\\s+");
                                 rules.put(data[1], data[0]);
-                                Log.d(TAG, "Putting " + data[0] + " " + data[1]);
+                                count++;
                             }
                         }
 
                         dataIO.close();
                         stream.close();
+
+                        Logger.info("Loaded " + String.valueOf(count) + " rules");
                     }
                 }
             } else if (mode == MODE_DNSMASQ) {
                 for (String dnsmasqFile : dnsmasqFiles) {
                     File file = new File(dnsmasqFile);
                     if (file.canRead()) {
-                        Log.d(TAG, "load: Loading DNSMasq configuration " + file.toString());
+                        Logger.info("Loading DNSMasq configuration " + file.toString());
                         FileInputStream stream = new FileInputStream(file);
                         BufferedReader dataIO = new BufferedReader(new InputStreamReader(stream));
                         String strLine;
                         String[] data;
+                        int count = 0;
                         while ((strLine = dataIO.readLine()) != null) {
                             if (!strLine.equals("") && !strLine.startsWith("#")) {
                                 data = strLine.split("/");
@@ -138,13 +136,15 @@ public class RulesResolver implements Runnable {
                                         data[1] = data[1].substring(1, data[1].length());
                                     }
                                     rules.put(data[1], data[2]);
-                                    //Log.d(TAG, "Putting " + data[1] + " " + data[2]);
+                                    count++;
                                 }
                             }
                         }
 
                         dataIO.close();
                         stream.close();
+
+                        Logger.info("Loaded " + String.valueOf(count) + " rules");
                     }
                 }
             }

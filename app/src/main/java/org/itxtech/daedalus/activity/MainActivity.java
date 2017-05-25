@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int FRAGMENT_ABOUT = 3;
     public static final int FRAGMENT_RULES = 4;
     public static final int FRAGMENT_DNS_SERVERS = 5;
+    public static final int FRAGMENT_LOG = 6;
 
     private static MainActivity instance = null;
 
@@ -223,6 +224,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case FRAGMENT_SETTINGS:
                 switchFragment(new SettingsFragment());
+                break;
+            case FRAGMENT_LOG:
+                switchFragment(new LogFragment());
+                break;
         }
         if (currentFragment == null) {
             switchFragment(new MainFragment());
@@ -255,6 +260,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_settings:
                 switchFragment(new SettingsFragment());
+                break;
+            case R.id.nav_log:
+                switchFragment(new LogFragment());
                 break;
         }
 
