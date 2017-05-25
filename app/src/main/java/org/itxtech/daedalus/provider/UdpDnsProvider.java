@@ -343,7 +343,7 @@ public class UdpDnsProvider extends DnsProvider {
         try {
             String response;
             if ((response = RulesResolver.resolve(dnsQueryName)) != null) {
-                Logger.info("DnsProvider: Resolved " + dnsQueryName + ". Local resolver response: " + response);
+                Logger.info("DnsProvider: Resolved " + dnsQueryName + "  Local resolver response: " + response);
                 DNSMessage.Builder builder = dnsMsg.asBuilder();
                 int[] ip = new int[4];
                 byte i = 0;
@@ -354,7 +354,7 @@ public class UdpDnsProvider extends DnsProvider {
                 builder.addAnswer(new Record<>(dnsQueryName, Record.TYPE.getType(A.class), 1, 64, new A(ip[0], ip[1], ip[2], ip[3])));
                 handleDnsResponse(parsedPacket, builder.build().toArray());
             } else {
-                Logger.info("DnsProvider: Resolving " + dnsQueryName + ". Sending to " + destAddr);
+                Logger.info("DnsProvider: Resolving " + dnsQueryName + "  Sending to " + destAddr);
                 DatagramPacket outPacket = new DatagramPacket(dnsRawData, 0, dnsRawData.length, destAddr,
                         DnsServerHelper.getPortOrDefault(destAddr, parsedUdp.getHeader().getDstPort().valueAsInt()));
                 forwardPacket(outPacket, parsedPacket);
