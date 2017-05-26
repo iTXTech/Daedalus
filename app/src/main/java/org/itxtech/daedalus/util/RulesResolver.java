@@ -1,7 +1,5 @@
 package org.itxtech.daedalus.util;
 
-import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -150,7 +148,7 @@ public class RulesResolver implements Runnable {
             }
             status = STATUS_LOADED;
         } catch (Exception e) {
-            Log.e(TAG, e.toString());
+            Logger.logException(e);
 
             status = STATUS_NOT_LOADED;
         }
@@ -166,7 +164,7 @@ public class RulesResolver implements Runnable {
                 Thread.sleep(100);
             }
         } catch (Exception e) {
-            Log.e(TAG, e.toString());
+            Logger.logException(e);
         }
     }
 }

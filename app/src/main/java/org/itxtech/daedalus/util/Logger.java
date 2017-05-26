@@ -77,7 +77,7 @@ public class Logger {
     }
 
     private static void send(String message) {
-        String fileDateFormat = new SimpleDateFormat("Y-M-d HH:mm:ss ").format(new Date());
+        String fileDateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss ").format(new Date());
         builder.insert(0, "\n").insert(0, message).insert(0, fileDateFormat);
         Log.d("Daedalus", message);
     }

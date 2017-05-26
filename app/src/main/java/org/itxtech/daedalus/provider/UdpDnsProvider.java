@@ -154,7 +154,7 @@ public class UdpDnsProvider extends DnsProvider {
                 service.providerLoopCallback();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.logException(e);
         }
     }
 

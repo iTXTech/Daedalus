@@ -137,7 +137,7 @@ public class Configurations {
             writer.flush();
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.logException(e);
         }
     }
 }

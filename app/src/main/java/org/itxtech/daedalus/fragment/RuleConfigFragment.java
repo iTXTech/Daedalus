@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.ConfigActivity;
+import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.Rule;
 import org.itxtech.daedalus.widget.ClickPreference;
 
@@ -143,7 +144,7 @@ public class RuleConfigFragment extends ConfigFragment {
                                         new RuleData(ruleFilename.getText(), builder.toString())).sendToTarget();
                                 stopThread();
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                Logger.logException(e);
                             } finally {
                                 stopThread();
                             }
@@ -315,7 +316,7 @@ public class RuleConfigFragment extends ConfigFragment {
                         stream.write(ruleData.getData().getBytes());
                         stream.close();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Logger.logException(e);
                     }
 
                     Snackbar.make(view, R.string.notice_downloaded, Snackbar.LENGTH_SHORT)

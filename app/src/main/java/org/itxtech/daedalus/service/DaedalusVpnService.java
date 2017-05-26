@@ -242,6 +242,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                     Thread.sleep(1000);
                 }
             }
+        } catch (InterruptedException ignored) {
         } catch (Exception e) {
             Logger.logException(e);
         } finally {

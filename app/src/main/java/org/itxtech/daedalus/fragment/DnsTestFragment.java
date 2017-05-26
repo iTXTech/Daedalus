@@ -20,6 +20,7 @@ import de.measite.minidns.util.InetAddressUtil;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.util.DnsServerHelper;
+import org.itxtech.daedalus.util.Logger;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -83,7 +84,7 @@ public class DnsTestFragment extends ToolbarFragment {
                     }
                     mHandler.obtainMessage(DnsTestHandler.MSG_TEST_DONE).sendToTarget();
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+                    Logger.logException(e);
                 }
             }
 
@@ -119,7 +120,7 @@ public class DnsTestFragment extends ToolbarFragment {
                 } catch (Exception e) {
                     testText.append("\n").append(getResources().getString(R.string.test_failed)).append("\n\n");
 
-                    Log.e(TAG, e.toString());
+                    Logger.logException(e);
                 }
 
                 mHandler.obtainMessage(DnsTestHandler.MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
