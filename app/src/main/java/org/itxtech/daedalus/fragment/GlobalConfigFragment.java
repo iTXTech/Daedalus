@@ -6,9 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.*;
 import android.support.design.widget.Snackbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.util.DnsServerHelper;
@@ -25,7 +23,6 @@ import org.itxtech.daedalus.util.DnsServerHelper;
  * (at your option) any later version.
  */
 public class GlobalConfigFragment extends PreferenceFragment {
-    private View view = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +43,7 @@ public class GlobalConfigFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary(DnsServerHelper.getDescription((String) newValue, Daedalus.getInstance()));
-                Snackbar.make(view, R.string.notice_need_restart, Snackbar.LENGTH_LONG)
+                Snackbar.make(getView(), R.string.notice_need_restart, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 return true;
             }
@@ -60,7 +57,7 @@ public class GlobalConfigFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary(DnsServerHelper.getDescription((String) newValue, Daedalus.getInstance()));
-                Snackbar.make(view, R.string.notice_need_restart, Snackbar.LENGTH_LONG)
+                Snackbar.make(getView(), R.string.notice_need_restart, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 return true;
             }
@@ -121,12 +118,6 @@ public class GlobalConfigFragment extends PreferenceFragment {
         updateAdvancedOptions(advanced.isChecked());
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = super.onCreateView(inflater, container, savedInstanceState);
-        return view;
-    }
-
     private void updateAdvancedOptions(boolean checked) {
         PreferenceCategory category = (PreferenceCategory) findPreference("settings_advanced");
         for (int i = 1; i < category.getPreferenceCount(); i++) {
@@ -143,18 +134,10 @@ public class GlobalConfigFragment extends PreferenceFragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        if (view != null && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            Snackbar.make(view, R.string.notice_legacy_api, Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-        }
-    }
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        view = null;
+        Snackbar.make(view, R.string.notice_legacy_api, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 }

@@ -23,11 +23,9 @@ import org.itxtech.daedalus.activity.MainActivity;
  */
 public class MainFragment extends ToolbarFragment {
 
-    private View view = null;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         Button but = (Button) view.findViewById(R.id.button_activate);
         but.setOnClickListener(new View.OnClickListener() {
@@ -51,13 +49,6 @@ public class MainFragment extends ToolbarFragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        view = null;
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         updateUserInterface();
@@ -65,7 +56,7 @@ public class MainFragment extends ToolbarFragment {
 
     private void updateUserInterface() {
         Log.d("DMainFragment", "updateInterface");
-        Button but = (Button) view.findViewById(R.id.button_activate);
+        Button but = (Button) getView().findViewById(R.id.button_activate);
         if (Daedalus.getInstance().isServiceActivated()) {
             but.setText(R.string.button_text_deactivate);
         } else {

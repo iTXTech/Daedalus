@@ -40,7 +40,6 @@ public class RuleConfigFragment extends ConfigFragment {
     private Intent intent = null;
     private Thread mThread = null;
     private RuleConfigHandler mHandler = null;
-    private View view;
     private int id;
 
     public void setIntent(Intent intent) {
@@ -55,7 +54,6 @@ public class RuleConfigFragment extends ConfigFragment {
         intent = null;
         mHandler.shutdown();
         mHandler = null;
-        view = null;
     }
 
     private void stopThread() {
@@ -74,7 +72,7 @@ public class RuleConfigFragment extends ConfigFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = super.onCreateView(inflater, container, savedInstanceState);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
 
         mHandler = new RuleConfigHandler().setView(view);
 
@@ -124,7 +122,7 @@ public class RuleConfigFragment extends ConfigFragment {
             public boolean onPreferenceClick(Preference preference) {
                 save();
                 if (mThread == null) {
-                    Snackbar.make(view, R.string.notice_start_download, Snackbar.LENGTH_LONG)
+                    Snackbar.make(getView(), R.string.notice_start_download, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                     mThread = new Thread(new Runnable() {
                         @Override
@@ -152,7 +150,7 @@ public class RuleConfigFragment extends ConfigFragment {
                     });
                     mThread.start();
                 } else {
-                    Snackbar.make(view, R.string.notice_now_downloading, Snackbar.LENGTH_LONG)
+                    Snackbar.make(getView(), R.string.notice_now_downloading, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
                 return false;
@@ -214,7 +212,7 @@ public class RuleConfigFragment extends ConfigFragment {
         String ruleDownloadUrl = ((EditTextPreference) findPreference("ruleDownloadUrl")).getText();
 
         if (ruleName.equals("") | ruleType.equals("") | ruleFilename.equals("") | ruleDownloadUrl.equals("")) {
-            Snackbar.make(view, R.string.notice_fill_in_all, Snackbar.LENGTH_SHORT)
+            Snackbar.make(getView(), R.string.notice_fill_in_all, Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show();
             return false;
         }

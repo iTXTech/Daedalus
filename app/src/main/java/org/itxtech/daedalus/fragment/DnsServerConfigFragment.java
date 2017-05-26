@@ -28,15 +28,7 @@ import org.itxtech.daedalus.util.DnsServer;
  * (at your option) any later version.
  */
 public class DnsServerConfigFragment extends ConfigFragment {
-    private View view;
     private int index;
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        view = null;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +38,7 @@ public class DnsServerConfigFragment extends ConfigFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = super.onCreateView(inflater, container, savedInstanceState);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
 
         EditTextPreference serverName = (EditTextPreference) findPreference("serverName");
         serverName.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -106,7 +98,7 @@ public class DnsServerConfigFragment extends ConfigFragment {
                 String serverPort = ((EditTextPreference) findPreference("serverPort")).getText();
 
                 if (serverName.equals("") | serverAddress.equals("") | serverPort.equals("")) {
-                    Snackbar.make(view, R.string.notice_fill_in_all, Snackbar.LENGTH_LONG)
+                    Snackbar.make(getView(), R.string.notice_fill_in_all, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                     break;
                 }

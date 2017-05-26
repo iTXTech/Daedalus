@@ -132,7 +132,7 @@ public class DnsTestFragment extends ToolbarFragment {
         startTestBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v, R.string.notice_start_test, Snackbar.LENGTH_LONG)
+                Snackbar.make(v, R.string.notice_start_test, Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();
                 startTestBut.setVisibility(View.INVISIBLE);
 
