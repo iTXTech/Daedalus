@@ -36,6 +36,13 @@ DNS server providers
 * __[Pure DNS](http://puredns.cn/)__ - *I DO NOT KNOW HOW TO DESCRIBE~~~*
 * __[AIXYZ DNS](https://aixyz.com/)__ - __*For academic purposes only.*__
 
+Rule providers
+-------------
+* __[hosts](https://github.com/racaljk/hosts)__ by *[Cthulhu](https://github.com/racaljk)* - [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)
+* __[google-hosts](https://github.com/fengixng/google-hosts)__ by *[fengixng](https://github.com/fengixng)* - None
+* __[hosts](https://github.com/sy618/hosts)__ by *[sy618](https://github.com/sy618)* - [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.zh)
+* __[connector](https://git.oschina.net/lengers/connector)__ by *[lankes](https://git.oschina.net/lengers)* - [GPLv3](https://git.oschina.net/lengers/connector/blob/master/LICENSE)
+
 Requirements
 -------------
 * Minimum Android version: 4.0.3 (API 15) - __*Basic VPN functions*__
@@ -48,9 +55,6 @@ Open Source Licenses
 * __[DNS66](https://github.com/julian-klode/dns66)__ by *[Julian Andres Klode](https://github.com/julian-klode)* - [GPLv3](https://github.com/julian-klode/dns66/blob/master/COPYING)
 * __[Pcap4J](https://github.com/kaitoy/pcap4j)__ by *[Kaito Yamada](https://github.com/kaitoy)* - [MIT](https://github.com/kaitoy/pcap4j)
 * __[MiniDNS](https://github.com/rtreffer/minidns)__ by *[Rene Treffer](https://github.com/rtreffer)* - [LGPLv2.1](https://github.com/rtreffer/minidns/blob/master/LICENCE_LGPL2.1)
-* __[hosts](https://github.com/racaljk/hosts)__ by *[Cthulhu](https://github.com/racaljk)* - [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)
-* __[google-hosts](https://github.com/fengixng/google-hosts)__ by *[fengixng](https://github.com/fengixng)* - None
-* __[hosts](https://github.com/sy618/hosts)__ by *[sy618](https://github.com/sy618)* - [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.zh)
 * __[Gson](https://github.com/google/gson)__ by *[Google](https://github.com/google)* - [APL 2.0](https://github.com/google/gson/blob/master/LICENSE)
 
 License

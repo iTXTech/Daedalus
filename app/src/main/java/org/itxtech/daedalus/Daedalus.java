@@ -49,8 +49,6 @@ public class Daedalus extends Application {
 
     private static final String SHORTCUT_ID_ACTIVATE = "shortcut_activate";
 
-    private static final String TAG = "Daedalus";
-
     public static final List<DnsServer> DNS_SERVERS = new ArrayList<DnsServer>() {{
         /*add(new DnsServer("0", "113.107.249.56", R.string.server_cutedns_north_china));
         add(new DnsServer("1", "120.27.103.230", R.string.server_cutedns_east_china));
@@ -71,6 +69,8 @@ public class Daedalus extends Application {
                 "https://raw.githubusercontent.com/sy618/hosts/master/ADFQ", false));
         add(new Rule("vokins/yhosts", "vokins.hosts", Rule.TYPE_HOSTS,
                 "https://raw.githubusercontent.com/vokins/yhosts/master/hosts", false));
+        add(new Rule("lengers/connector", "connector.hosts", Rule.TYPE_HOSTS,
+                "https://git.oschina.net/lengers/connector/raw/master/hosts", false));
         //Build-in DNSMasq rule providers
         add(new Rule("sy618/hosts/dnsad", "dnsad.dnsmasq", Rule.TYPE_DNAMASQ,
                 "https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsad", false));
@@ -108,8 +108,6 @@ public class Daedalus extends Application {
         if (getExternalFilesDir(null) != null) {
             rulesPath = getExternalFilesDir(null).getPath() + "/rules/";
             configPath = getExternalFilesDir(null).getPath() + "/config.json";
-
-            File file = new File(rulesPath);
         }
 
         initData();
