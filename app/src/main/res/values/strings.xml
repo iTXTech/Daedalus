@@ -74,4 +74,5 @@
     <string name="settings_manual_summary">Visit GitHub wiki page.</string>
     <string name="action_log">Log</string>
     <string name="action_refresh">Refresh</string>
+    <string name="settings_log_size">Log size limit</string>
 </resources>

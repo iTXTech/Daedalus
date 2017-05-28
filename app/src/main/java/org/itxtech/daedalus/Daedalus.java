@@ -100,6 +100,8 @@ public class Daedalus extends Application {
     public void onCreate() {
         super.onCreate();
 
+        instance = this;
+
         Logger.init();
 
         mResolver = new Thread(new RulesResolver());
@@ -111,8 +113,6 @@ public class Daedalus extends Application {
         }
 
         initData();
-
-        instance = this;
     }
 
     private void initData() {

@@ -73,6 +73,16 @@ public class GlobalConfigFragment extends PreferenceFragment {
             }
         });
 
+        EditTextPreference logSize = (EditTextPreference) findPreference("settings_log_size");
+        logSize.setSummary(logSize.getText());
+        logSize.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                preference.setSummary((String) newValue);
+                return true;
+            }
+        });
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             SwitchPreference advanced = (SwitchPreference) findPreference("settings_advanced_switch");
             advanced.setEnabled(false);
@@ -137,7 +147,9 @@ public class GlobalConfigFragment extends PreferenceFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Snackbar.make(view, R.string.notice_legacy_api, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            Snackbar.make(view, R.string.notice_legacy_api, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
 }

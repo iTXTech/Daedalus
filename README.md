@@ -51,7 +51,7 @@ Requirements
 
 Open Source Licenses
 -------------
-* __[ClearEditText](https://github.com/MrFuFuFu/ClearEditText)__ by *[Yuan Fu](https://github.com/MrFuFuFu)* - None
+* __[ClearEditText](https://github.com/MrFuFuFu/ClearEditText)__ by *[Yuan Fu](https://github.com/MrFuFuFu)* - [APL 2.0](https://github.com/MrFuFuFu/ClearEditText)
 * __[DNS66](https://github.com/julian-klode/dns66)__ by *[Julian Andres Klode](https://github.com/julian-klode)* - [GPLv3](https://github.com/julian-klode/dns66/blob/master/COPYING)
 * __[Pcap4J](https://github.com/kaitoy/pcap4j)__ by *[Kaito Yamada](https://github.com/kaitoy)* - [MIT](https://github.com/kaitoy/pcap4j)
 * __[MiniDNS](https://github.com/rtreffer/minidns)__ by *[Rene Treffer](https://github.com/rtreffer)* - [LGPLv2.1](https://github.com/rtreffer/minidns/blob/master/LICENCE_LGPL2.1)

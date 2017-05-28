@@ -96,7 +96,7 @@ public class RulesResolver implements Runnable {
                 for (String hostsFile : hostsFiles) {
                     File file = new File(hostsFile);
                     if (file.canRead()) {
-                        Logger.info("Loading hosts " + file.toString());
+                        Logger.info("Loading hosts from " + file.toString());
                         FileInputStream stream = new FileInputStream(file);
                         BufferedReader dataIO = new BufferedReader(new InputStreamReader(stream));
                         String strLine;
@@ -120,7 +120,7 @@ public class RulesResolver implements Runnable {
                 for (String dnsmasqFile : dnsmasqFiles) {
                     File file = new File(dnsmasqFile);
                     if (file.canRead()) {
-                        Logger.info("Loading DNSMasq configuration " + file.toString());
+                        Logger.info("Loading DNSMasq configuration from " + file.toString());
                         FileInputStream stream = new FileInputStream(file);
                         BufferedReader dataIO = new BufferedReader(new InputStreamReader(stream));
                         String strLine;

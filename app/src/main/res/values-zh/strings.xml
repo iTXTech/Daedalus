@@ -75,4 +75,5 @@
     <string name="settings_manual_summary">访问 GitHub wiki 页面。</string>
     <string name="action_log">日志</string>
     <string name="action_refresh">刷新</string>
+    <string name="settings_log_size">日志大小限制</string>
 </resources>

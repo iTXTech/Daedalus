@@ -120,7 +120,9 @@ public class Configurations {
         Configurations config = null;
         try {
             config = Daedalus.parseJson(Configurations.class, new JsonReader(new FileReader(file)));
-        } catch (Exception ignored) {
+            Logger.info("Loading configuration successfully from " + file);
+        } catch (Exception e) {
+            Logger.logException(e);
         }
 
         if (config == null) {

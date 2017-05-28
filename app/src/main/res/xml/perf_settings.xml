@@ -35,6 +35,13 @@
                 android:key="settings_notification"
                 android:title="@string/settings_notification"
                 android:defaultValue="true"/>
+        <EditTextPreference
+                android:key="settings_log_size"
+                android:selectAllOnFocus="false"
+                android:singleLine="true"
+                android:numeric="integer"
+                android:defaultValue="10000"
+                android:title="@string/settings_log_size"/>
     </PreferenceCategory>
 
     <PreferenceCategory

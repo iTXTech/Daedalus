@@ -1,6 +1,7 @@
 package org.itxtech.daedalus.util;
 
 import android.util.Log;
+import org.itxtech.daedalus.Daedalus;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -19,30 +20,22 @@ import java.util.Date;
  * (at your option) any later version.
  */
 public class Logger {
-    private static StringBuilder builder;
+    private static StringBuffer buffer = null;
 
     public static void init() {
-        builder = new StringBuilder();
+        if (buffer != null) {
+            buffer.setLength(0);
+        } else {
+            buffer = new StringBuffer();
+        }
     }
 
     public static void shutdown() {
-        builder = null;
+        buffer = null;
     }
 
     public static String getLog() {
-        return builder.toString();
-    }
-
-    public static void emergency(String message) {
-        send("[EMERGENCY] " + message);
-    }
-
-    public static void alert(String message) {
-        send("[ALERT] " + message);
-    }
-
-    public static void critical(String message) {
-        send("[CRITICAL] " + message);
+        return buffer.toString();
     }
 
     public static void error(String message) {
@@ -51,10 +44,6 @@ public class Logger {
 
     public static void warning(String message) {
         send("[WARNING] " + message);
-    }
-
-    public static void notice(String message) {
-        send("[NOTICE] " + message);
     }
 
     public static void info(String message) {
@@ -66,7 +55,7 @@ public class Logger {
     }
 
     public static void logException(Throwable e) {
-        alert(getExceptionMessage(e));
+        error(getExceptionMessage(e));
     }
 
     private static String getExceptionMessage(Throwable e) {
@@ -76,9 +65,33 @@ public class Logger {
         return stringWriter.toString();
     }
 
+    private static int getLogSizeLimit() {
+        return Integer.parseInt(Daedalus.getPrefs().getString("settings_log_size", "10000"));
+    }
+
+    private static boolean checkBufferSize() {
+        int limit = getLogSizeLimit();
+        if (limit == 0) {//DISABLED!
+            return false;
+        }
+        if (limit == -1) {//N0 limit
+            return true;
+        }
+        if (buffer.length() > limit) {//LET's clean it up!
+            buffer.setLength(limit);
+        }
+        return true;
+    }
+
     private static void send(String message) {
-        String fileDateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss ").format(new Date());
-        builder.insert(0, "\n").insert(0, message).insert(0, fileDateFormat);
-        Log.d("Daedalus", message);
+        try {
+            if (checkBufferSize()) {
+                String fileDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ").format(new Date());
+                buffer.insert(0, "\n").insert(0, message).insert(0, fileDateFormat);
+            }
+            Log.d("Daedalus", message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

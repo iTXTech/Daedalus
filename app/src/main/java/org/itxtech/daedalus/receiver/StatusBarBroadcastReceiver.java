@@ -3,9 +3,9 @@ package org.itxtech.daedalus.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.activity.MainActivity;
+import org.itxtech.daedalus.util.Logger;
 
 import java.lang.reflect.Method;
 
@@ -38,7 +38,7 @@ public class StatusBarBroadcastReceiver extends BroadcastReceiver {
                 Method collapse = statusBarManager.getClass().getMethod("collapsePanels");
                 collapse.invoke(statusBarManager);
             } catch (Exception e) {
-                Log.d("DStatusBarRecv", e.toString());
+                Logger.logException(e);
             }
         }
     }
