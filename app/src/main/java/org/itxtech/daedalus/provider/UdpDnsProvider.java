@@ -234,7 +234,7 @@ public class UdpDnsProvider extends DnsProvider {
         }
     }
 
-    private void handleRawDnsResponse(IpPacket parsedPacket, DatagramSocket dnsSocket) throws IOException {
+    private void handleRawDnsResponse(IpPacket parsedPacket, DatagramSocket dnsSocket) {
         try {
             byte[] datagramData = new byte[1024];
             DatagramPacket replyPacket = new DatagramPacket(datagramData, datagramData.length);
