@@ -235,10 +235,14 @@ public class UdpDnsProvider extends DnsProvider {
     }
 
     private void handleRawDnsResponse(IpPacket parsedPacket, DatagramSocket dnsSocket) throws IOException {
-        byte[] datagramData = new byte[1024];
-        DatagramPacket replyPacket = new DatagramPacket(datagramData, datagramData.length);
-        dnsSocket.receive(replyPacket);
-        handleDnsResponse(parsedPacket, datagramData);
+        try {
+            byte[] datagramData = new byte[1024];
+            DatagramPacket replyPacket = new DatagramPacket(datagramData, datagramData.length);
+            dnsSocket.receive(replyPacket);
+            handleDnsResponse(parsedPacket, datagramData);
+        } catch (Exception e) {
+            Logger.logException(e);
+        }
     }
 
 
