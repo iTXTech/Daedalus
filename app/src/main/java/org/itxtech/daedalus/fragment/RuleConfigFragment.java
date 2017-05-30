@@ -178,7 +178,11 @@ public class RuleConfigFragment extends ConfigFragment {
 
 
         ruleImportBuildIn.setValue("0");
-        id = intent.getIntExtra(ConfigActivity.LAUNCH_ACTION_ID, ConfigActivity.ID_NONE);
+        if (intent != null) {
+            id = intent.getIntExtra(ConfigActivity.LAUNCH_ACTION_ID, ConfigActivity.ID_NONE);
+        } else {
+            id = ConfigActivity.ID_NONE;
+        }
         Rule rule;
         if (id != ConfigActivity.ID_NONE && (rule = Rule.getRuleById(String.valueOf(id))) != null) {
             Rule.getRuleById(String.valueOf(id));
