@@ -134,10 +134,12 @@ public class Configurations {
 
     public void save() {
         try {
-            FileWriter writer = new FileWriter(file);
-            new Gson().toJson(this, writer);
-            writer.flush();
-            writer.close();
+            if (file != null) {
+                FileWriter writer = new FileWriter(file);
+                new Gson().toJson(this, writer);
+                writer.flush();
+                writer.close();
+            }
         } catch (IOException e) {
             Logger.logException(e);
         }
