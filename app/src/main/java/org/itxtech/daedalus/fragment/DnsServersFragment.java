@@ -44,7 +44,9 @@ public class DnsServersFragment extends ToolbarFragment {
             @Override
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 if (viewHolder instanceof ViewHolder) {
-                    if (DnsServerHelper.isInUsing(Daedalus.configurations.getCustomDnsServers().get(((ViewHolder) viewHolder).getIndex()))) {
+                    int index = ((ViewHolder) viewHolder).getIndex();
+                    if (index < Daedalus.configurations.getCustomDnsServers().size() &&
+                            DnsServerHelper.isInUsing(Daedalus.configurations.getCustomDnsServers().get(index))) {
                         return 0;
                     }
                 }
