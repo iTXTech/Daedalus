@@ -57,6 +57,7 @@ public class Daedalus extends Application {
         add(new DnsServer("123.207.137.88", R.string.server_puredns_north_china));
         add(new DnsServer("115.159.146.99", R.string.server_aixyz_east_china));
         add(new DnsServer("123.206.21.48", R.string.server_aixyz_south_china));
+        add(new DnsServer("119.29.105.234", R.string.server_cutedns_south_china));
     }};
 
     public static final List<Rule> RULES = new ArrayList<Rule>() {{
@@ -76,7 +77,6 @@ public class Daedalus extends Application {
                 "https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsad", false));
         add(new Rule("sy618/hosts/dnsfq", "dnsfq.dnsmasq", Rule.TYPE_DNAMASQ,
                 "https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsfq", false));
-
     }};
 
     public static final String[] DEFAULT_TEST_DOMAINS = new String[]{

@@ -32,7 +32,7 @@ __Users must comply with local laws and regulations.__<br>
 
 DNS server providers
 -------------
-* __CuteDNS!__ - *Stop service due to police intervention.*
+* __CuteDNS__ - *Restart service recently.*
 * __[Pure DNS](http://puredns.cn/)__ - *I DO NOT KNOW HOW TO DESCRIBE~~~*
 * __[AIXYZ DNS](https://aixyz.com/)__ - __*For academic purposes only.*__
 
@@ -42,6 +42,7 @@ Rule providers
 * __[google-hosts](https://github.com/fengixng/google-hosts)__ by *[fengixng](https://github.com/fengixng)* - None
 * __[hosts](https://github.com/sy618/hosts)__ by *[sy618](https://github.com/sy618)* - [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.zh)
 * __[connector](https://git.oschina.net/lengers/connector)__ by *[lankes](https://git.oschina.net/lengers)* - [GPLv3](https://git.oschina.net/lengers/connector/blob/master/LICENSE)
+* __[yhosts](https://github.com/vokins/yhosts)__ by *[vokins](https://github.com/vokins)* - [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 
 Requirements
 -------------
