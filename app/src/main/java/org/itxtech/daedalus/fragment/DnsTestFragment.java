@@ -15,8 +15,8 @@ import de.measite.minidns.DNSMessage;
 import de.measite.minidns.Question;
 import de.measite.minidns.Record;
 import de.measite.minidns.record.A;
+import de.measite.minidns.record.InternetAddressRR;
 import de.measite.minidns.source.NetworkDataSource;
-import de.measite.minidns.util.InetAddressUtil;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.util.DnsServerHelper;
@@ -103,13 +103,13 @@ public class DnsTestFragment extends ToolbarFragment {
 
                 try {
                     long startTime = System.currentTimeMillis();
-                    DNSMessage responseMessage = dnsQuery.query(message.build(), InetAddressUtil.ipv4From(dnsServer), 53);//Auto forward ports
+                    DNSMessage responseMessage = dnsQuery.query(message.build(), InetAddress.getByName(dnsServer), 53);//Auto forward ports
                     long endTime = System.currentTimeMillis();
 
-                    Set<A> answers = responseMessage.getAnswersFor(question);
+                    Set<InternetAddressRR> answers = responseMessage.getAnswersFor(question);
                     if (answers != null && answers.size() > 0) {
-                        for (A a : answers) {
-                            InetAddress inetAddress = a.getInetAddress();
+                        for (InternetAddressRR answer : answers) {
+                            InetAddress inetAddress = answer.getInetAddress();
                             testText.append("\n").append(getResources().getString(R.string.test_result_resolved)).append(" ").append(inetAddress.getHostAddress());
                         }
                         testText.append("\n").append(getResources().getString(R.string.test_time_used)).append(" ").

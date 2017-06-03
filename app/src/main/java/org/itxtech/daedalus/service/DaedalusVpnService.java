@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.ParcelFileDescriptor;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
-import de.measite.minidns.util.InetAddressUtil;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.MainActivity;
@@ -23,7 +22,7 @@ import org.itxtech.daedalus.util.DnsServerHelper;
 import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.RulesResolver;
 
-import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.util.HashMap;
 
 /**
@@ -210,8 +209,8 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                 aliasSecondary = secondaryServer;
             }
 
-            Inet4Address primaryDNSServer = InetAddressUtil.ipv4From(aliasPrimary);
-            Inet4Address secondaryDNSServer = InetAddressUtil.ipv4From(aliasSecondary);
+            InetAddress primaryDNSServer = InetAddress.getByName(aliasPrimary);
+            InetAddress secondaryDNSServer = InetAddress.getByName(aliasSecondary);
             Logger.info("Daedalus VPN service is listening on " + primaryDNSServer.getHostAddress() + " and " + secondaryDNSServer.getHostAddress());
             builder.setSession("Daedalus")
                     .addDnsServer(primaryDNSServer)

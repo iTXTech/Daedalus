@@ -30,13 +30,13 @@ Features:
 
 __Users must comply with local laws and regulations.__<br>
 
-DNS server providers
+DNS Server Providers
 -------------
 * __CuteDNS__ - *Restart service recently.*
 * __[Pure DNS](http://puredns.cn/)__ - *I DO NOT KNOW HOW TO DESCRIBE~~~*
 * __[AIXYZ DNS](https://aixyz.com/)__ - __*For academic purposes only.*__
 
-Rule providers
+Rule Providers
 -------------
 * __[hosts](https://github.com/racaljk/hosts)__ by *[Cthulhu](https://github.com/racaljk)* - [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)
 * __[google-hosts](https://github.com/fengixng/google-hosts)__ by *[fengixng](https://github.com/fengixng)* - None
