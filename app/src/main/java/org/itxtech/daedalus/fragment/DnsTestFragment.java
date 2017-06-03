@@ -15,7 +15,7 @@ import de.measite.minidns.DNSMessage;
 import de.measite.minidns.Question;
 import de.measite.minidns.Record;
 import de.measite.minidns.record.A;
-import de.measite.minidns.record.InternetAddressRR;
+import de.measite.minidns.record.AAAA;
 import de.measite.minidns.source.NetworkDataSource;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
@@ -27,7 +27,6 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
-import java.util.Set;
 
 /**
  * Daedalus Project
@@ -90,35 +89,46 @@ public class DnsTestFragment extends ToolbarFragment {
 
             private StringBuilder testServer(DNSQuery dnsQuery, String dnsServer, String testUrl, StringBuilder testText) {
                 Log.d(TAG, "Testing DNS " + dnsServer);
-                testText.append(getResources().getString(R.string.test_domain)).append(" ").append(testUrl).append("\n").append(getResources().getString(R.string.test_dns_server)).append(" ").append(dnsServer);
+                testText.append(getString(R.string.test_domain)).append(" ").append(testUrl).append("\n").append(getString(R.string.test_dns_server)).append(" ").append(dnsServer);
 
                 mHandler.obtainMessage(DnsTestHandler.MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
 
-                Question question = new Question(testUrl, Record.TYPE.getType(A.class));
-                DNSMessage.Builder message = DNSMessage.builder();
-                message.setQuestion(question);
-                message.setId((new Random()).nextInt());
-                message.setRecursionDesired(true);
-                message.getEdnsBuilder().setUdpPayloadSize(1024).setDnssecOk(false);
+                DNSMessage.Builder messageA = DNSMessage.builder();
+                messageA.addQuestion(new Question(testUrl, Record.TYPE.A));
+                messageA.setId((new Random()).nextInt());
+                messageA.setRecursionDesired(true);
+                messageA.getEdnsBuilder().setUdpPayloadSize(1024).setDnssecOk(false);
+
+                DNSMessage.Builder messageAAAA = DNSMessage.builder();
+                messageAAAA.addQuestion(new Question(testUrl, Record.TYPE.AAAA));
+                messageAAAA.setId((new Random()).nextInt());
+                messageAAAA.setRecursionDesired(true);
+                messageAAAA.getEdnsBuilder().setUdpPayloadSize(1024).setDnssecOk(false);
 
                 try {
                     long startTime = System.currentTimeMillis();
-                    DNSMessage responseMessage = dnsQuery.query(message.build(), InetAddress.getByName(dnsServer), 53);//Auto forward ports
+                    DNSMessage responseAMessage = dnsQuery.query(messageA.build(), InetAddress.getByName(dnsServer), 53);//Auto forward ports
+                    DNSMessage responseAAAAMessage = dnsQuery.query(messageAAAA.build(), InetAddress.getByName(dnsServer), 53);//Auto forward ports
                     long endTime = System.currentTimeMillis();
 
-                    Set<InternetAddressRR> answers = responseMessage.getAnswersFor(question);
-                    if (answers != null && answers.size() > 0) {
-                        for (InternetAddressRR answer : answers) {
-                            InetAddress inetAddress = answer.getInetAddress();
-                            testText.append("\n").append(getResources().getString(R.string.test_result_resolved)).append(" ").append(inetAddress.getHostAddress());
+                    if (responseAMessage.answerSection.size() > 0 || responseAAAAMessage.answerSection.size() > 0) {
+                        for (Record record : responseAAAAMessage.answerSection) {
+                            if (record.getPayload() instanceof AAAA) {
+                                testText.append("\n").append(getString(R.string.test_result_resolved)).append(" ").append(record.getPayload().toString());
+                            }
                         }
-                        testText.append("\n").append(getResources().getString(R.string.test_time_used)).append(" ").
+                        for (Record record : responseAMessage.answerSection) {
+                            if (record.getPayload() instanceof A) {
+                                testText.append("\n").append(getString(R.string.test_result_resolved)).append(" ").append(record.getPayload().toString());
+                            }
+                        }
+                        testText.append("\n").append(getString(R.string.test_time_used)).append(" ").
                                 append(String.valueOf(endTime - startTime)).append(" ms\n\n");
                     } else {
-                        testText.append("\n").append(getResources().getString(R.string.test_failed)).append("\n\n");
+                        testText.append("\n").append(getString(R.string.test_failed)).append("\n\n");
                     }
                 } catch (Exception e) {
-                    testText.append("\n").append(getResources().getString(R.string.test_failed)).append("\n\n");
+                    testText.append("\n").append(getString(R.string.test_failed)).append("\n\n");
 
                     Logger.logException(e);
                 }

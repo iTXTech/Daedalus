@@ -355,7 +355,7 @@ public class UdpDnsProvider extends DnsProvider {
                     ip[i] = Integer.parseInt(block);
                     i++;
                 }
-                builder.addAnswer(new Record<>(dnsQueryName, Record.TYPE.getType(A.class), 1, 64, new A(ip[0], ip[1], ip[2], ip[3])));
+                builder.addAnswer(new Record<>(dnsQueryName, Record.TYPE.A, 1, 64, new A(ip[0], ip[1], ip[2], ip[3])));
                 handleDnsResponse(parsedPacket, builder.build().toArray());
             } else {
                 Logger.info("DnsProvider: Resolving " + dnsQueryName + "  Sending to " + destAddr);
