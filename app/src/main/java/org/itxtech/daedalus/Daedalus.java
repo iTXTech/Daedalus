@@ -110,6 +110,14 @@ public class Daedalus extends Application {
         if (getExternalFilesDir(null) != null) {
             rulesPath = getExternalFilesDir(null).getPath() + "/rules/";
             configPath = getExternalFilesDir(null).getPath() + "/config.json";
+
+            File configDir = new File(rulesPath);
+            if (!configDir.isDirectory()) {
+                Logger.warning("Configuration directory is not a directory. Delete result: " + String.valueOf(configDir.delete()));
+            }
+            if (!configDir.exists()) {
+                Logger.debug("Configuration directory does not exist. Create result: " + String.valueOf(configDir.mkdirs()));
+            }
         }
 
         initData();
