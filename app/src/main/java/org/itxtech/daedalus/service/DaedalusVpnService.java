@@ -145,7 +145,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                 mThread = null;
             }
             if (notification != null) {
-                NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.cancel(NOTIFICATION_ACTIVATED);
                 notification = null;
             }
@@ -156,6 +156,8 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         stopSelf();
 
         if (shouldRefresh) {
+            RulesResolver.clear();
+            DnsServerHelper.clearPortCache();
             Logger.info("Daedalus VPN service has stopped");
         }
 
@@ -165,9 +167,6 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         } else if (shouldRefresh) {
             Daedalus.updateShortcut(getApplicationContext());
         }
-
-        RulesResolver.clean();
-        DnsServerHelper.cleanPortCache();
     }
 
 

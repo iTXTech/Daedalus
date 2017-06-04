@@ -50,9 +50,6 @@ public class Daedalus extends Application {
     private static final String SHORTCUT_ID_ACTIVATE = "shortcut_activate";
 
     public static final List<DnsServer> DNS_SERVERS = new ArrayList<DnsServer>() {{
-        /*add(new DnsServer("0", "113.107.249.56", R.string.server_cutedns_north_china));
-        add(new DnsServer("1", "120.27.103.230", R.string.server_cutedns_east_china));
-        add(new DnsServer("2", "123.206.61.167", R.string.server_cutedns_south_china));*/
         add(new DnsServer("115.159.220.214", R.string.server_puredns_east_china));
         add(new DnsServer("123.207.137.88", R.string.server_puredns_north_china));
         add(new DnsServer("115.159.146.99", R.string.server_aixyz_east_china));
@@ -179,7 +176,7 @@ public class Daedalus extends Application {
         prefs = null;
         RulesResolver.shutdown();
         mResolver.interrupt();
-        RulesResolver.clean();
+        RulesResolver.clear();
         mResolver = null;
         Logger.shutdown();
     }

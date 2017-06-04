@@ -58,7 +58,7 @@ public class RulesResolver implements Runnable {
         status = STATUS_PENDING_LOAD;
     }
 
-    public static void clean() {
+    public static void clear() {
         rules = null;
     }
 

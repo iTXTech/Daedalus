@@ -17,6 +17,22 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/spinner_server_choice"
                 android:layout_alignParentTop="true"/>
+        <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:id="@+id/spinner_type"
+                android:verticalScrollbarPosition="defaultPosition"
+                android:layout_alignParentTop="true"/>
+        <org.itxtech.daedalus.widget.ClearAutoCompleteTextView
+                android:completionThreshold="1"
+                android:singleLine="true"
+                android:hint="@string/test_test_domain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/autoCompleteTextView_test_url"
+                android:layout_below="@+id/spinner_type"
+                android:layout_marginTop="10dp"/>
         <Button
                 android:text="@string/action_start_test"
                 android:layout_width="wrap_content"
@@ -38,14 +54,5 @@
                 android:id="@+id/textView_test_info"
                 android:textIsSelectable="true"
                 android:textSize="18sp"/>
-        <org.itxtech.daedalus.widget.ClearAutoCompleteTextView
-                android:completionThreshold="1"
-                android:singleLine="true"
-                android:hint="@string/test_test_domain"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/autoCompleteTextView_test_url"
-                android:layout_below="@+id/spinner_server_choice"
-                android:layout_marginTop="10dp"/>
     </RelativeLayout>
 </ScrollView>

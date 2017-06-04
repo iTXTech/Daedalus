@@ -21,7 +21,7 @@ import java.util.HashMap;
 public class DnsServerHelper {
     private static HashMap<String, Integer> portCache = null;
 
-    public static void cleanPortCache() {
+    public static void clearPortCache() {
         portCache = null;
     }
 

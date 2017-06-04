@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +13,6 @@ import android.widget.*;
 import de.measite.minidns.DNSMessage;
 import de.measite.minidns.Question;
 import de.measite.minidns.Record;
-import de.measite.minidns.record.A;
-import de.measite.minidns.record.AAAA;
 import de.measite.minidns.source.NetworkDataSource;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
@@ -40,7 +37,28 @@ import java.util.Random;
  * (at your option) any later version.
  */
 public class DnsTestFragment extends ToolbarFragment {
-    private static final String TAG = "DServerTest";
+    private class Type {
+        private Record.TYPE type;
+        private String name;
+
+        private Type(String name, Record.TYPE type) {
+            this.name = name;
+            this.type = type;
+        }
+
+        private String getName() {
+            return name;
+        }
+
+        private Record.TYPE getType() {
+            return type;
+        }
+
+        @Override
+        public String toString() {
+            return getName();
+        }
+    }
 
     private static Thread mThread = null;
     private static Runnable mRunnable = null;
@@ -56,6 +74,32 @@ public class DnsTestFragment extends ToolbarFragment {
         ArrayAdapter spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, DnsServerHelper.getNames(Daedalus.getInstance()));
         spinnerServerChoice.setAdapter(spinnerArrayAdapter);
         spinnerServerChoice.setSelection(DnsServerHelper.getPosition(DnsServerHelper.getPrimary()));
+
+        ArrayList<Type> types = new ArrayList<Type>() {{
+            add(new Type("A", Record.TYPE.A));
+            add(new Type("NS", Record.TYPE.NS));
+            add(new Type("CNAME", Record.TYPE.CNAME));
+            add(new Type("SOA", Record.TYPE.SOA));
+            add(new Type("PTR", Record.TYPE.PTR));
+            add(new Type("MX", Record.TYPE.MX));
+            add(new Type("TXT", Record.TYPE.TXT));
+            add(new Type("AAAA", Record.TYPE.AAAA));
+            add(new Type("SRV", Record.TYPE.SRV));
+            add(new Type("OPT", Record.TYPE.OPT));
+            add(new Type("DS", Record.TYPE.DS));
+            add(new Type("RRSIG", Record.TYPE.RRSIG));
+            add(new Type("NSEC", Record.TYPE.NSEC));
+            add(new Type("DNSKEY", Record.TYPE.DNSKEY));
+            add(new Type("NSEC3", Record.TYPE.NSEC3));
+            add(new Type("NSEC3PARAM", Record.TYPE.NSEC3PARAM));
+            add(new Type("TLSA", Record.TYPE.TLSA));
+            add(new Type("OPENPGPKEY", Record.TYPE.OPENPGPKEY));
+            add(new Type("DLV", Record.TYPE.DLV));
+        }};
+
+        final Spinner spinnerType = (Spinner) view.findViewById(R.id.spinner_type);
+        ArrayAdapter<Type> typeAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, types);
+        spinnerType.setAdapter(typeAdapter);
 
         final AutoCompleteTextView textViewTestUrl = (AutoCompleteTextView) view.findViewById(R.id.autoCompleteTextView_test_url);
         ArrayAdapter autoCompleteArrayAdapter = new ArrayAdapter<>(Daedalus.getInstance(), android.R.layout.simple_list_item_1, Daedalus.DEFAULT_TEST_DOMAINS);
@@ -78,8 +122,9 @@ public class DnsTestFragment extends ToolbarFragment {
                         }
                     }};
                     DNSQuery dnsQuery = new DNSQuery();
+                    Record.TYPE type = ((Type) spinnerType.getSelectedItem()).getType();
                     for (String dnsServer : dnsServers) {
-                        testText = testServer(dnsQuery, dnsServer, testDomain, testText);
+                        testText = testServer(dnsQuery, type, dnsServer, testDomain, testText);
                     }
                     mHandler.obtainMessage(DnsTestHandler.MSG_TEST_DONE).sendToTarget();
                 } catch (Exception e) {
@@ -87,51 +132,41 @@ public class DnsTestFragment extends ToolbarFragment {
                 }
             }
 
-            private StringBuilder testServer(DNSQuery dnsQuery, String dnsServer, String testUrl, StringBuilder testText) {
-                Log.d(TAG, "Testing DNS " + dnsServer);
-                testText.append(getString(R.string.test_domain)).append(" ").append(testUrl).append("\n").append(getString(R.string.test_dns_server)).append(" ").append(dnsServer);
+
+            private StringBuilder testServer(DNSQuery dnsQuery, Record.TYPE type, String server, String domain, StringBuilder testText) {
+                Logger.debug("Testing DNS " + server);
+                testText.append(getString(R.string.test_domain)).append(" ").append(domain).append("\n").append(getString(R.string.test_dns_server)).append(" ").append(server);
 
                 mHandler.obtainMessage(DnsTestHandler.MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
 
-                DNSMessage.Builder messageA = DNSMessage.builder();
-                messageA.addQuestion(new Question(testUrl, Record.TYPE.A));
-                messageA.setId((new Random()).nextInt());
-                messageA.setRecursionDesired(true);
-                messageA.getEdnsBuilder().setUdpPayloadSize(1024).setDnssecOk(false);
-
-                DNSMessage.Builder messageAAAA = DNSMessage.builder();
-                messageAAAA.addQuestion(new Question(testUrl, Record.TYPE.AAAA));
-                messageAAAA.setId((new Random()).nextInt());
-                messageAAAA.setRecursionDesired(true);
-                messageAAAA.getEdnsBuilder().setUdpPayloadSize(1024).setDnssecOk(false);
-
                 try {
+                    DNSMessage.Builder message = DNSMessage.builder();
+                    message.addQuestion(new Question(domain, type));
+                    message.setId((new Random()).nextInt());
+                    message.setRecursionDesired(true);
+                    message.getEdnsBuilder().setUdpPayloadSize(1024).setDnssecOk(false);
+
                     long startTime = System.currentTimeMillis();
-                    DNSMessage responseAMessage = dnsQuery.query(messageA.build(), InetAddress.getByName(dnsServer), 53);//Auto forward ports
-                    DNSMessage responseAAAAMessage = dnsQuery.query(messageAAAA.build(), InetAddress.getByName(dnsServer), 53);//Auto forward ports
+                    DNSMessage responseAMessage = dnsQuery.query(message.build(), InetAddress.getByName(server), 53);
                     long endTime = System.currentTimeMillis();
 
-                    if (responseAMessage.answerSection.size() > 0 || responseAAAAMessage.answerSection.size() > 0) {
-                        for (Record record : responseAAAAMessage.answerSection) {
-                            if (record.getPayload() instanceof AAAA) {
-                                testText.append("\n").append(getString(R.string.test_result_resolved)).append(" ").append(record.getPayload().toString());
-                            }
-                        }
+                    if (responseAMessage.answerSection.size() > 0) {
                         for (Record record : responseAMessage.answerSection) {
-                            if (record.getPayload() instanceof A) {
+                            if (record.getPayload().getType() == type) {
                                 testText.append("\n").append(getString(R.string.test_result_resolved)).append(" ").append(record.getPayload().toString());
                             }
                         }
                         testText.append("\n").append(getString(R.string.test_time_used)).append(" ").
-                                append(String.valueOf(endTime - startTime)).append(" ms\n\n");
+                                append(String.valueOf(endTime - startTime)).append(" ms");
                     } else {
-                        testText.append("\n").append(getString(R.string.test_failed)).append("\n\n");
+                        testText.append("\n").append(getString(R.string.test_failed));
                     }
                 } catch (Exception e) {
-                    testText.append("\n").append(getString(R.string.test_failed)).append("\n\n");
-
+                    testText.append("\n").append(getString(R.string.test_failed));
                     Logger.logException(e);
                 }
+
+                testText.append("\n\n");
 
                 mHandler.obtainMessage(DnsTestHandler.MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
                 return testText;

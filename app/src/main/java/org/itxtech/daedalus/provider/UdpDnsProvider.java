@@ -345,7 +345,10 @@ public class UdpDnsProvider extends DnsProvider {
         String dnsQueryName = dnsMsg.getQuestion().name.toString();
 
         try {
-            String response = RulesResolver.resolve(dnsQueryName);
+            String response = null;
+            if (dnsMsg.getQuestion().type == Record.TYPE.A) {
+                response = RulesResolver.resolve(dnsQueryName);
+            }
             if (response != null) {
                 Logger.info("DnsProvider: Resolved " + dnsQueryName + "  Local resolver response: " + response);
                 DNSMessage.Builder builder = dnsMsg.asBuilder();
