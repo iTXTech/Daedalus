@@ -28,6 +28,7 @@ public class Configurations {
     private static File file;
 
     private ArrayList<CustomDNSServer> customDNSServers;
+    private ArrayList<CustomDNSServer> customDnsServers;
 
     private ArrayList<Rule> hostsRules;
     private ArrayList<Rule> dnsmasqRules;
@@ -60,6 +61,11 @@ public class Configurations {
     }
 
     public ArrayList<CustomDNSServer> getCustomDNSServers() {
+        //TODO: remove this after 1.10
+        if (customDnsServers != null && customDnsServers.size() > 0) {
+            customDNSServers = customDnsServers;
+            customDnsServers = null;
+        }
         if (customDNSServers == null) {
             customDNSServers = new ArrayList<>();
         }
