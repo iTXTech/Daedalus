@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.ConfigActivity;
-import org.itxtech.daedalus.util.CustomDnsServer;
-import org.itxtech.daedalus.util.DnsServer;
+import org.itxtech.daedalus.util.server.CustomDNSServer;
+import org.itxtech.daedalus.util.server.DNSServer;
 
 /**
  * Daedalus Project
@@ -70,7 +70,7 @@ public class DnsServerConfigFragment extends ConfigFragment {
 
         index = intent.getIntExtra(ConfigActivity.LAUNCH_ACTION_ID, ConfigActivity.ID_NONE);
         if (index != ConfigActivity.ID_NONE) {
-            CustomDnsServer server = Daedalus.configurations.getCustomDnsServers().get(index);
+            CustomDNSServer server = Daedalus.configurations.getCustomDNSServers().get(index);
             serverName.setText(server.getName());
             serverName.setSummary(server.getName());
             serverAddress.setText(server.getAddress());
@@ -80,7 +80,7 @@ public class DnsServerConfigFragment extends ConfigFragment {
         } else {
             serverName.setText("");
             serverAddress.setText("");
-            String port = String.valueOf(DnsServer.DNS_SERVER_DEFAULT_PORT);
+            String port = String.valueOf(DNSServer.DNS_SERVER_DEFAULT_PORT);
             serverPort.setText(port);
             serverPort.setSummary(port);
         }
@@ -104,9 +104,9 @@ public class DnsServerConfigFragment extends ConfigFragment {
                 }
 
                 if (index == ConfigActivity.ID_NONE) {
-                    Daedalus.configurations.getCustomDnsServers().add(new CustomDnsServer(serverName, serverAddress, Integer.parseInt(serverPort)));
+                    Daedalus.configurations.getCustomDNSServers().add(new CustomDNSServer(serverName, serverAddress, Integer.parseInt(serverPort)));
                 } else {
-                    CustomDnsServer server = Daedalus.configurations.getCustomDnsServers().get(index);
+                    CustomDNSServer server = Daedalus.configurations.getCustomDNSServers().get(index);
                     server.setName(serverName);
                     server.setAddress(serverAddress);
                     server.setPort(Integer.parseInt(serverPort));
@@ -120,7 +120,7 @@ public class DnsServerConfigFragment extends ConfigFragment {
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Daedalus.configurations.getCustomDnsServers().remove(index);
+                                    Daedalus.configurations.getCustomDNSServers().remove(index);
                                     getActivity().finish();
                                 }
                             })

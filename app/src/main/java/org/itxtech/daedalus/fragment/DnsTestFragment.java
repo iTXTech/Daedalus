@@ -16,8 +16,9 @@ import de.measite.minidns.Record;
 import de.measite.minidns.source.NetworkDataSource;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
-import org.itxtech.daedalus.util.DnsServerHelper;
 import org.itxtech.daedalus.util.Logger;
+import org.itxtech.daedalus.util.server.AbstractDNSServer;
+import org.itxtech.daedalus.util.server.DNSServerHelper;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -46,17 +47,13 @@ public class DnsTestFragment extends ToolbarFragment {
             this.type = type;
         }
 
-        private String getName() {
-            return name;
-        }
-
         private Record.TYPE getType() {
             return type;
         }
 
         @Override
         public String toString() {
-            return getName();
+            return name;
         }
     }
 
@@ -71,9 +68,9 @@ public class DnsTestFragment extends ToolbarFragment {
         final TextView textViewTestInfo = (TextView) view.findViewById(R.id.textView_test_info);
 
         final Spinner spinnerServerChoice = (Spinner) view.findViewById(R.id.spinner_server_choice);
-        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, DnsServerHelper.getNames(Daedalus.getInstance()));
+        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, DNSServerHelper.getAllServers());
         spinnerServerChoice.setAdapter(spinnerArrayAdapter);
-        spinnerServerChoice.setSelection(DnsServerHelper.getPosition(DnsServerHelper.getPrimary()));
+        spinnerServerChoice.setSelection(DNSServerHelper.getPosition(DNSServerHelper.getPrimary()));
 
         ArrayList<Type> types = new ArrayList<Type>() {{
             add(new Type("A", Record.TYPE.A));
@@ -101,21 +98,21 @@ public class DnsTestFragment extends ToolbarFragment {
         ArrayAdapter<Type> typeAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, types);
         spinnerType.setAdapter(typeAdapter);
 
-        final AutoCompleteTextView textViewTestUrl = (AutoCompleteTextView) view.findViewById(R.id.autoCompleteTextView_test_url);
+        final AutoCompleteTextView textViewTestDomain = (AutoCompleteTextView) view.findViewById(R.id.autoCompleteTextView_test_url);
         ArrayAdapter autoCompleteArrayAdapter = new ArrayAdapter<>(Daedalus.getInstance(), android.R.layout.simple_list_item_1, Daedalus.DEFAULT_TEST_DOMAINS);
-        textViewTestUrl.setAdapter(autoCompleteArrayAdapter);
+        textViewTestDomain.setAdapter(autoCompleteArrayAdapter);
 
         mRunnable = new Runnable() {
             @Override
             public void run() {
                 try {
-                    String testDomain = textViewTestUrl.getText().toString();
+                    String testDomain = textViewTestDomain.getText().toString();
                     if (testDomain.equals("")) {
                         testDomain = Daedalus.DEFAULT_TEST_DOMAINS[0];
                     }
                     StringBuilder testText = new StringBuilder();
                     ArrayList<String> dnsServers = new ArrayList<String>() {{
-                        add(DnsServerHelper.getAddressByDescription(Daedalus.getInstance(), spinnerServerChoice.getSelectedItem().toString()));
+                        add(((AbstractDNSServer) spinnerServerChoice.getSelectedItem()).getAddress());
                         String servers = Daedalus.getPrefs().getString("dns_test_servers", "");
                         if (!servers.equals("")) {
                             addAll(Arrays.asList(servers.split(",")));
@@ -134,7 +131,7 @@ public class DnsTestFragment extends ToolbarFragment {
 
 
             private StringBuilder testServer(DNSQuery dnsQuery, Record.TYPE type, String server, String domain, StringBuilder testText) {
-                Logger.debug("Testing DNS " + server);
+                Logger.debug("Testing DNS server" + server);
                 testText.append(getString(R.string.test_domain)).append(" ").append(domain).append("\n").append(getString(R.string.test_dns_server)).append(" ").append(server);
 
                 mHandler.obtainMessage(DnsTestHandler.MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();

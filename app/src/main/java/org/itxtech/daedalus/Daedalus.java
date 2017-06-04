@@ -19,7 +19,11 @@ import com.google.gson.JsonParseException;
 import com.google.gson.stream.JsonReader;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.service.DaedalusVpnService;
-import org.itxtech.daedalus.util.*;
+import org.itxtech.daedalus.util.Configurations;
+import org.itxtech.daedalus.util.Logger;
+import org.itxtech.daedalus.util.Rule;
+import org.itxtech.daedalus.util.RulesResolver;
+import org.itxtech.daedalus.util.server.DNSServer;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -49,12 +53,12 @@ public class Daedalus extends Application {
 
     private static final String SHORTCUT_ID_ACTIVATE = "shortcut_activate";
 
-    public static final List<DnsServer> DNS_SERVERS = new ArrayList<DnsServer>() {{
-        add(new DnsServer("115.159.220.214", R.string.server_puredns_east_china));
-        add(new DnsServer("123.207.137.88", R.string.server_puredns_north_china));
-        add(new DnsServer("115.159.146.99", R.string.server_aixyz_east_china));
-        add(new DnsServer("123.206.21.48", R.string.server_aixyz_south_china));
-        add(new DnsServer("119.29.105.234", R.string.server_cutedns_south_china));
+    public static final List<DNSServer> DNS_SERVERS = new ArrayList<DNSServer>() {{
+        add(new DNSServer("115.159.220.214", R.string.server_puredns_east_china));
+        add(new DNSServer("123.207.137.88", R.string.server_puredns_north_china));
+        add(new DNSServer("115.159.146.99", R.string.server_aixyz_east_china));
+        add(new DNSServer("123.206.21.48", R.string.server_aixyz_south_china));
+        add(new DNSServer("119.29.105.234", R.string.server_cutedns_south_china));
     }};
 
     public static final List<Rule> RULES = new ArrayList<Rule>() {{

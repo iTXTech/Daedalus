@@ -3,6 +3,7 @@ package org.itxtech.daedalus.util;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import org.itxtech.daedalus.Daedalus;
+import org.itxtech.daedalus.util.server.CustomDNSServer;
 
 import java.io.File;
 import java.io.FileReader;
@@ -26,7 +27,7 @@ public class Configurations {
 
     private static File file;
 
-    private ArrayList<CustomDnsServer> customDnsServers;
+    private ArrayList<CustomDNSServer> customDNSServers;
 
     private ArrayList<Rule> hostsRules;
     private ArrayList<Rule> dnsmasqRules;
@@ -36,7 +37,7 @@ public class Configurations {
 
     private long activateCounter;
 
-    int getNextDnsId() {
+    public int getNextDnsId() {
         if (totalDnsId < CUSTOM_ID_START) {
             totalDnsId = CUSTOM_ID_START;
         }
@@ -58,11 +59,11 @@ public class Configurations {
         this.activateCounter = activateCounter;
     }
 
-    public ArrayList<CustomDnsServer> getCustomDnsServers() {
-        if (customDnsServers == null) {
-            customDnsServers = new ArrayList<>();
+    public ArrayList<CustomDNSServer> getCustomDNSServers() {
+        if (customDNSServers == null) {
+            customDNSServers = new ArrayList<>();
         }
-        return customDnsServers;
+        return customDNSServers;
     }
 
     public ArrayList<Rule> getHostsRules() {

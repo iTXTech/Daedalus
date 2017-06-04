@@ -1,4 +1,4 @@
-package org.itxtech.daedalus.util;
+package org.itxtech.daedalus.util.server;
 
 import android.content.Context;
 import org.itxtech.daedalus.Daedalus;
@@ -18,7 +18,7 @@ import java.util.HashMap;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class DnsServerHelper {
+public class DNSServerHelper {
     private static HashMap<String, Integer> portCache = null;
 
     public static void clearPortCache() {
@@ -27,11 +27,11 @@ public class DnsServerHelper {
 
     public static void buildPortCache() {
         portCache = new HashMap<>();
-        for (DnsServer server : Daedalus.DNS_SERVERS) {
+        for (DNSServer server : Daedalus.DNS_SERVERS) {
             portCache.put(server.getAddress(), server.getPort());
         }
 
-        for (CustomDnsServer server : Daedalus.configurations.getCustomDnsServers()) {
+        for (CustomDNSServer server : Daedalus.configurations.getCustomDNSServers()) {
             portCache.put(server.getAddress(), server.getPort());
         }
 
@@ -53,8 +53,8 @@ public class DnsServerHelper {
             return intId;
         }
 
-        for (int i = 0; i < Daedalus.configurations.getCustomDnsServers().size(); i++) {
-            if (Daedalus.configurations.getCustomDnsServers().get(i).getId().equals(id)) {
+        for (int i = 0; i < Daedalus.configurations.getCustomDNSServers().size(); i++) {
+            if (Daedalus.configurations.getCustomDNSServers().get(i).getId().equals(id)) {
                 return i + Daedalus.DNS_SERVERS.size();
             }
         }
@@ -62,18 +62,18 @@ public class DnsServerHelper {
     }
 
     public static String getPrimary() {
-        return String.valueOf(DnsServerHelper.checkServerId(Integer.parseInt(Daedalus.getPrefs().getString("primary_server", "0"))));
+        return String.valueOf(DNSServerHelper.checkServerId(Integer.parseInt(Daedalus.getPrefs().getString("primary_server", "0"))));
     }
 
     public static String getSecondary() {
-        return String.valueOf(DnsServerHelper.checkServerId(Integer.parseInt(Daedalus.getPrefs().getString("secondary_server", "1"))));
+        return String.valueOf(DNSServerHelper.checkServerId(Integer.parseInt(Daedalus.getPrefs().getString("secondary_server", "1"))));
     }
 
     private static int checkServerId(int id) {
         if (id < (Daedalus.DNS_SERVERS.size() - 1)) {
             return id;
         }
-        for (CustomDnsServer server : Daedalus.configurations.getCustomDnsServers()) {
+        for (CustomDNSServer server : Daedalus.configurations.getCustomDNSServers()) {
             if (server.getId().equals(String.valueOf(id))) {
                 return id;
             }
@@ -82,28 +82,28 @@ public class DnsServerHelper {
     }
 
     public static String getAddressById(String id) {
-        for (DnsServer server : Daedalus.DNS_SERVERS) {
+        for (DNSServer server : Daedalus.DNS_SERVERS) {
             if (server.getId().equals(id)) {
                 return server.getAddress();
             }
         }
-        for (CustomDnsServer customDnsServer : Daedalus.configurations.getCustomDnsServers()) {
-            if (customDnsServer.getId().equals(id)) {
-                return customDnsServer.getAddress();
+        for (CustomDNSServer customDNSServer : Daedalus.configurations.getCustomDNSServers()) {
+            if (customDNSServer.getId().equals(id)) {
+                return customDNSServer.getAddress();
             }
         }
         return Daedalus.DNS_SERVERS.get(0).getAddress();
     }
 
     public static String getAddressByDescription(Context context, String description) {
-        for (DnsServer server : Daedalus.DNS_SERVERS) {
+        for (DNSServer server : Daedalus.DNS_SERVERS) {
             if (server.getStringDescription(context).equals(description)) {
                 return server.getAddress();
             }
         }
-        for (CustomDnsServer customDnsServer : Daedalus.configurations.getCustomDnsServers()) {
-            if (customDnsServer.getName().equals(description)) {
-                return customDnsServer.getAddress();
+        for (CustomDNSServer customDNSServer : Daedalus.configurations.getCustomDNSServers()) {
+            if (customDNSServer.getName().equals(description)) {
+                return customDNSServer.getAddress();
             }
         }
         return Daedalus.DNS_SERVERS.get(0).getAddress();
@@ -111,11 +111,11 @@ public class DnsServerHelper {
 
     public static String[] getIds() {
         ArrayList<String> servers = new ArrayList<>(Daedalus.DNS_SERVERS.size());
-        for (DnsServer server : Daedalus.DNS_SERVERS) {
+        for (DNSServer server : Daedalus.DNS_SERVERS) {
             servers.add(server.getId());
         }
-        for (CustomDnsServer customDnsServer : Daedalus.configurations.getCustomDnsServers()) {
-            servers.add(customDnsServer.getId());
+        for (CustomDNSServer customDNSServer : Daedalus.configurations.getCustomDNSServers()) {
+            servers.add(customDNSServer.getId());
         }
         String[] stringServers = new String[Daedalus.DNS_SERVERS.size()];
         return servers.toArray(stringServers);
@@ -123,31 +123,38 @@ public class DnsServerHelper {
 
     public static String[] getNames(Context context) {
         ArrayList<String> servers = new ArrayList<>(Daedalus.DNS_SERVERS.size());
-        for (DnsServer server : Daedalus.DNS_SERVERS) {
+        for (DNSServer server : Daedalus.DNS_SERVERS) {
             servers.add(server.getStringDescription(context));
         }
-        for (CustomDnsServer customDnsServer : Daedalus.configurations.getCustomDnsServers()) {
-            servers.add(customDnsServer.getName());
+        for (CustomDNSServer customDNSServer : Daedalus.configurations.getCustomDNSServers()) {
+            servers.add(customDNSServer.getName());
         }
         String[] stringServers = new String[Daedalus.DNS_SERVERS.size()];
         return servers.toArray(stringServers);
     }
 
+    public static ArrayList<AbstractDNSServer> getAllServers() {
+        ArrayList<AbstractDNSServer> servers = new ArrayList<>(Daedalus.DNS_SERVERS.size());
+        servers.addAll(Daedalus.DNS_SERVERS);
+        servers.addAll(Daedalus.configurations.getCustomDNSServers());
+        return servers;
+    }
+
     public static String getDescription(String id, Context context) {
-        for (DnsServer server : Daedalus.DNS_SERVERS) {
+        for (DNSServer server : Daedalus.DNS_SERVERS) {
             if (server.getId().equals(id)) {
                 return server.getStringDescription(context);
             }
         }
-        for (CustomDnsServer customDnsServer : Daedalus.configurations.getCustomDnsServers()) {
-            if (customDnsServer.getId().equals(id)) {
-                return customDnsServer.getName();
+        for (CustomDNSServer customDNSServer : Daedalus.configurations.getCustomDNSServers()) {
+            if (customDNSServer.getId().equals(id)) {
+                return customDNSServer.getName();
             }
         }
         return Daedalus.DNS_SERVERS.get(0).getStringDescription(context);
     }
 
-    public static boolean isInUsing(CustomDnsServer server) {
+    public static boolean isInUsing(CustomDNSServer server) {
         return Daedalus.getInstance().isServiceActivated() && (server.getId().equals(getPrimary()) || server.getId().equals(getSecondary()));
     }
 }

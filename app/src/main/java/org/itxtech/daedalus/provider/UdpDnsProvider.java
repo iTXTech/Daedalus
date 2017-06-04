@@ -13,9 +13,9 @@ import de.measite.minidns.Record;
 import de.measite.minidns.record.A;
 import de.measite.minidns.util.InetAddressUtil;
 import org.itxtech.daedalus.service.DaedalusVpnService;
-import org.itxtech.daedalus.util.DnsServerHelper;
 import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.RulesResolver;
+import org.itxtech.daedalus.util.server.DNSServerHelper;
 import org.pcap4j.packet.*;
 import org.pcap4j.packet.factory.PacketFactoryPropertiesLoader;
 import org.pcap4j.util.PropertiesLoader;
@@ -325,7 +325,7 @@ public class UdpDnsProvider extends DnsProvider {
             // the gateway to reduce the RTT. For further details, please see
             // https://bugzilla.mozilla.org/show_bug.cgi?id=888268
             DatagramPacket outPacket = new DatagramPacket(new byte[0], 0, 0, destAddr,
-                    DnsServerHelper.getPortOrDefault(destAddr, parsedUdp.getHeader().getDstPort().valueAsInt()));
+                    DNSServerHelper.getPortOrDefault(destAddr, parsedUdp.getHeader().getDstPort().valueAsInt()));
             forwardPacket(outPacket, null);
             return;
         }
@@ -363,7 +363,7 @@ public class UdpDnsProvider extends DnsProvider {
             } else {
                 Logger.info("DnsProvider: Resolving " + dnsQueryName + "  Sending to " + destAddr);
                 DatagramPacket outPacket = new DatagramPacket(dnsRawData, 0, dnsRawData.length, destAddr,
-                        DnsServerHelper.getPortOrDefault(destAddr, parsedUdp.getHeader().getDstPort().valueAsInt()));
+                        DNSServerHelper.getPortOrDefault(destAddr, parsedUdp.getHeader().getDstPort().valueAsInt()));
                 forwardPacket(outPacket, parsedPacket);
             }
         } catch (Exception e) {

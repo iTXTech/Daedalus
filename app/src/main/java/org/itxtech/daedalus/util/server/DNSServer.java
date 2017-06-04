@@ -1,6 +1,7 @@
-package org.itxtech.daedalus.util;
+package org.itxtech.daedalus.util.server;
 
 import android.content.Context;
+import org.itxtech.daedalus.Daedalus;
 
 /**
  * Daedalus Project
@@ -13,41 +14,33 @@ import android.content.Context;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class DnsServer {
-    public static int DNS_SERVER_DEFAULT_PORT = 53;
-
+public class DNSServer extends AbstractDNSServer {
 
     private static int totalId = 0;
 
     private String id;
-    private String address;
-    private int port;
     private int description = 0;
 
-    public DnsServer(String address, int description, int port) {
+    public DNSServer(String address, int description, int port) {
+        super(address, port);
         this.id = String.valueOf(totalId++);
-        this.address = address;
         this.description = description;
-        this.port = port;
     }
 
-    public DnsServer(String address, int description) {
+    public DNSServer(String address, int description) {
         this(address, description, DNS_SERVER_DEFAULT_PORT);
-    }
-
-    public int getPort() {
-        return port;
     }
 
     public String getId() {
         return id;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
     public String getStringDescription(Context context) {
         return context.getResources().getString(description);
+    }
+
+    @Override
+    public String getName() {
+        return getStringDescription(Daedalus.getInstance());
     }
 }

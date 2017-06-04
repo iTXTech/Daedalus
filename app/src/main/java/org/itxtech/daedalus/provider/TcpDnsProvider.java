@@ -9,8 +9,8 @@ import android.system.OsConstants;
 import android.system.StructPollfd;
 import android.util.Log;
 import org.itxtech.daedalus.service.DaedalusVpnService;
-import org.itxtech.daedalus.util.DnsServerHelper;
 import org.itxtech.daedalus.util.Logger;
+import org.itxtech.daedalus.util.server.DNSServerHelper;
 import org.pcap4j.packet.IpPacket;
 
 import java.io.*;
@@ -136,7 +136,7 @@ public class TcpDnsProvider extends UdpDnsProvider {
 
             service.protect(dnsSocket);
 
-            SocketAddress address = new InetSocketAddress(outPacket.getAddress(), DnsServerHelper.getPortOrDefault(outPacket.getAddress(), outPacket.getPort()));
+            SocketAddress address = new InetSocketAddress(outPacket.getAddress(), DNSServerHelper.getPortOrDefault(outPacket.getAddress(), outPacket.getPort()));
             dnsSocket.connect(address, 5000);
             dnsSocket.setSoTimeout(5000);
             Logger.info("TcpDnsProvider: Sending DNS query request");

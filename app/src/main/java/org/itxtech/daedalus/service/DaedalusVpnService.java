@@ -18,9 +18,9 @@ import org.itxtech.daedalus.provider.DnsProvider;
 import org.itxtech.daedalus.provider.TcpDnsProvider;
 import org.itxtech.daedalus.provider.UdpDnsProvider;
 import org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver;
-import org.itxtech.daedalus.util.DnsServerHelper;
 import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.RulesResolver;
+import org.itxtech.daedalus.util.server.DNSServerHelper;
 
 import java.net.InetAddress;
 import java.util.HashMap;
@@ -101,7 +101,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                     }
 
                     Daedalus.initHostsResolver();
-                    DnsServerHelper.buildPortCache();
+                    DNSServerHelper.buildPortCache();
 
                     if (this.mThread == null) {
                         this.mThread = new Thread(this, "DaedalusVpn");
@@ -157,7 +157,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
         if (shouldRefresh) {
             RulesResolver.clear();
-            DnsServerHelper.clearPortCache();
+            DNSServerHelper.clearPortCache();
             Logger.info("Daedalus VPN service has stopped");
         }
 
