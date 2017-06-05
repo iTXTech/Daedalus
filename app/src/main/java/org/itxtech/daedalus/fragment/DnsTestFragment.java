@@ -144,11 +144,11 @@ public class DnsTestFragment extends ToolbarFragment {
                     message.getEdnsBuilder().setUdpPayloadSize(1024).setDnssecOk(false);
 
                     long startTime = System.currentTimeMillis();
-                    DNSMessage responseAMessage = dnsQuery.query(message.build(), InetAddress.getByName(server), 53);
+                    DNSMessage response = dnsQuery.query(message.build(), InetAddress.getByName(server), 53);
                     long endTime = System.currentTimeMillis();
 
-                    if (responseAMessage.answerSection.size() > 0) {
-                        for (Record record : responseAMessage.answerSection) {
+                    if (response.answerSection.size() > 0) {
+                        for (Record record : response.answerSection) {
                             if (record.getPayload().getType() == type) {
                                 testText.append("\n").append(getString(R.string.test_result_resolved)).append(" ").append(record.getPayload().toString());
                             }

@@ -70,7 +70,7 @@ public class DNSServerHelper {
     }
 
     private static int checkServerId(int id) {
-        if (id < (Daedalus.DNS_SERVERS.size() - 1)) {
+        if (id < Daedalus.DNS_SERVERS.size()) {
             return id;
         }
         for (CustomDNSServer server : Daedalus.configurations.getCustomDNSServers()) {
@@ -89,20 +89,6 @@ public class DNSServerHelper {
         }
         for (CustomDNSServer customDNSServer : Daedalus.configurations.getCustomDNSServers()) {
             if (customDNSServer.getId().equals(id)) {
-                return customDNSServer.getAddress();
-            }
-        }
-        return Daedalus.DNS_SERVERS.get(0).getAddress();
-    }
-
-    public static String getAddressByDescription(Context context, String description) {
-        for (DNSServer server : Daedalus.DNS_SERVERS) {
-            if (server.getStringDescription(context).equals(description)) {
-                return server.getAddress();
-            }
-        }
-        for (CustomDNSServer customDNSServer : Daedalus.configurations.getCustomDNSServers()) {
-            if (customDNSServer.getName().equals(description)) {
                 return customDNSServer.getAddress();
             }
         }

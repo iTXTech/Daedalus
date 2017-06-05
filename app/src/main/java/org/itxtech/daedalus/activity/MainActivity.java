@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         activateCounter++;
         Daedalus.configurations.setActivateCounter(activateCounter);
-        if (activateCounter % 20 == 0) {
+        if (activateCounter % 10 == 0) {
             new AlertDialog.Builder(this)
                     .setTitle("觉得还不错？")
                     .setMessage("您的支持是我动力来源！\n请考虑为我买杯咖啡醒醒脑，甚至其他…… ;)")
