@@ -43,8 +43,8 @@ public class GlobalConfigFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary(DNSServerHelper.getDescription((String) newValue, Daedalus.getInstance()));
-                Snackbar.make(getView(), R.string.notice_need_restart, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                /*Snackbar.make(getView(), R.string.notice_need_restart, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
                 return true;
             }
         });
@@ -57,8 +57,8 @@ public class GlobalConfigFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary(DNSServerHelper.getDescription((String) newValue, Daedalus.getInstance()));
-                Snackbar.make(getView(), R.string.notice_need_restart, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                /*Snackbar.make(getView(), R.string.notice_need_restart, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
                 return true;
             }
         });

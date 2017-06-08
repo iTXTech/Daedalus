@@ -62,8 +62,8 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
                 if (viewHolder instanceof RulesFragment.ViewHolder) {
                     Rule rule = Rule.getRuleById(((ViewHolder) viewHolder).getId());
                     if (rule != null && rule.isServiceAndUsing()) {
-                        Snackbar.make(getView(), R.string.notice_after_stop, Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
+                        /*Snackbar.make(getView(), R.string.notice_after_stop, Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();*/
                         return 0;
                     }
                 }
@@ -229,10 +229,10 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
                     rule.setUsing(!v.isSelected());
                     v.setSelected(!v.isSelected());
                 }
-            } else {
+            }/* else {
                 Snackbar.make(view, R.string.notice_after_stop, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-            }
+            }*/
         }
 
         @Override
@@ -243,10 +243,10 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
                         .putExtra(ConfigActivity.LAUNCH_ACTION_ID, Integer.parseInt(id))
                         .putExtra(ConfigActivity.LAUNCH_ACTION_FRAGMENT, ConfigActivity.LAUNCH_FRAGMENT_RULE)
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            } else {
+            }/* else {
                 Snackbar.make(view, R.string.notice_after_stop, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-            }
+            }*/
             return true;
         }
     }

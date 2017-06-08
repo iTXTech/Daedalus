@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -174,9 +173,9 @@ public class DnsTestFragment extends ToolbarFragment {
         startTestBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v, R.string.notice_start_test, Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
-                startTestBut.setVisibility(View.INVISIBLE);
+                /*Snackbar.make(v, R.string.notice_start_test, Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show();*/
+                startTestBut.setEnabled(false);
 
                 InputMethodManager imm = (InputMethodManager) Daedalus.getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
@@ -249,7 +248,7 @@ public class DnsTestFragment extends ToolbarFragment {
                     textViewTestInfo.setText((String) msg.obj);
                     break;
                 case MSG_TEST_DONE:
-                    startTestBtn.setVisibility(View.VISIBLE);
+                    startTestBtn.setEnabled(true);
                     stopThread();
                     break;
             }
