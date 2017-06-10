@@ -52,7 +52,7 @@ dependencies {
     compile 'org.pcap4j:pcap4j-core:1.7.0'
     compile 'org.pcap4j:pcap4j-packetfactory-propertiesbased:1.7.0'
     compile 'de.measite.minidns:minidns-core:0.2.1'
-    compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.google.code.gson:gson:2.8.1'
 
     compile 'com.google.firebase:firebase-crash:10.2.6'
 

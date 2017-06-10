@@ -125,11 +125,13 @@ public class Configurations {
     public static Configurations load(File file) {
         Configurations.file = file;
         Configurations config = null;
-        try {
-            config = Daedalus.parseJson(Configurations.class, new JsonReader(new FileReader(file)));
-            Logger.info("Loading configuration successfully from " + file);
-        } catch (Exception e) {
-            Logger.logException(e);
+        if (file.exists()) {
+            try {
+                config = Daedalus.parseJson(Configurations.class, new JsonReader(new FileReader(file)));
+                Logger.info("Loading configuration successfully from " + file);
+            } catch (Exception e) {
+                Logger.logException(e);
+            }
         }
 
         if (config == null) {

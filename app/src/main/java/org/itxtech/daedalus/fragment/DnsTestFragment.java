@@ -130,7 +130,7 @@ public class DnsTestFragment extends ToolbarFragment {
 
 
             private StringBuilder testServer(DNSQuery dnsQuery, Record.TYPE type, String server, String domain, StringBuilder testText) {
-                Logger.debug("Testing DNS server" + server);
+                Logger.debug("Testing DNS server " + server);
                 testText.append(getString(R.string.test_domain)).append(" ").append(domain).append("\n").append(getString(R.string.test_dns_server)).append(" ").append(server);
 
                 mHandler.obtainMessage(DnsTestHandler.MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
