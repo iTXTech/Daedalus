@@ -11,7 +11,7 @@ package org.itxtech.daedalus.util.server;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-abstract public class AbstractDNSServer {
+public class AbstractDNSServer {
     public static final int DNS_SERVER_DEFAULT_PORT = 53;
 
     protected String address;
@@ -38,7 +38,9 @@ abstract public class AbstractDNSServer {
         return port;
     }
 
-    public abstract String getName();
+    public String getName() {
+        return "";
+    }
 
     @Override
     public String toString() {

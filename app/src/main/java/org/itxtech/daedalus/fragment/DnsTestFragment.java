@@ -22,7 +22,6 @@ import org.itxtech.daedalus.util.server.DNSServerHelper;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -110,16 +109,29 @@ public class DnsTestFragment extends ToolbarFragment {
                         testDomain = Daedalus.DEFAULT_TEST_DOMAINS[0];
                     }
                     StringBuilder testText = new StringBuilder();
-                    ArrayList<String> dnsServers = new ArrayList<String>() {{
-                        add(((AbstractDNSServer) spinnerServerChoice.getSelectedItem()).getAddress());
+                    ArrayList<AbstractDNSServer> dnsServers = new ArrayList<AbstractDNSServer>() {{
+                        add(((AbstractDNSServer) spinnerServerChoice.getSelectedItem()));
                         String servers = Daedalus.getPrefs().getString("dns_test_servers", "");
                         if (!servers.equals("")) {
-                            addAll(Arrays.asList(servers.split(",")));
+                            for (String server : servers.split(",")) {
+                                if (server.contains(":")) {
+                                    String[] pieces = servers.split(":");
+                                    int port = AbstractDNSServer.DNS_SERVER_DEFAULT_PORT;
+                                    try {
+                                        port = Integer.parseInt(pieces[1]);
+                                    } catch (Exception e) {
+                                        Logger.logException(e);
+                                    }
+                                    add(new AbstractDNSServer(pieces[0], port));
+                                } else {
+                                    add(new AbstractDNSServer(server, AbstractDNSServer.DNS_SERVER_DEFAULT_PORT));
+                                }
+                            }
                         }
                     }};
                     DNSQuery dnsQuery = new DNSQuery();
                     Record.TYPE type = ((Type) spinnerType.getSelectedItem()).getType();
-                    for (String dnsServer : dnsServers) {
+                    for (AbstractDNSServer dnsServer : dnsServers) {
                         testText = testServer(dnsQuery, type, dnsServer, testDomain, testText);
                     }
                     mHandler.obtainMessage(DnsTestHandler.MSG_TEST_DONE).sendToTarget();
@@ -129,9 +141,9 @@ public class DnsTestFragment extends ToolbarFragment {
             }
 
 
-            private StringBuilder testServer(DNSQuery dnsQuery, Record.TYPE type, String server, String domain, StringBuilder testText) {
+            private StringBuilder testServer(DNSQuery dnsQuery, Record.TYPE type, AbstractDNSServer server, String domain, StringBuilder testText) {
                 Logger.debug("Testing DNS server " + server);
-                testText.append(getString(R.string.test_domain)).append(" ").append(domain).append("\n").append(getString(R.string.test_dns_server)).append(" ").append(server);
+                testText.append(getString(R.string.test_domain)).append(" ").append(domain).append("\n").append(getString(R.string.test_dns_server)).append(" ").append(server.getAddress()).append(":").append(server.getPort());
 
                 mHandler.obtainMessage(DnsTestHandler.MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
 
@@ -143,7 +155,7 @@ public class DnsTestFragment extends ToolbarFragment {
                     message.getEdnsBuilder().setUdpPayloadSize(1024).setDnssecOk(false);
 
                     long startTime = System.currentTimeMillis();
-                    DNSMessage response = dnsQuery.query(message.build(), InetAddress.getByName(server), 53);
+                    DNSMessage response = dnsQuery.query(message.build(), InetAddress.getByName(server.getAddress()), server.getPort());
                     long endTime = System.currentTimeMillis();
 
                     if (response.answerSection.size() > 0) {
