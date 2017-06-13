@@ -14,9 +14,9 @@ import android.util.Log;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.MainActivity;
-import org.itxtech.daedalus.provider.DnsProvider;
-import org.itxtech.daedalus.provider.TcpDnsProvider;
-import org.itxtech.daedalus.provider.UdpDnsProvider;
+import org.itxtech.daedalus.provider.Provider;
+import org.itxtech.daedalus.provider.TcpProvider;
+import org.itxtech.daedalus.provider.UdpProvider;
 import org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver;
 import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.RulesResolver;
@@ -52,7 +52,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
     private boolean running = false;
     private long lastUpdate = 0;
     private boolean statisticQuery;
-    private DnsProvider provider;
+    private Provider provider;
     private ParcelFileDescriptor descriptor;
 
     private Thread mThread = null;
@@ -229,9 +229,9 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
             if (advanced) {
                 if (Daedalus.getPrefs().getBoolean("settings_dns_over_tcp", false)) {
-                    provider = new TcpDnsProvider(descriptor, this);
+                    provider = new TcpProvider(descriptor, this);
                 } else {
-                    provider = new UdpDnsProvider(descriptor, this);
+                    provider = new UdpProvider(descriptor, this);
                 }
                 provider.start();
                 provider.process();

@@ -86,7 +86,7 @@ public class RuleConfigFragment extends ConfigFragment {
         });
 
         final ListPreference ruleType = (ListPreference) findPreference("ruleType");
-        final String[] entries = {"hosts", "DNSMasq"};
+        final String[] entries = {"Hosts", "DNSMasq"};
         String[] values = {"0", "1"};
         ruleType.setEntries(entries);
         ruleType.setEntryValues(values);

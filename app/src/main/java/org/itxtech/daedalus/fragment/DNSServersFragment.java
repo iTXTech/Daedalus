@@ -28,8 +28,8 @@ import org.itxtech.daedalus.util.server.DNSServerHelper;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class DnsServersFragment extends ToolbarFragment {
-    private DnsServersFragment.DnsServerAdapter adapter;
+public class DNSServersFragment extends ToolbarFragment {
+    private DNSServerAdapter adapter;
     private CustomDNSServer server = null;
 
     @Override
@@ -38,7 +38,7 @@ public class DnsServersFragment extends ToolbarFragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_dns_servers);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(manager);
-        adapter = new DnsServerAdapter();
+        adapter = new DNSServerAdapter();
         recyclerView.setAdapter(adapter);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
             @Override
@@ -119,7 +119,7 @@ public class DnsServersFragment extends ToolbarFragment {
         adapter.notifyDataSetChanged();
     }
 
-    private class DnsServerAdapter extends RecyclerView.Adapter<ViewHolder> {
+    private class DNSServerAdapter extends RecyclerView.Adapter<ViewHolder> {
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             CustomDNSServer server = Daedalus.configurations.getCustomDNSServers().get(position);

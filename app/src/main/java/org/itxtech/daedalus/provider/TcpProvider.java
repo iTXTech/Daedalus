@@ -33,13 +33,13 @@ import java.util.LinkedList;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class TcpDnsProvider extends UdpDnsProvider {
+public class TcpProvider extends UdpProvider {
 
-    private static final String TAG = "TcpDnsProvider";
+    private static final String TAG = "TcpProvider";
 
-    private final TcpDnsProvider.WospList dnsIn = new TcpDnsProvider.WospList();
+    private final TcpProvider.WospList dnsIn = new TcpProvider.WospList();
 
-    public TcpDnsProvider(ParcelFileDescriptor descriptor, DaedalusVpnService service) {
+    public TcpProvider(ParcelFileDescriptor descriptor, DaedalusVpnService service) {
         super(descriptor, service);
     }
 
@@ -70,7 +70,7 @@ public class TcpDnsProvider extends UdpDnsProvider {
                 polls[1] = blockFd;
                 {
                     int i = -1;
-                    for (TcpDnsProvider.WaitingOnSocketPacket wosp : dnsIn) {
+                    for (TcpProvider.WaitingOnSocketPacket wosp : dnsIn) {
                         i++;
                         StructPollfd pollFd = polls[2 + i] = new StructPollfd();
                         pollFd.fd = ParcelFileDescriptor.fromSocket(wosp.socket).getFileDescriptor();
@@ -91,10 +91,10 @@ public class TcpDnsProvider extends UdpDnsProvider {
                 // constraints
                 {
                     int i = -1;
-                    Iterator<TcpDnsProvider.WaitingOnSocketPacket> iter = dnsIn.iterator();
+                    Iterator<TcpProvider.WaitingOnSocketPacket> iter = dnsIn.iterator();
                     while (iter.hasNext()) {
                         i++;
-                        TcpDnsProvider.WaitingOnSocketPacket wosp = iter.next();
+                        TcpProvider.WaitingOnSocketPacket wosp = iter.next();
                         if ((polls[i + 2].revents & OsConstants.POLLIN) != 0) {
                             Log.d(TAG, "Read from TCP DNS socket" + wosp.socket);
                             iter.remove();
@@ -139,7 +139,7 @@ public class TcpDnsProvider extends UdpDnsProvider {
             SocketAddress address = new InetSocketAddress(outPacket.getAddress(), DNSServerHelper.getPortOrDefault(outPacket.getAddress(), outPacket.getPort()));
             dnsSocket.connect(address, 5000);
             dnsSocket.setSoTimeout(5000);
-            Logger.info("TcpDnsProvider: Sending DNS query request");
+            Logger.info("TcpProvider: Sending DNS query request");
             DataOutputStream dos = new DataOutputStream(dnsSocket.getOutputStream());
             byte[] packet = processUdpPacket(outPacket, parsedPacket);
             dos.writeShort(packet.length);
@@ -147,7 +147,7 @@ public class TcpDnsProvider extends UdpDnsProvider {
             dos.flush();
 
             if (parsedPacket != null) {
-                dnsIn.add(new TcpDnsProvider.WaitingOnSocketPacket(dnsSocket, parsedPacket));
+                dnsIn.add(new TcpProvider.WaitingOnSocketPacket(dnsSocket, parsedPacket));
             } else {
                 dnsSocket.close();
             }
@@ -198,10 +198,10 @@ public class TcpDnsProvider extends UdpDnsProvider {
     /**
      * Queue of WaitingOnSocketPacket, bound on time and space.
      */
-    private static class WospList implements Iterable<TcpDnsProvider.WaitingOnSocketPacket> {
-        private final LinkedList<TcpDnsProvider.WaitingOnSocketPacket> list = new LinkedList<>();
+    private static class WospList implements Iterable<TcpProvider.WaitingOnSocketPacket> {
+        private final LinkedList<TcpProvider.WaitingOnSocketPacket> list = new LinkedList<>();
 
-        void add(TcpDnsProvider.WaitingOnSocketPacket wosp) {
+        void add(TcpProvider.WaitingOnSocketPacket wosp) {
             try {
                 if (list.size() > 1024) {
                     Log.d(TAG, "Dropping socket due to space constraints: " + list.element().socket);
@@ -218,7 +218,7 @@ public class TcpDnsProvider extends UdpDnsProvider {
             }
         }
 
-        public Iterator<TcpDnsProvider.WaitingOnSocketPacket> iterator() {
+        public Iterator<TcpProvider.WaitingOnSocketPacket> iterator() {
             return list.iterator();
         }
 

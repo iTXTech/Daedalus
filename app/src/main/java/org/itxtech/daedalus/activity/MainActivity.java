@@ -211,10 +211,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 switchFragment(new AboutFragment());
                 break;
             case FRAGMENT_DNS_SERVERS:
-                switchFragment(new DnsServersFragment());
+                switchFragment(new DNSServersFragment());
                 break;
             case FRAGMENT_DNS_TEST:
-                switchFragment(new DnsTestFragment());
+                switchFragment(new DNSTestFragment());
                 break;
             case FRAGMENT_MAIN:
                 switchFragment(new MainFragment());
@@ -244,10 +244,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 switchFragment(new AboutFragment());
                 break;
             case R.id.nav_dns_server:
-                switchFragment(new DnsServersFragment());
+                switchFragment(new DNSServersFragment());
                 break;
             case R.id.nav_dns_test:
-                switchFragment(new DnsTestFragment());
+                switchFragment(new DNSTestFragment());
                 break;
             case R.id.nav_github:
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus")));

@@ -35,7 +35,7 @@ import java.util.Random;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class DnsTestFragment extends ToolbarFragment {
+public class DNSTestFragment extends ToolbarFragment {
     private class Type {
         private Record.TYPE type;
         private String name;

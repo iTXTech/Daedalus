@@ -3,7 +3,6 @@ package org.itxtech.daedalus.provider;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.ParcelFileDescriptor;
-import android.system.ErrnoException;
 import android.system.Os;
 import android.system.OsConstants;
 import android.system.StructPollfd;
@@ -42,8 +41,8 @@ import java.util.Queue;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class UdpDnsProvider extends DnsProvider {
-    private static final String TAG = "UdpDnsProvider";
+public class UdpProvider extends Provider {
+    private static final String TAG = "UdpProvider";
 
     private final WospList dnsIn = new WospList();
     FileDescriptor mBlockFd = null;
@@ -55,7 +54,7 @@ public class UdpDnsProvider extends DnsProvider {
      */
     private int pcap4jFactoryClearCacheCounter = 0;
 
-    public UdpDnsProvider(ParcelFileDescriptor descriptor, DaedalusVpnService service) {
+    public UdpProvider(ParcelFileDescriptor descriptor, DaedalusVpnService service) {
         super(descriptor, service);
     }
 
@@ -224,13 +223,8 @@ public class UdpDnsProvider extends DnsProvider {
                 dnsSocket.close();
             }
         } catch (IOException e) {
-            if (e.getCause() instanceof ErrnoException) {
-                ErrnoException errnoExc = (ErrnoException) e.getCause();
-                if ((errnoExc.errno == OsConstants.ENETUNREACH) || (errnoExc.errno == OsConstants.EPERM)) {
-                    throw new DaedalusVpnService.VpnNetworkException("Cannot send message:", e);
-                }
-            }
-            Log.w(TAG, "handleDnsRequest: Could not send packet to upstream", e);
+            handleDnsResponse(parsedPacket, outPacket.getData());
+            Logger.warning("DNSProvider: Could not send packet to upstream, forwarding packet directly");
         }
     }
 
@@ -350,7 +344,7 @@ public class UdpDnsProvider extends DnsProvider {
                 response = RulesResolver.resolve(dnsQueryName);
             }
             if (response != null) {
-                Logger.info("DnsProvider: Resolved " + dnsQueryName + "  Local resolver response: " + response);
+                Logger.info("Provider: Resolved " + dnsQueryName + "  Local resolver response: " + response);
                 DNSMessage.Builder builder = dnsMsg.asBuilder();
                 int[] ip = new int[4];
                 byte i = 0;
@@ -361,7 +355,7 @@ public class UdpDnsProvider extends DnsProvider {
                 builder.addAnswer(new Record<>(dnsQueryName, Record.TYPE.A, 1, 64, new A(ip[0], ip[1], ip[2], ip[3])));
                 handleDnsResponse(parsedPacket, builder.build().toArray());
             } else {
-                Logger.info("DnsProvider: Resolving " + dnsQueryName + "  Sending to " + destAddr);
+                Logger.info("Provider: Resolving " + dnsQueryName + "  Sending to " + destAddr);
                 DatagramPacket outPacket = new DatagramPacket(dnsRawData, 0, dnsRawData.length, destAddr,
                         DNSServerHelper.getPortOrDefault(destAddr, parsedUdp.getHeader().getDstPort().valueAsInt()));
                 forwardPacket(outPacket, parsedPacket);

@@ -14,13 +14,13 @@ import org.itxtech.daedalus.service.DaedalusVpnService;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public abstract class DnsProvider {
+public abstract class Provider {
     ParcelFileDescriptor descriptor;
     DaedalusVpnService service;
     boolean running = false;
     static long dnsQueryTimes = 0;
 
-    DnsProvider(ParcelFileDescriptor descriptor, DaedalusVpnService service) {
+    Provider(ParcelFileDescriptor descriptor, DaedalusVpnService service) {
         this.descriptor = descriptor;
         this.service = service;
         dnsQueryTimes = 0;

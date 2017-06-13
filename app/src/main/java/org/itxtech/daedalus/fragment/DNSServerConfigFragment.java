@@ -27,7 +27,7 @@ import org.itxtech.daedalus.util.server.DNSServer;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class DnsServerConfigFragment extends ConfigFragment {
+public class DNSServerConfigFragment extends ConfigFragment {
     private int index;
 
     @Override
