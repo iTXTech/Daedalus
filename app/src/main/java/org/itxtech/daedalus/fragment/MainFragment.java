@@ -1,5 +1,6 @@
 package org.itxtech.daedalus.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,7 +35,8 @@ public class MainFragment extends ToolbarFragment {
                 if (Daedalus.getInstance().isServiceActivated()) {
                     Daedalus.getInstance().deactivateService();
                 } else {
-                    MainActivity.getInstance().activateService();
+                    startActivity(new Intent(getActivity(), MainActivity.class)
+                            .putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_ACTIVATE));
                 }
             }
         });
