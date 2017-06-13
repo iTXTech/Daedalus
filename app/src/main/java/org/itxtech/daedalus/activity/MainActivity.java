@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static final String LAUNCH_FRAGMENT = "org.itxtech.daedalus.activity.MainActivity.LAUNCH_FRAGMENT";
     public static final int FRAGMENT_NONE = -1;
-    public static final int FRAGMENT_MAIN = 0;
+    public static final int FRAGMENT_HOME = 0;
     public static final int FRAGMENT_DNS_TEST = 1;
     public static final int FRAGMENT_SETTINGS = 2;
     public static final int FRAGMENT_ABOUT = 3;
@@ -111,8 +111,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (!(currentFragment instanceof MainFragment)) {
-            switchFragment(new MainFragment());
+        } else if (!(currentFragment instanceof HomeFragment)) {
+            switchFragment(new HomeFragment());
         } else {
             super.onBackPressed();
         }
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void updateMainButton(int id) {
-        if (currentFragment instanceof MainFragment) {
+        if (currentFragment instanceof HomeFragment) {
             Button button = (Button) currentFragment.getView().findViewById(R.id.button_activate);
             button.setText(id);
         }
@@ -216,8 +216,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case FRAGMENT_DNS_TEST:
                 switchFragment(new DNSTestFragment());
                 break;
-            case FRAGMENT_MAIN:
-                switchFragment(new MainFragment());
+            case FRAGMENT_HOME:
+                switchFragment(new HomeFragment());
                 break;
             case FRAGMENT_RULES:
                 switchFragment(new RulesFragment());
@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
         if (currentFragment == null) {
-            switchFragment(new MainFragment());
+            switchFragment(new HomeFragment());
         }
     }
 
@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus")));
                 break;
             case R.id.nav_home:
-                switchFragment(new MainFragment());
+                switchFragment(new HomeFragment());
                 break;
             case R.id.nav_rules:
                 switchFragment(new RulesFragment());

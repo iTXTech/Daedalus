@@ -12,6 +12,11 @@ __[Releases](https://github.com/iTXTech/Daedalus/releases)__
       src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'
       height="80">](https://play.google.com/store/apps/details?id=org.itxtech.daedalus)
 
+Manual
+-------------
+[Wiki](https://github.com/iTXTech/Daedalus/wiki)
+
+
 Introduction
 -------------
 This application can create a VPN tunnel to modify the DNS settings on Android.<br>

@@ -22,7 +22,7 @@ import org.itxtech.daedalus.activity.MainActivity;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class MainFragment extends ToolbarFragment {
+public class HomeFragment extends ToolbarFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,7 +33,8 @@ public class MainFragment extends ToolbarFragment {
             @Override
             public void onClick(View v) {
                 if (Daedalus.getInstance().isServiceActivated()) {
-                    Daedalus.getInstance().deactivateService();
+                    startActivity(new Intent(getActivity(), MainActivity.class)
+                            .putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_DEACTIVATE));
                 } else {
                     startActivity(new Intent(getActivity(), MainActivity.class)
                             .putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_ACTIVATE));
