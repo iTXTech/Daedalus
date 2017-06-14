@@ -62,6 +62,7 @@ Open Source Licenses
 * __[Pcap4J](https://github.com/kaitoy/pcap4j)__ by *[Kaito Yamada](https://github.com/kaitoy)* - [MIT](https://github.com/kaitoy/pcap4j)
 * __[MiniDNS](https://github.com/rtreffer/minidns)__ by *[Rene Treffer](https://github.com/rtreffer)* - [LGPLv2.1](https://github.com/rtreffer/minidns/blob/master/LICENCE_LGPL2.1)
 * __[Gson](https://github.com/google/gson)__ by *[Google](https://github.com/google)* - [APL 2.0](https://github.com/google/gson/blob/master/LICENSE)
+* __[Shadowsocks](https://github.com/shadowsocks/shadowsocks-android)__ by *[Shadowsocks](https://github.com/shadowsocks)* - [GPLv3](https://github.com/shadowsocks/shadowsocks-android/blob/master/LICENSE)
 
 License
 ------------

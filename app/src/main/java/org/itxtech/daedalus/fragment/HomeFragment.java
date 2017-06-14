@@ -33,8 +33,7 @@ public class HomeFragment extends ToolbarFragment {
             @Override
             public void onClick(View v) {
                 if (Daedalus.getInstance().isServiceActivated()) {
-                    startActivity(new Intent(getActivity(), MainActivity.class)
-                            .putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_DEACTIVATE));
+                    Daedalus.getInstance().deactivateService();
                 } else {
                     startActivity(new Intent(getActivity(), MainActivity.class)
                             .putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_ACTIVATE));

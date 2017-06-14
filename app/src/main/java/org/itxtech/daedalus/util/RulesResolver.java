@@ -18,7 +18,6 @@ import java.util.HashMap;
  * (at your option) any later version.
  */
 public class RulesResolver implements Runnable {
-    private static final String TAG = "DRulesResolver";
 
     public static final int STATUS_LOADED = 0;
     public static final int STATUS_LOADING = 1;
