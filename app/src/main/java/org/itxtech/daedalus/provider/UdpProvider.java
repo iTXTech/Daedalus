@@ -179,7 +179,6 @@ public class UdpProvider extends Provider {
         try {
             outFd.write(deviceWrites.poll());
         } catch (IOException e) {
-            // TODO: Make this more specific, only for: "File descriptor closed"
             throw new DaedalusVpnService.VpnNetworkException("Outgoing VPN output stream closed");
         }
     }
@@ -196,7 +195,6 @@ public class UdpProvider extends Provider {
 
 
         if (length == 0) {
-            // TODO: Possibly change to exception
             Log.w(TAG, "Got empty packet!");
             return;
         }
@@ -293,7 +291,6 @@ public class UdpProvider extends Provider {
         IpPacket parsedPacket;
         try {
             parsedPacket = (IpPacket) IpSelector.newPacket(packetData, 0, packetData.length);
-            //TODO: get rid of pcap4j
         } catch (Exception e) {
             Log.i(TAG, "handleDnsRequest: Discarding invalid IP packet", e);
             return;
@@ -312,6 +309,7 @@ public class UdpProvider extends Provider {
         } catch (Exception e) {
             Logger.logException(e);
             Logger.error("handleDnsRequest: DNS server alias query failed for " + destAddr.getHostAddress());
+            return;
         }
 
         UdpPacket parsedUdp = (UdpPacket) parsedPacket.getPayload();
