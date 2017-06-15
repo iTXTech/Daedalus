@@ -10,7 +10,6 @@ import android.util.Log;
 import de.measite.minidns.DNSMessage;
 import de.measite.minidns.Record;
 import de.measite.minidns.record.A;
-import de.measite.minidns.util.InetAddressUtil;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.RulesResolver;
@@ -308,7 +307,12 @@ public class UdpProvider extends Provider {
         InetAddress destAddr = parsedPacket.getHeader().getDstAddr();
         if (destAddr == null)
             return;
-        destAddr = InetAddressUtil.ipv4From(service.dnsServers.get(destAddr.getHostAddress()));
+        try {
+            destAddr = InetAddress.getByName(service.dnsServers.get(destAddr.getHostAddress()));
+        } catch (Exception e) {
+            Logger.logException(e);
+            Logger.error("handleDnsRequest: DNS server alias query failed for " + destAddr.getHostAddress());
+        }
 
         UdpPacket parsedUdp = (UdpPacket) parsedPacket.getPayload();
 
