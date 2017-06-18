@@ -1,7 +1,5 @@
 package org.itxtech.daedalus.fragment;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.*;
@@ -104,7 +102,7 @@ public class GlobalConfigFragment extends PreferenceFragment {
         findPreference("settings_check_update").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus/releases")));
+                Daedalus.openUri("https://github.com/iTXTech/Daedalus/releases");
                 return false;
             }
         });
@@ -112,7 +110,7 @@ public class GlobalConfigFragment extends PreferenceFragment {
         findPreference("settings_issue_tracker").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus/issues")));
+                Daedalus.openUri("https://github.com/iTXTech/Daedalus/issues");
                 return false;
             }
         });
@@ -120,7 +118,7 @@ public class GlobalConfigFragment extends PreferenceFragment {
         findPreference("settings_manual").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iTXTech/Daedalus/wiki")));
+                Daedalus.openUri("https://github.com/iTXTech/Daedalus/wiki");
                 return false;
             }
         });

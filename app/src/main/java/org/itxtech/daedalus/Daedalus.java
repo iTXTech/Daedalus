@@ -254,8 +254,16 @@ public class Daedalus extends Application {
     }
 
     public static void donate() {
-        instance.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://qr.alipay.com/a6x07022gffiehykicipv1a"))
-                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        openUri("https://qr.alipay.com/a6x07022gffiehykicipv1a");
+    }
+
+    public static void openUri(String uri) {
+        try {
+            instance.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        } catch (Exception e) {
+            Logger.logException(e);
+        }
     }
 
     public static Daedalus getInstance() {
