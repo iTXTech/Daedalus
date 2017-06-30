@@ -215,7 +215,7 @@ public class RuleConfigFragment extends ConfigFragment {
         String ruleFilename = ((EditTextPreference) findPreference("ruleFilename")).getText();
         String ruleDownloadUrl = ((EditTextPreference) findPreference("ruleDownloadUrl")).getText();
 
-        if (ruleName.equals("") | ruleType.equals("") | ruleFilename.equals("") | ruleDownloadUrl.equals("")) {
+        if (ruleName.equals("") | ruleType.equals("") | ruleFilename.equals("")) {
             Snackbar.make(getView(), R.string.notice_fill_in_all, Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show();
             return false;
