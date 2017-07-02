@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar); //causes toolbar issues
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -90,13 +90,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         updateUserInterface(getIntent());
         Log.d(TAG, "onCreate");
-    }
-
-    @Override
-    public void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-        currentFragment.checkStatus();
     }
 
     private void switchFragment(ToolbarFragment fragment) {
