@@ -1,5 +1,7 @@
 package org.itxtech.daedalus.util;
 
+import de.measite.minidns.Record;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,7 +33,8 @@ public class RulesResolver implements Runnable {
     private static int mode = MODE_HOSTS;
     private static String[] hostsFiles;
     private static String[] dnsmasqFiles;
-    private static HashMap<String, String> rules;
+    private static HashMap<String, String> rulesA;
+    private static HashMap<String, String> rulesAAAA;
     private static boolean shutdown = false;
 
     public RulesResolver() {
@@ -58,10 +61,16 @@ public class RulesResolver implements Runnable {
     }
 
     public static void clear() {
-        rules = null;
+        rulesA = null;
     }
 
-    public static String resolve(String hostname) {
+    public static String resolve(String hostname, Record.TYPE type) {
+        HashMap<String, String> rules = null;
+        if (type == Record.TYPE.A) {
+            rules = rulesA;
+        } else if (type == Record.TYPE.AAAA) {
+            rules = rulesAAAA;
+        }
         if (rules == null) {
             return null;
         }
@@ -90,7 +99,8 @@ public class RulesResolver implements Runnable {
     private void load() {
         try {
             status = STATUS_LOADING;
-            rules = new HashMap<>();
+            rulesA = new HashMap<>();
+            rulesAAAA = new HashMap<>();
             if (mode == MODE_HOSTS) {
                 for (String hostsFile : hostsFiles) {
                     File file = new File(hostsFile);
@@ -104,7 +114,11 @@ public class RulesResolver implements Runnable {
                         while ((strLine = dataIO.readLine()) != null) {
                             if (!strLine.equals("") && !strLine.startsWith("#")) {
                                 data = strLine.split("\\s+");
-                                rules.put(data[1], data[0]);
+                                if (strLine.contains(":")) {//IPv6
+                                    rulesAAAA.put(data[1], data[0]);
+                                } else if (strLine.contains(".")) {//IPv4
+                                    rulesA.put(data[1], data[0]);
+                                }
                                 count++;
                             }
                         }
@@ -132,7 +146,11 @@ public class RulesResolver implements Runnable {
                                     if (data[1].startsWith(".")) {
                                         data[1] = data[1].substring(1, data[1].length());
                                     }
-                                    rules.put(data[1], data[2]);
+                                    if (strLine.contains(":")) {//IPv6
+                                        rulesAAAA.put(data[1], data[2]);
+                                    } else if (strLine.contains(".")) {//IPv4
+                                        rulesA.put(data[1], data[2]);
+                                    }
                                     count++;
                                 }
                             }

@@ -10,6 +10,7 @@ import android.util.Log;
 import de.measite.minidns.DNSMessage;
 import de.measite.minidns.Record;
 import de.measite.minidns.record.A;
+import de.measite.minidns.record.AAAA;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.RulesResolver;
@@ -347,11 +348,8 @@ public class UdpProvider extends Provider {
         String dnsQueryName = dnsMsg.getQuestion().name.toString();
 
         try {
-            String response = null;
-            if (dnsMsg.getQuestion().type == Record.TYPE.A) {
-                response = RulesResolver.resolve(dnsQueryName);
-            }
-            if (response != null) {
+            String response = RulesResolver.resolve(dnsQueryName, dnsMsg.getQuestion().type);
+            if (response != null && dnsMsg.getQuestion().type == Record.TYPE.A) {
                 Logger.info("Provider: Resolved " + dnsQueryName + "  Local resolver response: " + response);
                 DNSMessage.Builder builder = dnsMsg.asBuilder();
                 int[] ip = new int[4];
@@ -361,6 +359,12 @@ public class UdpProvider extends Provider {
                     i++;
                 }
                 builder.addAnswer(new Record<>(dnsQueryName, Record.TYPE.A, 1, 64, new A(ip[0], ip[1], ip[2], ip[3])));
+                handleDnsResponse(parsedPacket, builder.build().toArray());
+            } else if (response != null && dnsMsg.getQuestion().type == Record.TYPE.AAAA) {
+                Logger.info("Provider: Resolved " + dnsQueryName + "  Local resolver response: " + response);
+                DNSMessage.Builder builder = dnsMsg.asBuilder();
+                builder.addAnswer(new Record<>(dnsQueryName, Record.TYPE.AAAA, 1, 64,
+                        new AAAA(Inet6Address.getByName(response).getAddress())));
                 handleDnsResponse(parsedPacket, builder.build().toArray());
             } else {
                 Logger.info("Provider: Resolving " + dnsQueryName + " Type: " + dnsMsg.getQuestion().type.name() + " Sending to " + destAddr);
