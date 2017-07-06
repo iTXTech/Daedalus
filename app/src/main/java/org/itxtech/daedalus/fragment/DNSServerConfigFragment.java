@@ -111,6 +111,7 @@ public class DNSServerConfigFragment extends ConfigFragment {
                     server.setAddress(serverAddress);
                     server.setPort(Integer.parseInt(serverPort));
                 }
+                Daedalus.setRulesChanged();
                 getActivity().finish();
                 break;
             case R.id.action_delete:
@@ -128,6 +129,7 @@ public class DNSServerConfigFragment extends ConfigFragment {
                             .create()
                             .show();
                 } else {
+                    Daedalus.setRulesChanged();
                     getActivity().finish();
                 }
                 break;

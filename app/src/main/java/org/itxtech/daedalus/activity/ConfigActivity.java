@@ -65,7 +65,7 @@ public class ConfigActivity extends AppCompatActivity {
             }
         });
         toolbar.setOnMenuItemClickListener(fragment);
-        toolbar.inflateMenu(R.menu.custom_dns_server_menu);
+        toolbar.inflateMenu(R.menu.custom_config);
 
         FragmentManager manager = getFragmentManager();
         fragment.setIntent(getIntent());

@@ -62,6 +62,11 @@
                 android:defaultValue="false"
                 android:enabled="false"/>
         <SwitchPreference
+                android:key="settings_allow_dynamic_rule_reload"
+                android:title="@string/settings_allow_dynamic_rule_reload"
+                android:defaultValue="false"
+                android:enabled="false"/>
+        <SwitchPreference
                 android:key="settings_dns_over_tcp"
                 android:title="@string/settings_dns_over_tcp"
                 android:defaultValue="false"

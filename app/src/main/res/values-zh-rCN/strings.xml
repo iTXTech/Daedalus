@@ -77,4 +77,7 @@
     <string name="action_refresh">刷新</string>
     <string name="settings_log_size">日志大小限制</string>
     <string name="server_cutedns_south_china">CuteDNS 华南</string>
+    <string name="settings_allow_dynamic_rule_reload">允许动态更新规则</string>
+    <string name="action_reload">重新加载规则</string>
+    <string name="notice_check_dynamic_rule_reload">请在设置中勾选“允许动态更新规则”</string>
 </resources>

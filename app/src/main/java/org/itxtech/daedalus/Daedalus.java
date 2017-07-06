@@ -167,6 +167,13 @@ public class Daedalus extends Application {
         }
     }
 
+    public static void setRulesChanged() {
+        if (instance.isServiceActivated() &&
+                getPrefs().getBoolean("settings_allow_dynamic_rule_reload", false)) {
+            initHostsResolver();
+        }
+    }
+
     public static SharedPreferences getPrefs() {
         return getInstance().prefs;
     }

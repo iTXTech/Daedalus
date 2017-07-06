@@ -6,4 +6,10 @@
           android:alphabeticShortcut="c"
           android:numericShortcut="1"
           app:showAsAction="always"/>
+    <item android:id="@+id/action_reload"
+          android:title="@string/action_reload"
+          android:alphabeticShortcut="r"
+          android:numericShortcut="2"
+          android:icon="@drawable/ic_refresh"
+          app:showAsAction="always"/>
 </menu>
