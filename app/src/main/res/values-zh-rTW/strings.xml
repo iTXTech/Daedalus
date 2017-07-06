@@ -6,7 +6,7 @@
     <string name="button_text_activate">啟用</string>
     <string name="button_text_deactivate">停用</string>
     <string name="action_about">關於</string>
-    <string name="notification_activated">已啟用 iTXTech Daedalus。</string>
+    <string name="notice_activated">已啟用 iTXTech Daedalus。</string>
     <string name="settings_system">系統設置</string>
     <string name="settings_boot">開機自動啟用</string>
     <string name="settings_server">伺服器設置</string>
@@ -25,7 +25,7 @@
     <string name="settings_check_update">檢查更新</string>
     <string name="settings_update_summary">前往 GitHub 發佈頁面。</string>
     <string name="settings_count_number_of_queries">統計 DNS 查詢次數</string>
-    <string name="notification_queries">DNS 查詢次數:</string>
+    <string name="notice_queries">DNS 查詢次數:</string>
     <string name="notice_legacy_api">當前 Android API 無法支持所有功能。</string>
     <string name="settings_bug_report">提交回饋</string>
     <string name="settings_issue_summary">前往 GitHub 提交 Bug 回饋。</string>

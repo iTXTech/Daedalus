@@ -78,13 +78,13 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                         Intent nIntent = new Intent(this, MainActivity.class);
                         PendingIntent pIntent = PendingIntent.getActivity(this, 0, nIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                         builder.setWhen(0)
-                                .setContentTitle(getResources().getString(R.string.notification_activated))
+                                .setContentTitle(getResources().getString(R.string.notice_activated))
                                 .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
                                 .setSmallIcon(R.drawable.ic_security)
                                 .setColor(getResources().getColor(R.color.colorPrimary)) //backward compatibility
                                 .setAutoCancel(false)
                                 .setOngoing(true)
-                                .setTicker(getResources().getString(R.string.notification_activated))
+                                .setTicker(getResources().getString(R.string.notice_activated))
                                 .setContentIntent(pIntent)
                                 .addAction(R.drawable.ic_clear, getResources().getString(R.string.button_text_deactivate),
                                         PendingIntent.getBroadcast(this, 0,
@@ -260,7 +260,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         if (time - lastUpdate >= 1000) {
             lastUpdate = time;
             if (notification != null) {
-                notification.setContentTitle(getResources().getString(R.string.notification_queries) + " " + String.valueOf(provider.getDnsQueryTimes()));
+                notification.setContentTitle(getResources().getString(R.string.notice_queries) + " " + String.valueOf(provider.getDnsQueryTimes()));
                 NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
                 manager.notify(NOTIFICATION_ACTIVATED, notification.build());
             }
