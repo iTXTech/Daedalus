@@ -244,6 +244,12 @@ public class UdpProvider extends Provider {
      * @param responsePayload The payload of the response
      */
     void handleDnsResponse(IpPacket requestPacket, byte[] responsePayload) {
+        try {
+            DNSMessage message = new DNSMessage(responsePayload);
+            Logger.info(message.toString());
+        } catch (IOException e) {
+            Logger.logException(e);
+        }
         UdpPacket udpOutPacket = (UdpPacket) requestPacket.getPayload();
         UdpPacket.Builder payLoadBuilder = new UdpPacket.Builder(udpOutPacket)
                 .srcPort(udpOutPacket.getHeader().getDstPort())
@@ -357,7 +363,7 @@ public class UdpProvider extends Provider {
                 builder.addAnswer(new Record<>(dnsQueryName, Record.TYPE.A, 1, 64, new A(ip[0], ip[1], ip[2], ip[3])));
                 handleDnsResponse(parsedPacket, builder.build().toArray());
             } else {
-                Logger.info("Provider: Resolving " + dnsQueryName + "  Sending to " + destAddr);
+                Logger.info("Provider: Resolving " + dnsQueryName + " Type: " + dnsMsg.getQuestion().type.name() + " Sending to " + destAddr);
                 DatagramPacket outPacket = new DatagramPacket(dnsRawData, 0, dnsRawData.length, destAddr,
                         DNSServerHelper.getPortOrDefault(destAddr, parsedUdp.getHeader().getDstPort().valueAsInt()));
                 forwardPacket(outPacket, parsedPacket);

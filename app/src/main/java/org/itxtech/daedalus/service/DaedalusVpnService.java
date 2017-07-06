@@ -22,7 +22,10 @@ import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.RulesResolver;
 import org.itxtech.daedalus.util.server.DNSServerHelper;
 
+import java.net.Inet4Address;
+import java.net.Inet6Address;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 
 /**
@@ -175,11 +178,33 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         stopThread();
     }
 
+    private InetAddress addDnsServer(Builder builder, String format, byte[] ipv6Template, InetAddress address) throws UnknownHostException {
+        int size = dnsServers.size();
+        size++;
+        if (address instanceof Inet4Address) {
+            String alias = String.format(format, size + 1);
+            dnsServers.put(alias, address.getHostAddress());
+            builder.addRoute(alias, 32);
+            return InetAddress.getByName(alias);
+        } else if (address instanceof Inet6Address) {
+            /*ipv6Template[ipv6Template.length - 1] = (byte) (size + 1);
+            InetAddress i6addr = Inet6Address.getByAddress(ipv6Template);
+            dnsServers.put(i6addr.getHostAddress(), address.getHostAddress());
+            return i6addr;*/
+            return address;
+        }
+        return null;
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void run() {
         try {
-            Builder builder = new Builder();
+            Builder builder = new Builder()
+                    .setSession("Daedalus")
+                    .setConfigureIntent(PendingIntent.getActivity(this, 0,
+                            new Intent(this, MainActivity.class).putExtra(MainActivity.LAUNCH_FRAGMENT, MainActivity.FRAGMENT_SETTINGS),
+                            PendingIntent.FLAG_ONE_SHOT));
             String format = null;
             for (String prefix : new String[]{"10.0.0", "192.0.2", "198.51.100", "203.0.113", "192.168.50"}) {
                 try {
@@ -194,34 +219,27 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
             boolean advanced = Daedalus.getPrefs().getBoolean("settings_advanced_switch", false);
             statisticQuery = Daedalus.getPrefs().getBoolean("settings_count_query_times", false);
+            byte[] ipv6Template = new byte[]{32, 1, 13, (byte) (184 & 0xFF), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-            String aliasPrimary;
-            String aliasSecondary;
+            InetAddress aliasPrimary;
+            InetAddress aliasSecondary;
             if (advanced) {
                 dnsServers = new HashMap<>();
-                aliasPrimary = String.format(format, 2);
-                dnsServers.put(aliasPrimary, primaryServer);
-                aliasSecondary = String.format(format, 3);
-                dnsServers.put(aliasSecondary, secondaryServer);
+                aliasPrimary = addDnsServer(builder, format, ipv6Template, InetAddress.getByName(primaryServer));
+                aliasSecondary = addDnsServer(builder, format, ipv6Template, InetAddress.getByName(secondaryServer));
             } else {
-                aliasPrimary = primaryServer;
-                aliasSecondary = secondaryServer;
+                aliasPrimary = InetAddress.getByName(primaryServer);
+                aliasSecondary = InetAddress.getByName(secondaryServer);
             }
 
-            InetAddress primaryDNSServer = InetAddress.getByName(aliasPrimary);
-            InetAddress secondaryDNSServer = InetAddress.getByName(aliasSecondary);
-            Logger.info("Daedalus VPN service is listening on " + primaryDNSServer.getHostAddress() + " and " + secondaryDNSServer.getHostAddress());
-            builder.setSession("Daedalus")
-                    .addDnsServer(primaryDNSServer)
-                    .addDnsServer(secondaryDNSServer)
-                    .setConfigureIntent(PendingIntent.getActivity(this, 0,
-                            new Intent(this, MainActivity.class).putExtra(MainActivity.LAUNCH_FRAGMENT, MainActivity.FRAGMENT_SETTINGS),
-                            PendingIntent.FLAG_ONE_SHOT));
+            InetAddress primaryDNSServer = aliasPrimary;
+            InetAddress secondaryDNSServer = aliasSecondary;
+            Logger.info("Daedalus VPN service is listening on " + primaryServer + " as " + primaryDNSServer.getHostAddress());
+            Logger.info("Daedalus VPN service is listening on " + secondaryServer + " as " + secondaryDNSServer.getHostAddress());
+            builder.addDnsServer(primaryDNSServer).addDnsServer(secondaryDNSServer);
 
             if (advanced) {
-                builder.addRoute(primaryDNSServer, primaryDNSServer.getAddress().length * 8)
-                        .addRoute(secondaryDNSServer, secondaryDNSServer.getAddress().length * 8)
-                        .setBlocking(true);
+                builder.setBlocking(true);
             }
 
             descriptor = builder.establish();

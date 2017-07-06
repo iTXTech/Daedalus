@@ -114,8 +114,17 @@ public class DNSTestFragment extends ToolbarFragment {
                         String servers = Daedalus.getPrefs().getString("dns_test_servers", "");
                         if (!servers.equals("")) {
                             for (String server : servers.split(",")) {
-                                if (server.contains(":")) {
+                                if (server.contains(".") && server.contains(":")) {//IPv4
                                     String[] pieces = servers.split(":");
+                                    int port = AbstractDNSServer.DNS_SERVER_DEFAULT_PORT;
+                                    try {
+                                        port = Integer.parseInt(pieces[1]);
+                                    } catch (Exception e) {
+                                        Logger.logException(e);
+                                    }
+                                    add(new AbstractDNSServer(pieces[0], port));
+                                } else if (!server.contains(".") && server.contains("|")) {//IPv6
+                                    String[] pieces = servers.split("\\|");
                                     int port = AbstractDNSServer.DNS_SERVER_DEFAULT_PORT;
                                     try {
                                         port = Integer.parseInt(pieces[1]);
