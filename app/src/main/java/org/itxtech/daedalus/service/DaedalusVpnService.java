@@ -10,6 +10,7 @@ import android.net.VpnService;
 import android.os.Build;
 import android.os.ParcelFileDescriptor;
 import android.support.v7.app.NotificationCompat;
+import android.system.OsConstants;
 import android.util.Log;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
@@ -181,17 +182,18 @@ public class DaedalusVpnService extends VpnService implements Runnable {
     private InetAddress addDnsServer(Builder builder, String format, byte[] ipv6Template, InetAddress address) throws UnknownHostException {
         int size = dnsServers.size();
         size++;
-        if (address instanceof Inet4Address) {
+        if (address instanceof Inet6Address && ipv6Template == null) {
+            Log.i(TAG, "addDnsServer: Ignoring DNS server " + address);
+        } else if (address instanceof Inet4Address) {
             String alias = String.format(format, size + 1);
             dnsServers.put(alias, address.getHostAddress());
             builder.addRoute(alias, 32);
             return InetAddress.getByName(alias);
         } else if (address instanceof Inet6Address) {
-            /*ipv6Template[ipv6Template.length - 1] = (byte) (size + 1);
+            ipv6Template[ipv6Template.length - 1] = (byte) (size + 1);
             InetAddress i6addr = Inet6Address.getByAddress(ipv6Template);
             dnsServers.put(i6addr.getHostAddress(), address.getHostAddress());
-            return i6addr;*/
-            return address;
+            return i6addr;
         }
         return null;
     }
@@ -221,6 +223,20 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             statisticQuery = Daedalus.getPrefs().getBoolean("settings_count_query_times", false);
             byte[] ipv6Template = new byte[]{32, 1, 13, (byte) (184 & 0xFF), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
+            if (primaryServer.contains(":") || secondaryServer.contains(":")) {//IPv6
+                try {
+                    InetAddress addr = Inet6Address.getByAddress(ipv6Template);
+                    Log.d(TAG, "configure: Adding IPv6 address" + addr);
+                    builder.addAddress(addr, 120);
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                    ipv6Template = null;
+                }
+            } else {
+                ipv6Template = null;
+            }
+
             InetAddress aliasPrimary;
             InetAddress aliasSecondary;
             if (advanced) {
@@ -241,6 +257,9 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             if (advanced) {
                 builder.setBlocking(true);
             }
+
+            builder.allowFamily(OsConstants.AF_INET);
+            builder.allowFamily(OsConstants.AF_INET6);
 
             descriptor = builder.establish();
             Logger.info("Daedalus VPN service is started");

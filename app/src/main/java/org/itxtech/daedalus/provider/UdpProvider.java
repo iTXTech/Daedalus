@@ -244,12 +244,12 @@ public class UdpProvider extends Provider {
      * @param responsePayload The payload of the response
      */
     void handleDnsResponse(IpPacket requestPacket, byte[] responsePayload) {
-        try {
+        /*try {
             DNSMessage message = new DNSMessage(responsePayload);
             Logger.info(message.toString());
         } catch (IOException e) {
             Logger.logException(e);
-        }
+        }*/
         UdpPacket udpOutPacket = (UdpPacket) requestPacket.getPayload();
         UdpPacket.Builder payLoadBuilder = new UdpPacket.Builder(udpOutPacket)
                 .srcPort(udpOutPacket.getHeader().getDstPort())
