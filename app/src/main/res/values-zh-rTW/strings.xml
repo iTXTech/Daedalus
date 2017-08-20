@@ -3,10 +3,10 @@
     <string name="app_name">Daedalus</string>
     <string name="action_settings">設定</string>
     <string name="notice_main">世界很大，我要去看看。</string>
-    <string name="button_text_activate">啟用</string>
+    <string name="button_text_activate">啟動</string>
     <string name="button_text_deactivate">停用</string>
     <string name="action_about">關於</string>
-    <string name="notice_activated">已啟用 iTXTech Daedalus。</string>
+    <string name="notice_activated">已啟動 iTXTech Daedalus。</string>
     <string name="settings_system">系統設定</string>
     <string name="settings_boot">開機自動啟動</string>
     <string name="settings_server">伺服器設定</string>
