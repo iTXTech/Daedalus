@@ -12,11 +12,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import com.google.gson.stream.JsonReader;
+
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Configurations;
@@ -108,6 +110,13 @@ public class Daedalus extends Application {
         mResolver = new Thread(new RulesResolver());
         mResolver.start();
 
+        initData();
+    }
+
+    private void initData() {
+        PreferenceManager.setDefaultValues(this, R.xml.perf_settings, false);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
         if (getExternalFilesDir(null) != null) {
             rulesPath = getExternalFilesDir(null).getPath() + "/rules/";
             configPath = getExternalFilesDir(null).getPath() + "/config.json";
@@ -120,13 +129,6 @@ public class Daedalus extends Application {
                 Logger.debug("Configuration directory does not exist. Create result: " + String.valueOf(configDir.mkdirs()));
             }
         }
-
-        initData();
-    }
-
-    private void initData() {
-        PreferenceManager.setDefaultValues(this, R.xml.perf_settings, false);
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         if (configPath != null) {
             configurations = Configurations.load(new File(configPath));
