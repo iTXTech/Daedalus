@@ -20,10 +20,18 @@ import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
+
 import org.itxtech.daedalus.BuildConfig;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
-import org.itxtech.daedalus.fragment.*;
+import org.itxtech.daedalus.fragment.AboutFragment;
+import org.itxtech.daedalus.fragment.DNSServersFragment;
+import org.itxtech.daedalus.fragment.DNSTestFragment;
+import org.itxtech.daedalus.fragment.HomeFragment;
+import org.itxtech.daedalus.fragment.LogFragment;
+import org.itxtech.daedalus.fragment.RulesFragment;
+import org.itxtech.daedalus.fragment.SettingsFragment;
+import org.itxtech.daedalus.fragment.ToolbarFragment;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.server.DNSServerHelper;
 
@@ -233,28 +241,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (id) {
             case R.id.nav_about:
-                switchFragment(new AboutFragment());
+                if (!(currentFragment == null || currentFragment instanceof AboutFragment)) {
+                    switchFragment(new AboutFragment());
+                }
                 break;
             case R.id.nav_dns_server:
-                switchFragment(new DNSServersFragment());
+                if (!(currentFragment == null || currentFragment instanceof DNSServersFragment)) {
+                    switchFragment(new DNSServersFragment());
+                }
                 break;
             case R.id.nav_dns_test:
-                switchFragment(new DNSTestFragment());
+                if (!(currentFragment == null || currentFragment instanceof DNSTestFragment)) {
+                    switchFragment(new DNSTestFragment());
+                }
                 break;
             case R.id.nav_github:
                 Daedalus.openUri("https://github.com/iTXTech/Daedalus");
                 break;
             case R.id.nav_home:
-                switchFragment(new HomeFragment());
+                if (!(currentFragment == null || currentFragment instanceof HomeFragment)) {
+                    switchFragment(new HomeFragment());
+                }
                 break;
             case R.id.nav_rules:
-                switchFragment(new RulesFragment());
+                if (!(currentFragment == null || currentFragment instanceof RulesFragment)) {
+                    switchFragment(new RulesFragment());
+                }
                 break;
             case R.id.nav_settings:
-                switchFragment(new SettingsFragment());
+                if (!(currentFragment == null || currentFragment instanceof SettingsFragment)) {
+                    switchFragment(new SettingsFragment());
+                }
                 break;
             case R.id.nav_log:
-                switchFragment(new LogFragment());
+                if (!(currentFragment == null || currentFragment instanceof LogFragment)) {
+                    switchFragment(new LogFragment());
+                }
                 break;
         }
 
