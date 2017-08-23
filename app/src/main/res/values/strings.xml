@@ -79,6 +79,7 @@
     <string name="server_aixyz_south_china">AIXYZ DNS South China</string>
     <string name="server_aixyz_east_china">AIXYZ DNS East China</string>
     <string name="server_cutedns_south_china">CuteDNS South China</string>
+    <string name="server_fundns">FUN DNS</string>
 
     <string name="primary_server">Primary DNS server</string>
     <string name="secondary_server">Secondary DNS server</string>
