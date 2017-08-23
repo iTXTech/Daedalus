@@ -24,7 +24,7 @@ import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Configurations;
 import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.Rule;
-import org.itxtech.daedalus.util.RulesResolver;
+import org.itxtech.daedalus.util.RuleResolver;
 import org.itxtech.daedalus.util.server.DNSServer;
 
 import java.io.File;
@@ -95,7 +95,8 @@ public class Daedalus extends Application {
 
     public static Configurations configurations;
 
-    public static String rulesPath = null;
+    public static String rulePath = null;
+    public static String logPath = null;
     private static String configPath = null;
 
     private static Daedalus instance = null;
@@ -110,10 +111,20 @@ public class Daedalus extends Application {
 
         Logger.init();
 
-        mResolver = new Thread(new RulesResolver());
+        mResolver = new Thread(new RuleResolver());
         mResolver.start();
 
         initData();
+    }
+
+    private void initDirectory(String dir){
+        File directory = new File(dir);
+        if (!directory.isDirectory()) {
+            Logger.warning(dir + " is not a directory. Delete result: " + String.valueOf(directory.delete()));
+        }
+        if (!directory.exists()) {
+            Logger.debug(dir + " does not exist. Create result: " + String.valueOf(directory.mkdirs()));
+        }
     }
 
     private void initData() {
@@ -121,16 +132,12 @@ public class Daedalus extends Application {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         if (getExternalFilesDir(null) != null) {
-            rulesPath = getExternalFilesDir(null).getPath() + "/rules/";
+            rulePath = getExternalFilesDir(null).getPath() + "/rules/";
+            logPath = getExternalFilesDir(null).getPath() + "/logs/";
             configPath = getExternalFilesDir(null).getPath() + "/config.json";
 
-            File configDir = new File(rulesPath);
-            if (!configDir.isDirectory()) {
-                Logger.warning("Configuration directory is not a directory. Delete result: " + String.valueOf(configDir.delete()));
-            }
-            if (!configDir.exists()) {
-                Logger.debug("Configuration directory does not exist. Create result: " + String.valueOf(configDir.mkdirs()));
-            }
+            initDirectory(rulePath);
+            initDirectory(logPath);
         }
 
         if (configPath != null) {
@@ -153,7 +160,7 @@ public class Daedalus extends Application {
             if (usingRules != null && usingRules.size() > 0) {
                 for (Rule rule : usingRules) {
                     if (rule.isUsing()) {
-                        pendingLoad.add(rulesPath + rule.getFileName());
+                        pendingLoad.add(rulePath + rule.getFileName());
                     }
                 }
                 if (pendingLoad.size() > 0) {
@@ -161,10 +168,10 @@ public class Daedalus extends Application {
                     pendingLoad.toArray(arr);
                     switch (usingRules.get(0).getType()) {
                         case Rule.TYPE_HOSTS:
-                            RulesResolver.startLoadHosts(arr);
+                            RuleResolver.startLoadHosts(arr);
                             break;
                         case Rule.TYPE_DNAMASQ:
-                            RulesResolver.startLoadDnsmasq(arr);
+                            RuleResolver.startLoadDnsmasq(arr);
                             break;
                     }
                 }
@@ -190,9 +197,9 @@ public class Daedalus extends Application {
 
         instance = null;
         prefs = null;
-        RulesResolver.shutdown();
+        RuleResolver.shutdown();
         mResolver.interrupt();
-        RulesResolver.clear();
+        RuleResolver.clear();
         mResolver = null;
         Logger.shutdown();
     }

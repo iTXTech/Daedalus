@@ -13,7 +13,7 @@ import de.measite.minidns.record.A;
 import de.measite.minidns.record.AAAA;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Logger;
-import org.itxtech.daedalus.util.RulesResolver;
+import org.itxtech.daedalus.util.RuleResolver;
 import org.itxtech.daedalus.util.server.DNSServerHelper;
 import org.pcap4j.packet.*;
 import org.pcap4j.packet.factory.PacketFactoryPropertiesLoader;
@@ -348,7 +348,7 @@ public class UdpProvider extends Provider {
         String dnsQueryName = dnsMsg.getQuestion().name.toString();
 
         try {
-            String response = RulesResolver.resolve(dnsQueryName, dnsMsg.getQuestion().type);
+            String response = RuleResolver.resolve(dnsQueryName, dnsMsg.getQuestion().type);
             if (response != null && dnsMsg.getQuestion().type == Record.TYPE.A) {
                 Logger.info("Provider: Resolved " + dnsQueryName + "  Local resolver response: " + response);
                 DNSMessage.Builder builder = dnsMsg.asBuilder();

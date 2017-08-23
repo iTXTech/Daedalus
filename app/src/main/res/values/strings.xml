@@ -15,6 +15,7 @@
     <string name="notice_delete_confirm_prompt">Are you sure you want to remove this configuration?</string>
     <string name="notice_after_stop">Please modify activated rules after stopping service.</string>
     <string name="notice_check_dynamic_rule_reload">Please enable "Allow dynamic rule reload" in Settings</string>
+    <string name="notice_export_complete">Export completed.</string>
 
     <string name="action_settings">Settings</string>
     <string name="action_about">About</string>
@@ -31,6 +32,7 @@
 
     <string name="delete">Delete</string>
     <string name="apply">Apply</string>
+    <string name="export">Export</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

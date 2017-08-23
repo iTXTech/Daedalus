@@ -313,7 +313,7 @@ public class RuleConfigFragment extends ConfigFragment {
                 case MSG_RULE_DOWNLOADED:
                     try {
                         RuleData ruleData = (RuleData) msg.obj;
-                        File file = new File(Daedalus.rulesPath + ruleData.getFilename());
+                        File file = new File(Daedalus.rulePath + ruleData.getFilename());
                         FileOutputStream stream = new FileOutputStream(file);
                         stream.write(ruleData.getData().getBytes());
                         stream.close();

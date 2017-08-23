@@ -129,6 +129,7 @@ public class Configurations {
         }
 
         if (config == null) {
+            Logger.info("Loading configuration failed. Generating default configurations.");
             config = new Configurations();
         }
 

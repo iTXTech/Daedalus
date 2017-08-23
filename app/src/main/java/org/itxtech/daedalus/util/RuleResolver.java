@@ -19,7 +19,7 @@ import java.util.HashMap;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class RulesResolver implements Runnable {
+public class RuleResolver implements Runnable {
 
     public static final int STATUS_LOADED = 0;
     public static final int STATUS_LOADING = 1;
@@ -37,7 +37,7 @@ public class RulesResolver implements Runnable {
     private static HashMap<String, String> rulesAAAA;
     private static boolean shutdown = false;
 
-    public RulesResolver() {
+    public RuleResolver() {
         status = STATUS_NOT_LOADED;
         hostsFiles = new String[0];
         dnsmasqFiles = new String[0];

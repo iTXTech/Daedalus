@@ -1,14 +1,18 @@
 package org.itxtech.daedalus.fragment;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.util.Logger;
+
+import java.io.FileWriter;
 
 /**
  * Daedalus Project
@@ -38,6 +42,19 @@ public class LogFragment extends ToolbarFragment implements Toolbar.OnMenuItemCl
         ((TextView) getView().findViewById(R.id.textView_log)).setText(Logger.getLog());
     }
 
+    private void export() {
+        try {
+            String file = Daedalus.logPath + String.valueOf(System.currentTimeMillis()) + ".log";
+            FileWriter fileWriter = new FileWriter(file);
+            fileWriter.write(Logger.getLog());
+            fileWriter.close();
+            Snackbar.make(getView(), getString(R.string.notice_export_complete) + file, Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show();
+        } catch (Throwable e){
+            Logger.logException(e);
+        }
+    }
+
     @Override
     public void checkStatus() {
         menu.findItem(R.id.nav_log).setChecked(true);
@@ -57,6 +74,9 @@ public class LogFragment extends ToolbarFragment implements Toolbar.OnMenuItemCl
                 break;
             case R.id.action_refresh:
                 refresh();
+                break;
+            case R.id.action_export:
+                export();
                 break;
         }
 

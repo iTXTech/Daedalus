@@ -178,7 +178,7 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
             holder.textViewName.setText(rule.getName());
             holder.textViewAddress.setText(rule.getFileName());
 
-            File file = new File(Daedalus.rulesPath + rule.getFileName());
+            File file = new File(Daedalus.rulePath + rule.getFileName());
             StringBuilder builder = new StringBuilder();
             if (file.exists()) {
                 builder.append(new DecimalFormat("0.00").format(((float) file.length() / 1024)));

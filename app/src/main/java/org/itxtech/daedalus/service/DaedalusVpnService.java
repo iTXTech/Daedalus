@@ -20,7 +20,7 @@ import org.itxtech.daedalus.provider.TcpProvider;
 import org.itxtech.daedalus.provider.UdpProvider;
 import org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver;
 import org.itxtech.daedalus.util.Logger;
-import org.itxtech.daedalus.util.RulesResolver;
+import org.itxtech.daedalus.util.RuleResolver;
 import org.itxtech.daedalus.util.server.DNSServerHelper;
 
 import java.net.Inet4Address;
@@ -160,7 +160,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         stopSelf();
 
         if (shouldRefresh) {
-            RulesResolver.clear();
+            RuleResolver.clear();
             DNSServerHelper.clearPortCache();
             Logger.info("Daedalus VPN service has stopped");
         }
