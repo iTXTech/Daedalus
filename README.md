@@ -1,7 +1,5 @@
 iTXTech Daedalus
 ===============
-__声明：本程序并非所谓翻墙软件，本程序是一个工具软件用于修改DNS服务器和解析规则。近期大量SNI服务器出问题，大规模封锁可用的服务器导致部分网站不可用。这都是本程序所无法控制的，多尝试使用一些规则找到适合自己地区的服务器才是不错的解决方案。__
-
 __No root required Android DNS modifier and hosts/DNSMasq resolver.__
 
 [![Build Status](https://travis-ci.org/iTXTech/Daedalus.svg?branch=master)](https://travis-ci.org/iTXTech/Daedalus)
@@ -28,6 +26,7 @@ Features:
 * Functional under data connection
 * DNS over TCP
 * A tester for DNS servers
+* IPv6 support (including Rules!)
 * Custom DNS server
 * Custom hosts and DNSMasq configuration
 * EXTREME LOW power consume
