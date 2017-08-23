@@ -76,6 +76,8 @@ public class Daedalus extends Application {
                 "https://raw.githubusercontent.com/vokins/yhosts/master/hosts", false));
         add(new Rule("lengers/connector", "connector.hosts", Rule.TYPE_HOSTS,
                 "https://git.oschina.net/lengers/connector/raw/master/hosts", false));
+        add(new Rule("wangchunming/2017hosts", "2017.hosts", Rule.TYPE_HOSTS,
+                "https://raw.githubusercontent.com/wangchunming/2017hosts/master/hosts-pc", false));
         //Build-in DNSMasq rule providers
         add(new Rule("sy618/hosts/dnsad", "dnsad.dnsmasq", Rule.TYPE_DNAMASQ,
                 "https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsad", false));

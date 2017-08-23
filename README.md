@@ -40,7 +40,7 @@ DNS Server Providers
 * __CuteDNS__
 * __[Pure DNS](http://puredns.cn/)__ - *I DO NOT KNOW HOW TO DESCRIBE~~~*
 * __[AIXYZ DNS](https://aixyz.com/)__ - __*For academic purposes only.*__
-* __[FUN DNS](http://fundns.cn)__ - __The Most Pure Domain Name Resolution Service__
+* __[FUN DNS](http://fundns.cn)__ - *The Most Pure Domain Name Resolution Service*
 
 Rule Providers
 -------------
@@ -49,6 +49,7 @@ Rule Providers
 * __[hosts](https://github.com/sy618/hosts)__ by *[sy618](https://github.com/sy618)* - [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.zh)
 * __[connector](https://git.oschina.net/lengers/connector)__ by *[lankes](https://git.oschina.net/lengers)* - [GPLv3](https://git.oschina.net/lengers/connector/blob/master/LICENSE)
 * __[yhosts](https://github.com/vokins/yhosts)__ by *[vokins](https://github.com/vokins)* - [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+* __[2017hosts](https://github.com/wangchunming/2017hosts)__ by *[wangchunming](https://github.com/wangchunming)* - None
 
 Requirements
 -------------
