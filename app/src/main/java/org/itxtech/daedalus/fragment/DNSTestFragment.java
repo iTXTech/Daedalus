@@ -21,6 +21,7 @@ import org.itxtech.daedalus.util.server.DNSServerHelper;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -151,11 +152,12 @@ public class DNSTestFragment extends ToolbarFragment {
 
 
             private StringBuilder testServer(DNSQuery dnsQuery, Record.TYPE type, AbstractDNSServer server, String domain, StringBuilder testText) {
-                Logger.debug("Testing DNS server " + server);
+                Logger.debug("Testing DNS server " + server.getAddress() + ":" + server.getPort());
                 testText.append(getString(R.string.test_domain)).append(" ").append(domain).append("\n").append(getString(R.string.test_dns_server)).append(" ").append(server.getAddress()).append(":").append(server.getPort());
 
                 mHandler.obtainMessage(DnsTestHandler.MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
 
+                boolean succ = false;
                 try {
                     DNSMessage.Builder message = DNSMessage.builder();
                     message.addQuestion(new Question(domain, type));
@@ -175,14 +177,16 @@ public class DNSTestFragment extends ToolbarFragment {
                         }
                         testText.append("\n").append(getString(R.string.test_time_used)).append(" ").
                                 append(String.valueOf(endTime - startTime)).append(" ms");
-                    } else {
-                        testText.append("\n").append(getString(R.string.test_failed));
+                        succ = true;
                     }
+                } catch (SocketTimeoutException ignored){
                 } catch (Exception e) {
-                    testText.append("\n").append(getString(R.string.test_failed));
                     Logger.logException(e);
                 }
 
+                if (!succ){
+                    testText.append("\n").append(getString(R.string.test_failed));
+                }
                 testText.append("\n\n");
 
                 mHandler.obtainMessage(DnsTestHandler.MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
