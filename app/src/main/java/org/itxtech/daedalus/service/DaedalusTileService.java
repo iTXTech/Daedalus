@@ -7,11 +7,19 @@ import android.service.quicksettings.TileService;
 import android.support.annotation.RequiresApi;
 
 import org.itxtech.daedalus.Daedalus;
+import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.MainActivity;
 
 /**
- * Quick Tile Service
- * Created by pcqpcq on 17/7/28.
+ * Daedalus Project
+ *
+ * @author pcqpcq & iTX Technologies
+ * @link https://itxtech.org
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  */
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class DaedalusTileService extends TileService {
@@ -42,6 +50,8 @@ public class DaedalusTileService extends TileService {
         boolean activate = Daedalus.getInstance().isServiceActivated();
 
         Tile tile = getQsTile();
+        tile.setLabel(getString(R.string.quick_toggle));
+        tile.setContentDescription(getString(R.string.app_name));
         tile.setState(activate ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE);
         tile.updateTile();
     }

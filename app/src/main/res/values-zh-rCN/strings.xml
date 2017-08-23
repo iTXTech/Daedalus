@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Daedalus</string>
+    <string name="quick_toggle">开关</string>
     <string name="action_settings">设置</string>
     <string name="notice_main">世界很大，我要去看看。</string>
     <string name="button_text_activate">启用</string>
