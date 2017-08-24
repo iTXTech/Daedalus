@@ -58,7 +58,7 @@ public class Logger {
         error(getExceptionMessage(e));
     }
 
-    private static String getExceptionMessage(Throwable e) {
+    public static String getExceptionMessage(Throwable e) {
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
         e.printStackTrace(printWriter);

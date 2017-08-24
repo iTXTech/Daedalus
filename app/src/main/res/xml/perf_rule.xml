@@ -33,5 +33,8 @@
         <ListPreference
                 android:key="ruleImportBuildIn"
                 android:title="@string/settings_rule_import_build_in"/>
+        <org.itxtech.daedalus.widget.ClickPreference
+                android:key="ruleImportExternal"
+                android:title="@string/settings_rule_import_external"/>
     </PreferenceCategory>
 </PreferenceScreen>

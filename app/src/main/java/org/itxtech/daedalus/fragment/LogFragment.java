@@ -50,7 +50,7 @@ public class LogFragment extends ToolbarFragment implements Toolbar.OnMenuItemCl
             fileWriter.close();
             Snackbar.make(getView(), getString(R.string.notice_export_complete) + file, Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show();
-        } catch (Throwable e){
+        } catch (Exception e) {
             Logger.logException(e);
         }
     }

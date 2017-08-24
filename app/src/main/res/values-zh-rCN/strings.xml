@@ -71,7 +71,8 @@
     <string name="settings_rule_sync">同步规则</string>
     <string name="settings_rule_filename">规则文件名</string>
     <string name="settings_rule_import">导入</string>
-    <string name="settings_rule_import_build_in">从内置规则导入</string>
+    <string name="settings_rule_import_build_in">内置</string>
+    <string name="settings_rule_import_external">外部</string>
     <string name="notice_after_stop">请在服务停止后更改启用的规则。</string>
     <string name="settings_manual">使用手册</string>
     <string name="settings_manual_summary">访问 GitHub wiki 页面。</string>
@@ -83,4 +84,5 @@
     <string name="action_reload">重新加载规则</string>
     <string name="notice_check_dynamic_rule_reload">请在设置中勾选“允许动态更新规则”</string>
     <string name="notice_export_complete">导出完成。</string>
+    <string name="notice_importing_rule">正在导入规则，请稍等。</string>
 </resources>

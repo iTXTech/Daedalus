@@ -2,6 +2,7 @@ package org.itxtech.daedalus.util;
 
 import org.itxtech.daedalus.Daedalus;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -120,6 +121,8 @@ public class Rule {
         } else if (getType() == Rule.TYPE_DNAMASQ) {
             Daedalus.configurations.getDnsmasqRules().remove(this);
         }
+        File file = new File(getFileName());
+        Logger.info("Delete rule " + getName() + " result: " + String.valueOf(file.delete()));
     }
 
 

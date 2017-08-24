@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 FragmentManager fm = getFragmentManager();
                 fm.beginTransaction().replace(R.id.id_content, fragment).commit();
                 currentFragment = fragment;
-            } catch (Throwable e){
+            } catch (Exception e) {
                 Logger.logException(e);
             }
         }

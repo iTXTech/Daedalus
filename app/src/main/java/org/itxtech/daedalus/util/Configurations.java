@@ -122,14 +122,14 @@ public class Configurations {
         if (file.exists()) {
             try {
                 config = Daedalus.parseJson(Configurations.class, new JsonReader(new FileReader(file)));
-                Logger.info("Loading configuration successfully from " + file);
+                Logger.info("Load configuration successfully from " + file);
             } catch (Exception e) {
                 Logger.logException(e);
             }
         }
 
         if (config == null) {
-            Logger.info("Loading configuration failed. Generating default configurations.");
+            Logger.info("Load configuration failed. Generating default configurations.");
             config = new Configurations();
         }
 

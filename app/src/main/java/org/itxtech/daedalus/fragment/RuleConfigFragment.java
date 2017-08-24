@@ -1,8 +1,12 @@
 package org.itxtech.daedalus.fragment;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -37,6 +41,7 @@ import java.net.URLConnection;
  * (at your option) any later version.
  */
 public class RuleConfigFragment extends ConfigFragment {
+    private static final int READ_REQUEST_CODE = 1;
     private Intent intent = null;
     private Thread mThread = null;
     private RuleConfigHandler mHandler = null;
@@ -122,36 +127,60 @@ public class RuleConfigFragment extends ConfigFragment {
             public boolean onPreferenceClick(Preference preference) {
                 save();
                 if (mThread == null) {
-                    Snackbar.make(getView(), R.string.notice_start_download, Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                    mThread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                URLConnection connection = new URL(ruleDownloadUrl.getText()).openConnection();
-                                InputStream inputStream = connection.getInputStream();
-                                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                                StringBuilder builder = new StringBuilder();
-                                String result;
-                                while ((result = reader.readLine()) != null) {
-                                    builder.append("\n").append(result);
+                    Snackbar.make(getView(), R.string.notice_start_download, Snackbar.LENGTH_SHORT).show();
+                    if (ruleDownloadUrl.getText().startsWith("content:/")) {
+                        mThread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    InputStream inputStream = getActivity().getContentResolver().openInputStream(Uri.parse(ruleDownloadUrl.getText()));
+                                    int readLen;
+                                    byte[] data = new byte[1024];
+                                    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+                                    while ((readLen = inputStream.read(data)) != -1) {
+                                        buffer.write(data, 0, readLen);
+                                    }
+                                    inputStream.close();
+                                    buffer.flush();
+                                    mHandler.obtainMessage(RuleConfigHandler.MSG_RULE_DOWNLOADED,
+                                            new RuleData(ruleFilename.getText(), buffer.toByteArray())).sendToTarget();
+                                    stopThread();
+                                } catch (Exception e) {
+                                    Logger.logException(e);
+                                } finally {
+                                    stopThread();
                                 }
-                                reader.close();
-
-                                mHandler.obtainMessage(RuleConfigHandler.MSG_RULE_DOWNLOADED,
-                                        new RuleData(ruleFilename.getText(), builder.toString())).sendToTarget();
-                                stopThread();
-                            } catch (Exception e) {
-                                Logger.logException(e);
-                            } finally {
-                                stopThread();
                             }
-                        }
-                    });
+                        });
+                    } else {
+                        mThread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    URLConnection connection = new URL(ruleDownloadUrl.getText()).openConnection();
+                                    InputStream inputStream = connection.getInputStream();
+                                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                                    StringBuilder builder = new StringBuilder();
+                                    String result;
+                                    while ((result = reader.readLine()) != null) {
+                                        builder.append("\n").append(result);
+                                    }
+                                    reader.close();
+
+                                    mHandler.obtainMessage(RuleConfigHandler.MSG_RULE_DOWNLOADED,
+                                            new RuleData(ruleFilename.getText(), builder.toString().getBytes())).sendToTarget();
+                                    stopThread();
+                                } catch (Exception e) {
+                                    Logger.logException(e);
+                                } finally {
+                                    stopThread();
+                                }
+                            }
+                        });
+                    }
                     mThread.start();
                 } else {
-                    Snackbar.make(getView(), R.string.notice_now_downloading, Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    Snackbar.make(getView(), R.string.notice_now_downloading, Snackbar.LENGTH_LONG).show();
                 }
                 return false;
             }
@@ -173,6 +202,19 @@ public class RuleConfigFragment extends ConfigFragment {
                 ruleDownloadUrl.setText(rule.getDownloadUrl());
                 ruleDownloadUrl.setSummary(rule.getDownloadUrl());
                 return true;
+            }
+        });
+
+        ClickPreference ruleImportExternal = (ClickPreference) findPreference("ruleImportExternal");
+        ruleImportExternal.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    performFileSearch();
+                } else {
+                    Snackbar.make(getView(), R.string.notice_legacy_api, Snackbar.LENGTH_LONG).show();
+                }
+                return false;
             }
         });
 
@@ -207,6 +249,50 @@ public class RuleConfigFragment extends ConfigFragment {
         }
 
         return view;
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void performFileSearch() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+
+        startActivityForResult(intent, READ_REQUEST_CODE);
+    }
+
+    @Override
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            if (resultData != null) {
+                Uri uri = resultData.getData();
+                try {
+                    getActivity().getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                    String file = System.currentTimeMillis() + ".dr";//Daedalus Rule
+                    InputStream inputStream = getActivity().getContentResolver().openInputStream(uri);
+                    OutputStream outputStream = new FileOutputStream(Daedalus.rulePath + file);
+                    byte[] b = new byte[1024];
+                    while ((inputStream.read(b)) != -1) {
+                        outputStream.write(b);
+                    }
+                    inputStream.close();
+                    outputStream.close();
+
+                    ((EditTextPreference) findPreference("ruleFilename")).setText(file);
+                    findPreference("ruleFilename").setSummary(file);
+                    ((EditTextPreference) findPreference("ruleDownloadUrl")).setText(uri.toString());
+                    findPreference("ruleDownloadUrl").setSummary(uri.toString());
+
+                    Snackbar.make(getView(), R.string.notice_importing_rule, Snackbar.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    Logger.logException(e);
+                }
+            }
+        }
     }
 
     private boolean save() {
@@ -274,15 +360,15 @@ public class RuleConfigFragment extends ConfigFragment {
     }
 
     private class RuleData {
-        private String data;
+        private byte[] data;
         private String filename;
 
-        RuleData(String filename, String data) {
+        RuleData(String filename, byte[] data) {
             this.data = data;
             this.filename = filename;
         }
 
-        String getData() {
+        byte[] getData() {
             return data;
         }
 
@@ -315,14 +401,13 @@ public class RuleConfigFragment extends ConfigFragment {
                         RuleData ruleData = (RuleData) msg.obj;
                         File file = new File(Daedalus.rulePath + ruleData.getFilename());
                         FileOutputStream stream = new FileOutputStream(file);
-                        stream.write(ruleData.getData().getBytes());
+                        stream.write(ruleData.getData());
                         stream.close();
                     } catch (Exception e) {
                         Logger.logException(e);
                     }
 
-                    Snackbar.make(view, R.string.notice_downloaded, Snackbar.LENGTH_SHORT)
-                            .setAction("Action", null).show();
+                    Snackbar.make(view, R.string.notice_downloaded, Snackbar.LENGTH_SHORT).show();
                     break;
             }
         }

@@ -146,8 +146,7 @@ public class GlobalConfigFragment extends PreferenceFragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            Snackbar.make(view, R.string.notice_legacy_api, Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+            Snackbar.make(view, R.string.notice_legacy_api, Snackbar.LENGTH_LONG).show();
         }
     }
 }
