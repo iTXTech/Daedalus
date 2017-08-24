@@ -62,6 +62,7 @@ public class RuleResolver implements Runnable {
 
     public static void clear() {
         rulesA = null;
+        rulesAAAA = null;
     }
 
     public static String resolve(String hostname, Record.TYPE type) {
