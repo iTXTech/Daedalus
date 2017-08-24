@@ -66,8 +66,6 @@ public class Daedalus extends Application {
         //Build-in Hosts rule providers
         add(new Rule("racaljk/hosts", "racaljk.hosts", Rule.TYPE_HOSTS,
                 "https://coding.net/u/scaffrey/p/hosts/git/raw/master/hosts", false));
-        add(new Rule("fengixng/google-hosts", "fengixng.hosts", Rule.TYPE_HOSTS,
-                "https://raw.githubusercontent.com/fengixng/google-hosts/master/hosts", false));
         add(new Rule("sy618/hosts", "sy618.hosts", Rule.TYPE_HOSTS,
                 "https://raw.githubusercontent.com/sy618/hosts/master/ADFQ", false));
         add(new Rule("vokins/yhosts", "vokins.hosts", Rule.TYPE_HOSTS,
