@@ -47,7 +47,7 @@ DNS Server Providers
 
 Rule Providers
 -------------
-* __[hosts](https://github.com/googlehosts/hosts)__ by *[googlehosts](hhttps://github.com/googlehosts)* - [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)
+* __[hosts](https://github.com/googlehosts/hosts)__ by *[googlehosts](https://github.com/googlehosts)* - [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)
 * __[hosts](https://github.com/sy618/hosts)__ by *[sy618](https://github.com/sy618)* - [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.zh)
 * __[connector](https://git.oschina.net/lengers/connector)__ by *[lankes](https://git.oschina.net/lengers)* - [GPLv3](https://git.oschina.net/lengers/connector/blob/master/LICENSE)
 * __[yhosts](https://github.com/vokins/yhosts)__ by *[vokins](https://github.com/vokins)* - [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/)
