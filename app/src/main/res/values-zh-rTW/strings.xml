@@ -41,6 +41,8 @@
     <string name="server_puredns_east_china">Pure DNS 中國華東</string>
     <string name="server_aixyz_south_china">AIXYZ DNS 中國華南</string>
     <string name="server_aixyz_east_china">AIXYZ DNS 中國華東</string>
+    <string name="server_fundns_beijing">FUN DNS 北京</string>
+    <string name="server_fundns_chengdu">FUN DNS 成都</string>
     <string name="nav_github">GitHub</string>
     <string name="settings_advanced">進階系統設定</string>
     <string name="settings_advanced_on">開啟</string>
