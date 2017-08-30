@@ -59,6 +59,7 @@ public class RuleConfigFragment extends ConfigFragment {
         intent = null;
         mHandler.shutdown();
         mHandler = null;
+        Daedalus.configurations.save();
     }
 
     private void stopThread() {
