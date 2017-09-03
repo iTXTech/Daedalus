@@ -268,6 +268,10 @@ public class DNSTestFragment extends ToolbarFragment {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
+            if (startTestBtn == null) {
+                return;
+            }
+
             switch (msg.what) {
                 case MSG_DISPLAY_STATUS:
                     textViewTestInfo.setText((String) msg.obj);

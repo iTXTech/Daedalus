@@ -5,7 +5,6 @@ import android.os.Build;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 import android.support.annotation.RequiresApi;
-
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.MainActivity;
@@ -33,12 +32,7 @@ public class DaedalusTileService extends TileService {
                 .setAction(Intent.ACTION_VIEW)
                 .putExtra(MainActivity.LAUNCH_ACTION, activate ? MainActivity.LAUNCH_ACTION_DEACTIVATE : MainActivity.LAUNCH_ACTION_ACTIVATE);
 
-        startActivityAndCollapse(intent);
-    }
-
-    @Override
-    public void onTileAdded() {
-        updateTile();
+        startActivity(intent);
     }
 
     @Override
