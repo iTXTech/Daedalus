@@ -163,7 +163,9 @@ public class DNSTestFragment extends ToolbarFragment {
                     message.addQuestion(new Question(domain, type));
                     message.setId((new Random()).nextInt());
                     message.setRecursionDesired(true);
-                    message.getEdnsBuilder().setUdpPayloadSize(1024).setDnssecOk(false);
+                    message.setOpcode(DNSMessage.OPCODE.QUERY);
+                    message.setResponseCode(DNSMessage.RESPONSE_CODE.NO_ERROR);
+                    message.setQrFlag(false);
 
                     long startTime = System.currentTimeMillis();
                     DNSMessage response = dnsQuery.query(message.build(), InetAddress.getByName(server.getAddress()), server.getPort());

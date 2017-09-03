@@ -16,14 +16,11 @@ import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.RuleResolver;
 import org.itxtech.daedalus.util.server.DNSServerHelper;
 import org.pcap4j.packet.*;
-import org.pcap4j.packet.factory.PacketFactoryPropertiesLoader;
-import org.pcap4j.util.PropertiesLoader;
 
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.net.*;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -48,11 +45,6 @@ public class UdpProvider extends Provider {
     FileDescriptor mBlockFd = null;
     FileDescriptor mInterruptFd = null;
     final Queue<byte[]> deviceWrites = new LinkedList<>();
-
-    /**
-     * Number of iterations since we last cleared the pcap4j cache
-     */
-    private int pcap4jFactoryClearCacheCounter = 0;
 
     public UdpProvider(ParcelFileDescriptor descriptor, DaedalusVpnService service) {
         super(descriptor, service);
@@ -148,31 +140,10 @@ public class UdpProvider extends Provider {
                     Log.d(TAG, "Read from device");
                     readPacketFromDevice(inputStream, packet);
                 }
-
-                checkCache();
                 service.providerLoopCallback();
             }
         } catch (Exception e) {
             Logger.logException(e);
-        }
-    }
-
-    void checkCache() {
-        // pcap4j has some sort of properties cache in the packet factory. This cache leaks, so
-        // we need to clean it up.
-        if (++pcap4jFactoryClearCacheCounter % 1024 == 0) {
-            try {
-                PacketFactoryPropertiesLoader l = PacketFactoryPropertiesLoader.getInstance();
-                Field field = l.getClass().getDeclaredField("loader");
-                field.setAccessible(true);
-                PropertiesLoader loader = (PropertiesLoader) field.get(l);
-                Log.d(TAG, "Cleaning cache");
-                loader.clearCache();
-            } catch (NoSuchFieldException e) {
-                Log.e(TAG, "Cannot find declared loader field", e);
-            } catch (IllegalAccessException e) {
-                Log.e(TAG, "Cannot get declared loader field", e);
-            }
         }
     }
 

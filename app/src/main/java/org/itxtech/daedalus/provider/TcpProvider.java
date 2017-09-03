@@ -111,9 +111,6 @@ public class TcpProvider extends UdpProvider {
                     Log.d(TAG, "Read from device");
                     readPacketFromDevice(inputStream, packet);
                 }
-
-                checkCache();
-
                 service.providerLoopCallback();
             }
         } catch (Exception e) {
