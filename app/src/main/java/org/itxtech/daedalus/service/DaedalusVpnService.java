@@ -229,7 +229,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                     Log.d(TAG, "configure: Adding IPv6 address" + addr);
                     builder.addAddress(addr, 120);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Logger.logException(e);
 
                     ipv6Template = null;
                 }
@@ -256,10 +256,9 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
             if (advanced) {
                 builder.setBlocking(true);
+                builder.allowFamily(OsConstants.AF_INET);
+                builder.allowFamily(OsConstants.AF_INET6);
             }
-
-            builder.allowFamily(OsConstants.AF_INET);
-            builder.allowFamily(OsConstants.AF_INET6);
 
             descriptor = builder.establish();
             Logger.info("Daedalus VPN service is started");
