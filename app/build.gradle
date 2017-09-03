@@ -10,8 +10,8 @@ android {
         applicationId "org.itxtech.daedalus"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 11
-        versionName "1.10.0"
+        versionCode 12
+        versionName "1.10.1"
 
         buildConfigField "String", "BUILD_TIME", "\"${System.currentTimeMillis()}\""
         buildConfigField "String", "GIT_COMMIT", "\"${gitCommit}\""
