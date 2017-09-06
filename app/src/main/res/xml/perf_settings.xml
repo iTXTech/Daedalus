@@ -71,6 +71,11 @@
                 android:title="@string/settings_dns_over_tcp"
                 android:defaultValue="false"
                 android:enabled="false"/>
+        <SwitchPreference
+                android:key="settings_debug_output"
+                android:title="@string/settings_debug_output"
+                android:defaultValue="false"
+                android:enabled="false"/>
     </PreferenceCategory>
 
     <PreferenceCategory

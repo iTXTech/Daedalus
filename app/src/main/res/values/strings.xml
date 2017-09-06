@@ -63,6 +63,7 @@
     <string name="settings_manual">Manual</string>
     <string name="settings_manual_summary">Visit GitHub wiki page.</string>
     <string name="settings_allow_dynamic_rule_reload">Allow dynamic rule reload</string>
+    <string name="settings_debug_output">Debug output</string>
 
     <string name="settings_rule_name">Rule Name</string>
     <string name="settings_rule_type">Rule Type</string>

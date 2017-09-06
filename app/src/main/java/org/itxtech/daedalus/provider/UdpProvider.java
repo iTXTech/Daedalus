@@ -11,6 +11,7 @@ import de.measite.minidns.DNSMessage;
 import de.measite.minidns.Record;
 import de.measite.minidns.record.A;
 import de.measite.minidns.record.AAAA;
+import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.RuleResolver;
@@ -216,12 +217,13 @@ public class UdpProvider extends Provider {
      * @param responsePayload The payload of the response
      */
     void handleDnsResponse(IpPacket requestPacket, byte[] responsePayload) {
-        /*try {
-            DNSMessage message = new DNSMessage(responsePayload);
-            Logger.info(message.toString());
-        } catch (IOException e) {
-            Logger.logException(e);
-        }*/
+        if (Daedalus.getPrefs().getBoolean("settings_debug_output", false)) {
+            try {
+                Logger.debug(new DNSMessage(responsePayload).toString());
+            } catch (IOException e) {
+                Logger.logException(e);
+            }
+        }
         UdpPacket udpOutPacket = (UdpPacket) requestPacket.getPayload();
         UdpPacket.Builder payLoadBuilder = new UdpPacket.Builder(udpOutPacket)
                 .srcPort(udpOutPacket.getHeader().getDstPort())
@@ -308,6 +310,9 @@ public class UdpProvider extends Provider {
         DNSMessage dnsMsg;
         try {
             dnsMsg = new DNSMessage(dnsRawData);
+            if (Daedalus.getPrefs().getBoolean("settings_debug_output", false)) {
+                Logger.debug(dnsMsg.toString());
+            }
         } catch (IOException e) {
             Log.i(TAG, "handleDnsRequest: Discarding non-DNS or invalid packet", e);
             return;

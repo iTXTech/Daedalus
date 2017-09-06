@@ -81,6 +81,7 @@
     <string name="action_log">紀錄檔</string>
     <string name="action_refresh">重新整理</string>
     <string name="settings_log_size">紀錄檔大小限制</string>
+    <string name="settings_debug_output">调试输出 TODO</string>
     <string name="server_cutedns_south_china">CuteDNS 中國華南</string>
     <string name="settings_allow_dynamic_rule_reload">允許動態規則重新載入</string>
     <string name="action_reload">重新載入</string>
