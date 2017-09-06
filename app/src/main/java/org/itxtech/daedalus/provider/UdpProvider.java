@@ -216,12 +216,12 @@ public class UdpProvider extends Provider {
      * @param responsePayload The payload of the response
      */
     void handleDnsResponse(IpPacket requestPacket, byte[] responsePayload) {
-        /*try {
+        try {
             DNSMessage message = new DNSMessage(responsePayload);
             Logger.info(message.toString());
         } catch (IOException e) {
             Logger.logException(e);
-        }*/
+        }
         UdpPacket udpOutPacket = (UdpPacket) requestPacket.getPayload();
         UdpPacket.Builder payLoadBuilder = new UdpPacket.Builder(udpOutPacket)
                 .srcPort(udpOutPacket.getHeader().getDstPort())
@@ -322,7 +322,7 @@ public class UdpProvider extends Provider {
             String response = RuleResolver.resolve(dnsQueryName, dnsMsg.getQuestion().type);
             if (response != null && dnsMsg.getQuestion().type == Record.TYPE.A) {
                 Logger.info("Provider: Resolved " + dnsQueryName + "  Local resolver response: " + response);
-                DNSMessage.Builder builder = dnsMsg.asBuilder();
+                DNSMessage.Builder builder = dnsMsg.asBuilder().setQrFlag(false);
                 int[] ip = new int[4];
                 byte i = 0;
                 for (String block : response.split("\\.")) {
@@ -333,7 +333,7 @@ public class UdpProvider extends Provider {
                 handleDnsResponse(parsedPacket, builder.build().toArray());
             } else if (response != null && dnsMsg.getQuestion().type == Record.TYPE.AAAA) {
                 Logger.info("Provider: Resolved " + dnsQueryName + "  Local resolver response: " + response);
-                DNSMessage.Builder builder = dnsMsg.asBuilder();
+                DNSMessage.Builder builder = dnsMsg.asBuilder().setQrFlag(false);
                 builder.addAnswer(new Record<>(dnsQueryName, Record.TYPE.AAAA, 1, 64,
                         new AAAA(Inet6Address.getByName(response).getAddress())));
                 handleDnsResponse(parsedPacket, builder.build().toArray());
