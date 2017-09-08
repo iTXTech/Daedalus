@@ -55,7 +55,7 @@ public class Daedalus extends Application {
 
     public static final List<DNSServer> DNS_SERVERS = new ArrayList<DNSServer>() {{
         add(new DNSServer("119.23.248.241", R.string.server_fundns_south_china));
-        add(new DNSServer("116.196.87.241", R.string.server_fundns_north_china));
+        add(new DNSServer("116.196.109.54", R.string.server_fundns_north_china));
         add(new DNSServer("115.159.220.214", R.string.server_puredns_east_china));
         add(new DNSServer("123.207.137.88", R.string.server_puredns_north_china));
         add(new DNSServer("115.159.146.99", R.string.server_aixyz_east_china));
