@@ -114,7 +114,7 @@ public class Daedalus extends Application {
         initData();
     }
 
-    private void initDirectory(String dir){
+    private void initDirectory(String dir) {
         File directory = new File(dir);
         if (!directory.isDirectory()) {
             Logger.warning(dir + " is not a directory. Delete result: " + String.valueOf(directory.delete()));

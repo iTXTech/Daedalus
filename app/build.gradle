@@ -4,12 +4,12 @@ apply plugin: 'com.google.gms.google-services'
 def gitCommit = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId "org.itxtech.daedalus"
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 12
         versionName "1.10.1"
 
@@ -42,17 +42,18 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.android.support:percent:25.3.1'
-    compile 'com.android.support:cardview-v7:25.3.1'
+    compile 'com.android.support:appcompat-v7:26.0.2'
+    compile 'com.android.support:design:26.0.2'
+    compile 'com.android.support:support-v4:26.0.2'
+    compile 'com.android.support:percent:26.0.2'
+    compile 'com.android.support:cardview-v7:26.0.2'
 
     compile 'org.pcap4j:pcap4j-core:1.7.1'
     compile 'org.pcap4j:pcap4j-packetfactory-static:1.7.1'
     compile 'de.measite.minidns:minidns-core:0.2.2'
     compile 'com.google.code.gson:gson:2.8.1'
 
+    compile 'com.google.firebase:firebase-core:11.0.4'
     compile 'com.google.firebase:firebase-crash:11.0.4'
 
     testCompile 'junit:junit:4.12'

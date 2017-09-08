@@ -125,8 +125,7 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
 
         if (id == R.id.action_reload) {
             if (!Daedalus.getPrefs().getBoolean("settings_allow_dynamic_rule_reload", false)) {
-                Snackbar.make(getView(), R.string.notice_check_dynamic_rule_reload, Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
+                Snackbar.make(getView(), R.string.notice_check_dynamic_rule_reload, Snackbar.LENGTH_SHORT).show();
             } else {
                 Daedalus.setRulesChanged();
             }

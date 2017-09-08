@@ -136,6 +136,10 @@ public class Configurations {
         return config;
     }
 
+    public Configurations() {
+        //TODO: Initial config. Eg. Build-in rules
+    }
+
     public void save() {
         try {
             if (file != null) {
