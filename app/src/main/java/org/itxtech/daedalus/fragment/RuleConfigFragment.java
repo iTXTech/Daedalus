@@ -408,7 +408,9 @@ public class RuleConfigFragment extends ConfigFragment {
                         Logger.logException(e);
                     }
 
-                    Snackbar.make(view, R.string.notice_downloaded, Snackbar.LENGTH_SHORT).show();
+                    if (view != null) {
+                        Snackbar.make(view, R.string.notice_downloaded, Snackbar.LENGTH_SHORT).show();
+                    }
                     break;
             }
         }
