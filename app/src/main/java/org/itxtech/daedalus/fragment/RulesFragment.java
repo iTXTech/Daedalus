@@ -51,7 +51,7 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
         View view = inflater.inflate(R.layout.fragment_rules, container, false);
         currentType = Daedalus.configurations.getUsingRuleType();
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_rules);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView_rules);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(manager);
         adapter = new RuleAdapter();
@@ -87,7 +87,7 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
         });
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_add_rule);
+        FloatingActionButton fab = view.findViewById(R.id.fab_add_rule);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,12 +209,16 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
         ViewHolder(View view) {
             super(view);
             this.view = view;
-            textViewName = (TextView) view.findViewById(R.id.textView_rule_name);
-            textViewAddress = (TextView) view.findViewById(R.id.textView_rule_detail);
-            textViewSize = (TextView) view.findViewById(R.id.textView_rule_size);
+            textViewName = view.findViewById(R.id.textView_rule_name);
+            textViewAddress = view.findViewById(R.id.textView_rule_detail);
+            textViewSize = view.findViewById(R.id.textView_rule_size);
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
-            view.findViewById(R.id.cardView_indicator).setBackgroundResource(R.drawable.background_selectable);
+            if (Daedalus.isDarkTheme()) {
+                view.findViewById(R.id.cardView_indicator).setBackgroundResource(R.drawable.bg_selectable_dark);
+            } else {
+                view.findViewById(R.id.cardView_indicator).setBackgroundResource(R.drawable.bg_selectable);
+            }
         }
 
         void setId(String id) {

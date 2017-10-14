@@ -19,7 +19,7 @@
     </item>
     <item android:left="8dp">
         <shape android:shape="rectangle">
-            <solid android:color="@android:color/white"/>
+            <solid android:color="@android:color/background_dark"/>
             <corners android:bottomRightRadius="4dp" android:topRightRadius="4dp"/>
         </shape>
     </item>

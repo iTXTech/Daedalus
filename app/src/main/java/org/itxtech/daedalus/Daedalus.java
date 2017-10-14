@@ -189,6 +189,10 @@ public class Daedalus extends Application {
         return getInstance().prefs;
     }
 
+    public static boolean isDarkTheme() {
+        return false;
+    }
+
     @Override
     public void onTerminate() {
         Log.d("Daedalus", "onTerminate");
