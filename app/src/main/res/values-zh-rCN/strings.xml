@@ -37,8 +37,6 @@
     <string name="nav_version">版本:</string>
     <string name="nav_git_commit">Git commit:</string>
     <string name="settings_help_and_support">支持和帮助</string>
-    <string name="server_puredns_north_china">Pure DNS 华北</string>
-    <string name="server_puredns_east_china">Pure DNS 华东</string>
     <string name="server_aixyz_south_china">AIXYZ DNS 华南</string>
     <string name="server_aixyz_east_china">AIXYZ DNS 华东</string>
     <string name="server_fundns_south_china">FUN DNS 华南</string>
