@@ -35,6 +35,10 @@
                 android:key="settings_notification"
                 android:title="@string/settings_notification"
                 android:defaultValue="true"/>
+        <SwitchPreference
+                android:key="settings_dark_theme"
+                android:title="@string/settings_dark_theme"
+                android:defaultValue="false"/>
         <EditTextPreference
                 android:key="settings_log_size"
                 android:selectAllOnFocus="false"

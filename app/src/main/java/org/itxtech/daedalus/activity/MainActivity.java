@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int FRAGMENT_DNS_SERVERS = 5;
     public static final int FRAGMENT_LOG = 6;
 
+    public static final String LAUNCH_NEED_RECREATE = "org.itxtech.daedalus.activity.MainActivity.LAUNCH_NEED_RECREATE";
+
     private static MainActivity instance = null;
 
     private ToolbarFragment currentFragment;
@@ -92,7 +94,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.textView_nav_git_commit)).setText(getString(R.string.nav_git_commit) + " " + BuildConfig.GIT_COMMIT);
 
         updateUserInterface(getIntent());
-        Log.d(TAG, "onCreate");
     }
 
     private void switchFragment(Class fragmentClass) {
@@ -123,8 +124,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        Log.d(TAG, "onDestroy");
         instance = null;
         currentFragment = null;
     }
@@ -208,6 +207,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         int fragment = intent.getIntExtra(LAUNCH_FRAGMENT, FRAGMENT_NONE);
+
+        if (intent.getBooleanExtra(LAUNCH_NEED_RECREATE, false)) {
+            finish();
+            overridePendingTransition(R.anim.start, R.anim.end);
+            if (fragment != FRAGMENT_NONE) {
+                startActivity(new Intent(this, MainActivity.class)
+                        .putExtra(LAUNCH_FRAGMENT, fragment));
+            } else {
+                startActivity(new Intent(this, MainActivity.class));
+            }
+            return;
+        }
+
         switch (fragment) {
             case FRAGMENT_ABOUT:
                 switchFragment(AboutFragment.class);

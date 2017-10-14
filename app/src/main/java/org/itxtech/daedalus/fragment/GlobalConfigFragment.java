@@ -1,5 +1,6 @@
 package org.itxtech.daedalus.fragment;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.*;
@@ -7,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
+import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.util.server.DNSServerHelper;
 
 /**
@@ -77,6 +79,17 @@ public class GlobalConfigFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary((String) newValue);
+                return true;
+            }
+        });
+
+        SwitchPreference darkTheme = (SwitchPreference) findPreference("settings_dark_theme");
+        darkTheme.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                getActivity().startActivity(new Intent(Daedalus.getInstance(), MainActivity.class)
+                        .putExtra(MainActivity.LAUNCH_FRAGMENT, MainActivity.FRAGMENT_SETTINGS)
+                        .putExtra(MainActivity.LAUNCH_NEED_RECREATE, true));
                 return true;
             }
         });

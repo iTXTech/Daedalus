@@ -190,7 +190,7 @@ public class Daedalus extends Application {
     }
 
     public static boolean isDarkTheme() {
-        return false;
+        return getInstance().prefs.getBoolean("settings_dark_theme", false);
     }
 
     @Override

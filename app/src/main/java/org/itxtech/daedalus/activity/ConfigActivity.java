@@ -56,7 +56,7 @@ public class ConfigActivity extends AppCompatActivity {
                 break;
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_config);
+        Toolbar toolbar = findViewById(R.id.toolbar_config);
         Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_clear);
         Drawable wrappedDrawable = DrawableCompat.wrap(drawable);
         DrawableCompat.setTint(wrappedDrawable, Color.WHITE);
