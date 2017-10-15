@@ -86,7 +86,6 @@
     <string name="server_fundns_south_china">FUN DNS South China</string>
     <string name="server_fundns_north_china">FUN DNS North China</string>
 
-
     <string name="primary_server">Primary DNS server</string>
     <string name="secondary_server">Secondary DNS server</string>
 

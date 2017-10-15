@@ -25,10 +25,9 @@ public class DaedalusTileService extends TileService {
 
     @Override
     public void onClick() {
-        Daedalus appContext = Daedalus.getInstance();
-        boolean activate = appContext.isServiceActivated();
+        boolean activate = Daedalus.getInstance().isServiceActivated();
 
-        Intent intent = new Intent(appContext, MainActivity.class)
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class)
                 .setAction(Intent.ACTION_VIEW)
                 .putExtra(MainActivity.LAUNCH_ACTION, activate ? MainActivity.LAUNCH_ACTION_DEACTIVATE : MainActivity.LAUNCH_ACTION_ACTIVATE);
 

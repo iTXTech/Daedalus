@@ -48,7 +48,7 @@ __Users must comply with local laws and regulations.__<br>
 DNS Server Providers
 -------------
 * __CuteDNS__
-* __[Pure DNS](http://puredns.cn/)__ - *Shutdown according to regulations*
+* __[Pure DNS](https://puredns.cn/)__ - *Shutdown according to regulations*
 * __[AIXYZ DNS](https://aixyz.com/)__ - __*For academic purposes only.*__
 * __[FUN DNS](http://fundns.cn)__ - *The Most Pure Domain Name Resolution Service*
 

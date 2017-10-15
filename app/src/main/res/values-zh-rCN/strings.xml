@@ -2,68 +2,71 @@
 <resources>
     <string name="app_name">Daedalus</string>
     <string name="quick_toggle">开关</string>
-    <string name="action_settings">设置</string>
+
     <string name="notice_main">世界很大，我要去看看。</string>
+    <string name="notice_activated">已启用 iTXTech Daedalus。</string>
+    <string name="notice_start_test">正在测试指定的 DNS 服务器……</string>
+    <string name="notice_queries">DNS 查询次数:</string>
+    <string name="notice_legacy_api">当前 Android API 无法支持所有功能。</string>
+    <string name="notice_need_restart">重新启用 Daedalus 以应用设置。</string>
+    <string name="notice_start_download">正在下载规则，请稍等 ……</string>
+    <string name="notice_downloaded">已下载规则。</string>
+    <string name="notice_now_downloading">Daedalus 当前正在下载规则，请稍等。</string>
+    <string name="notice_fill_in_all">请填写所有配置项。</string>
+    <string name="notice_delete_confirm_prompt">您确定要删除此配置项？</string>
+    <string name="notice_after_stop">请在服务停止后更改启用的规则。</string>
+    <string name="notice_check_dynamic_rule_reload">请在设置中勾选“允许动态更新规则”</string>
+    <string name="notice_export_complete">导出完成。</string>
+    <string name="notice_importing_rule">正在导入规则，请稍等。</string>
+
+    <string name="action_settings">设置</string>
+    <string name="action_about">关于</string>
+    <string name="action_dns_test">测试</string>
+    <string name="action_start_test">开始测试</string>
+    <string name="action_home">主页</string>
+    <string name="action_rules">规则</string>
+    <string name="action_dns_servers">服务器</string>
+    <string name="action_removed">已移除。</string>
+    <string name="action_undo">撤销</string>
+    <string name="action_log">日志</string>
+    <string name="action_refresh">刷新</string>
+    <string name="action_reload">重新加载规则</string>
+
+    <string name="delete">删除</string>
+    <string name="apply">应用</string>
+    <string name="export">导出</string>
+
+    <string name="navigation_drawer_close">关闭导航栏</string>
+    <string name="navigation_drawer_open">开启导航栏</string>
+
     <string name="button_text_activate">启用</string>
     <string name="button_text_deactivate">停用</string>
-    <string name="action_about">关于</string>
-    <string name="notice_activated">已启用 iTXTech Daedalus。</string>
+
+    <string name="config_dns_server">配置 DNS 服务器</string>
+    <string name="config_rule">配置规则</string>
+
     <string name="settings_system">系统设置</string>
     <string name="settings_boot">开机自动启用</string>
     <string name="settings_server">服务器设置</string>
-    <string name="primary_server">首选 DNS 服务器</string>
-    <string name="secondary_server">备用 DNS 服务器</string>
-    <string name="notice_start_test">正在测试指定的 DNS 服务器……</string>
-    <string name="action_dns_test">测试</string>
-    <string name="action_start_test">开始测试</string>
-    <string name="test_domain">测试域名:</string>
-    <string name="test_time_used">耗时:</string>
-    <string name="test_dns_server">DNS 服务器:</string>
-    <string name="test_result_resolved">解析地址:</string>
-    <string name="test_failed">查询失败。超时或未知的主机。</string>
-    <string name="test_test_domain">google.com</string>
     <string name="settings_notification">显示通知</string>
     <string name="settings_check_update">检查更新</string>
     <string name="settings_update_summary">前往 GitHub 发布页面。</string>
     <string name="settings_count_number_of_queries">统计 DNS 查询次数</string>
-    <string name="notice_queries">DNS 查询次数:</string>
-    <string name="notice_legacy_api">当前 Android API 无法支持所有功能。</string>
     <string name="settings_bug_report">提交反馈</string>
     <string name="settings_issue_summary">前往 GitHub 提交 Bug 反馈。</string>
     <string name="settings_dns_test_servers">DNS 测试服务器</string>
-    <string name="navigation_drawer_close">关闭导航栏</string>
-    <string name="navigation_drawer_open">开启导航栏</string>
-    <string name="action_home">主页</string>
-    <string name="nav_version">版本:</string>
-    <string name="nav_git_commit">Git commit:</string>
     <string name="settings_help_and_support">支持和帮助</string>
-    <string name="server_aixyz_south_china">AIXYZ DNS 华南</string>
-    <string name="server_aixyz_east_china">AIXYZ DNS 华东</string>
-    <string name="server_fundns_south_china">FUN DNS 华南</string>
-    <string name="server_fundns_north_china">FUN DNS 华北</string>
-    <string name="nav_github">GitHub</string>
     <string name="settings_advanced">高级系统设置</string>
     <string name="settings_advanced_on">开启</string>
     <string name="settings_local_rules_resolution">本地规则解析</string>
-    <string name="notice_need_restart">重新启用 Daedalus 以应用设置。</string>
-    <string name="action_rules">规则</string>
-    <string name="notice_start_download">正在下载规则，请稍等 ……</string>
-    <string name="notice_downloaded">已下载规则。</string>
-    <string name="notice_now_downloading">Daedalus 当前正在下载规则，请稍等。</string>
-    <string name="action_dns_servers">服务器</string>
-    <string name="settings_server_name">服务器名称</string>
-    <string name="settings_server_address">服务器地址</string>
-    <string name="settings_server_port">服务器端口</string>
-    <string name="delete">删除</string>
-    <string name="apply">应用</string>
-    <string name="export">导出</string>
-    <string name="notice_fill_in_all">请填写所有配置项。</string>
     <string name="settings_dns_over_tcp">DNS over TCP</string>
-    <string name="action_removed">已移除。</string>
-    <string name="action_undo">撤销</string>
-    <string name="notice_delete_confirm_prompt">您确定要删除此配置项？</string>
-    <string name="config_dns_server">配置 DNS 服务器</string>
-    <string name="config_rule">配置规则</string>
+    <string name="settings_manual">使用手册</string>
+    <string name="settings_manual_summary">访问 GitHub wiki 页面。</string>
+    <string name="settings_log_size">日志大小限制</string>
+    <string name="settings_debug_output">调试输出</string>
+    <string name="settings_allow_dynamic_rule_reload">允许动态更新规则</string>
+    <string name="settings_dark_theme">使用暗主题</string>
+
     <string name="settings_rule_name">规则名称</string>
     <string name="settings_rule_type">规则类型</string>
     <string name="settings_rule">规则设置</string>
@@ -73,18 +76,28 @@
     <string name="settings_rule_import">导入</string>
     <string name="settings_rule_import_build_in">内置</string>
     <string name="settings_rule_import_external">外部</string>
-    <string name="notice_after_stop">请在服务停止后更改启用的规则。</string>
-    <string name="settings_manual">使用手册</string>
-    <string name="settings_manual_summary">访问 GitHub wiki 页面。</string>
-    <string name="action_log">日志</string>
-    <string name="action_refresh">刷新</string>
-    <string name="settings_log_size">日志大小限制</string>
-    <string name="settings_debug_output">调试输出</string>
+
+    <string name="settings_server_name">服务器名称</string>
+    <string name="settings_server_address">服务器地址</string>
+    <string name="settings_server_port">服务器端口</string>
+
+    <string name="server_aixyz_south_china">AIXYZ DNS 华南</string>
+    <string name="server_aixyz_east_china">AIXYZ DNS 华东</string>
+    <string name="server_fundns_south_china">FUN DNS 华南</string>
+    <string name="server_fundns_north_china">FUN DNS 华北</string>
     <string name="server_cutedns_south_china">CuteDNS 华南</string>
-    <string name="settings_allow_dynamic_rule_reload">允许动态更新规则</string>
-    <string name="action_reload">重新加载规则</string>
-    <string name="notice_check_dynamic_rule_reload">请在设置中勾选“允许动态更新规则”</string>
-    <string name="notice_export_complete">导出完成。</string>
-    <string name="notice_importing_rule">正在导入规则，请稍等。</string>
-    <string name="settings_dark_theme">使用暗主题</string>
+
+    <string name="primary_server">首选 DNS 服务器</string>
+    <string name="secondary_server">备用 DNS 服务器</string>
+
+    <string name="test_domain">测试域名:</string>
+    <string name="test_time_used">耗时:</string>
+    <string name="test_dns_server">DNS 服务器:</string>
+    <string name="test_result_resolved">解析地址:</string>
+    <string name="test_failed">查询失败。超时或未知的主机。</string>
+    <string name="test_test_domain">google.com</string>
+
+    <string name="nav_version">版本:</string>
+    <string name="nav_git_commit">Git commit:</string>
+    <string name="nav_github">GitHub</string>
 </resources>

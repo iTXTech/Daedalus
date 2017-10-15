@@ -180,16 +180,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             DaedalusVpnService.secondaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getSecondary());
 
             Daedalus.getInstance().startService(Daedalus.getInstance().getServiceIntent().setAction(DaedalusVpnService.ACTION_ACTIVATE));
-
             updateMainButton(R.string.button_text_deactivate);
-
             Daedalus.updateShortcut(Daedalus.getInstance());
         }
     }
 
     private void updateMainButton(int id) {
         if (currentFragment instanceof HomeFragment) {
-            Button button = (Button) currentFragment.getView().findViewById(R.id.button_activate);
+            Button button = currentFragment.getView().findViewById(R.id.button_activate);
             button.setText(id);
         }
     }
