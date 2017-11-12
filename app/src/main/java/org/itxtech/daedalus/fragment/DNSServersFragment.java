@@ -35,7 +35,7 @@ public class DNSServersFragment extends ToolbarFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_dns_servers, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_dns_servers);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView_dns_servers);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(manager);
         adapter = new DNSServerAdapter();

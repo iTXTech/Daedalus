@@ -137,4 +137,10 @@ public class DNSServerConfigFragment extends ConfigFragment {
 
         return true;
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Daedalus.configurations.save();
+    }
 }
