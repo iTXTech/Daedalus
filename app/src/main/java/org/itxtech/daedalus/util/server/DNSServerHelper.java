@@ -2,6 +2,7 @@ package org.itxtech.daedalus.util.server;
 
 import android.content.Context;
 import org.itxtech.daedalus.Daedalus;
+import org.itxtech.daedalus.service.DaedalusVpnService;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -141,6 +142,6 @@ public class DNSServerHelper {
     }
 
     public static boolean isInUsing(CustomDNSServer server) {
-        return Daedalus.getInstance().isServiceActivated() && (server.getId().equals(getPrimary()) || server.getId().equals(getSecondary()));
+        return DaedalusVpnService.isActivated() && (server.getId().equals(getPrimary()) || server.getId().equals(getSecondary()));
     }
 }

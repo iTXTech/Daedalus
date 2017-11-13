@@ -63,6 +63,12 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
     public HashMap<String, String> dnsServers;
 
+    private static boolean activated = false;
+
+    public static boolean isActivated() {
+        return activated;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -73,6 +79,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         if (intent != null) {
             switch (intent.getAction()) {
                 case ACTION_ACTIVATE:
+                    activated = true;
                     if (Daedalus.getPrefs().getBoolean("settings_notification", true)) {
 
                         NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -130,6 +137,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void stopThread() {
         Log.d(TAG, "stopThread");
+        activated = false;
         boolean shouldRefresh = false;
         try {
             if (this.descriptor != null) {
@@ -165,14 +173,13 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             Logger.info("Daedalus VPN service has stopped");
         }
 
-        if (shouldRefresh && MainActivity.getInstance() != null && Daedalus.getInstance().isAppOnForeground()) {
+        if (shouldRefresh && MainActivity.getInstance() != null) {
             MainActivity.getInstance().startActivity(new Intent(getApplicationContext(), MainActivity.class)
                     .putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_AFTER_DEACTIVATE));
         } else if (shouldRefresh) {
             Daedalus.updateShortcut(getApplicationContext());
         }
     }
-
 
     @Override
     public void onRevoke() {

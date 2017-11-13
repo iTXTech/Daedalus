@@ -1,6 +1,7 @@
 package org.itxtech.daedalus.util;
 
 import org.itxtech.daedalus.Daedalus;
+import org.itxtech.daedalus.service.DaedalusVpnService;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -104,7 +105,7 @@ public class Rule {
     }
 
     public boolean isServiceAndUsing() {
-        return Daedalus.getInstance().isServiceActivated() && isUsing();
+        return DaedalusVpnService.isActivated() && isUsing();
     }
 
     public void addToConfig() {

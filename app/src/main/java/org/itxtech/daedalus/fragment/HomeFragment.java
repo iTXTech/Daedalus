@@ -10,6 +10,7 @@ import android.widget.Button;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.MainActivity;
+import org.itxtech.daedalus.service.DaedalusVpnService;
 
 /**
  * Daedalus Project
@@ -28,11 +29,11 @@ public class HomeFragment extends ToolbarFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        Button but = (Button) view.findViewById(R.id.button_activate);
+        Button but = view.findViewById(R.id.button_activate);
         but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Daedalus.getInstance().isServiceActivated()) {
+                if (DaedalusVpnService.isActivated()) {
                     Daedalus.getInstance().deactivateService();
                 } else {
                     startActivity(new Intent(getActivity(), MainActivity.class)
@@ -51,15 +52,17 @@ public class HomeFragment extends ToolbarFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        updateUserInterface();
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            updateUserInterface();
+        }
     }
 
     private void updateUserInterface() {
         Log.d("DMainFragment", "updateInterface");
-        Button but = (Button) getView().findViewById(R.id.button_activate);
-        if (Daedalus.getInstance().isServiceActivated()) {
+        Button but = getView().findViewById(R.id.button_activate);
+        if (DaedalusVpnService.isActivated()) {
             but.setText(R.string.button_text_deactivate);
         } else {
             but.setText(R.string.button_text_activate);

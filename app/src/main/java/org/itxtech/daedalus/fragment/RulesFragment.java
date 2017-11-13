@@ -16,6 +16,7 @@ import android.widget.TextView;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.ConfigActivity;
+import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Rule;
 
 import java.io.File;
@@ -236,7 +237,7 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
         @Override
         public void onClick(View v) {
             if ((!Daedalus.getPrefs().getBoolean("settings_allow_dynamic_rule_reload", false) &&
-                    !Daedalus.getInstance().isServiceActivated()) ||
+                    !DaedalusVpnService.isActivated()) ||
                     Daedalus.getPrefs().getBoolean("settings_allow_dynamic_rule_reload", false)) {
                 Rule rule = Rule.getRuleById(id);
                 if (rule != null) {

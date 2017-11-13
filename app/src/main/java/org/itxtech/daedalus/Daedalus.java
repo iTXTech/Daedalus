@@ -177,7 +177,7 @@ public class Daedalus extends Application {
     }
 
     public static void setRulesChanged() {
-        if (instance.isServiceActivated() &&
+        if (DaedalusVpnService.isActivated() &&
                 getPrefs().getBoolean("settings_allow_dynamic_rule_reload", false)) {
             initHostsResolver();
         }
@@ -209,42 +209,9 @@ public class Daedalus extends Application {
         return new Intent(this, DaedalusVpnService.class);
     }
 
-
-    public boolean isAppOnForeground() {
-        // Returns a list of application processes that are running on the
-        // device
-
-        ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-        String packageName = getApplicationContext().getPackageName();
-
-        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
-                .getRunningAppProcesses();
-        if (appProcesses == null)
-            return false;
-
-        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
-            // The name of the process that this object is associated with.
-            if (appProcess.processName.equals(packageName)
-                    && appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void deactivateService() {
         startService(getServiceIntent().setAction(DaedalusVpnService.ACTION_DEACTIVATE));
         stopService(getServiceIntent());
-    }
-
-    public boolean isServiceActivated() {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (DaedalusVpnService.class.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public static void updateShortcut(Context context) {
