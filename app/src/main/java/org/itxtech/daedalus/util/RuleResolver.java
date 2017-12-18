@@ -33,8 +33,8 @@ public class RuleResolver implements Runnable {
     private static int mode = MODE_HOSTS;
     private static String[] hostsFiles;
     private static String[] dnsmasqFiles;
-    private static HashMap<String, String> rulesA;
-    private static HashMap<String, String> rulesAAAA;
+    private static HashMap<String, String> rulesA = new HashMap<>();
+    private static HashMap<String, String> rulesAAAA = new HashMap<>();
     private static boolean shutdown = false;
 
     public RuleResolver() {
@@ -61,18 +61,20 @@ public class RuleResolver implements Runnable {
     }
 
     public static void clear() {
-        rulesA = null;
-        rulesAAAA = null;
+        rulesA = new HashMap<>();
+        rulesAAAA = new HashMap<>();
     }
 
     public static String resolve(String hostname, Record.TYPE type) {
-        HashMap<String, String> rules = null;
+        HashMap<String, String> rules;
         if (type == Record.TYPE.A) {
             rules = rulesA;
         } else if (type == Record.TYPE.AAAA) {
             rules = rulesAAAA;
+        } else {
+            return null;
         }
-        if (rules == null) {
+        if (rules.size() == 0) {
             return null;
         }
         if (rules.containsKey(hostname)) {

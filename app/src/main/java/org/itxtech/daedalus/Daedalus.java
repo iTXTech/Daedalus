@@ -140,7 +140,7 @@ public class Daedalus extends Application {
         return gson.fromJson(reader, beanClass);
     }
 
-    public static void initHostsResolver() {
+    public static void initRuleResolver() {
         if (Daedalus.getPrefs().getBoolean("settings_local_rules_resolution", false)) {
             ArrayList<String> pendingLoad = new ArrayList<>();
             ArrayList<Rule> usingRules = configurations.getUsingRules();
@@ -161,6 +161,8 @@ public class Daedalus extends Application {
                             RuleResolver.startLoadDnsmasq(arr);
                             break;
                     }
+                } else {
+                    RuleResolver.clear();
                 }
             } else {
                 RuleResolver.clear();
@@ -171,7 +173,7 @@ public class Daedalus extends Application {
     public static void setRulesChanged() {
         if (DaedalusVpnService.isActivated() &&
                 getPrefs().getBoolean("settings_allow_dynamic_rule_reload", false)) {
-            initHostsResolver();
+            initRuleResolver();
         }
     }
 

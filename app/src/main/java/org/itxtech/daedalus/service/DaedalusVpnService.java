@@ -111,7 +111,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                         this.notification = builder;
                     }
 
-                    Daedalus.initHostsResolver();
+                    Daedalus.initRuleResolver();
                     DNSServerHelper.buildPortCache();
 
                     if (this.mThread == null) {
