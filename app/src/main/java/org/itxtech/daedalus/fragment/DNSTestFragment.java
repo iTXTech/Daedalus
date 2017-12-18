@@ -145,6 +145,7 @@ public class DNSTestFragment extends ToolbarFragment {
                         testText = testServer(dnsQuery, type, dnsServer, testDomain, testText);
                     }
                     mHandler.obtainMessage(DnsTestHandler.MSG_TEST_DONE).sendToTarget();
+                } catch (IllegalStateException ignored) {
                 } catch (Exception e) {
                     Logger.logException(e);
                 }
