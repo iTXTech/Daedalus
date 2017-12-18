@@ -63,21 +63,13 @@ public class Daedalus extends Application {
         //Build-in Hosts rule providers
         add(new Rule("googlehosts/hosts", "googlehosts.hosts", Rule.TYPE_HOSTS,
                 "https://raw.githubusercontent.com/googlehosts/hosts/master/hosts-files/hosts", false));
-        add(new Rule("sy618/hosts", "sy618.hosts", Rule.TYPE_HOSTS,
-                "https://raw.githubusercontent.com/sy618/hosts/master/FQ", false));
         add(new Rule("vokins/yhosts", "vokins.hosts", Rule.TYPE_HOSTS,
                 "https://raw.githubusercontent.com/vokins/yhosts/master/hosts", false));
-        add(new Rule("lengers/connector", "connector.hosts", Rule.TYPE_HOSTS,
-                "https://git.oschina.net/lengers/connector/raw/master/hosts", false));
-        add(new Rule("wangchunming/2017hosts", "2017.hosts", Rule.TYPE_HOSTS,
-                "https://raw.githubusercontent.com/wangchunming/2017hosts/master/hosts-pc", false));
         add(new Rule("adaway", "adaway.hosts", Rule.TYPE_HOSTS,
                 "https://adaway.org/hosts.txt", false));
         //Build-in DNSMasq rule providers
         add(new Rule("vokins/yhosts/union", "union.dnsmasq", Rule.TYPE_DNAMASQ,
                 "https://raw.githubusercontent.com/vokins/yhosts/master/dnsmasq/union.conf", false));
-        add(new Rule("sy618/hosts/dnsfq", "dnsfq.dnsmasq", Rule.TYPE_DNAMASQ,
-                "https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsfq", false));
     }};
 
     public static final String[] DEFAULT_TEST_DOMAINS = new String[]{
