@@ -9,8 +9,8 @@ android {
         applicationId "org.itxtech.daedalus"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 13
-        versionName "1.10.2"
+        versionCode 14
+        versionName "1.11.0"
 
         buildConfigField "String", "BUILD_TIME", "\"${System.currentTimeMillis()}\""
         buildConfigField "String", "GIT_COMMIT", "\"${gitCommit}\""
@@ -47,8 +47,8 @@ dependencies {
     compile 'com.android.support:percent:26.0.2'
     compile 'com.android.support:cardview-v7:26.0.2'
 
-    compile 'org.pcap4j:pcap4j-core:1.7.2'
-    compile 'org.pcap4j:pcap4j-packetfactory-static:1.7.2'
+    compile 'org.pcap4j:pcap4j-core:1.7.3'
+    compile 'org.pcap4j:pcap4j-packetfactory-static:1.7.3'
     compile 'de.measite.minidns:minidns-core:0.2.2'
     compile 'com.google.code.gson:gson:2.8.2'
 
