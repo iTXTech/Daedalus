@@ -77,8 +77,8 @@ Credits
 
 License
 ------------
-Copyright (C) 2017 by iTXTech <[admin@itxtech.org](mailto:admin@itxtech.org)><br>
-Copyright (C) 2017 by PeratX <[peratx@itxtech.org](mailto:peratx@itxtech.org)>
+Copyright (C) 2017-2018 by iTXTech <[admin@itxtech.org](mailto:admin@itxtech.org)><br>
+Copyright (C) 2017-2018 by PeratX <[peratx@itxtech.org](mailto:peratx@itxtech.org)>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
