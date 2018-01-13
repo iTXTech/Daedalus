@@ -9,6 +9,7 @@ import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
+import android.net.VpnService;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -24,6 +25,7 @@ import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.Rule;
 import org.itxtech.daedalus.util.RuleResolver;
 import org.itxtech.daedalus.util.server.DNSServer;
+import org.itxtech.daedalus.util.server.DNSServerHelper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -201,6 +203,28 @@ public class Daedalus extends Application {
 
     public Intent getServiceIntent() {
         return new Intent(this, DaedalusVpnService.class);
+    }
+
+    public static boolean switchService() {
+        if (DaedalusVpnService.isActivated()) {
+            instance.deactivateService();
+            return false;
+        } else {
+            instance.activateService();
+            return true;
+        }
+    }
+
+    public boolean activateService() {
+        Intent intent = VpnService.prepare(Daedalus.getInstance());
+        if (intent != null) {
+            return false;
+        } else {
+            DaedalusVpnService.primaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getPrimary());
+            DaedalusVpnService.secondaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getSecondary());
+            startService(Daedalus.getInstance().getServiceIntent().setAction(DaedalusVpnService.ACTION_ACTIVATE));
+            return true;
+        }
     }
 
     public void deactivateService() {

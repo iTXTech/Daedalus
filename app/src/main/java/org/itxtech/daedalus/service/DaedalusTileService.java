@@ -1,12 +1,11 @@
 package org.itxtech.daedalus.service;
 
-import android.content.Intent;
 import android.os.Build;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 import android.support.annotation.RequiresApi;
+import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
-import org.itxtech.daedalus.activity.MainActivity;
 
 /**
  * Daedalus Project
@@ -24,13 +23,11 @@ public class DaedalusTileService extends TileService {
 
     @Override
     public void onClick() {
-        boolean activate = DaedalusVpnService.isActivated();
-
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class)
-                .setAction(Intent.ACTION_VIEW)
-                .putExtra(MainActivity.LAUNCH_ACTION, activate ? MainActivity.LAUNCH_ACTION_DEACTIVATE : MainActivity.LAUNCH_ACTION_ACTIVATE);
-
-        startActivity(intent);
+        Tile tile = getQsTile();
+        tile.setLabel(getString(R.string.quick_toggle));
+        tile.setContentDescription(getString(R.string.app_name));
+        tile.setState(Daedalus.switchService() ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE);
+        tile.updateTile();
     }
 
     @Override
@@ -40,7 +37,6 @@ public class DaedalusTileService extends TileService {
 
     private void updateTile() {
         boolean activate = DaedalusVpnService.isActivated();
-
         Tile tile = getQsTile();
         tile.setLabel(getString(R.string.quick_toggle));
         tile.setContentDescription(getString(R.string.app_name));

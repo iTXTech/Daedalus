@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int LAUNCH_ACTION_NONE = 0;
     public static final int LAUNCH_ACTION_ACTIVATE = 1;
     public static final int LAUNCH_ACTION_DEACTIVATE = 2;
-    public static final int LAUNCH_ACTION_AFTER_DEACTIVATE = 3;
+    public static final int LAUNCH_ACTION_SERVICE_DONE = 3;
 
     public static final String LAUNCH_FRAGMENT = "org.itxtech.daedalus.activity.MainActivity.LAUNCH_FRAGMENT";
     public static final int FRAGMENT_NONE = -1;
@@ -198,9 +198,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             this.activateService();
         } else if (launchAction == LAUNCH_ACTION_DEACTIVATE) {
             Daedalus.getInstance().deactivateService();
-        } else if (launchAction == LAUNCH_ACTION_AFTER_DEACTIVATE) {
+        } else if (launchAction == LAUNCH_ACTION_SERVICE_DONE) {
             Daedalus.updateShortcut(this.getApplicationContext());
-            updateMainButton(R.string.button_text_activate);
+            if (DaedalusVpnService.isActivated()) {
+                updateMainButton(R.string.button_text_deactivate);
+            } else {
+                updateMainButton(R.string.button_text_activate);
+            }
         }
 
         int fragment = intent.getIntExtra(LAUNCH_FRAGMENT, FRAGMENT_NONE);
