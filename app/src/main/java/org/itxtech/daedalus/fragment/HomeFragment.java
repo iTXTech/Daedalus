@@ -34,7 +34,7 @@ public class HomeFragment extends ToolbarFragment {
             @Override
             public void onClick(View v) {
                 if (DaedalusVpnService.isActivated()) {
-                    Daedalus.getInstance().deactivateService();
+                    Daedalus.deactivateService(getActivity().getApplicationContext());
                 } else {
                     startActivity(new Intent(getActivity(), MainActivity.class)
                             .putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_ACTIVATE));

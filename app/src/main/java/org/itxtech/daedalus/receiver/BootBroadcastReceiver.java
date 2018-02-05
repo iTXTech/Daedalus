@@ -3,11 +3,8 @@ package org.itxtech.daedalus.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.VpnService;
 import org.itxtech.daedalus.Daedalus;
-import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Logger;
-import org.itxtech.daedalus.util.server.DNSServerHelper;
 
 /**
  * Daedalus Project
@@ -24,20 +21,8 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (Daedalus.getPrefs().getBoolean("settings_boot", false)) {
-            Intent vIntent = VpnService.prepare(context);
-            if (vIntent != null) {
-                vIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(vIntent);
-            }
-
-            DaedalusVpnService.primaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getPrimary());
-            DaedalusVpnService.secondaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getSecondary());
-
-            context.startService((new Intent(context, DaedalusVpnService.class)).setAction(DaedalusVpnService.ACTION_ACTIVATE));
-
+            Daedalus.activateService(context);
             Logger.info("Triggered boot receiver");
         }
-
-        Daedalus.updateShortcut(context);
     }
 }
