@@ -119,7 +119,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                         this.running = true;
                         this.mThread.start();
                     }
-                    Daedalus.updateShortcut(this.getApplicationContext());
+                    Daedalus.updateShortcut(getApplicationContext());
                     if (MainActivity.getInstance() != null) {
                         MainActivity.getInstance().startActivity(new Intent(getApplicationContext(), MainActivity.class)
                                 .putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_SERVICE_DONE));

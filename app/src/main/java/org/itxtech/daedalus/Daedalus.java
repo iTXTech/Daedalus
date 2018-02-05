@@ -241,7 +241,7 @@ public class Daedalus extends Application {
                     .setShortLabel(notice)
                     .setIcon(Icon.createWithResource(context, R.mipmap.ic_launcher))
                     .setIntent(new Intent(context, MainActivity.class).setAction(Intent.ACTION_VIEW)
-                            .putExtra(MainActivity.LAUNCH_ACTION, activate ? MainActivity.LAUNCH_ACTION_ACTIVATE : MainActivity.LAUNCH_ACTION_DEACTIVATE))
+                            .putExtra(MainActivity.LAUNCH_ACTION, activate ? MainActivity.LAUNCH_ACTION_DEACTIVATE : MainActivity.LAUNCH_ACTION_ACTIVATE))
                     .build();
             ShortcutManager shortcutManager = (ShortcutManager) context.getSystemService(SHORTCUT_SERVICE);
             shortcutManager.addDynamicShortcuts(Collections.singletonList(info));

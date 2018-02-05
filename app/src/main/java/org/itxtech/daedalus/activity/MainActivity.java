@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             DaedalusVpnService.secondaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getSecondary());
             Daedalus.getInstance().startService(Daedalus.getServiceIntent(getApplicationContext()).setAction(DaedalusVpnService.ACTION_ACTIVATE));
             updateMainButton(R.string.button_text_deactivate);
-            Daedalus.updateShortcut(Daedalus.getInstance());
+            Daedalus.updateShortcut(getApplicationContext());
         }
     }
 
@@ -192,14 +192,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void updateUserInterface(Intent intent) {
-        Log.d(TAG, "Updating user interface");
         int launchAction = intent.getIntExtra(LAUNCH_ACTION, LAUNCH_ACTION_NONE);
+        Log.d(TAG, "Updating user interface with Launch Action " + String.valueOf(launchAction));
         if (launchAction == LAUNCH_ACTION_ACTIVATE) {
             this.activateService();
         } else if (launchAction == LAUNCH_ACTION_DEACTIVATE) {
             Daedalus.deactivateService(getApplicationContext());
         } else if (launchAction == LAUNCH_ACTION_SERVICE_DONE) {
-            Daedalus.updateShortcut(this.getApplicationContext());
+            Daedalus.updateShortcut(getApplicationContext());
             if (DaedalusVpnService.isActivated()) {
                 updateMainButton(R.string.button_text_deactivate);
             } else {
