@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.ParcelFileDescriptor;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
 import android.system.OsConstants;
 import android.util.Log;
 import org.itxtech.daedalus.Daedalus;
