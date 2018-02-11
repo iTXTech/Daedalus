@@ -12,6 +12,8 @@ android:
     - extra-android-m2repository
   licenses:
     - '.+'
+before_install:
+  - yes | sdkmanager "platforms;android-27"
 script:
   - chmod 777 gradlew
   - ./gradlew clean assembleDebug
