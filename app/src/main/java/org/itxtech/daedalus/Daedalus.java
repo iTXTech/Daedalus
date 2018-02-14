@@ -80,6 +80,8 @@ public class Daedalus extends Application {
             "twitter.com",
             "youtube.com",
             "facebook.com",
+            "pornhub.com",
+            "redtube.com",
             "wikipedia.org"
     };
 
