@@ -18,11 +18,11 @@ Installation
 
 Chat
 -------------
-* __[Telegram](https://t.me/joinchat/EsHMnw8aBv0oFhAArL4qsA)__
+* __[Telegram](https://t.me/iTXTechDaedalus)__
 
 Manual
 -------------
-[Wiki](https://github.com/iTXTech/Daedalus/wiki)
+* __[Wiki](https://github.com/iTXTech/Daedalus/wiki)__
 
 Introduction
 -------------
