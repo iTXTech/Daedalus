@@ -49,6 +49,7 @@ DNS Server Providers
 * __[Pure DNS](https://puredns.cn/)__ - *Shutdown according to regulations*
 * __[AIXYZ DNS](https://aixyz.com/)__ - __*For academic purposes only.*__
 * __[FUN DNS](http://fundns.cn)__ - *The Most Pure Domain Name Resolution Service*
+* __[PdoMo-DNS](https://pdomo.me/)__ - *Intelligent Free Public DNS*
 
 Rule Providers
 -------------
@@ -73,7 +74,7 @@ Open Source Licenses
 Credits
 ------------
 * __[Jetbrains](https://www.jetbrains.com/)__ - For providing free license for [IntelliJ IDEA](https://www.jetbrains.com/idea/)
-* __[ZXDA Cloud](https://cloud.zxda.net/)__ - For donating free VPS
+* __[SNC IDC](http://www.sncidc.com/)__ - For supporting us with love
 
 License
 ------------
