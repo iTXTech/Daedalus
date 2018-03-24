@@ -24,7 +24,7 @@
             app:layout_marginTopPercent="5%"
             android:layout_alignParentTop="true" android:layout_centerHorizontal="true"/>
     <TextView
-            android:text="@string/app_name"
+            android:text="My Name Jeff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="30sp"
@@ -34,7 +34,7 @@
             android:fontFamily="sans-serif"
             android:layout_centerHorizontal="true" android:id="@+id/textView_app_name"/>
     <TextView
-            android:text="@string/notice_main"
+            android:text="#internetrights"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView_notice"
