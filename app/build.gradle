@@ -33,7 +33,7 @@ android {
             def outputFile = output.outputFile
             if (outputFile != null && outputFile.name.endsWith('.apk')) {
                 def fileName = outputFile.name.replace("app", "${defaultConfig.applicationId}_${defaultConfig.versionName}_${gitCommit}")
-                output.outputFile = new File(outputFile.parent, fileName)
+                output.outputFileName = new File(outputFile.parent, fileName)
             }
         }
     }
