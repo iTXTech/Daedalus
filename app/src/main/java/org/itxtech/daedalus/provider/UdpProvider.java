@@ -3,6 +3,7 @@ package org.itxtech.daedalus.provider;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.ParcelFileDescriptor;
+import android.support.annotation.NonNull;
 import android.system.Os;
 import android.system.OsConstants;
 import android.system.StructPollfd;
@@ -156,7 +157,7 @@ public class UdpProvider extends Provider {
         }
     }
 
-    void readPacketFromDevice(FileInputStream inputStream, byte[] packet) throws DaedalusVpnService.VpnNetworkException, SocketException {
+    void readPacketFromDevice(FileInputStream inputStream, byte[] packet) throws DaedalusVpnService.VpnNetworkException {
         // Read the outgoing packet from the input stream.
         int length;
 
@@ -389,6 +390,7 @@ public class UdpProvider extends Provider {
             list.add(wosp);
         }
 
+        @NonNull
         public Iterator<WaitingOnSocketPacket> iterator() {
             return list.iterator();
         }

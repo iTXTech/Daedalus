@@ -1,10 +1,8 @@
 package org.itxtech.daedalus.fragment;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
-import android.preference.Preference;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -41,30 +39,21 @@ public class DNSServerConfigFragment extends ConfigFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         EditTextPreference serverName = (EditTextPreference) findPreference("serverName");
-        serverName.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                preference.setSummary((String) newValue);
-                return true;
-            }
+        serverName.setOnPreferenceChangeListener((preference, newValue) -> {
+            preference.setSummary((String) newValue);
+            return true;
         });
 
         EditTextPreference serverAddress = (EditTextPreference) findPreference("serverAddress");
-        serverAddress.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                preference.setSummary((String) newValue);
-                return true;
-            }
+        serverAddress.setOnPreferenceChangeListener((preference, newValue) -> {
+            preference.setSummary((String) newValue);
+            return true;
         });
 
         EditTextPreference serverPort = (EditTextPreference) findPreference("serverPort");
-        serverPort.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                preference.setSummary((String) newValue);
-                return true;
-            }
+        serverPort.setOnPreferenceChangeListener((preference, newValue) -> {
+            preference.setSummary((String) newValue);
+            return true;
         });
 
 
@@ -118,12 +107,9 @@ public class DNSServerConfigFragment extends ConfigFragment {
                 if (index != ConfigActivity.ID_NONE) {
                     new AlertDialog.Builder(getActivity())
                             .setTitle(R.string.notice_delete_confirm_prompt)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Daedalus.configurations.getCustomDNSServers().remove(index);
-                                    getActivity().finish();
-                                }
+                            .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                                Daedalus.configurations.getCustomDNSServers().remove(index);
+                                getActivity().finish();
                             })
                             .setNegativeButton(android.R.string.no, null)
                             .create()

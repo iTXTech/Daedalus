@@ -4,12 +4,12 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import org.itxtech.daedalus.R;
 
 /**
@@ -23,7 +23,8 @@ import org.itxtech.daedalus.R;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class ClearAutoCompleteTextView extends AutoCompleteTextView implements View.OnTouchListener, View.OnFocusChangeListener, TextWatcher {
+public class ClearAutoCompleteTextView extends AppCompatAutoCompleteTextView
+        implements View.OnTouchListener, View.OnFocusChangeListener, TextWatcher {
 
     private Drawable mClearTextIcon;
     private OnFocusChangeListener mOnFocusChangeListener;

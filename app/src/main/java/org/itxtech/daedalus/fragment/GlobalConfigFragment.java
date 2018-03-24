@@ -39,59 +39,40 @@ public class GlobalConfigFragment extends PreferenceFragment {
         primaryServer.setEntries(DNSServerHelper.getNames(Daedalus.getInstance()));
         primaryServer.setEntryValues(DNSServerHelper.getIds());
         primaryServer.setSummary(DNSServerHelper.getDescription(primaryServer.getValue(), Daedalus.getInstance()));
-        primaryServer.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                preference.setSummary(DNSServerHelper.getDescription((String) newValue, Daedalus.getInstance()));
-                /*Snackbar.make(getView(), R.string.notice_need_restart, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
-                return true;
-            }
+        primaryServer.setOnPreferenceChangeListener((preference, newValue) -> {
+            preference.setSummary(DNSServerHelper.getDescription((String) newValue, Daedalus.getInstance()));
+            return true;
         });
 
         ListPreference secondaryServer = (ListPreference) findPreference("secondary_server");
         secondaryServer.setEntries(DNSServerHelper.getNames(Daedalus.getInstance()));
         secondaryServer.setEntryValues(DNSServerHelper.getIds());
         secondaryServer.setSummary(DNSServerHelper.getDescription(secondaryServer.getValue(), Daedalus.getInstance()));
-        secondaryServer.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                preference.setSummary(DNSServerHelper.getDescription((String) newValue, Daedalus.getInstance()));
-                /*Snackbar.make(getView(), R.string.notice_need_restart, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
-                return true;
-            }
+        secondaryServer.setOnPreferenceChangeListener((preference, newValue) -> {
+            preference.setSummary(DNSServerHelper.getDescription((String) newValue, Daedalus.getInstance()));
+            return true;
         });
 
         EditTextPreference testDNSServers = (EditTextPreference) findPreference("dns_test_servers");
         testDNSServers.setSummary(testDNSServers.getText());
-        testDNSServers.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                preference.setSummary((String) newValue);
-                return true;
-            }
+        testDNSServers.setOnPreferenceChangeListener((preference, newValue) -> {
+            preference.setSummary((String) newValue);
+            return true;
         });
 
         EditTextPreference logSize = (EditTextPreference) findPreference("settings_log_size");
         logSize.setSummary(logSize.getText());
-        logSize.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                preference.setSummary((String) newValue);
-                return true;
-            }
+        logSize.setOnPreferenceChangeListener((preference, newValue) -> {
+            preference.setSummary((String) newValue);
+            return true;
         });
 
         SwitchPreference darkTheme = (SwitchPreference) findPreference("settings_dark_theme");
-        darkTheme.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object o) {
-                getActivity().startActivity(new Intent(Daedalus.getInstance(), MainActivity.class)
-                        .putExtra(MainActivity.LAUNCH_FRAGMENT, MainActivity.FRAGMENT_SETTINGS)
-                        .putExtra(MainActivity.LAUNCH_NEED_RECREATE, true));
-                return true;
-            }
+        darkTheme.setOnPreferenceChangeListener((preference, o) -> {
+            getActivity().startActivity(new Intent(Daedalus.getInstance(), MainActivity.class)
+                    .putExtra(MainActivity.LAUNCH_FRAGMENT, MainActivity.FRAGMENT_SETTINGS)
+                    .putExtra(MainActivity.LAUNCH_NEED_RECREATE, true));
+            return true;
         });
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -104,36 +85,24 @@ public class GlobalConfigFragment extends PreferenceFragment {
         }
 
         SwitchPreference advanced = (SwitchPreference) findPreference("settings_advanced_switch");
-        advanced.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                updateAdvancedOptions((boolean) newValue);
-                return true;
-            }
+        advanced.setOnPreferenceChangeListener((preference, newValue) -> {
+            updateAdvancedOptions((boolean) newValue);
+            return true;
         });
 
-        findPreference("settings_check_update").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Daedalus.openUri("https://github.com/iTXTech/Daedalus/releases");
-                return false;
-            }
+        findPreference("settings_check_update").setOnPreferenceClickListener(preference -> {
+            Daedalus.openUri("https://github.com/iTXTech/Daedalus/releases");
+            return false;
         });
 
-        findPreference("settings_issue_tracker").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Daedalus.openUri("https://github.com/iTXTech/Daedalus/issues");
-                return false;
-            }
+        findPreference("settings_issue_tracker").setOnPreferenceClickListener(preference -> {
+            Daedalus.openUri("https://github.com/iTXTech/Daedalus/issues");
+            return false;
         });
 
-        findPreference("settings_manual").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Daedalus.openUri("https://github.com/iTXTech/Daedalus/wiki");
-                return false;
-            }
+        findPreference("settings_manual").setOnPreferenceClickListener(preference -> {
+            Daedalus.openUri("https://github.com/iTXTech/Daedalus/wiki");
+            return false;
         });
 
         updateAdvancedOptions(advanced.isChecked());

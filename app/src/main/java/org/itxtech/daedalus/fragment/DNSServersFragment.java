@@ -2,6 +2,7 @@ package org.itxtech.daedalus.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -70,16 +71,11 @@ public class DNSServersFragment extends ToolbarFragment {
         });
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_add_server);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), ConfigActivity.class)
-                        .putExtra(ConfigActivity.LAUNCH_ACTION_ID, ConfigActivity.ID_NONE)
-                        .putExtra(ConfigActivity.LAUNCH_ACTION_FRAGMENT, ConfigActivity.LAUNCH_FRAGMENT_DNS_SERVER)
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            }
-        });
+        FloatingActionButton fab = view.findViewById(R.id.fab_add_server);
+        fab.setOnClickListener(v -> startActivity(new Intent(getActivity(), ConfigActivity.class)
+                .putExtra(ConfigActivity.LAUNCH_ACTION_ID, ConfigActivity.ID_NONE)
+                .putExtra(ConfigActivity.LAUNCH_ACTION_FRAGMENT, ConfigActivity.LAUNCH_FRAGMENT_DNS_SERVER)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)));
         return view;
     }
 
@@ -121,7 +117,7 @@ public class DNSServersFragment extends ToolbarFragment {
 
     private class DNSServerAdapter extends RecyclerView.Adapter<ViewHolder> {
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             CustomDNSServer server = Daedalus.configurations.getCustomDNSServers().get(position);
             holder.setIndex(position);
             holder.textViewName.setText(server.getName());
@@ -134,7 +130,8 @@ public class DNSServersFragment extends ToolbarFragment {
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        @NonNull
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_server, parent, false);
             return new ViewHolder(view);
         }
@@ -147,8 +144,8 @@ public class DNSServersFragment extends ToolbarFragment {
 
         ViewHolder(View view) {
             super(view);
-            textViewName = (TextView) view.findViewById(R.id.textView_custom_dns_name);
-            textViewAddress = (TextView) view.findViewById(R.id.textView_custom_dns_address);
+            textViewName = view.findViewById(R.id.textView_custom_dns_name);
+            textViewAddress = view.findViewById(R.id.textView_custom_dns_address);
             view.setOnClickListener(this);
         }
 

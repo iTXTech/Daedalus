@@ -30,15 +30,12 @@ public class HomeFragment extends ToolbarFragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         Button but = view.findViewById(R.id.button_activate);
-        but.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (DaedalusVpnService.isActivated()) {
-                    Daedalus.deactivateService(getActivity().getApplicationContext());
-                } else {
-                    startActivity(new Intent(getActivity(), MainActivity.class)
-                            .putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_ACTIVATE));
-                }
+        but.setOnClickListener(v -> {
+            if (DaedalusVpnService.isActivated()) {
+                Daedalus.deactivateService(getActivity().getApplicationContext());
+            } else {
+                startActivity(new Intent(getActivity(), MainActivity.class)
+                        .putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_ACTIVATE));
             }
         });
 

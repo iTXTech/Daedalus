@@ -2,6 +2,7 @@ package org.itxtech.daedalus.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -89,15 +90,10 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         FloatingActionButton fab = view.findViewById(R.id.fab_add_rule);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), ConfigActivity.class)
-                        .putExtra(ConfigActivity.LAUNCH_ACTION_ID, ConfigActivity.ID_NONE)
-                        .putExtra(ConfigActivity.LAUNCH_ACTION_FRAGMENT, ConfigActivity.LAUNCH_FRAGMENT_RULE)
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            }
-        });
+        fab.setOnClickListener(v -> startActivity(new Intent(getActivity(), ConfigActivity.class)
+                .putExtra(ConfigActivity.LAUNCH_ACTION_ID, ConfigActivity.ID_NONE)
+                .putExtra(ConfigActivity.LAUNCH_ACTION_FRAGMENT, ConfigActivity.LAUNCH_FRAGMENT_RULE)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)));
         return view;
     }
 
@@ -172,7 +168,7 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
 
     private class RuleAdapter extends RecyclerView.Adapter<ViewHolder> {
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             Rule rule = getRules().get(position);
             holder.setId(rule.getId());
             holder.textViewName.setText(rule.getName());
@@ -194,7 +190,8 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        @NonNull
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_rule, parent, false);
             return new ViewHolder(view);
         }

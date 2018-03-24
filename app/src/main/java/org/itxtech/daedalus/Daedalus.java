@@ -12,7 +12,6 @@ import android.net.VpnService;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
@@ -43,14 +42,6 @@ import java.util.List;
  * (at your option) any later version.
  */
 public class Daedalus extends Application {
-    static {
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException(Thread t, Throwable e) {
-                FirebaseCrash.report(e);
-            }
-        });
-    }
 
     private static final String SHORTCUT_ID_ACTIVATE = "shortcut_activate";
 

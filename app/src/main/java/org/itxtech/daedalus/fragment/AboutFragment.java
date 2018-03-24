@@ -42,12 +42,7 @@ public class AboutFragment extends ToolbarFragment {
         mWebView.setBackgroundColor(0);
         mWebView.addJavascriptInterface(this, "JavascriptInterface");
 
-        mWebView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                return true;
-            }
-        });
+        mWebView.setOnLongClickListener(v -> true);
 
         if (Locale.getDefault().getLanguage().equals("zh")) {
             mWebView.loadUrl("file:///android_asset/about_html/index_zh.html");

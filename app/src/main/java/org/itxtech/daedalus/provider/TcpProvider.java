@@ -3,6 +3,7 @@ package org.itxtech.daedalus.provider;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.ParcelFileDescriptor;
+import android.support.annotation.NonNull;
 import android.system.ErrnoException;
 import android.system.Os;
 import android.system.OsConstants;
@@ -215,6 +216,7 @@ public class TcpProvider extends UdpProvider {
             }
         }
 
+        @NonNull
         public Iterator<TcpProvider.WaitingOnSocketPacket> iterator() {
             return list.iterator();
         }
