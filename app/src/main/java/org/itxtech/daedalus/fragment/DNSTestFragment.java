@@ -9,15 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
-import de.measite.minidns.DNSMessage;
-import de.measite.minidns.Question;
-import de.measite.minidns.Record;
-import de.measite.minidns.source.NetworkDataSource;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.server.AbstractDNSServer;
 import org.itxtech.daedalus.util.server.DNSServerHelper;
+import org.minidns.dnsmessage.DnsMessage;
+import org.minidns.dnsmessage.Question;
+import org.minidns.record.Record;
+import org.minidns.source.NetworkDataSource;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -139,7 +139,7 @@ public class DNSTestFragment extends ToolbarFragment {
                             }
                         }
                     }};
-                    DNSQuery dnsQuery = new DNSQuery();
+                    DnsQuery dnsQuery = new DnsQuery();
                     Record.TYPE type = ((Type) spinnerType.getSelectedItem()).getType();
                     for (AbstractDNSServer dnsServer : dnsServers) {
                         testText = testServer(dnsQuery, type, dnsServer, testDomain, testText);
@@ -152,7 +152,7 @@ public class DNSTestFragment extends ToolbarFragment {
             }
 
 
-            private StringBuilder testServer(DNSQuery dnsQuery, Record.TYPE type, AbstractDNSServer server, String domain, StringBuilder testText) {
+            private StringBuilder testServer(DnsQuery dnsQuery, Record.TYPE type, AbstractDNSServer server, String domain, StringBuilder testText) {
                 Logger.debug("Testing DNS server " + server.getAddress() + ":" + server.getPort());
                 testText.append(getString(R.string.test_domain)).append(" ").append(domain).append("\n").append(getString(R.string.test_dns_server)).append(" ").append(server.getAddress()).append(":").append(server.getPort());
 
@@ -160,16 +160,16 @@ public class DNSTestFragment extends ToolbarFragment {
 
                 boolean succ = false;
                 try {
-                    DNSMessage.Builder message = DNSMessage.builder()
+                    DnsMessage.Builder message = DnsMessage.builder()
                             .addQuestion(new Question(domain, type))
                             .setId((new Random()).nextInt())
                             .setRecursionDesired(true)
-                            .setOpcode(DNSMessage.OPCODE.QUERY)
-                            .setResponseCode(DNSMessage.RESPONSE_CODE.NO_ERROR)
+                            .setOpcode(DnsMessage.OPCODE.QUERY)
+                            .setResponseCode(DnsMessage.RESPONSE_CODE.NO_ERROR)
                             .setQrFlag(false);
 
                     long startTime = System.currentTimeMillis();
-                    DNSMessage response = dnsQuery.query(message.build(), InetAddress.getByName(server.getAddress()), server.getPort());
+                    DnsMessage response = dnsQuery.query(message.build(), InetAddress.getByName(server.getAddress()), server.getPort());
                     long endTime = System.currentTimeMillis();
 
                     if (response.answerSection.size() > 0) {
@@ -280,8 +280,8 @@ public class DNSTestFragment extends ToolbarFragment {
         }
     }
 
-    private class DNSQuery extends NetworkDataSource {
-        public DNSMessage query(DNSMessage message, InetAddress address, int port) throws IOException {
+    private class DnsQuery extends NetworkDataSource {
+        public DnsMessage query(DnsMessage message, InetAddress address, int port) throws IOException {
             return queryUdp(message, address, port);
         }
     }

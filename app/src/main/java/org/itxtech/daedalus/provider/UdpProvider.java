@@ -8,15 +8,15 @@ import android.system.Os;
 import android.system.OsConstants;
 import android.system.StructPollfd;
 import android.util.Log;
-import de.measite.minidns.DNSMessage;
-import de.measite.minidns.Record;
-import de.measite.minidns.record.A;
-import de.measite.minidns.record.AAAA;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.RuleResolver;
 import org.itxtech.daedalus.util.server.DNSServerHelper;
+import org.minidns.dnsmessage.DnsMessage;
+import org.minidns.record.A;
+import org.minidns.record.AAAA;
+import org.minidns.record.Record;
 import org.pcap4j.packet.*;
 
 import java.io.FileDescriptor;
@@ -220,7 +220,7 @@ public class UdpProvider extends Provider {
     void handleDnsResponse(IpPacket requestPacket, byte[] responsePayload) {
         if (Daedalus.getPrefs().getBoolean("settings_debug_output", false)) {
             try {
-                Logger.debug(new DNSMessage(responsePayload).toString());
+                Logger.debug(new DnsMessage(responsePayload).toString());
             } catch (IOException e) {
                 Logger.logException(e);
             }
@@ -308,9 +308,9 @@ public class UdpProvider extends Provider {
         }
 
         byte[] dnsRawData = (parsedUdp).getPayload().getRawData();
-        DNSMessage dnsMsg;
+        DnsMessage dnsMsg;
         try {
-            dnsMsg = new DNSMessage(dnsRawData);
+            dnsMsg = new DnsMessage(dnsRawData);
             if (Daedalus.getPrefs().getBoolean("settings_debug_output", false)) {
                 Logger.debug(dnsMsg.toString());
             }
@@ -328,14 +328,14 @@ public class UdpProvider extends Provider {
             String response = RuleResolver.resolve(dnsQueryName, dnsMsg.getQuestion().type);
             if (response != null && dnsMsg.getQuestion().type == Record.TYPE.A) {
                 Logger.info("Provider: Resolved " + dnsQueryName + "  Local resolver response: " + response);
-                DNSMessage.Builder builder = dnsMsg.asBuilder()
+                DnsMessage.Builder builder = dnsMsg.asBuilder()
                         .setQrFlag(true)
                         .addAnswer(new Record<>(dnsQueryName, Record.TYPE.A, 1, 64,
                                 new A(Inet4Address.getByName(response).getAddress())));
                 handleDnsResponse(parsedPacket, builder.build().toArray());
             } else if (response != null && dnsMsg.getQuestion().type == Record.TYPE.AAAA) {
                 Logger.info("Provider: Resolved " + dnsQueryName + "  Local resolver response: " + response);
-                DNSMessage.Builder builder = dnsMsg.asBuilder()
+                DnsMessage.Builder builder = dnsMsg.asBuilder()
                         .setQrFlag(true)
                         .addAnswer(new Record<>(dnsQueryName, Record.TYPE.AAAA, 1, 64,
                                 new AAAA(Inet6Address.getByName(response).getAddress())));

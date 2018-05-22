@@ -1,6 +1,6 @@
 package org.itxtech.daedalus.util;
 
-import de.measite.minidns.Record;
+import org.minidns.record.Record;
 
 import java.io.BufferedReader;
 import java.io.File;
