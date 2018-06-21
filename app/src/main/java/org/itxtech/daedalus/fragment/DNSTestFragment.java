@@ -153,38 +153,41 @@ public class DNSTestFragment extends ToolbarFragment {
 
 
             private StringBuilder testServer(DnsQuery dnsQuery, Record.TYPE type, AbstractDNSServer server, String domain, StringBuilder testText) {
-                Logger.debug("Testing DNS server " + server.getAddress() + ":" + server.getPort());
-                testText.append(getString(R.string.test_domain)).append(" ").append(domain).append("\n").append(getString(R.string.test_dns_server)).append(" ").append(server.getAddress()).append(":").append(server.getPort());
+                Logger.debug("Testing DNS server " + server.getRealName());
+                testText.append(getString(R.string.test_domain)).append(" ").append(domain).append("\n")
+                        .append(getString(R.string.test_dns_server)).append(" ").append(server.getRealName());
 
                 mHandler.obtainMessage(DnsTestHandler.MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
 
                 boolean succ = false;
-                try {
-                    DnsMessage.Builder message = DnsMessage.builder()
-                            .addQuestion(new Question(domain, type))
-                            .setId((new Random()).nextInt())
-                            .setRecursionDesired(true)
-                            .setOpcode(DnsMessage.OPCODE.QUERY)
-                            .setResponseCode(DnsMessage.RESPONSE_CODE.NO_ERROR)
-                            .setQrFlag(false);
+                if (!server.isHttpsServer()) {//TODO: DoH Server Test
+                    try {
+                        DnsMessage.Builder message = DnsMessage.builder()
+                                .addQuestion(new Question(domain, type))
+                                .setId((new Random()).nextInt())
+                                .setRecursionDesired(true)
+                                .setOpcode(DnsMessage.OPCODE.QUERY)
+                                .setResponseCode(DnsMessage.RESPONSE_CODE.NO_ERROR)
+                                .setQrFlag(false);
 
-                    long startTime = System.currentTimeMillis();
-                    DnsMessage response = dnsQuery.query(message.build(), InetAddress.getByName(server.getAddress()), server.getPort());
-                    long endTime = System.currentTimeMillis();
+                        long startTime = System.currentTimeMillis();
+                        DnsMessage response = dnsQuery.query(message.build(), InetAddress.getByName(server.getAddress()), server.getPort());
+                        long endTime = System.currentTimeMillis();
 
-                    if (response.answerSection.size() > 0) {
-                        for (Record record : response.answerSection) {
-                            if (record.getPayload().getType() == type) {
-                                testText.append("\n").append(getString(R.string.test_result_resolved)).append(" ").append(record.getPayload().toString());
+                        if (response.answerSection.size() > 0) {
+                            for (Record record : response.answerSection) {
+                                if (record.getPayload().getType() == type) {
+                                    testText.append("\n").append(getString(R.string.test_result_resolved)).append(" ").append(record.getPayload().toString());
+                                }
                             }
+                            testText.append("\n").append(getString(R.string.test_time_used)).append(" ").
+                                    append(String.valueOf(endTime - startTime)).append(" ms");
+                            succ = true;
                         }
-                        testText.append("\n").append(getString(R.string.test_time_used)).append(" ").
-                                append(String.valueOf(endTime - startTime)).append(" ms");
-                        succ = true;
+                    } catch (SocketTimeoutException ignored) {
+                    } catch (Exception e) {
+                        Logger.logException(e);
                     }
-                } catch (SocketTimeoutException ignored){
-                } catch (Exception e) {
-                    Logger.logException(e);
                 }
 
                 if (!succ){

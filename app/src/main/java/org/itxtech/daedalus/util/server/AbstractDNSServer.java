@@ -46,4 +46,12 @@ public class AbstractDNSServer {
     public String toString() {
         return getName();
     }
+
+    public String getRealName() {
+        return isHttpsServer() ? address : address + ":" + port;
+    }
+
+    public boolean isHttpsServer() {
+        return address.contains("/");
+    }
 }

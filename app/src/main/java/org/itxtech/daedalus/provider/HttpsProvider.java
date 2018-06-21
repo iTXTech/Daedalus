@@ -77,18 +77,16 @@ abstract public class HttpsProvider extends Provider {
                     return;
                 }
 
-                boolean writeToDevice = false;
                 Iterator<WaitingHttpsRequest> iterator = whqList.iterator();
                 while (iterator.hasNext()) {
                     WaitingHttpsRequest request = iterator.next();
                     if (request.completed) {
-                        writeToDevice = true;
                         handleDnsResponse(request.packet, request.result);
                         iterator.remove();
                     }
                 }
 
-                if (writeToDevice) {
+                if ((deviceFd.revents & OsConstants.POLLOUT) != 0) {
                     Log.d(TAG, "Write to device");
                     writeToDevice(outputStream);
                 }
@@ -149,7 +147,7 @@ abstract public class HttpsProvider extends Provider {
         }
 
         if (!resolve(parsedPacket, dnsMsg) && uri != null) {
-            sendRequestToServer(parsedPacket, dnsMsg.asBuilder().setId(0).build(), uri);
+            sendRequestToServer(parsedPacket, dnsMsg, uri);
             //SHOULD use a DNS ID of 0 in every DNS request (according to draft-ietf-doh-dns-over-https-11)
         }
     }
@@ -181,10 +179,5 @@ abstract public class HttpsProvider extends Provider {
         public Iterator<WaitingHttpsRequest> iterator() {
             return list.iterator();
         }
-
-        int size() {
-            return list.size();
-        }
-
     }
 }

@@ -121,7 +121,7 @@ public class DNSServersFragment extends ToolbarFragment {
             CustomDNSServer server = Daedalus.configurations.getCustomDNSServers().get(position);
             holder.setIndex(position);
             holder.textViewName.setText(server.getName());
-            holder.textViewAddress.setText(server.getAddress() + ":" + server.getPort());
+            holder.textViewAddress.setText(server.getRealName());
         }
 
         @Override

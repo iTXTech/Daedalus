@@ -48,10 +48,12 @@ public class HttpsIetfProvider extends HttpsProvider {
         whqList.add(new WaitingHttpsRequest(parsedPacket) {
             @Override
             public void doRequest() {
+                final int id = message.id;
                 final byte[] rawRequest = message.toArray();
                 Request request = new Request.Builder()
                         .url(HttpUrl.parse(HTTPS_SUFFIX + uri).newBuilder()
-                                .addQueryParameter("dns", Base64.encodeToString(rawRequest, Base64.DEFAULT))
+                                .addQueryParameter("dns", Base64.encodeToString(
+                                        message.asBuilder().setId(0).build().toArray(), Base64.DEFAULT))
                                 .build())
                         .get()
                         .build();
@@ -65,7 +67,8 @@ public class HttpsIetfProvider extends HttpsProvider {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         if (response.isSuccessful()) {
-                            result = response.body().bytes();
+                            result = new DnsMessage(response.body().bytes()).asBuilder()
+                                    .setId(id).build().toArray();
                             completed = true;
                         }
                     }

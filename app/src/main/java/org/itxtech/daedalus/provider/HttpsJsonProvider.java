@@ -128,7 +128,7 @@ public class HttpsJsonProvider extends HttpsProvider {
                                     }
                                 }
                             }
-                            result = msg.build().toArray();
+                            result = msg.setQrFlag(true).build().toArray();
                             completed = true;
                         }
                     }
