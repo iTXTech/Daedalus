@@ -47,7 +47,6 @@ public class TcpProvider extends UdpProvider {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void process() {
         try {
-            Log.d(TAG, "Starting advanced DNS proxy.");
             FileDescriptor[] pipes = Os.pipe();
             mInterruptFd = pipes[0];
             mBlockFd = pipes[1];

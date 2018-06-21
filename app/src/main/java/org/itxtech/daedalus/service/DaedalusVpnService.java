@@ -17,8 +17,6 @@ import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.provider.Provider;
 import org.itxtech.daedalus.provider.ProviderPicker;
-import org.itxtech.daedalus.provider.TcpProvider;
-import org.itxtech.daedalus.provider.UdpProvider;
 import org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver;
 import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.RuleResolver;
@@ -191,9 +189,16 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         stopThread();
     }
 
-    private InetAddress addDnsServer(Builder builder, String format, byte[] ipv6Template, InetAddress address) throws UnknownHostException {
+    private InetAddress addDnsServer(Builder builder, String format, byte[] ipv6Template, String addr) throws UnknownHostException {
         int size = dnsServers.size();
         size++;
+        if (addr.contains("/")) {//https uri
+            String alias = String.format(format, size + 1);
+            dnsServers.put(alias, addr);
+            builder.addRoute(alias, 32);
+            return InetAddress.getByName(alias);
+        }
+        InetAddress address = InetAddress.getByName(addr);
         if (address instanceof Inet6Address && ipv6Template == null) {
             Log.i(TAG, "addDnsServer: Ignoring DNS server " + address);
         } else if (address instanceof Inet4Address) {
@@ -253,8 +258,8 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             InetAddress aliasSecondary;
             if (advanced) {
                 dnsServers = new HashMap<>();
-                aliasPrimary = addDnsServer(builder, format, ipv6Template, InetAddress.getByName(primaryServer));
-                aliasSecondary = addDnsServer(builder, format, ipv6Template, InetAddress.getByName(secondaryServer));
+                aliasPrimary = addDnsServer(builder, format, ipv6Template, primaryServer);
+                aliasSecondary = addDnsServer(builder, format, ipv6Template, secondaryServer);
             } else {
                 aliasPrimary = InetAddress.getByName(primaryServer);
                 aliasSecondary = InetAddress.getByName(secondaryServer);

@@ -76,6 +76,7 @@
                 android:dialogTitle="@string/settings_dns_query_method"
                 android:entries="@array/dns_query_methods"
                 android:entryValues="@array/dns_query_method_values"
+                android:defaultValue="0"
                 android:enabled="false"/>
         <SwitchPreference
                 android:key="settings_debug_output"

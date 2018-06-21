@@ -11,23 +11,21 @@ import android.util.Log;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Logger;
-import org.itxtech.daedalus.util.RuleResolver;
 import org.itxtech.daedalus.util.server.DNSServerHelper;
 import org.minidns.dnsmessage.DnsMessage;
-import org.minidns.record.A;
-import org.minidns.record.AAAA;
-import org.minidns.record.Record;
-import org.pcap4j.packet.*;
+import org.pcap4j.packet.IpPacket;
+import org.pcap4j.packet.IpSelector;
+import org.pcap4j.packet.UdpPacket;
 
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.*;
-import java.util.Arrays;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * Daedalus Project
@@ -44,40 +42,14 @@ public class UdpProvider extends Provider {
     private static final String TAG = "UdpProvider";
 
     private final WospList dnsIn = new WospList();
-    FileDescriptor mBlockFd = null;
-    FileDescriptor mInterruptFd = null;
-    final Queue<byte[]> deviceWrites = new LinkedList<>();
 
     public UdpProvider(ParcelFileDescriptor descriptor, DaedalusVpnService service) {
         super(descriptor, service);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public void stop() {
-        try {
-            if (mInterruptFd != null) {
-                Os.close(mInterruptFd);
-            }
-            if (mBlockFd != null) {
-                Os.close(mBlockFd);
-            }
-            if (this.descriptor != null) {
-                this.descriptor.close();
-                this.descriptor = null;
-            }
-        } catch (Exception ignored) {
-        }
-    }
-
-    private void queueDeviceWrite(IpPacket ipOutPacket) {
-        dnsQueryTimes++;
-        deviceWrites.add(ipOutPacket.getRawData());
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void process() {
         try {
-            Log.d(TAG, "Starting advanced DNS proxy.");
             FileDescriptor[] pipes = Os.pipe();
             mInterruptFd = pipes[0];
             mBlockFd = pipes[1];
@@ -149,35 +121,6 @@ public class UdpProvider extends Provider {
         }
     }
 
-    void writeToDevice(FileOutputStream outFd) throws DaedalusVpnService.VpnNetworkException {
-        try {
-            outFd.write(deviceWrites.poll());
-        } catch (IOException e) {
-            throw new DaedalusVpnService.VpnNetworkException("Outgoing VPN output stream closed");
-        }
-    }
-
-    void readPacketFromDevice(FileInputStream inputStream, byte[] packet) throws DaedalusVpnService.VpnNetworkException {
-        // Read the outgoing packet from the input stream.
-        int length;
-
-        try {
-            length = inputStream.read(packet);
-        } catch (IOException e) {
-            throw new DaedalusVpnService.VpnNetworkException("Cannot read from device", e);
-        }
-
-
-        if (length == 0) {
-            Log.w(TAG, "Got empty packet!");
-            return;
-        }
-
-        final byte[] readPacket = Arrays.copyOfRange(packet, 0, length);
-
-        handleDnsRequest(readPacket);
-    }
-
     void forwardPacket(DatagramPacket outPacket, IpPacket parsedPacket) throws DaedalusVpnService.VpnNetworkException {
         DatagramSocket dnsSocket;
         try {
@@ -210,64 +153,14 @@ public class UdpProvider extends Provider {
         }
     }
 
-
-    /**
-     * Handles a responsePayload from an upstream DNS server
-     *
-     * @param requestPacket   The original request packet
-     * @param responsePayload The payload of the response
-     */
-    void handleDnsResponse(IpPacket requestPacket, byte[] responsePayload) {
-        if (Daedalus.getPrefs().getBoolean("settings_debug_output", false)) {
-            try {
-                Logger.debug(new DnsMessage(responsePayload).toString());
-            } catch (IOException e) {
-                Logger.logException(e);
-            }
-        }
-        UdpPacket udpOutPacket = (UdpPacket) requestPacket.getPayload();
-        UdpPacket.Builder payLoadBuilder = new UdpPacket.Builder(udpOutPacket)
-                .srcPort(udpOutPacket.getHeader().getDstPort())
-                .dstPort(udpOutPacket.getHeader().getSrcPort())
-                .srcAddr(requestPacket.getHeader().getDstAddr())
-                .dstAddr(requestPacket.getHeader().getSrcAddr())
-                .correctChecksumAtBuild(true)
-                .correctLengthAtBuild(true)
-                .payloadBuilder(
-                        new UnknownPacket.Builder()
-                                .rawData(responsePayload)
-                );
-
-
-        IpPacket ipOutPacket;
-        if (requestPacket instanceof IpV4Packet) {
-            ipOutPacket = new IpV4Packet.Builder((IpV4Packet) requestPacket)
-                    .srcAddr((Inet4Address) requestPacket.getHeader().getDstAddr())
-                    .dstAddr((Inet4Address) requestPacket.getHeader().getSrcAddr())
-                    .correctChecksumAtBuild(true)
-                    .correctLengthAtBuild(true)
-                    .payloadBuilder(payLoadBuilder)
-                    .build();
-
-        } else {
-            ipOutPacket = new IpV6Packet.Builder((IpV6Packet) requestPacket)
-                    .srcAddr((Inet6Address) requestPacket.getHeader().getDstAddr())
-                    .dstAddr((Inet6Address) requestPacket.getHeader().getSrcAddr())
-                    .correctLengthAtBuild(true)
-                    .payloadBuilder(payLoadBuilder)
-                    .build();
-        }
-
-        queueDeviceWrite(ipOutPacket);
-    }
-
     /**
      * Handles a DNS request, by either blocking it or forwarding it to the remote location.
      *
      * @param packetData The packet data to read
      * @throws DaedalusVpnService.VpnNetworkException If some network error occurred
      */
-    private void handleDnsRequest(byte[] packetData) throws DaedalusVpnService.VpnNetworkException {
+    @Override
+    protected void handleDnsRequest(byte[] packetData) throws DaedalusVpnService.VpnNetworkException {
 
         IpPacket parsedPacket;
         try {
@@ -312,7 +205,7 @@ public class UdpProvider extends Provider {
         try {
             dnsMsg = new DnsMessage(dnsRawData);
             if (Daedalus.getPrefs().getBoolean("settings_debug_output", false)) {
-                Logger.debug(dnsMsg.toString());
+                Logger.debug("DnsRequest: " + dnsMsg.toString());
             }
         } catch (IOException e) {
             Log.i(TAG, "handleDnsRequest: Discarding non-DNS or invalid packet", e);
@@ -322,32 +215,11 @@ public class UdpProvider extends Provider {
             Log.i(TAG, "handleDnsRequest: Discarding DNS packet with no query " + dnsMsg);
             return;
         }
-        String dnsQueryName = dnsMsg.getQuestion().name.toString();
 
-        try {
-            String response = RuleResolver.resolve(dnsQueryName, dnsMsg.getQuestion().type);
-            if (response != null && dnsMsg.getQuestion().type == Record.TYPE.A) {
-                Logger.info("Provider: Resolved " + dnsQueryName + "  Local resolver response: " + response);
-                DnsMessage.Builder builder = dnsMsg.asBuilder()
-                        .setQrFlag(true)
-                        .addAnswer(new Record<>(dnsQueryName, Record.TYPE.A, 1, 64,
-                                new A(Inet4Address.getByName(response).getAddress())));
-                handleDnsResponse(parsedPacket, builder.build().toArray());
-            } else if (response != null && dnsMsg.getQuestion().type == Record.TYPE.AAAA) {
-                Logger.info("Provider: Resolved " + dnsQueryName + "  Local resolver response: " + response);
-                DnsMessage.Builder builder = dnsMsg.asBuilder()
-                        .setQrFlag(true)
-                        .addAnswer(new Record<>(dnsQueryName, Record.TYPE.AAAA, 1, 64,
-                                new AAAA(Inet6Address.getByName(response).getAddress())));
-                handleDnsResponse(parsedPacket, builder.build().toArray());
-            } else {
-                Logger.info("Provider: Resolving " + dnsQueryName + " Type: " + dnsMsg.getQuestion().type.name() + " Sending to " + destAddr);
-                DatagramPacket outPacket = new DatagramPacket(dnsRawData, 0, dnsRawData.length, destAddr,
-                        DNSServerHelper.getPortOrDefault(destAddr, parsedUdp.getHeader().getDstPort().valueAsInt()));
-                forwardPacket(outPacket, parsedPacket);
-            }
-        } catch (Exception e) {
-            Logger.logException(e);
+        if (!resolve(parsedPacket, dnsMsg)) {
+            DatagramPacket outPacket = new DatagramPacket(dnsRawData, 0, dnsRawData.length, destAddr,
+                    DNSServerHelper.getPortOrDefault(destAddr, parsedUdp.getHeader().getDstPort().valueAsInt()));
+            forwardPacket(outPacket, parsedPacket);
         }
     }
 

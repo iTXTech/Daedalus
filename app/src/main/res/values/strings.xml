@@ -66,9 +66,11 @@
     <string name="settings_dark_theme">Use Dark Theme</string>
     <string name="settings_dns_query_method">DNS Query Method</string>
 
-    <string name="settings_dns_https">HTTPS</string>
     <string name="settings_dns_tcp">TCP</string>
     <string name="settings_dns_udp">UDP</string>
+    <string name="settings_dns_tls">TLS</string>
+    <string name="settings_dns_https_ietf">HTTPS (IETF draft)</string>
+    <string name="settings_dns_https_json">HTTPS (Google JSON)</string>
 
     <string name="settings_rule_name">Rule Name</string>
     <string name="settings_rule_type">Rule Type</string>
