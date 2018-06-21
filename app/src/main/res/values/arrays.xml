@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="dns_query_methods">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
+    <string-array name="dns_query_method_values">
+        <item>@string/settings_dns_udp</item>
+        <item>@string/settings_dns_tcp</item>
+        <item>@string/settings_dns_https</item>
+    </string-array>
+</resources>
+

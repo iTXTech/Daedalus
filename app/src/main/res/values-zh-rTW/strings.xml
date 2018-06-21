@@ -59,7 +59,6 @@
     <string name="settings_advanced">進階系統設定</string>
     <string name="settings_advanced_on">開啟</string>
     <string name="settings_local_rules_resolution">本機規則解析</string>
-    <string name="settings_dns_over_tcp">DNS over TCP</string>
     <string name="settings_manual">使用手冊</string>
     <string name="settings_manual_summary">造訪 GitHub wiki 頁面。</string>
     <string name="settings_log_size">紀錄檔大小限制</string>
@@ -76,6 +75,7 @@
     <string name="settings_rule_import">匯入</string>
     <string name="settings_rule_import_build_in">内置</string>
     <string name="settings_rule_import_external">外部</string>
+    <string name="settings_dns_query_method">DNS 查询方式</string>
 
     <string name="settings_server_name">伺服器名稱</string>
     <string name="settings_server_address">伺服器網址</string>
@@ -98,6 +98,4 @@
     <string name="test_test_domain">google.com</string>
 
     <string name="nav_version">版本:</string>
-    <string name="nav_git_commit">Git commit:</string>
-    <string name="nav_github">GitHub</string>
 </resources>

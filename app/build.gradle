@@ -48,10 +48,11 @@ dependencies {
     implementation 'org.pcap4j:pcap4j-core:1.7.3'
     implementation 'org.pcap4j:pcap4j-packetfactory-static:1.7.3'
     implementation 'org.minidns:minidns-client:0.3.0'
-    implementation 'com.google.code.gson:gson:2.8.4'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     //Analytics
     implementation 'com.google.firebase:firebase-core:15.0.2'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.2'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.3'
 }
 
 apply plugin: 'com.google.gms.google-services'

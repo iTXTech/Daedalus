@@ -58,13 +58,17 @@
     <string name="settings_advanced">Advanced System Settings</string>
     <string name="settings_advanced_on">On</string>
     <string name="settings_local_rules_resolution">Local Rules Resolution</string>
-    <string name="settings_dns_over_tcp">DNS over TCP</string>
     <string name="settings_log_size">Log Size Limit</string>
     <string name="settings_manual">Manual</string>
     <string name="settings_manual_summary">Visit GitHub wiki page.</string>
     <string name="settings_allow_dynamic_rule_reload">Allow Dynamic Rule Reloading</string>
     <string name="settings_debug_output">Debug Output</string>
     <string name="settings_dark_theme">Use Dark Theme</string>
+    <string name="settings_dns_query_method">DNS Query Method</string>
+
+    <string name="settings_dns_https">HTTPS</string>
+    <string name="settings_dns_tcp">TCP</string>
+    <string name="settings_dns_udp">UDP</string>
 
     <string name="settings_rule_name">Rule Name</string>
     <string name="settings_rule_type">Rule Type</string>

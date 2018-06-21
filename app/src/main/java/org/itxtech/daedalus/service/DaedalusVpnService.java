@@ -16,6 +16,7 @@ import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.provider.Provider;
+import org.itxtech.daedalus.provider.ProviderPicker;
 import org.itxtech.daedalus.provider.TcpProvider;
 import org.itxtech.daedalus.provider.UdpProvider;
 import org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver;
@@ -275,11 +276,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             Logger.info("Daedalus VPN service is started");
 
             if (advanced) {
-                if (Daedalus.getPrefs().getBoolean("settings_dns_over_tcp", false)) {
-                    provider = new TcpProvider(descriptor, this);
-                } else {
-                    provider = new UdpProvider(descriptor, this);
-                }
+                provider = ProviderPicker.getProvider(descriptor, this);
                 provider.start();
                 provider.process();
             } else {

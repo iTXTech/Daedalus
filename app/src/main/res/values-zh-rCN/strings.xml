@@ -59,13 +59,13 @@
     <string name="settings_advanced">高级系统设置</string>
     <string name="settings_advanced_on">开启</string>
     <string name="settings_local_rules_resolution">本地规则解析</string>
-    <string name="settings_dns_over_tcp">DNS over TCP</string>
     <string name="settings_manual">使用手册</string>
     <string name="settings_manual_summary">访问 GitHub wiki 页面。</string>
     <string name="settings_log_size">日志大小限制</string>
     <string name="settings_debug_output">调试输出</string>
     <string name="settings_allow_dynamic_rule_reload">允许动态更新规则</string>
     <string name="settings_dark_theme">使用暗主题</string>
+    <string name="settings_dns_query_method">DNS 查询方式</string>
 
     <string name="settings_rule_name">规则名称</string>
     <string name="settings_rule_type">规则类型</string>
@@ -98,6 +98,4 @@
     <string name="test_test_domain">google.com</string>
 
     <string name="nav_version">版本:</string>
-    <string name="nav_git_commit">Git commit:</string>
-    <string name="nav_github">GitHub</string>
 </resources>
