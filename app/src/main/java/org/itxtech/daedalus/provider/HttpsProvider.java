@@ -36,6 +36,8 @@ import java.util.LinkedList;
  * (at your option) any later version.
  */
 abstract public class HttpsProvider extends Provider {
+    protected static final String HTTPS_SUFFIX = "https://";
+
     private static final String TAG = "HttpsProvider";
 
     protected final WhqList whqList = new WhqList();
@@ -147,7 +149,8 @@ abstract public class HttpsProvider extends Provider {
         }
 
         if (!resolve(parsedPacket, dnsMsg) && uri != null) {
-            sendRequestToServer(parsedPacket, dnsMsg, uri);
+            sendRequestToServer(parsedPacket, dnsMsg.asBuilder().setId(0).build(), uri);
+            //SHOULD use a DNS ID of 0 in every DNS request (according to draft-ietf-doh-dns-over-https-11)
         }
     }
 
@@ -166,9 +169,6 @@ abstract public class HttpsProvider extends Provider {
         public abstract void doRequest();
     }
 
-    /**
-     * Queue of WaitingOnSocketPacket, bound on time and space.
-     */
     public static class WhqList implements Iterable<WaitingHttpsRequest> {
         private final LinkedList<WaitingHttpsRequest> list = new LinkedList<>();
 

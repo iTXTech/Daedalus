@@ -31,7 +31,7 @@ public class ProviderPicker {
             case DNS_QUERY_METHOD_HTTPS_IETF:
                 return new HttpsIetfProvider(descriptor, service);
             case DNS_QUERY_METHOD_HTTPS_JSON:
-                break;
+                return new HttpsJsonProvider(descriptor, service);
             case DNS_QUERY_METHOD_TLS:
                 break;
         }

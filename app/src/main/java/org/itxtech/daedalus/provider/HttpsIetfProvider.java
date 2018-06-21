@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  * (at your option) any later version.
  */
 public class HttpsIetfProvider extends HttpsProvider {
-    private static final String HTTPS_SUFFIX = "https://";
+    // implemented https://tools.ietf.org/html/draft-ietf-doh-dns-over-https-11
 
     private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
