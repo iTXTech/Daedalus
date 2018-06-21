@@ -70,7 +70,7 @@ abstract public class HttpsProvider extends Provider {
                 StructPollfd[] polls = new StructPollfd[2];
                 polls[0] = deviceFd;
                 polls[1] = blockFd;
-                Os.poll(polls, -1);
+                Os.poll(polls, 100);
                 if (blockFd.revents != 0) {
                     Log.i(TAG, "Told to stop VPN");
                     running = false;
