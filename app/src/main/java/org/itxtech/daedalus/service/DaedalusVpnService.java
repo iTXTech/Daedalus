@@ -2,6 +2,7 @@ package org.itxtech.daedalus.service;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -46,6 +47,8 @@ public class DaedalusVpnService extends VpnService implements Runnable {
     private static final int NOTIFICATION_ACTIVATED = 0;
 
     private static final String TAG = "DaedalusVpnService";
+    private static final String CHANNEL_ID = "daedalus_channel_1";
+    private static final String CHANNEL_NAME = "daedalus_channel";
 
     public static String primaryServer;
     public static String secondaryServer;
@@ -83,10 +86,21 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
                         NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-                        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+                        NotificationCompat.Builder builder;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
+                            manager.createNotificationChannel(channel);
+                            builder = new NotificationCompat.Builder(this, CHANNEL_ID);
+                        } else {
+                            builder = new NotificationCompat.Builder(this);
+                        }
 
-                        Intent nIntent = new Intent(this, MainActivity.class);
-                        PendingIntent pIntent = PendingIntent.getActivity(this, 0, nIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        Intent deactivateIntent = new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION);
+                        deactivateIntent.setClass(this, StatusBarBroadcastReceiver.class);
+                        Intent settingsIntent = new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION);
+                        settingsIntent.setClass(this, StatusBarBroadcastReceiver.class);
+                        PendingIntent pIntent = PendingIntent.getActivity(this, 0,
+                                new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
                         builder.setWhen(0)
                                 .setContentTitle(getResources().getString(R.string.notice_activated))
                                 .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
@@ -98,10 +112,10 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                                 .setContentIntent(pIntent)
                                 .addAction(R.drawable.ic_clear, getResources().getString(R.string.button_text_deactivate),
                                         PendingIntent.getBroadcast(this, 0,
-                                                new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION), 0))
+                                                deactivateIntent, PendingIntent.FLAG_UPDATE_CURRENT))
                                 .addAction(R.drawable.ic_settings, getResources().getString(R.string.action_settings),
                                         PendingIntent.getBroadcast(this, 0,
-                                                new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION), 0));
+                                                settingsIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
                         Notification notification = builder.build();
 
