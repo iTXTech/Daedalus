@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (Daedalus.isDarkTheme()) {
-            setTheme(R.style.AppTheme_Dark_NoActionBar);
+            setTheme(R.style.AppTheme_Dark_NoActionBar_TransparentStatusBar);
         }
         super.onCreate(savedInstanceState);
 
