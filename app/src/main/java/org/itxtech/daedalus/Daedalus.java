@@ -46,11 +46,8 @@ public class Daedalus extends Application {
     private static final String SHORTCUT_ID_ACTIVATE = "shortcut_activate";
 
     public static final List<DNSServer> DNS_SERVERS = new ArrayList<DNSServer>() {{
-        add(new DNSServer("119.23.248.241", R.string.server_fundns_south_china));
         add(new DNSServer("101.132.183.99", R.string.server_pdomo_primary));
         add(new DNSServer("193.112.15.186", R.string.server_pdomo_secondary));
-        add(new DNSServer("115.159.146.99", R.string.server_aixyz_east_china));
-        add(new DNSServer("123.206.21.48", R.string.server_aixyz_south_china));
     }};
 
     public static final List<Rule> RULES = new ArrayList<Rule>() {{

@@ -86,9 +86,6 @@
     <string name="settings_server_address">Server Address</string>
     <string name="settings_server_port">Server Port</string>
 
-    <string name="server_aixyz_south_china">AIXYZ DNS South China</string>
-    <string name="server_aixyz_east_china">AIXYZ DNS East China</string>
-    <string name="server_fundns_south_china">FUN DNS South China</string>
     <string name="server_pdomo_primary">PdoMo DNS Primary</string>
     <string name="server_pdomo_secondary">PdoMo DNS Secondary</string>
 

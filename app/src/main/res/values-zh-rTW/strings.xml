@@ -81,9 +81,6 @@
     <string name="settings_server_address">伺服器網址</string>
     <string name="settings_server_port">伺服器埠</string>
 
-    <string name="server_aixyz_south_china">AIXYZ DNS 中國華南</string>
-    <string name="server_aixyz_east_china">AIXYZ DNS 中國華東</string>
-    <string name="server_fundns_south_china">FUN DNS 中國華南</string>
     <string name="server_pdomo_primary">PdoMo DNS 主伺服器</string>
     <string name="server_pdomo_secondary">PdoMo DNS 輔伺服器</string>
 

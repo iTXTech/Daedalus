@@ -32,13 +32,19 @@ Through the DNS server and rules which are provided by third parties, users can 
 Features:
 * No root access required, no ads contained
 * Functional under data connection
-* DNS over TCP
 * A tester for DNS servers
 * IPv6 support (including Rules!)
 * Custom DNS server
 * Custom hosts and DNSMasq configuration
 * EXTREME LOW power consume
 * Material Design
+
+Supported DNS Query Methods:
+* UDP
+* TCP 
+* DNS over TLS ([RFC7858](https://tools.ietf.org/html/rfc7858))
+* DNS over HTTPS ([IETF darft](https://tools.ietf.org/html/draft-ietf-doh-dns-over-https-11))
+* DNS over HTTPS ([Google JSON](https://developers.google.com/speed/public-dns/docs/dns-over-https))
 <br>
 
 __Users must comply with local laws and regulations.__<br>
@@ -47,8 +53,7 @@ DNS Server Providers
 -------------
 * __CuteDNS__ - *Shutdown according to regulations*
 * __[Pure DNS](https://puredns.cn/)__ - *Shutdown according to regulations*
-* __[AIXYZ DNS](https://aixyz.com/)__ - __*For academic purposes only.*__
-* __[FUN DNS](http://fundns.cn)__ - *The Most Pure Domain Name Resolution Service*
+* __[FUN DNS](http://fundns.cn)__ - *Shutdown according to regulations*
 * __[PdoMo-DNS](https://pdomo.me/)__ - *Intelligent Free Public DNS*
 
 Rule Providers
