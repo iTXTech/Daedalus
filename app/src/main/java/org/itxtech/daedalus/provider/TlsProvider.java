@@ -1,8 +1,6 @@
 package org.itxtech.daedalus.provider;
 
 import android.os.ParcelFileDescriptor;
-import android.system.ErrnoException;
-import android.system.OsConstants;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.server.DNSServerHelper;
@@ -10,10 +8,8 @@ import org.pcap4j.packet.IpPacket;
 
 import javax.net.ssl.SSLContext;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.Socket;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * Daedalus Project
@@ -32,12 +28,13 @@ public class TlsProvider extends TcpProvider{
     }
 
     @Override
-    protected void forwardPacket(DatagramPacket outPacket, IpPacket parsedPacket) throws DaedalusVpnService.VpnNetworkException {
+    protected void forwardPacket(DatagramPacket outPacket, IpPacket parsedPacket) {
         Socket dnsSocket;
         try {
-            dnsSocket = SSLContext.getInstance("TLSv1.2").getSocketFactory()
-                    .createSocket(outPacket.getAddress(),
-                            DNSServerHelper.getPortOrDefault(outPacket.getAddress(), outPacket.getPort()));
+            SSLContext context = SSLContext.getInstance("TLSv1.2");
+            context.init(null, null, null);
+            dnsSocket = context.getSocketFactory().createSocket(outPacket.getAddress(),
+                    DNSServerHelper.getPortOrDefault(outPacket.getAddress(), outPacket.getPort()));
             //Create TLS v1.2 socket
 
             service.protect(dnsSocket);
@@ -53,15 +50,8 @@ public class TlsProvider extends TcpProvider{
             } else {
                 dnsSocket.close();
             }
-        } catch (NoSuchAlgorithmException e){
+        } catch (Exception e) {
             Logger.logException(e);
-        } catch (IOException e) {
-            if (e.getCause() instanceof ErrnoException) {
-                ErrnoException errnoExc = (ErrnoException) e.getCause();
-                if ((errnoExc.errno == OsConstants.ENETUNREACH) || (errnoExc.errno == OsConstants.EPERM)) {
-                    throw new DaedalusVpnService.VpnNetworkException("Cannot send message:", e);
-                }
-            }
         }
     }
 }
