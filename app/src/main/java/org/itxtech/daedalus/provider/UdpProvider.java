@@ -121,7 +121,7 @@ public class UdpProvider extends Provider {
         }
     }
 
-    void forwardPacket(DatagramPacket outPacket, IpPacket parsedPacket) throws DaedalusVpnService.VpnNetworkException {
+    protected void forwardPacket(DatagramPacket outPacket, IpPacket parsedPacket) throws DaedalusVpnService.VpnNetworkException {
         DatagramSocket dnsSocket;
         try {
             // Packets to be sent to the real DNS server will need to be protected from the VPN

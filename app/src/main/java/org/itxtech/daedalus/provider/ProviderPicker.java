@@ -21,6 +21,7 @@ public class ProviderPicker {
     public static final int DNS_QUERY_METHOD_TLS = 2;
     public static final int DNS_QUERY_METHOD_HTTPS_IETF = 3;
     public static final int DNS_QUERY_METHOD_HTTPS_JSON = 4;
+    //This section mush be the same as the one in arrays.xml
 
     public static Provider getProvider(ParcelFileDescriptor descriptor, DaedalusVpnService service) {
         switch (Integer.valueOf(Daedalus.getPrefs().getString("settings_dns_query_method", "0"))) {
@@ -33,7 +34,7 @@ public class ProviderPicker {
             case DNS_QUERY_METHOD_HTTPS_JSON:
                 return new HttpsJsonProvider(descriptor, service);
             case DNS_QUERY_METHOD_TLS:
-                break;
+                return new TlsProvider(descriptor, service);
         }
         return new UdpProvider(descriptor, service);
     }
