@@ -11,6 +11,7 @@
     <string name="notice_need_restart">重新启用 Daedalus 以应用设置。</string>
     <string name="notice_start_download">正在下载规则，请稍等 ……</string>
     <string name="notice_downloaded">已下载规则。</string>
+    <string name="notice_download_failed">规则下载失败。</string>
     <string name="notice_now_downloading">Daedalus 当前正在下载规则，请稍等。</string>
     <string name="notice_fill_in_all">请填写所有配置项。</string>
     <string name="notice_delete_confirm_prompt">您确定要删除此配置项？</string>

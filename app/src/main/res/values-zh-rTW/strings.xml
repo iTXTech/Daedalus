@@ -11,13 +11,14 @@
     <string name="notice_need_restart">重新啟動 Daedalus 以套用設定。</string>
     <string name="notice_start_download">正在下載規則，請稍等……</string>
     <string name="notice_downloaded">已下載規則。</string>
+    <string name="notice_download_failed">規則下載失敗。</string>
     <string name="notice_now_downloading">Daedalus 目前正在下載規則，請稍等。</string>
     <string name="notice_fill_in_all">請填寫所有設定項。</string>
     <string name="notice_delete_confirm_prompt">您確定要刪除此設定項？</string>
     <string name="notice_after_stop">請在服務停止後變更啟動的規則。</string>
     <string name="notice_check_dynamic_rule_reload">請在設定中開啟「允許動態規則重新載入」</string>
-    <string name="notice_export_complete">导出完成。 TODO</string>
-    <string name="notice_importing_rule">正在导入规则，请稍等。 TODO</string>
+    <string name="notice_export_complete">導出完成。</string>
+    <string name="notice_importing_rule">正在導入規則，請稍等。</string>
 
     <string name="action_settings">設定</string>
     <string name="action_about">關於</string>
@@ -34,7 +35,7 @@
 
     <string name="delete">刪除</string>
     <string name="apply">套用</string>
-    <string name="export">导出 TODO</string>
+    <string name="export">導出</string>
 
     <string name="navigation_drawer_close">關閉隱藏式瀏覽選單</string>
     <string name="navigation_drawer_open">開啟隱藏式瀏覽選單</string>

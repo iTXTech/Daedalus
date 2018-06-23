@@ -16,6 +16,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.ConfigActivity;
@@ -24,8 +27,7 @@ import org.itxtech.daedalus.util.Rule;
 import org.itxtech.daedalus.widget.ClickPreference;
 
 import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Daedalus Project
@@ -39,6 +41,12 @@ import java.net.URLConnection;
  * (at your option) any later version.
  */
 public class RuleConfigFragment extends ConfigFragment {
+    private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
+            .writeTimeout(10, TimeUnit.SECONDS)
+            .build();
+
     private static final int READ_REQUEST_CODE = 1;
     private Intent intent = null;
     private Thread mThread = null;
@@ -127,7 +135,6 @@ public class RuleConfigFragment extends ConfigFragment {
                             buffer.flush();
                             mHandler.obtainMessage(RuleConfigHandler.MSG_RULE_DOWNLOADED,
                                     new RuleData(ruleFilename.getText(), buffer.toByteArray())).sendToTarget();
-                            stopThread();
                         } catch (Exception e) {
                             Logger.logException(e);
                         } finally {
@@ -137,21 +144,20 @@ public class RuleConfigFragment extends ConfigFragment {
                 } else {
                     mThread = new Thread(() -> {
                         try {
-                            URLConnection connection = new URL(ruleDownloadUrl.getText()).openConnection();
-                            InputStream inputStream = connection.getInputStream();
-                            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                            StringBuilder builder = new StringBuilder();
-                            String result;
-                            while ((result = reader.readLine()) != null) {
-                                builder.append("\n").append(result);
+                            Request request = new Request.Builder()
+                                    .url(ruleDownloadUrl.getText()).get().build();
+                            Response response = HTTP_CLIENT.newCall(request).execute();
+                            Logger.info("Downloaded " + ruleDownloadUrl.getText());
+                            if (response.isSuccessful() && mHandler != null) {
+                                mHandler.obtainMessage(RuleConfigHandler.MSG_RULE_DOWNLOADED,
+                                        new RuleData(ruleFilename.getText(), response.body().bytes())).sendToTarget();
                             }
-                            reader.close();
-
-                            mHandler.obtainMessage(RuleConfigHandler.MSG_RULE_DOWNLOADED,
-                                    new RuleData(ruleFilename.getText(), builder.toString().getBytes())).sendToTarget();
-                            stopThread();
                         } catch (Exception e) {
                             Logger.logException(e);
+                            if (mHandler != null) {
+                                mHandler.obtainMessage(RuleConfigHandler.MSG_RULE_DOWNLOADED,
+                                        new RuleData(ruleFilename.getText(), new byte[0])).sendToTarget();
+                            }
                         } finally {
                             stopThread();
                         }
@@ -366,8 +372,14 @@ public class RuleConfigFragment extends ConfigFragment {
 
             switch (msg.what) {
                 case MSG_RULE_DOWNLOADED:
+                    RuleData ruleData = (RuleData) msg.obj;
+                    if (ruleData.data.length == 0) {
+                        if (view != null) {
+                            Snackbar.make(view, R.string.notice_download_failed, Snackbar.LENGTH_SHORT).show();
+                        }
+                        break;
+                    }
                     try {
-                        RuleData ruleData = (RuleData) msg.obj;
                         File file = new File(Daedalus.rulePath + ruleData.getFilename());
                         FileOutputStream stream = new FileOutputStream(file);
                         stream.write(ruleData.getData());

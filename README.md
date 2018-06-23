@@ -78,8 +78,8 @@ Open Source Licenses
 
 Credits
 ------------
-* __[Jetbrains](https://www.jetbrains.com/)__ - For providing free license for [IntelliJ IDEA](https://www.jetbrains.com/idea/)
-* __[SNC IDC](http://www.sncidc.com/)__ - For supporting us with love
+* __[JetBrains](https://www.jetbrains.com/)__ - For providing free license for [IntelliJ IDEA](https://www.jetbrains.com/idea/)
+* __[ShenniaoTech](https://www.sncidc.com/)__ - For supporting us with love
 
 License
 ------------

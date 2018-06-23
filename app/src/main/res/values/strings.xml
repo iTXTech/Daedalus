@@ -10,6 +10,7 @@
     <string name="notice_need_restart">Re-activate Daedalus to make the settings take effect.</string>
     <string name="notice_start_download">Downloading rule, please wait …</string>
     <string name="notice_downloaded">Rule has been downloaded.</string>
+    <string name="notice_download_failed">Download failed.</string>
     <string name="notice_now_downloading">Daedalus is currently downloading rule, please wait.</string>
     <string name="notice_fill_in_all">Please fill in all configuration items.</string>
     <string name="notice_delete_confirm_prompt">Are you sure you want to remove this configuration?</string>
