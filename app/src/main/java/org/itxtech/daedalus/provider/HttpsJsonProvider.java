@@ -72,64 +72,67 @@ public class HttpsJsonProvider extends HttpsProvider {
                     }
 
                     @Override
-                    public void onResponse(Call call, Response response) throws IOException {
+                    public void onResponse(Call call, Response response) {
                         if (response.isSuccessful()) {
-                            JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
-                            DnsMessage.Builder msg = message.asBuilder()
-                                    .setRecursionDesired(jsonObject.get("RD").getAsBoolean())
-                                    .setRecursionAvailable(jsonObject.get("RA").getAsBoolean())
-                                    .setAuthenticData(jsonObject.get("AD").getAsBoolean())
-                                    .setCheckingDisabled(jsonObject.get("CD").getAsBoolean());
-                            if (jsonObject.has("Answer")) {
-                                JsonArray answers = jsonObject.get("Answer").getAsJsonArray();
-                                for (JsonElement answer : answers) {
-                                    JsonObject ans = answer.getAsJsonObject();
-                                    Record.TYPE type = Record.TYPE.getType(ans.get("type").getAsInt());
-                                    String data = ans.get("data").getAsString();
-                                    Data recordData = null;
-                                    switch (type) {
-                                        case A:
-                                            recordData = new A(data);
-                                            break;
-                                        case AAAA:
-                                            recordData = new AAAA(data);
-                                            break;
-                                        case CNAME:
-                                            recordData = new CNAME(data);
-                                            break;
-                                        case MX:
-                                            recordData = new MX(5, data);
-                                            break;
-                                        case SOA:
-                                            String[] sections = data.split(" ");
-                                            if (sections.length == 7) {
-                                                recordData = new SOA(sections[0], sections[1],
-                                                        Long.valueOf(sections[2]), Integer.valueOf(sections[3]),
-                                                        Integer.valueOf(sections[4]), Integer.valueOf(sections[5]),
-                                                        Long.valueOf(sections[6]));
-                                            }
-                                            break;
-                                        case DNAME:
-                                            recordData = new DNAME(data);
-                                            break;
-                                        case NS:
-                                            recordData = new NS(DnsName.from(data));
-                                            break;
-                                        case TXT:
-                                            recordData = new TXT(data.getBytes());
-                                            break;
+                            try {
+                                JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
+                                DnsMessage.Builder msg = message.asBuilder()
+                                        .setRecursionDesired(jsonObject.get("RD").getAsBoolean())
+                                        .setRecursionAvailable(jsonObject.get("RA").getAsBoolean())
+                                        .setAuthenticData(jsonObject.get("AD").getAsBoolean())
+                                        .setCheckingDisabled(jsonObject.get("CD").getAsBoolean());
+                                if (jsonObject.has("Answer")) {
+                                    JsonArray answers = jsonObject.get("Answer").getAsJsonArray();
+                                    for (JsonElement answer : answers) {
+                                        JsonObject ans = answer.getAsJsonObject();
+                                        Record.TYPE type = Record.TYPE.getType(ans.get("type").getAsInt());
+                                        String data = ans.get("data").getAsString();
+                                        Data recordData = null;
+                                        switch (type) {
+                                            case A:
+                                                recordData = new A(data);
+                                                break;
+                                            case AAAA:
+                                                recordData = new AAAA(data);
+                                                break;
+                                            case CNAME:
+                                                recordData = new CNAME(data);
+                                                break;
+                                            case MX:
+                                                recordData = new MX(5, data);
+                                                break;
+                                            case SOA:
+                                                String[] sections = data.split(" ");
+                                                if (sections.length == 7) {
+                                                    recordData = new SOA(sections[0], sections[1],
+                                                            Long.valueOf(sections[2]), Integer.valueOf(sections[3]),
+                                                            Integer.valueOf(sections[4]), Integer.valueOf(sections[5]),
+                                                            Long.valueOf(sections[6]));
+                                                }
+                                                break;
+                                            case DNAME:
+                                                recordData = new DNAME(data);
+                                                break;
+                                            case NS:
+                                                recordData = new NS(DnsName.from(data));
+                                                break;
+                                            case TXT:
+                                                recordData = new TXT(data.getBytes());
+                                                break;
 
-                                    }
-                                    if (recordData != null) {
-                                        msg.addAnswer(new Record<>(ans.get("name").getAsString(),
-                                                type, 1,
-                                                ans.get("TTL").getAsLong(),
-                                                recordData));
+                                        }
+                                        if (recordData != null) {
+                                            msg.addAnswer(new Record<>(ans.get("name").getAsString(),
+                                                    type, 1,
+                                                    ans.get("TTL").getAsLong(),
+                                                    recordData));
+                                        }
                                     }
                                 }
+                                result = msg.setQrFlag(true).build().toArray();
+                                completed = true;
+                            } catch (Exception ignored) {//throw com.google.gson.JsonSyntaxException when response is not correct
                             }
-                            result = msg.setQrFlag(true).build().toArray();
-                            completed = true;
                         }
                     }
                 });

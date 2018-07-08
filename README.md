@@ -43,7 +43,7 @@ Supported DNS Query Methods:
 * UDP
 * TCP 
 * DNS over TLS ([RFC7858](https://tools.ietf.org/html/rfc7858))
-* DNS over HTTPS ([IETF darft](https://tools.ietf.org/html/draft-ietf-doh-dns-over-https-11))
+* DNS over HTTPS ([IETF darft](https://tools.ietf.org/html/draft-ietf-doh-dns-over-https-12))
 * DNS over HTTPS ([Google JSON](https://developers.google.com/speed/public-dns/docs/dns-over-https))
 <br>
 

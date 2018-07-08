@@ -65,11 +65,14 @@ public class HttpsIetfProvider extends HttpsProvider {
                     }
 
                     @Override
-                    public void onResponse(Call call, Response response) throws IOException {
+                    public void onResponse(Call call, Response response) {
                         if (response.isSuccessful()) {
-                            result = new DnsMessage(response.body().bytes()).asBuilder()
-                                    .setId(id).build().toArray();
-                            completed = true;
+                            try {
+                                result = new DnsMessage(response.body().bytes()).asBuilder()
+                                        .setId(id).build().toArray();
+                                completed = true;
+                            } catch (Exception ignored) {//throw IllegalArgumentException when response is not correct
+                            }
                         }
                     }
                 });
