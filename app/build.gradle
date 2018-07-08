@@ -10,8 +10,8 @@ android {
         applicationId "org.itxtech.daedalus"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 15
-        versionName "1.11.1"
+        versionCode 16
+        versionName "1.12.0"
 
         buildConfigField "String", "BUILD_TIME", "\"${System.currentTimeMillis()}\""
         buildConfigField "String", "GIT_COMMIT", "\"${gitCommit}\""
@@ -51,8 +51,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     //Analytics
-    implementation 'com.google.firebase:firebase-core:15.0.2'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.3'
+    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
 }
 
 apply plugin: 'com.google.gms.google-services'
