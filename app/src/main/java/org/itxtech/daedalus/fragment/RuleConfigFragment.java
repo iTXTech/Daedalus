@@ -61,7 +61,6 @@ public class RuleConfigFragment extends ConfigFragment {
     public void onDestroy() {
         super.onDestroy();
 
-        Daedalus.configurations.save();
         stopThread();
         intent = null;
         mHandler.shutdown();
