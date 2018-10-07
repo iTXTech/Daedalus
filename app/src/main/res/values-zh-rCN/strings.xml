@@ -52,6 +52,7 @@
     <string name="settings_notification">显示通知</string>
     <string name="settings_check_update">检查更新</string>
     <string name="settings_update_summary">前往 GitHub 发布页面。</string>
+    <string name="settings_privacy_policy">隐私政策</string>
     <string name="settings_count_number_of_queries">统计 DNS 查询次数</string>
     <string name="settings_bug_report">提交反馈</string>
     <string name="settings_issue_summary">前往 GitHub 提交 Bug 反馈。</string>

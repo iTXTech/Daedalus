@@ -52,6 +52,7 @@
     <string name="settings_notification">顯示通知</string>
     <string name="settings_check_update">檢查更新</string>
     <string name="settings_update_summary">造訪 GitHub 發行頁面。</string>
+    <string name="settings_privacy_policy">隱私政策</string>
     <string name="settings_count_number_of_queries">統計 DNS 查詢次數</string>
     <string name="settings_bug_report">回報 Bug</string>
     <string name="settings_issue_summary">前往 GitHub 送出 Bug 回饋。</string>

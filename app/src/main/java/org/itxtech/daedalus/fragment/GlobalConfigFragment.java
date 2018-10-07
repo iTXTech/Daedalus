@@ -105,6 +105,11 @@ public class GlobalConfigFragment extends PreferenceFragment {
             return false;
         });
 
+        findPreference("settings_privacy_policy").setOnPreferenceClickListener(preference -> {
+            Daedalus.openUri("https://github.com/iTXTech/Daedalus/wiki/Privacy-Policy");
+            return false;
+        });
+
         updateAdvancedOptions(advanced.isChecked());
     }
 
