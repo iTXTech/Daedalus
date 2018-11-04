@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/fragment_dns_servers"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView_dns_servers"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -14,7 +14,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"/>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_add_server"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,4 +23,4 @@
             android:src="@drawable/ic_note_add"
             android:tint="#FFFFFF"/>
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

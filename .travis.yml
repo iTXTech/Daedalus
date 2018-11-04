@@ -5,15 +5,15 @@ android:
   components:
     - tools
     - platform-tools
-    - build-tools-27.0.3
-    - android-27
+    - build-tools-28.0.3
+    - android-28
     - extra-android-support
     - extra-google-m2repository
     - extra-android-m2repository
   licenses:
     - '.+'
 before_install:
-  - yes | sdkmanager "platforms;android-27"
+- yes | sdkmanager "platforms;android-28"
 script:
   - chmod 777 gradlew
   - ./gradlew clean assembleDebug

@@ -71,7 +71,7 @@
     <string name="settings_dns_tcp">TCP</string>
     <string name="settings_dns_udp">UDP</string>
     <string name="settings_dns_tls">TLS</string>
-    <string name="settings_dns_https_ietf">HTTPS (IETF draft)</string>
+    <string name="settings_dns_https_ietf">HTTPS (RFC8484)</string>
     <string name="settings_dns_https_json">HTTPS (Google JSON)</string>
 
     <string name="settings_rule_name">Rule Name</string>

@@ -1,13 +1,13 @@
 package org.itxtech.daedalus.fragment;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import androidx.appcompat.widget.Toolbar;
+import com.google.android.material.snackbar.Snackbar;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.util.Logger;

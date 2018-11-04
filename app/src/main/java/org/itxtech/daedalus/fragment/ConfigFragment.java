@@ -2,7 +2,7 @@ package org.itxtech.daedalus.fragment;
 
 import android.content.Intent;
 import android.preference.PreferenceFragment;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 
 /**
  * Daedalus Project

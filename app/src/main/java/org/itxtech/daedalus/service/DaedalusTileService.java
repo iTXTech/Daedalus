@@ -3,7 +3,7 @@ package org.itxtech.daedalus.service;
 import android.os.Build;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 
