@@ -52,8 +52,8 @@ __Users must comply with local laws and regulations.__<br>
 DNS Server Providers
 -------------
 * __CuteDNS__ - *Shutdown according to regulations*
-* __[Pure DNS](https://puredns.cn/)__ - *Shutdown according to regulations*
 * __[FUN DNS](http://fundns.cn)__ - *Shutdown according to regulations*
+* __[Pure DNS](https://puredns.cn/)__
 * __[PdoMo-DNS](https://pdomo.me/)__ - *Intelligent Free Public DNS*
 
 Rule Providers
@@ -83,9 +83,9 @@ Credits
 
 License
 ------------
-Copyright (C) 2017-2018 by iTXTech <[admin@itxtech.org](mailto:admin@itxtech.org)><br>
-Copyright (C) 2017-2018 by PeratX <[peratx@itxtech.org](mailto:peratx@itxtech.org)>
 
+    Copyright (C) 2017-2018 iTX Technologies <admin@itxtech.org>
+    
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
