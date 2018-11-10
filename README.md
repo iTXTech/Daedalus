@@ -55,6 +55,7 @@ DNS Server Providers
 * __[FUN DNS](http://fundns.cn)__ - *Shutdown according to regulations*
 * __[Pure DNS](https://puredns.cn/)__
 * __[PdoMo-DNS](https://pdomo.me/)__ - *Intelligent Free Public DNS*
+* __[rubyfish](https://www.rubyfish.cn)__ - *Free DoT/DoH DNS*
 
 Rule Providers
 -------------

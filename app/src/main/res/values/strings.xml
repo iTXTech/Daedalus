@@ -92,6 +92,7 @@
     <string name="server_pdomo_secondary">PdoMo DNS Secondary</string>
     <string name="server_puredns_south_china">PureDNS South China</string>
     <string name="server_puredns_north_china">PureDNS North China</string>
+    <string name="server_rubyfish">rubyfish (DoT/DOH)</string>
 
     <string name="primary_server">Primary DNS server</string>
     <string name="secondary_server">Secondary DNS server</string>

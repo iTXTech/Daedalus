@@ -50,10 +50,13 @@ public class Daedalus extends Application {
         add(new DNSServer("193.112.15.186", R.string.server_pdomo_secondary));
         add(new DNSServer("123.207.13.111", R.string.server_puredns_south_china));
         add(new DNSServer("123.207.137.88", R.string.server_puredns_north_china));
+        add(new DNSServer("dns.rubyfish.cn/dns-query", R.string.server_rubyfish));
     }};
 
     public static final List<Rule> RULES = new ArrayList<Rule>() {{
         //Build-in Hosts rule providers
+        add(new Rule("iTXTech/Daedalus/Default", "daedalus-default.hosts", Rule.TYPE_HOSTS,
+                "https://raw.githubusercontent.com/iTXTech/Daedalus/master/default.hosts", false));
         add(new Rule("googlehosts/hosts", "googlehosts.hosts", Rule.TYPE_HOSTS,
                 "https://raw.githubusercontent.com/googlehosts/hosts/master/hosts-files/hosts", false));
         add(new Rule("vokins/yhosts", "vokins.hosts", Rule.TYPE_HOSTS,
