@@ -53,7 +53,8 @@ public class HttpsIetfProvider extends HttpsProvider {
                 Request request = new Request.Builder()
                         .url(HttpUrl.parse(HTTPS_SUFFIX + uri).newBuilder()
                                 .addQueryParameter("dns", Base64.encodeToString(
-                                        message.asBuilder().setId(0).build().toArray(), Base64.DEFAULT))
+                                        message.asBuilder().setId(0).build().toArray(),
+                                        Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP))
                                 .build())
                         .get()
                         .build();

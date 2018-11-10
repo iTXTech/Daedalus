@@ -36,6 +36,7 @@ public class TlsProvider extends TcpProvider{
             dnsSocket = context.getSocketFactory().createSocket(outPacket.getAddress(),
                     DNSServerHelper.getPortOrDefault(outPacket.getAddress(), outPacket.getPort()));
             //Create TLS v1.2 socket
+            //TODO: SNI
 
             service.protect(dnsSocket);
 
