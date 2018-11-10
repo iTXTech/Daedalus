@@ -62,7 +62,7 @@
                 android:enabled="false"/>
         <SwitchPreference
                 android:key="settings_local_rules_resolution"
-                android:title="@string/settings_local_rules_resolution"
+                android:title="@string/settings_local_rules_resolver"
                 android:defaultValue="false"
                 android:enabled="false"/>
         <SwitchPreference

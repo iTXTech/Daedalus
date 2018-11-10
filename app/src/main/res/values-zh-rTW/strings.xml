@@ -60,7 +60,7 @@
     <string name="settings_help_and_support">支援與說明</string>
     <string name="settings_advanced">進階系統設定</string>
     <string name="settings_advanced_on">開啟</string>
-    <string name="settings_local_rules_resolution">本機規則解析</string>
+    <string name="settings_local_rules_resolver">本機規則解析</string>
     <string name="settings_manual">使用手冊</string>
     <string name="settings_manual_summary">造訪 GitHub wiki 頁面。</string>
     <string name="settings_log_size">紀錄檔大小限制</string>

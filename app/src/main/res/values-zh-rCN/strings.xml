@@ -60,7 +60,7 @@
     <string name="settings_help_and_support">支持和帮助</string>
     <string name="settings_advanced">高级系统设置</string>
     <string name="settings_advanced_on">开启</string>
-    <string name="settings_local_rules_resolution">本地规则解析</string>
+    <string name="settings_local_rules_resolver">本地规则解析</string>
     <string name="settings_manual">使用手册</string>
     <string name="settings_manual_summary">访问 GitHub wiki 页面。</string>
     <string name="settings_log_size">日志大小限制</string>

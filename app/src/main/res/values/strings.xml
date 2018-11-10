@@ -59,7 +59,7 @@
     <string name="settings_help_and_support">Help &amp; Support</string>
     <string name="settings_advanced">Advanced System Settings</string>
     <string name="settings_advanced_on">On</string>
-    <string name="settings_local_rules_resolution">Local Rules Resolution</string>
+    <string name="settings_local_rules_resolver">Local Rules Resolver</string>
     <string name="settings_log_size">Log Size Limit</string>
     <string name="settings_manual">Manual</string>
     <string name="settings_manual_summary">Visit GitHub wiki page.</string>

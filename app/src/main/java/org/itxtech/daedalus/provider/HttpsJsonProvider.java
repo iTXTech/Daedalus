@@ -36,15 +36,9 @@ public class HttpsJsonProvider extends HttpsProvider {
             .connectTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
-            .addInterceptor((chain) -> {
-                Request original = chain.request();
-
-                Request request = original.newBuilder()
-                        .header("Accept", "application/dns-json")
-                        .build();
-
-                return chain.proceed(request);
-            })
+            .addInterceptor((chain) -> chain.proceed(chain.request().newBuilder()
+                    .header("Accept", "application/dns-json")
+                    .build()))
             .build();
 
     public HttpsJsonProvider(ParcelFileDescriptor descriptor, DaedalusVpnService service) {
