@@ -61,6 +61,7 @@ public class AboutFragment extends ToolbarFragment {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 try {
+                    mWebView.loadUrl("javascript:changeColor('"+(Daedalus.isDarkTheme() ? "#FFFFFF" : "#000000")+"')");
                     mWebView.loadUrl("javascript:changeVersionInfo('" + Daedalus.getInstance().getPackageManager().getPackageInfo(Daedalus.getInstance().getPackageName(), 0).versionName + "', '" + BuildConfig.BUILD_TIME + "', '" + BuildConfig.GIT_COMMIT + "')");
                 } catch (Exception e) {
                     Log.e("DAboutActivity", e.toString());
