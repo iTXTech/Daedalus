@@ -2,7 +2,7 @@
     <string name="app_name">Daedalus</string>
     <string name="quick_toggle">Toggle</string>
 
-    <string name="notice_main">See the world outside.</string>
+    <string name="notice_main">Connect To The VPN.</string>
     <string name="notice_activated">iTXTech Daedalus is activated.</string>
     <string name="notice_start_test">Testing specified DNS server…</string>
     <string name="notice_queries">DNS query times:</string>
