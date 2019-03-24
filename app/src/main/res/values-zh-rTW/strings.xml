@@ -83,6 +83,12 @@
     <string name="settings_server_address">伺服器網址</string>
     <string name="settings_server_port">伺服器埠</string>
 
+    <string name="settings_app_filter">分應用代理</string>
+    <string name="settings_app_filter_list">選擇應用</string>
+    <string name="settings_app_filter_mode">黑名單模式</string>
+    <string name="settings_app_filter_list_summary">選擇要過濾的應用</string>
+    <string name="settings_app_filter_summary">僅支持Android Lollipop及以上版本</string>
+
     <string name="server_pdomo_primary">PdoMo DNS 主伺服器</string>
     <string name="server_pdomo_secondary">PdoMo DNS 輔伺服器</string>
     <string name="server_puredns_south_china">PureDNS 華南</string>

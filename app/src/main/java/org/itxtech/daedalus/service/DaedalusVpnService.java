@@ -7,12 +7,15 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.ParcelFileDescriptor;
 import android.system.OsConstants;
 import android.util.Log;
+
 import androidx.core.app.NotificationCompat;
+
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.MainActivity;
@@ -28,6 +31,7 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Daedalus Project
@@ -238,7 +242,28 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                     .setConfigureIntent(PendingIntent.getActivity(this, 0,
                             new Intent(this, MainActivity.class).putExtra(MainActivity.LAUNCH_FRAGMENT, MainActivity.FRAGMENT_SETTINGS),
                             PendingIntent.FLAG_ONE_SHOT));
+
+            //Set App Filter
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && Daedalus.getPrefs().getBoolean("settings_app_filter_switch", false)) {
+                Set<String> apps = Daedalus.getPrefs().getStringSet("filterAppObjects", null);
+                if (apps != null) {
+                    boolean mode = Daedalus.getPrefs().getBoolean("settings_app_filter_mode_switch", false);
+                    for (String app : apps) {
+                        try {
+                            if (mode) {
+                                builder.addDisallowedApplication(app);
+                            } else {
+                                builder.addAllowedApplication(app);
+                            }
+                        } catch (PackageManager.NameNotFoundException e) {
+                            Logger.error("Package Not Found:" + app);
+                        }
+                    }
+                }
+            }
+
             String format = null;
+
             for (String prefix : new String[]{"10.0.0", "192.0.2", "198.51.100", "203.0.113", "192.168.50"}) {
                 try {
                     builder.addAddress(prefix + ".1", 24);
@@ -303,8 +328,10 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                     Thread.sleep(1000);
                 }
             }
-        } catch (InterruptedException ignored) {
-        } catch (Exception e) {
+        } catch (
+                InterruptedException ignored) {
+        } catch (
+                Exception e) {
             Logger.logException(e);
         } finally {
             Log.d(TAG, "quit");

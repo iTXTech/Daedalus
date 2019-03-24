@@ -71,6 +71,7 @@
                 android:configChanges="keyboard|keyboardHidden|screenLayout|uiMode|orientation|screenSize|smallestScreenSize"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity android:name=".activity.FilterAppProxyActivity" />
     </application>
 
 </manifest>

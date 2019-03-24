@@ -49,6 +49,26 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:key="settings_app_filter"
+        android:title="@string/settings_app_filter">
+        <SwitchPreference
+            android:key="settings_app_filter_switch"
+            android:title="@string/settings_app_filter"
+            android:summary="@string/settings_app_filter_summary"
+            android:defaultValue="false"/>
+        <SwitchPreference
+            android:key="settings_app_filter_mode_switch"
+            android:title="@string/settings_app_filter_mode"
+            android:defaultValue="false"
+            android:enabled="false"/>
+        <org.itxtech.daedalus.widget.ClickPreference
+            android:key="settings_app_filter_list"
+            android:title="@string/settings_app_filter_list"
+            android:summary="@string/settings_app_filter_list_summary"
+            android:enabled="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
             android:key="settings_advanced"
             android:title="@string/settings_advanced">
         <SwitchPreference

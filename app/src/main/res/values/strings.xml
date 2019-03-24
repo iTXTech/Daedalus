@@ -88,6 +88,12 @@
     <string name="settings_server_address">Server Address</string>
     <string name="settings_server_port">Server Port</string>
 
+    <string name="settings_app_filter">App Filter</string>
+    <string name="settings_app_filter_mode">Blacklist mode</string>
+    <string name="settings_app_filter_list">Select application</string>
+    <string name="settings_app_filter_list_summary">Select an app to filter</string>
+    <string name="settings_app_filter_summary">Only supports Android Lollipop and above</string>
+
     <string name="server_pdomo_primary">PdoMo DNS Primary</string>
     <string name="server_pdomo_secondary">PdoMo DNS Secondary</string>
     <string name="server_puredns_south_china">PureDNS South China</string>
