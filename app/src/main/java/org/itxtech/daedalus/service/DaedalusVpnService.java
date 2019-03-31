@@ -244,7 +244,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                             PendingIntent.FLAG_ONE_SHOT));
 
             //Set App Filter
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && Daedalus.getPrefs().getBoolean("settings_app_filter_switch", false)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Daedalus.getPrefs().getBoolean("settings_app_filter_switch", false)) {
                 Set<String> apps = Daedalus.getPrefs().getStringSet("filterAppObjects", null);
                 if (apps != null) {
                     boolean mode = Daedalus.getPrefs().getBoolean("settings_app_filter_mode_switch", false);
