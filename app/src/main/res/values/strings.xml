@@ -91,7 +91,7 @@
     <string name="settings_app_filter">App Filter</string>
     <string name="settings_app_filter_mode">Blacklist mode</string>
     <string name="settings_app_filter_list">Select application</string>
-    <string name="settings_app_filter_list_summary">Select an app to filter</string>
+    <string name="settings_app_filter_list_summary">Select apps to pass through</string>
     <string name="settings_app_filter_summary">Only supports Android Lollipop and above</string>
 
     <string name="server_pdomo_primary">PdoMo DNS Primary</string>
