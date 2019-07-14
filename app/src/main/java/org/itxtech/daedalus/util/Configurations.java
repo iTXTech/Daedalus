@@ -2,9 +2,9 @@ package org.itxtech.daedalus.util;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.util.server.CustomDNSServer;
+import org.itxtech.daedalus.util.server.DNSServer;
 
 import java.io.File;
 import java.io.FileReader;
@@ -28,6 +28,7 @@ public class Configurations {
 
     private static File file;
 
+    private ArrayList<DNSServer> builtInDNSServers;
     private ArrayList<CustomDNSServer> customDNSServers;
     private ArrayList<String> filterAppObjects;
 

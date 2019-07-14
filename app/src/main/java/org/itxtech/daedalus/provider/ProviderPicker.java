@@ -24,7 +24,7 @@ public class ProviderPicker {
     //This section mush be the same as the one in arrays.xml
 
     public static Provider getProvider(ParcelFileDescriptor descriptor, DaedalusVpnService service) {
-        switch (Integer.valueOf(Daedalus.getPrefs().getString("settings_dns_query_method", "0"))) {
+        switch (getDnsQueryMethod()) {
             case DNS_QUERY_METHOD_UDP:
                 return new UdpProvider(descriptor, service);
             case DNS_QUERY_METHOD_TCP:
@@ -37,5 +37,9 @@ public class ProviderPicker {
                 return new TlsProvider(descriptor, service);
         }
         return new UdpProvider(descriptor, service);
+    }
+
+    public static int getDnsQueryMethod() {
+        return Integer.valueOf(Daedalus.getPrefs().getString("settings_dns_query_method", "0"));
     }
 }

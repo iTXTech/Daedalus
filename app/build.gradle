@@ -8,7 +8,7 @@ android {
     buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "org.itxtech.daedalus"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 19
         versionName "1.14.0"
@@ -39,12 +39,12 @@ android {
 
 dependencies {
     //Support
-    implementation 'androidx.appcompat:appcompat:1.1.0-beta01'
+    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.percentlayout:percentlayout:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.android.material:material:1.1.0-alpha07'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha06'
+    implementation 'com.google.android.material:material:1.1.0-alpha08'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta01'
     //DNS
     implementation 'org.pcap4j:pcap4j-core:1.7.6'
     implementation 'org.pcap4j:pcap4j-packetfactory-static:1.7.6'
@@ -52,7 +52,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.okhttp3:okhttp:3.14.1'
     //Analytics
-    implementation 'com.google.firebase:firebase-core:16.0.9'
+    implementation 'com.google.firebase:firebase-core:17.0.1'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 }
 

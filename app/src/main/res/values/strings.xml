@@ -59,11 +59,10 @@
     <string name="settings_help_and_support">Help &amp; Support</string>
     <string name="settings_advanced">Advanced System Settings</string>
     <string name="settings_advanced_on">On</string>
-    <string name="settings_local_rules_resolver">Local Rules Resolver</string>
     <string name="settings_log_size">Log Size Limit</string>
     <string name="settings_manual">Manual</string>
     <string name="settings_manual_summary">Visit GitHub wiki page.</string>
-    <string name="settings_allow_dynamic_rule_reload">Allow Dynamic Rule Reloading</string>
+    <string name="settings_dont_build_doh_cache">Don\'t build DNS Cache for DoH DNS</string>
     <string name="settings_debug_output">Debug Output</string>
     <string name="settings_dark_theme">Use Dark Theme</string>
     <string name="settings_dns_query_method">DNS Query Method</string>

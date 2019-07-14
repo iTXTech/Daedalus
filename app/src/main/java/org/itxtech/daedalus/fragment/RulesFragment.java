@@ -17,7 +17,6 @@ import com.google.android.material.snackbar.Snackbar;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.ConfigActivity;
-import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Rule;
 
 import java.io.File;
@@ -61,14 +60,6 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
             @Override
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                if (!Daedalus.getPrefs().getBoolean("settings_allow_dynamic_rule_reload", false)) {
-                    if (viewHolder instanceof RulesFragment.ViewHolder) {
-                        Rule rule = Rule.getRuleById(((ViewHolder) viewHolder).getId());
-                        if (rule != null && rule.isServiceAndUsing()) {
-                            return 0;
-                        }
-                    }
-                }
                 return makeMovementFlags(0, ItemTouchHelper.START | ItemTouchHelper.END);
             }
 
@@ -121,11 +112,7 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
         }
 
         if (id == R.id.action_reload) {
-            if (!Daedalus.getPrefs().getBoolean("settings_allow_dynamic_rule_reload", false)) {
-                Snackbar.make(getView(), R.string.notice_check_dynamic_rule_reload, Snackbar.LENGTH_SHORT).show();
-            } else {
-                Daedalus.setRulesChanged();
-            }
+            Daedalus.setRulesChanged();
         }
         return true;
     }
@@ -233,24 +220,18 @@ public class RulesFragment extends ToolbarFragment implements Toolbar.OnMenuItem
 
         @Override
         public void onClick(View v) {
-            if ((!Daedalus.getPrefs().getBoolean("settings_allow_dynamic_rule_reload", false) &&
-                    !DaedalusVpnService.isActivated()) ||
-                    Daedalus.getPrefs().getBoolean("settings_allow_dynamic_rule_reload", false)) {
                 Rule rule = Rule.getRuleById(id);
                 if (rule != null) {
                     rule.setUsing(!v.isSelected());
                     v.setSelected(!v.isSelected());
                     Daedalus.setRulesChanged();
                 }
-            }
         }
 
         @Override
         public boolean onLongClick(View v) {
             Rule rule = Rule.getRuleById(id);
-            if (rule != null &&
-                    (Daedalus.getPrefs().getBoolean("settings_allow_dynamic_rule_reload", false) ||
-                            !rule.isServiceAndUsing())) {
+            if (rule != null) {
                 Daedalus.getInstance().startActivity(new Intent(Daedalus.getInstance(), ConfigActivity.class)
                         .putExtra(ConfigActivity.LAUNCH_ACTION_ID, Integer.parseInt(id))
                         .putExtra(ConfigActivity.LAUNCH_ACTION_FRAGMENT, ConfigActivity.LAUNCH_FRAGMENT_RULE)

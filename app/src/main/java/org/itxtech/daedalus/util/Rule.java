@@ -1,7 +1,6 @@
 package org.itxtech.daedalus.util;
 
 import org.itxtech.daedalus.Daedalus;
-import org.itxtech.daedalus.service.DaedalusVpnService;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -104,10 +103,6 @@ public class Rule {
         this.downloadUrl = downloadUrl;
     }
 
-    public boolean isServiceAndUsing() {
-        return DaedalusVpnService.isActivated() && isUsing();
-    }
-
     public void addToConfig() {
         if (getType() == Rule.TYPE_HOSTS) {
             Daedalus.configurations.getHostsRules().add(this);
@@ -123,11 +118,9 @@ public class Rule {
             Daedalus.configurations.getDnsmasqRules().remove(this);
         }
         File file = new File(getFileName());
-        Logger.info("Delete rule " + getName() + " result: " + String.valueOf(file.delete()));
+        Logger.info("Delete rule " + getName() + " result: " + file.delete());
     }
 
-
-    //STATIC METHODS
     public static String[] getBuildInRuleNames() {
         ArrayList<String> names = new ArrayList<>(Daedalus.RULES.size());
         for (Rule rule : Daedalus.RULES) {

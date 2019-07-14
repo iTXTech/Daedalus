@@ -8,7 +8,6 @@ import org.minidns.dnsmessage.DnsMessage;
 import org.pcap4j.packet.IpPacket;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Daedalus Project
@@ -22,14 +21,8 @@ import java.util.concurrent.TimeUnit;
  * (at your option) any later version.
  */
 public class HttpsIetfProvider extends HttpsProvider {
-    private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
-            .connectTimeout(10, TimeUnit.SECONDS)
-            .readTimeout(10, TimeUnit.SECONDS)
-            .writeTimeout(10, TimeUnit.SECONDS)
-            .addInterceptor((chain) -> chain.proceed(chain.request().newBuilder()
-                    .header("Accept", "application/dns-message")
-                    .build()))
-            .build();
+    private OkHttpClient HTTP_CLIENT = getHttpClient("application/dns-message");
+
 
     public HttpsIetfProvider(ParcelFileDescriptor descriptor, DaedalusVpnService service) {
         super(descriptor, service);

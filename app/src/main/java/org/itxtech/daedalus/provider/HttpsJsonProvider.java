@@ -13,7 +13,6 @@ import org.minidns.record.*;
 import org.pcap4j.packet.IpPacket;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Daedalus Project
@@ -32,14 +31,7 @@ public class HttpsJsonProvider extends HttpsProvider {
      *             https://developers.google.com/speed/public-dns/docs/dns-over-https
      */
 
-    private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
-            .connectTimeout(10, TimeUnit.SECONDS)
-            .readTimeout(10, TimeUnit.SECONDS)
-            .writeTimeout(10, TimeUnit.SECONDS)
-            .addInterceptor((chain) -> chain.proceed(chain.request().newBuilder()
-                    .header("Accept", "application/dns-json")
-                    .build()))
-            .build();
+    private OkHttpClient HTTP_CLIENT = getHttpClient("application/dns-json");
 
     public HttpsJsonProvider(ParcelFileDescriptor descriptor, DaedalusVpnService service) {
         super(descriptor, service);

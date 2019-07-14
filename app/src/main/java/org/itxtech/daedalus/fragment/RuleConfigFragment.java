@@ -187,11 +187,7 @@ public class RuleConfigFragment extends ConfigFragment {
 
         ClickPreference ruleImportExternal = (ClickPreference) findPreference("ruleImportExternal");
         ruleImportExternal.setOnPreferenceClickListener(preference -> {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                performFileSearch();
-            } else {
-                Snackbar.make(getView(), R.string.notice_legacy_api, Snackbar.LENGTH_LONG).show();
-            }
+            performFileSearch();
             return false;
         });
 

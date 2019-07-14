@@ -135,7 +135,6 @@ public class Daedalus extends Application {
     }
 
     public static void initRuleResolver() {
-        if (Daedalus.getPrefs().getBoolean("settings_local_rules_resolution", false)) {
             ArrayList<String> pendingLoad = new ArrayList<>();
             ArrayList<Rule> usingRules = configurations.getUsingRules();
             if (usingRules != null && usingRules.size() > 0) {
@@ -160,13 +159,11 @@ public class Daedalus extends Application {
                 }
             } else {
                 RuleResolver.clear();
-            }
         }
     }
 
     public static void setRulesChanged() {
-        if (DaedalusVpnService.isActivated() &&
-                getPrefs().getBoolean("settings_allow_dynamic_rule_reload", false)) {
+        if (DaedalusVpnService.isActivated()) {
             initRuleResolver();
         }
     }

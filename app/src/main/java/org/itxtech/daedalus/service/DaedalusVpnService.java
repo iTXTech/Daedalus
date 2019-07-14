@@ -13,9 +13,7 @@ import android.os.Build;
 import android.os.ParcelFileDescriptor;
 import android.system.OsConstants;
 import android.util.Log;
-
 import androidx.core.app.NotificationCompat;
-
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.MainActivity;
@@ -129,7 +127,6 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                     }
 
                     Daedalus.initRuleResolver();
-                    DNSServerHelper.buildPortCache();
 
                     if (this.mThread == null) {
                         this.mThread = new Thread(this, "DaedalusVpn");
@@ -190,7 +187,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
         if (shouldRefresh) {
             RuleResolver.clear();
-            DNSServerHelper.clearPortCache();
+            DNSServerHelper.clearCache();
             Logger.info("Daedalus VPN service has stopped");
         }
 
@@ -237,6 +234,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
     @Override
     public void run() {
         try {
+            DNSServerHelper.buildCache();
             Builder builder = new Builder()
                     .setSession("Daedalus")
                     .setConfigureIntent(PendingIntent.getActivity(this, 0,

@@ -1,12 +1,18 @@
 package org.itxtech.daedalus.util.server;
 
 import android.content.Context;
+import android.net.Uri;
 import org.itxtech.daedalus.Daedalus;
+import org.itxtech.daedalus.provider.HttpsProvider;
+import org.itxtech.daedalus.provider.ProviderPicker;
 import org.itxtech.daedalus.service.DaedalusVpnService;
+import org.itxtech.daedalus.util.Logger;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Daedalus Project
@@ -21,12 +27,21 @@ import java.util.HashMap;
  */
 public class DNSServerHelper {
     private static HashMap<String, Integer> portCache = null;
+    public static HashMap<String, List<InetAddress>> domainCache = null;
 
-    public static void clearPortCache() {
+    public static void clearCache() {
         portCache = null;
+        domainCache = null;
     }
 
-    public static void buildPortCache() {
+    public static void buildCache() {
+        domainCache = new HashMap<>();
+        if (ProviderPicker.getDnsQueryMethod() >= ProviderPicker.DNS_QUERY_METHOD_HTTPS_IETF &&
+                !Daedalus.getPrefs().getBoolean("settings_dont_build_doh_cache", false)) {
+            buildDomainCache(getAddressById(getPrimary()));
+            buildDomainCache(getAddressById(getSecondary()));
+        }
+
         portCache = new HashMap<>();
         for (DNSServer server : Daedalus.DNS_SERVERS) {
             portCache.put(server.getAddress(), server.getPort());
@@ -35,7 +50,16 @@ public class DNSServerHelper {
         for (CustomDNSServer server : Daedalus.configurations.getCustomDNSServers()) {
             portCache.put(server.getAddress(), server.getPort());
         }
+    }
 
+    private static void buildDomainCache(String addr) {
+        addr = HttpsProvider.HTTPS_SUFFIX + addr;
+        String host = Uri.parse(addr).getHost();
+        try {
+            domainCache.put(host, Arrays.asList(InetAddress.getAllByName(host)));
+        } catch (Exception e) {
+            Logger.logException(e);
+        }
     }
 
     public static int getPortOrDefault(InetAddress address, int defaultPort) {
