@@ -49,6 +49,9 @@ public class Daedalus extends Application {
         add(new DNSServer("101.101.101.101", R.string.server_twnic_primary));
         add(new DNSServer("101.102.103.104", R.string.server_twnic_secondary));
         add(new DNSServer("dns.rubyfish.cn/dns-query", R.string.server_rubyfish));
+        add(new DNSServer("cloudflare-dns.com/dns-query", R.string.server_cloudflare));
+        add(new DNSServer("dns.google/dns-query", R.string.server_google_ietf));
+        add(new DNSServer("dns.google/resolve", R.string.server_google_json));
     }};
 
     public static final List<Rule> RULES = new ArrayList<Rule>() {{

@@ -48,8 +48,8 @@ __Users must comply with local laws and regulations.__<br>
 
 * __CuteDNS__ - *Shutdown according to regulations*
 * __[FUN DNS](http://fundns.cn)__ - *Shutdown according to regulations*
-* __[Pure DNS](https://puredns.cn/)__
-* __[PdoMo-DNS](https://pdomo.me/)__ - *Intelligent Free Public DNS*
+* __[Pure DNS](https://puredns.cn/)__ - *Shutdown according to regulations*
+* __[PdoMo-DNS](https://pdomo.me/)__ - *Shutdown according to regulations*
 * __[rubyfish](https://www.rubyfish.cn)__ - *Free DoT/DoH DNS*
 
 ## Rule Providers
@@ -60,9 +60,8 @@ __Users must comply with local laws and regulations.__<br>
 
 ## Requirements
 
-* Minimum Android version: 4.0.3 (API 15) - __*Basic VPN functions*__
-* Recommended Android version: >= 5.0 (API 21) - __*Full features*__
-* Best Android version: >= 7.1 (API 25) - __*Launcher shortcuts*__
+* Minimum Android version: >= 5.0 (API 21)
+* Recommended Android version: >= 7.1 (API 25) - __*Launcher shortcuts*__
 
 ## Open Source Licenses
 

@@ -7,7 +7,6 @@
     <string name="notice_activated">已啟動 iTXTech Daedalus。</string>
     <string name="notice_start_test">正在測試指定的 DNS 伺服器……</string>
     <string name="notice_queries">DNS 查詢次數:</string>
-    <string name="notice_legacy_api">目前 Android API 無法支援所有功能。</string>
     <string name="notice_need_restart">重新啟動 Daedalus 以套用設定。</string>
     <string name="notice_start_download">正在下載規則，請稍等……</string>
     <string name="notice_downloaded">已下載規則。</string>
@@ -64,7 +63,7 @@
     <string name="settings_manual_summary">造訪 GitHub wiki 頁面。</string>
     <string name="settings_log_size">紀錄檔大小限制</string>
     <string name="settings_debug_output">调试输出 TODO</string>
-    <string name="settings_dont_build_doh_cache">不缓存 DoH DNS 的 IP地址</string>
+    <string name="settings_dont_build_doh_cache">不緩存 DoH DNS 的 IP地址</string>
     <string name="settings_dark_theme">使用暗主题</string>
 
     <string name="settings_rule_name">規則名稱</string>
@@ -86,7 +85,6 @@
     <string name="settings_app_filter_list">選擇應用</string>
     <string name="settings_app_filter_mode">黑名單模式</string>
     <string name="settings_app_filter_list_summary">選擇要過濾的應用</string>
-    <string name="settings_app_filter_summary">僅支持Android Lollipop及以上版本</string>
 
     <string name="server_twnic_primary">Quad 101 主伺服器</string>
     <string name="server_twnic_secondary">Quad 101 輔伺服器</string>

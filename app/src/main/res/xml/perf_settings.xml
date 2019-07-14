@@ -54,7 +54,6 @@
         <SwitchPreference
             android:key="settings_app_filter_switch"
             android:title="@string/settings_app_filter"
-            android:summary="@string/settings_app_filter_summary"
             android:defaultValue="false"/>
         <SwitchPreference
             android:key="settings_app_filter_mode_switch"

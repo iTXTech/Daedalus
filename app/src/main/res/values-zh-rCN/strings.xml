@@ -7,7 +7,6 @@
     <string name="notice_activated">已启用 iTXTech Daedalus。</string>
     <string name="notice_start_test">正在测试指定的 DNS 服务器……</string>
     <string name="notice_queries">DNS 查询次数:</string>
-    <string name="notice_legacy_api">当前 Android API 无法支持所有功能。</string>
     <string name="notice_need_restart">重新启用 Daedalus 以应用设置。</string>
     <string name="notice_start_download">正在下载规则，请稍等 ……</string>
     <string name="notice_downloaded">已下载规则。</string>
@@ -86,11 +85,12 @@
     <string name="settings_app_filter_list">选择应用</string>
     <string name="settings_app_filter_mode">黑名单模式</string>
     <string name="settings_app_filter_list_summary">选择要过滤的应用</string>
-    <string name="settings_app_filter_summary">仅支持Android Lollipop及以上版本</string>
 
     <string name="server_twnic_primary">Quad 101 主服务器</string>
     <string name="server_twnic_secondary">Quad 101 辅服务器</string>
     <string name="server_rubyfish">红鱼 (DoH)</string>
+    <string name="server_google_json">谷歌公共 DNS (DoH JSON)</string>
+    <string name="server_google_ietf">谷歌公共 DNS (DoH RFC8484)</string>
 
     <string name="primary_server">首选 DNS 服务器</string>
     <string name="secondary_server">备用 DNS 服务器</string>

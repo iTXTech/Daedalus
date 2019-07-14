@@ -1,6 +1,8 @@
 language: android
 jdk: oraclejdk8
-
+dist: xenial
+git:
+  depth: 1
 android:
   components:
     - tools
@@ -12,8 +14,6 @@ android:
     - extra-android-m2repository
   licenses:
     - '.+'
-before_install:
-- yes | sdkmanager "platforms;android-28"
 script:
   - chmod 777 gradlew
   - ./gradlew clean assembleDebug

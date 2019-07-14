@@ -1,13 +1,8 @@
 package org.itxtech.daedalus.fragment;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.*;
-import android.view.View;
-
-import com.google.android.material.snackbar.Snackbar;
-
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.FilterAppProxyActivity;
@@ -78,26 +73,14 @@ public class GlobalConfigFragment extends PreferenceFragment {
             return true;
         });
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            SwitchPreference advanced = (SwitchPreference) findPreference("settings_advanced_switch");
-            advanced.setEnabled(false);
-            advanced.setChecked(false);
-            SwitchPreference boot = (SwitchPreference) findPreference("settings_boot");
-            boot.setEnabled(false);
-            boot.setChecked(false);
-            SwitchPreference app_filter = (SwitchPreference) findPreference("settings_app_filter_switch");
-            app_filter.setEnabled(false);
-            app_filter.setChecked(false);
-        }
-
         SwitchPreference advanced = (SwitchPreference) findPreference("settings_advanced_switch");
         advanced.setOnPreferenceChangeListener((preference, newValue) -> {
             updateOptions((boolean) newValue, "settings_advanced");
             return true;
         });
 
-        SwitchPreference app_filter = (SwitchPreference) findPreference("settings_app_filter_switch");
-        app_filter.setOnPreferenceChangeListener((p, w) -> {
+        SwitchPreference appFilter = (SwitchPreference) findPreference("settings_app_filter_switch");
+        appFilter.setOnPreferenceChangeListener((p, w) -> {
             updateOptions((boolean) w, "settings_app_filter");
             return true;
         });
@@ -128,7 +111,7 @@ public class GlobalConfigFragment extends PreferenceFragment {
         });
 
         updateOptions(advanced.isChecked(), "settings_advanced");
-        updateOptions(app_filter.isChecked(), "settings_app_filter");
+        updateOptions(appFilter.isChecked(), "settings_app_filter");
     }
 
     private void updateOptions(boolean checked, String pref) {
@@ -143,15 +126,6 @@ public class GlobalConfigFragment extends PreferenceFragment {
                     ((SwitchPreference) preference).setChecked(false);
                 }
             }
-        }
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            Snackbar.make(view, R.string.notice_legacy_api, Snackbar.LENGTH_LONG).show();
         }
     }
 }

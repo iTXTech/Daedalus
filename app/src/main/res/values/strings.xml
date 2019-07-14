@@ -6,7 +6,6 @@
     <string name="notice_activated">iTXTech Daedalus is activated.</string>
     <string name="notice_start_test">Testing specified DNS server…</string>
     <string name="notice_queries">DNS query times:</string>
-    <string name="notice_legacy_api">The current Android API can not support all the features.</string>
     <string name="notice_need_restart">Re-activate Daedalus to make the settings take effect.</string>
     <string name="notice_start_download">Downloading rule, please wait …</string>
     <string name="notice_downloaded">Rule has been downloaded.</string>
@@ -91,11 +90,13 @@
     <string name="settings_app_filter_mode">Blacklist mode</string>
     <string name="settings_app_filter_list">Select application</string>
     <string name="settings_app_filter_list_summary">Select apps to pass through</string>
-    <string name="settings_app_filter_summary">Only supports Android Lollipop and above</string>
 
     <string name="server_twnic_primary">Quad 101 Primary</string>
     <string name="server_twnic_secondary">Quad 101 Secondary</string>
     <string name="server_rubyfish">rubyfish (DoH)</string>
+    <string name="server_cloudflare">Cloudflare DNS (DoH)</string>
+    <string name="server_google_json">Google Public DNS (DoH JSON)</string>
+    <string name="server_google_ietf">Google Public DNS (DoH RFC8484)</string>
 
     <string name="primary_server">Primary DNS server</string>
     <string name="secondary_server">Secondary DNS server</string>

@@ -127,7 +127,7 @@ public class FilterAppProxyActivity extends AppCompatActivity {
                 }
             }
 
-            runOnUiThread(() -> notifyDataSetChanged());
+            runOnUiThread(this::notifyDataSetChanged);
         }
 
         @NonNull
