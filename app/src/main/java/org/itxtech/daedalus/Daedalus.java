@@ -55,9 +55,6 @@ public class Daedalus extends Application {
     }};
 
     public static final List<Rule> RULES = new ArrayList<Rule>() {{
-        //Build-in Hosts rule providers
-        add(new Rule("iTXTech/Daedalus/Default", "daedalus-default.hosts", Rule.TYPE_HOSTS,
-                "https://raw.githubusercontent.com/iTXTech/Daedalus/master/default.hosts", false));
         add(new Rule("googlehosts/hosts", "googlehosts.hosts", Rule.TYPE_HOSTS,
                 "https://raw.githubusercontent.com/googlehosts/hosts/master/hosts-files/hosts", false));
         add(new Rule("vokins/yhosts", "vokins.hosts", Rule.TYPE_HOSTS,

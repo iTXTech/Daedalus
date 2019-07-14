@@ -17,7 +17,7 @@ __No root required Android DNS modifier and Hosts/DNSMasq resolver.__
 
 ## Useful links
 * __[Telegram](https://t.me/iTXTechDaedalus)__
-* __[Wiki](https://github.com/iTXTech/Daedalus/wiki)__ - __See before using DoH__
+* __[Wiki](https://github.com/iTXTech/Daedalus/wiki)__
 
 ## Introduction
 
