@@ -54,7 +54,6 @@ __Users must comply with local laws and regulations.__<br>
 
 ## Rule Providers
 
-* __[Daedalus Default](https://github.com/iTXTech/Daedalus/blob/master/default.hosts)__ - __Default Rules for Built-in DoH servers__
 * __[hosts](https://github.com/googlehosts/hosts)__ by *[googlehosts](https://github.com/googlehosts)* - [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)
 * __[yhosts](https://github.com/vokins/yhosts)__ by *[vokins](https://github.com/vokins)* - [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 
