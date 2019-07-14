@@ -89,10 +89,8 @@
     <string name="settings_app_filter_list_summary">选择要过滤的应用</string>
     <string name="settings_app_filter_summary">仅支持Android Lollipop及以上版本</string>
 
-    <string name="server_pdomo_primary">PdoMo DNS 主服务器</string>
-    <string name="server_pdomo_secondary">PdoMo DNS 辅服务器</string>
-    <string name="server_puredns_south_china">PureDNS 华南</string>
-    <string name="server_puredns_north_china">PureDNS 华北</string>
+    <string name="server_twnic_primary">Quad 101 主服务器</string>
+    <string name="server_twnic_secondary">Quad 101 辅服务器</string>
     <string name="server_rubyfish">红鱼 (DoH)</string>
 
     <string name="primary_server">首选 DNS 服务器</string>
