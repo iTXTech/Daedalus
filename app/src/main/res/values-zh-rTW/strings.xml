@@ -73,7 +73,7 @@
     <string name="settings_rule_sync">同步規則</string>
     <string name="settings_rule_filename">規則檔案名稱</string>
     <string name="settings_rule_import">匯入</string>
-    <string name="settings_rule_import_build_in">内置</string>
+    <string name="settings_rule_import_built_in">内置</string>
     <string name="settings_rule_import_external">外部</string>
     <string name="settings_dns_query_method">DNS 查询方式</string>
 

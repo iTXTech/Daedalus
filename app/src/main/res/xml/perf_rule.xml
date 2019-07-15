@@ -32,7 +32,7 @@
             android:title="@string/settings_rule_import">
         <ListPreference
                 android:key="ruleImportBuildIn"
-                android:title="@string/settings_rule_import_build_in"/>
+                android:title="@string/settings_rule_import_built_in"/>
         <org.itxtech.daedalus.widget.ClickPreference
                 android:key="ruleImportExternal"
                 android:title="@string/settings_rule_import_external"/>

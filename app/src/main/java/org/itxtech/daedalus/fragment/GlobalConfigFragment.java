@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.preference.*;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
-import org.itxtech.daedalus.activity.FilterAppProxyActivity;
+import org.itxtech.daedalus.activity.AppFilterActivity;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.util.server.DNSServerHelper;
 
@@ -86,7 +86,7 @@ public class GlobalConfigFragment extends PreferenceFragment {
         });
 
         findPreference("settings_app_filter_list").setOnPreferenceClickListener(preference -> {
-            startActivity(new Intent(getActivity(), FilterAppProxyActivity.class));
+            startActivity(new Intent(getActivity(), AppFilterActivity.class));
             return false;
         });
 

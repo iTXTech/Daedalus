@@ -79,7 +79,7 @@
     <string name="settings_rule_sync">Sync Rule</string>
     <string name="settings_rule_filename">Rule Filename</string>
     <string name="settings_rule_import">Import</string>
-    <string name="settings_rule_import_build_in">Build-in</string>
+    <string name="settings_rule_import_built_in">Built-in</string>
     <string name="settings_rule_import_external">External</string>
 
     <string name="settings_server_name">Server Name</string>

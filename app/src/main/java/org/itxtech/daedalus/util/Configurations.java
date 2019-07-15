@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.util.server.CustomDNSServer;
-import org.itxtech.daedalus.util.server.DNSServer;
 
 import java.io.File;
 import java.io.FileReader;
@@ -28,9 +27,8 @@ public class Configurations {
 
     private static File file;
 
-    private ArrayList<DNSServer> builtInDNSServers;
     private ArrayList<CustomDNSServer> customDNSServers;
-    private ArrayList<String> filterAppObjects;
+    private ArrayList<String> appObjects;
 
     private ArrayList<Rule> hostsRules;
     private ArrayList<Rule> dnsmasqRules;
@@ -69,11 +67,11 @@ public class Configurations {
         return customDNSServers;
     }
 
-    public ArrayList<String> getFilterAppObjects() {
-        if (filterAppObjects == null) {
-            filterAppObjects = new ArrayList<>();
+    public ArrayList<String> getAppObjects() {
+        if (appObjects == null) {
+            appObjects = new ArrayList<>();
         }
-        return filterAppObjects;
+        return appObjects;
     }
 
     public ArrayList<Rule> getHostsRules() {

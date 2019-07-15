@@ -39,7 +39,7 @@ import java.util.Objects;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class FilterAppProxyActivity extends AppCompatActivity {
+public class AppFilterActivity extends AppCompatActivity {
 
     private RecyclerViewAdapter adapter;
 
@@ -50,7 +50,7 @@ public class FilterAppProxyActivity extends AppCompatActivity {
         }
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_filter_app);
+        setContentView(R.layout.activity_app_filter);
         Toolbar toolbar = findViewById(R.id.toolbar_filter);
         Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_clear);
         RecyclerView recyclerView = findViewById(R.id.recyclerView_app_filter_list);
@@ -60,19 +60,10 @@ public class FilterAppProxyActivity extends AppCompatActivity {
         DrawableCompat.setTint(wrappedDrawable, Color.WHITE);
         toolbar.setNavigationIcon(drawable);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        toolbar.setTitle(R.string.settings_app_filter);
         adapter = new RecyclerViewAdapter();
         recyclerView.setAdapter(adapter);
-        new Thread(() -> {
-            ArrayList<AppObject> appList = getAppList();
-            adapter.updateList(appList);
-        }).start();
-    }
-
-    @Override
-    public void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        Toolbar toolbar = findViewById(R.id.toolbar_filter);
-        toolbar.setTitle(R.string.settings_app_filter);
+        new Thread(() -> adapter.updateList(getAppList())).start();
     }
 
     @Override
@@ -122,7 +113,7 @@ public class FilterAppProxyActivity extends AppCompatActivity {
             appList = appObjects;
 
             for (int i = 0; i < appObjects.size(); i++) {
-                if (Daedalus.configurations.getFilterAppObjects().contains(appObjects.get(i).appPackageName)) {
+                if (Daedalus.configurations.getAppObjects().contains(appObjects.get(i).appPackageName)) {
                     checkStatus.put(i, true);
                 }
             }
@@ -144,7 +135,7 @@ public class FilterAppProxyActivity extends AppCompatActivity {
             holder.appIcon.setImageDrawable(appList.get(position).appIcon);
             holder.appPackageName = packageName;
             holder.appCheck.setOnCheckedChangeListener(null);
-            if (Daedalus.configurations.getFilterAppObjects().contains(packageName)) {
+            if (Daedalus.configurations.getAppObjects().contains(packageName)) {
                 holder.appCheck.setChecked(true);
             }
             holder.appCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -186,10 +177,10 @@ public class FilterAppProxyActivity extends AppCompatActivity {
         public void onClick(View v) {
             if (appCheck.isChecked()) {
                 appCheck.setChecked(false);
-                Daedalus.configurations.getFilterAppObjects().remove(appPackageName);
+                Daedalus.configurations.getAppObjects().remove(appPackageName);
             } else {
                 appCheck.setChecked(true);
-                Daedalus.configurations.getFilterAppObjects().add(appPackageName);
+                Daedalus.configurations.getAppObjects().add(appPackageName);
             }
         }
     }

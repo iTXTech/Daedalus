@@ -74,7 +74,7 @@
     <string name="settings_rule_sync">同步规则</string>
     <string name="settings_rule_filename">规则文件名</string>
     <string name="settings_rule_import">导入</string>
-    <string name="settings_rule_import_build_in">内置</string>
+    <string name="settings_rule_import_built_in">内置</string>
     <string name="settings_rule_import_external">外部</string>
 
     <string name="settings_server_name">服务器名称</string>
