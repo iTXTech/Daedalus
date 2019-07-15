@@ -16,13 +16,12 @@ __No root required Android DNS modifier and Hosts/DNSMasq resolver.__
       height="80">](https://play.google.com/store/apps/details?id=org.itxtech.daedalus)
 
 ## Useful links
-* __[Telegram](https://t.me/iTXTechDaedalus)__
-* __[Wiki](https://github.com/iTXTech/Daedalus/wiki)__
+* __[Telegram](https://t.me/iTXTechDaedalus)__ - Join chat
+* __[Wiki](https://github.com/iTXTech/Daedalus/wiki)__ - Pending update
 
 ## Introduction
 
-This application can create a VPN tunnel to modify the DNS settings on Android.<br>
-Through the DNS server and rules which are provided by third parties, users can visit Google, Twitter and so on via https protocol directly without a VPN.<br>
+This application creates a VPN tunnel to handle all DNS requests.<br>
 <br>
 Features:
 * No root access required, no ads contained
