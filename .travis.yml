@@ -16,6 +16,6 @@ android:
     - '.+'
 script:
   - chmod 777 gradlew
-  - ./gradlew clean assembleDebug
+  - ./gradlew clean assemblePureDebug
 after_success:
   - bash <(curl -s https://codecov.io/bash)
