@@ -45,13 +45,13 @@ abstract public class HttpsProvider extends Provider {
 
     private static final String TAG = "HttpsProvider";
 
-    protected final WhqList whqList = new WhqList();
+    final WhqList whqList = new WhqList();
 
-    public HttpsProvider(ParcelFileDescriptor descriptor, DaedalusVpnService service) {
+    HttpsProvider(ParcelFileDescriptor descriptor, DaedalusVpnService service) {
         super(descriptor, service);
     }
 
-    protected OkHttpClient getHttpClient(String accept) {
+    OkHttpClient getHttpClient(String accept) {
         return new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)

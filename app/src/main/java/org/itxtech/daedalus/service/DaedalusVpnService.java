@@ -28,8 +28,8 @@ import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 /**
  * Daedalus Project
@@ -126,6 +126,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                         this.notification = builder;
                     }
 
+                    DNSServerHelper.buildCache();
                     Daedalus.initRuleResolver();
 
                     if (this.mThread == null) {
@@ -234,7 +235,6 @@ public class DaedalusVpnService extends VpnService implements Runnable {
     @Override
     public void run() {
         try {
-            DNSServerHelper.buildCache();
             Builder builder = new Builder()
                     .setSession("Daedalus")
                     .setConfigureIntent(PendingIntent.getActivity(this, 0,
@@ -242,9 +242,9 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                             PendingIntent.FLAG_ONE_SHOT));
 
             //Set App Filter
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Daedalus.getPrefs().getBoolean("settings_app_filter_switch", false)) {
-                Set<String> apps = Daedalus.getPrefs().getStringSet("filterAppObjects", null);
-                if (apps != null) {
+            if (Daedalus.getPrefs().getBoolean("settings_app_filter_switch", false)) {
+                ArrayList<String> apps = Daedalus.configurations.getAppObjects();
+                if (apps.size() > 0) {
                     boolean mode = Daedalus.getPrefs().getBoolean("settings_app_filter_mode_switch", false);
                     for (String app : apps) {
                         try {
