@@ -26,23 +26,24 @@ import java.util.List;
  * (at your option) any later version.
  */
 public class DNSServerHelper {
-    private static HashMap<String, Integer> portCache = null;
-    public static HashMap<String, List<InetAddress>> domainCache = null;
+    private static HashMap<String, Integer> portCache = new HashMap<>();
+    public static HashMap<String, List<InetAddress>> domainCache = new HashMap<>();
 
     public static void clearCache() {
-        portCache = null;
-        domainCache = null;
+        portCache = new HashMap<>();
+        domainCache = new HashMap<>();
     }
 
     public static void buildCache() {
         domainCache = new HashMap<>();
+        portCache = new HashMap<>();
+
         if (ProviderPicker.getDnsQueryMethod() >= ProviderPicker.DNS_QUERY_METHOD_HTTPS_IETF &&
                 !Daedalus.getPrefs().getBoolean("settings_dont_build_doh_cache", false)) {
             buildDomainCache(getAddressById(getPrimary()));
             buildDomainCache(getAddressById(getSecondary()));
         }
 
-        portCache = new HashMap<>();
         for (DNSServer server : Daedalus.DNS_SERVERS) {
             portCache.put(server.getAddress(), server.getPort());
         }

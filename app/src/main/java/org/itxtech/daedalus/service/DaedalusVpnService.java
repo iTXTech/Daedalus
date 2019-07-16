@@ -125,7 +125,6 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                         this.notification = builder;
                     }
 
-                    DNSServerHelper.buildCache();
                     Daedalus.initRuleResolver();
 
                     if (this.mThread == null) {
@@ -232,6 +231,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
     @Override
     public void run() {
         try {
+            DNSServerHelper.buildCache();
             Builder builder = new Builder()
                     .setSession("Daedalus")
                     .setConfigureIntent(PendingIntent.getActivity(this, 0,
@@ -250,6 +250,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                             } else {
                                 builder.addAllowedApplication(app);
                             }
+                            Logger.debug("Added app to list: " + app);
                         } catch (PackageManager.NameNotFoundException e) {
                             Logger.error("Package Not Found:" + app);
                         }
