@@ -1,8 +1,6 @@
 package org.itxtech.daedalus.widget;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
 
@@ -19,7 +17,6 @@ import android.util.AttributeSet;
  */
 public class ClickPreference extends ListPreference {
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public ClickPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }

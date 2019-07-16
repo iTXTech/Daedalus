@@ -1,7 +1,5 @@
 package org.itxtech.daedalus.provider;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.ParcelFileDescriptor;
 import android.system.ErrnoException;
 import android.system.Os;
@@ -44,7 +42,6 @@ public class TcpProvider extends UdpProvider {
         super(descriptor, service);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void process() {
         try {
             FileDescriptor[] pipes = Os.pipe();

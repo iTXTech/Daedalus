@@ -1,7 +1,5 @@
 package org.itxtech.daedalus.provider;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.ParcelFileDescriptor;
 import android.system.Os;
 import android.system.OsConstants;
@@ -68,7 +66,6 @@ abstract public class HttpsProvider extends Provider {
                 .build();
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void process() {
         try {
             FileDescriptor[] pipes = Os.pipe();

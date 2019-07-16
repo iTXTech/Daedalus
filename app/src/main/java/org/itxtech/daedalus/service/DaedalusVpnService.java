@@ -1,6 +1,5 @@
 package org.itxtech.daedalus.service;
 
-import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -153,7 +152,6 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         stopThread();
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void stopThread() {
         Log.d(TAG, "stopThread");
         activated = false;
@@ -231,7 +229,6 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         return null;
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void run() {
         try {

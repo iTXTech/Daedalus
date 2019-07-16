@@ -1,11 +1,9 @@
 package org.itxtech.daedalus.fragment;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -224,7 +222,6 @@ public class RuleConfigFragment extends ConfigFragment {
         return view;
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void performFileSearch() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
 
@@ -237,7 +234,6 @@ public class RuleConfigFragment extends ConfigFragment {
     }
 
     @Override
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             if (resultData != null) {

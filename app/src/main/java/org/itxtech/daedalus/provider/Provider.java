@@ -1,7 +1,5 @@
 package org.itxtech.daedalus.provider;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.ParcelFileDescriptor;
 import android.system.Os;
 import org.itxtech.daedalus.Daedalus;
@@ -65,7 +63,6 @@ public abstract class Provider {
         running = false;
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void stop() {
         try {
             if (mInterruptFd != null) {
