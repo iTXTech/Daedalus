@@ -4,12 +4,12 @@ apply plugin: 'io.fabric'
 def gitCommit = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "28.0.3"
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "org.itxtech.daedalus"
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 20
         versionName "1.14.1"
 
@@ -52,12 +52,12 @@ configurations {
 
 dependencies {
     //Support
-    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.percentlayout:percentlayout:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.android.material:material:1.1.0-alpha08'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta01'
+    implementation 'com.google.android.material:material:1.1.0-alpha10'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta04'
     //DNS
     implementation 'org.pcap4j:pcap4j-core:1.7.6'
     implementation 'org.pcap4j:pcap4j-packetfactory-static:1.7.6'
@@ -66,7 +66,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.14.1'
 
     //Analytics
-    googleReleaseImplementation 'com.google.firebase:firebase-core:17.0.1'
+    googleReleaseImplementation 'com.google.firebase:firebase-core:17.2.0'
     googleReleaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 }
 
