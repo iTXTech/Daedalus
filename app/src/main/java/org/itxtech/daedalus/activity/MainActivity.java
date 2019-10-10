@@ -1,7 +1,6 @@
 package org.itxtech.daedalus.activity;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -100,8 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (currentFragment == null || fragmentClass != currentFragment.getClass()) {
             try {
                 ToolbarFragment fragment = (ToolbarFragment) fragmentClass.newInstance();
-                FragmentManager fm = getFragmentManager();
-                fm.beginTransaction().replace(R.id.id_content, fragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.id_content, fragment).commit();
                 currentFragment = fragment;
             } catch (Exception e) {
                 Logger.logException(e);
@@ -153,22 +151,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             new AlertDialog.Builder(this)
                     .setTitle("觉得还不错？")
                     .setMessage("您的支持是我动力来源！\n请考虑为我买杯咖啡醒醒脑，甚至其他…… ;)")
-                    .setPositiveButton("为我买杯咖啡", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Daedalus.donate();
-                            new AlertDialog.Builder(MainActivity.this)
-                                    .setMessage("感谢您的支持！;)\n我会再接再厉！")
-                                    .setPositiveButton("确认", null)
-                                    .show();
-                        }
+                    .setPositiveButton("为我买杯咖啡", (dialog, which) -> {
+                        Daedalus.donate();
+                        new AlertDialog.Builder(MainActivity.this)
+                                .setMessage("感谢您的支持！;)\n我会再接再厉！")
+                                .setPositiveButton("确认", null)
+                                .show();
                     })
-                    .setNeutralButton("不再显示", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Daedalus.configurations.setActivateCounter(-1);
-                        }
-                    })
+                    .setNeutralButton("不再显示", (dialog, which) -> Daedalus.configurations.setActivateCounter(-1))
                     .setNegativeButton("取消", null)
                     .show();
         }
@@ -182,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             updateMainButton(R.string.button_text_deactivate);
             Daedalus.updateShortcut(getApplicationContext());
         }
+        super.onActivityResult(request, result, data);
     }
 
     private void updateMainButton(int id) {

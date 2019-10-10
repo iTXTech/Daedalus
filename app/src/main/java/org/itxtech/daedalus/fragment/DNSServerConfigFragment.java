@@ -2,7 +2,7 @@ package org.itxtech.daedalus.fragment;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
+import androidx.preference.EditTextPreference;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,8 +29,7 @@ public class DNSServerConfigFragment extends ConfigFragment {
     private int index;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.perf_server);
     }
 
@@ -38,19 +37,19 @@ public class DNSServerConfigFragment extends ConfigFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        EditTextPreference serverName = (EditTextPreference) findPreference("serverName");
+        EditTextPreference serverName = findPreference("serverName");
         serverName.setOnPreferenceChangeListener((preference, newValue) -> {
             preference.setSummary((String) newValue);
             return true;
         });
 
-        EditTextPreference serverAddress = (EditTextPreference) findPreference("serverAddress");
+        EditTextPreference serverAddress = findPreference("serverAddress");
         serverAddress.setOnPreferenceChangeListener((preference, newValue) -> {
             preference.setSummary((String) newValue);
             return true;
         });
 
-        EditTextPreference serverPort = (EditTextPreference) findPreference("serverPort");
+        EditTextPreference serverPort = findPreference("serverPort");
         serverPort.setOnPreferenceChangeListener((preference, newValue) -> {
             preference.setSummary((String) newValue);
             return true;

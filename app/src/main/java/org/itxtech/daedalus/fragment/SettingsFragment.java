@@ -1,7 +1,5 @@
 package org.itxtech.daedalus.fragment;
 
-import android.app.FragmentManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,13 +26,7 @@ public class SettingsFragment extends ToolbarFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        FragmentManager fm;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            fm = getChildFragmentManager();
-        } else {
-            fm = getFragmentManager();
-        }
-        fm.beginTransaction().replace(R.id.settings_content, new GlobalConfigFragment()).commit();
+        getChildFragmentManager().beginTransaction().replace(R.id.settings_content, new GlobalConfigFragment()).commit();
     }
 
     @Override

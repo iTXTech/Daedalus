@@ -168,7 +168,10 @@ public class UdpProvider extends Provider {
         }
 
         if (!(parsedPacket.getPayload() instanceof UdpPacket)) {
-            Log.i(TAG, "handleDnsRequest: Discarding unknown packet type " + parsedPacket.getPayload());
+            try {
+                Log.i(TAG, "handleDnsRequest: Discarding unknown packet type " + parsedPacket.getPayload());
+            } catch (Exception ignored) {
+            }
             return;
         }
 

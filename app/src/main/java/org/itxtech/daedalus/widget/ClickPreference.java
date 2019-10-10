@@ -1,7 +1,7 @@
 package org.itxtech.daedalus.widget;
 
 import android.content.Context;
-import android.preference.ListPreference;
+import androidx.preference.ListPreference;
 import android.util.AttributeSet;
 
 /**

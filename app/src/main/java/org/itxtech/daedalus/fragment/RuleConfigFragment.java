@@ -7,8 +7,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
+import androidx.preference.EditTextPreference;
+import androidx.preference.ListPreference;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -72,10 +72,8 @@ public class RuleConfigFragment extends ConfigFragment {
         }
     }
 
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.perf_rule);
     }
 
@@ -85,13 +83,13 @@ public class RuleConfigFragment extends ConfigFragment {
 
         mHandler = new RuleConfigHandler().setView(view);
 
-        final EditTextPreference ruleName = (EditTextPreference) findPreference("ruleName");
+        final EditTextPreference ruleName = findPreference("ruleName");
         ruleName.setOnPreferenceChangeListener((preference, newValue) -> {
             preference.setSummary((String) newValue);
             return true;
         });
 
-        final ListPreference ruleType = (ListPreference) findPreference("ruleType");
+        final ListPreference ruleType = findPreference("ruleType");
         final String[] entries = {"Hosts", "DNSMasq"};
         String[] values = {"0", "1"};
         ruleType.setEntries(entries);
@@ -101,19 +99,19 @@ public class RuleConfigFragment extends ConfigFragment {
             return true;
         });
 
-        final EditTextPreference ruleDownloadUrl = (EditTextPreference) findPreference("ruleDownloadUrl");
+        final EditTextPreference ruleDownloadUrl = findPreference("ruleDownloadUrl");
         ruleDownloadUrl.setOnPreferenceChangeListener((preference, newValue) -> {
             preference.setSummary((String) newValue);
             return true;
         });
 
-        final EditTextPreference ruleFilename = (EditTextPreference) findPreference("ruleFilename");
+        final EditTextPreference ruleFilename = findPreference("ruleFilename");
         ruleFilename.setOnPreferenceChangeListener((preference, newValue) -> {
             preference.setSummary((String) newValue);
             return true;
         });
 
-        ClickPreference ruleSync = (ClickPreference) findPreference("ruleSync");
+        ClickPreference ruleSync = findPreference("ruleSync");
         ruleSync.setOnPreferenceClickListener(preference -> {
             save();
             if (mThread == null) {
@@ -167,7 +165,7 @@ public class RuleConfigFragment extends ConfigFragment {
             return false;
         });
 
-        ListPreference ruleImportBuildIn = (ListPreference) findPreference("ruleImportBuildIn");
+        ListPreference ruleImportBuildIn = findPreference("ruleImportBuildIn");
         ruleImportBuildIn.setEntries(Rule.getBuildInRuleNames());
         ruleImportBuildIn.setEntryValues(Rule.getBuildInRuleEntries());
         ruleImportBuildIn.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -183,7 +181,7 @@ public class RuleConfigFragment extends ConfigFragment {
             return true;
         });
 
-        ClickPreference ruleImportExternal = (ClickPreference) findPreference("ruleImportExternal");
+        ClickPreference ruleImportExternal = findPreference("ruleImportExternal");
         ruleImportExternal.setOnPreferenceClickListener(preference -> {
             performFileSearch();
             return false;
