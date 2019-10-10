@@ -65,6 +65,7 @@
     <string name="settings_debug_output">Debug Output</string>
     <string name="settings_dark_theme">Use Dark Theme</string>
     <string name="settings_dns_query_method">DNS Query Method</string>
+    <string name="settings_foreground">Run service in Foreground</string>
 
     <string name="settings_dns_tcp">TCP</string>
     <string name="settings_dns_udp">UDP</string>

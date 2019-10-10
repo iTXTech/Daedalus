@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                                      xmlns:app="http://schemas.android.com/apk/res-auto">
     <EditTextPreference
             android:key="serverName"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="@string/settings_server_name"/>
+
     <PreferenceCategory
+            app:iconSpaceReserved="false"
             android:key="serverSettings"
             android:title="@string/settings_server">
         <EditTextPreference
@@ -20,4 +23,4 @@
                 android:numeric="integer"
                 android:title="@string/settings_server_port"/>
     </PreferenceCategory>
-</PreferenceScreen>
+</androidx.preference.PreferenceScreen>

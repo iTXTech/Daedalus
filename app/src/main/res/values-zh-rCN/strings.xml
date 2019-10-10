@@ -66,6 +66,7 @@
     <string name="settings_dont_build_doh_cache">不缓存 DoH DNS 的 IP地址</string>
     <string name="settings_dark_theme">使用暗主题</string>
     <string name="settings_dns_query_method">DNS 查询方式</string>
+    <string name="settings_foreground">运行前台服务</string>
 
     <string name="settings_rule_name">规则名称</string>
     <string name="settings_rule_type">规则类型</string>

@@ -199,20 +199,31 @@ public class Daedalus extends Application {
             deactivateService(instance);
             return false;
         } else {
-            activateService(instance);
+            prepareAndActivateService(instance);
             return true;
         }
     }
 
-    public static boolean activateService(Context context) {
+    public static boolean prepareAndActivateService(Context context) {
         Intent intent = VpnService.prepare(context);
         if (intent != null) {
             return false;
         } else {
-            DaedalusVpnService.primaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getPrimary());
-            DaedalusVpnService.secondaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getSecondary());
-            context.startService(Daedalus.getServiceIntent(context).setAction(DaedalusVpnService.ACTION_ACTIVATE));
+            activateService(context);
             return true;
+        }
+    }
+
+    public static void activateService(Context context) {
+        DaedalusVpnService.primaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getPrimary());
+        DaedalusVpnService.secondaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getSecondary());
+        if (getInstance().prefs.getBoolean("settings_foreground", false)
+                && Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            Logger.info("Starting foreground service");
+            context.startForegroundService(Daedalus.getServiceIntent(context).setAction(DaedalusVpnService.ACTION_ACTIVATE));
+        } else {
+            Logger.info("Starting background service");
+            context.startService(Daedalus.getServiceIntent(context).setAction(DaedalusVpnService.ACTION_ACTIVATE));
         }
     }
 
