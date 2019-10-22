@@ -9,6 +9,8 @@ import org.itxtech.daedalus.activity.AppFilterActivity;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.util.server.DNSServerHelper;
 
+import java.util.ArrayList;
+
 /**
  * Daedalus Project
  *
@@ -31,23 +33,21 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
 
         addPreferencesFromResource(R.xml.perf_settings);
 
-        ListPreference primaryServer = findPreference("primary_server");
-        primaryServer.setEntries(DNSServerHelper.getNames(Daedalus.getInstance()));
-        primaryServer.setEntryValues(DNSServerHelper.getIds());
-        primaryServer.setSummary(DNSServerHelper.getDescription(primaryServer.getValue(), Daedalus.getInstance()));
-        primaryServer.setOnPreferenceChangeListener((preference, newValue) -> {
-            preference.setSummary(DNSServerHelper.getDescription((String) newValue, Daedalus.getInstance()));
-            return true;
-        });
-
-        ListPreference secondaryServer = findPreference("secondary_server");
-        secondaryServer.setEntries(DNSServerHelper.getNames(Daedalus.getInstance()));
-        secondaryServer.setEntryValues(DNSServerHelper.getIds());
-        secondaryServer.setSummary(DNSServerHelper.getDescription(secondaryServer.getValue(), Daedalus.getInstance()));
-        secondaryServer.setOnPreferenceChangeListener((preference, newValue) -> {
-            preference.setSummary(DNSServerHelper.getDescription((String) newValue, Daedalus.getInstance()));
-            return true;
-        });
+        boolean visible = !Daedalus.getPrefs().getBoolean("settings_use_system_dns", false);
+        for (String k : new ArrayList<String>() {{
+            add("primary_server");
+            add("secondary_server");
+        }}) {
+            ListPreference listPref = findPreference(k);
+            listPref.setVisible(visible);
+            listPref.setEntries(DNSServerHelper.getNames(Daedalus.getInstance()));
+            listPref.setEntryValues(DNSServerHelper.getIds());
+            listPref.setSummary(DNSServerHelper.getDescription(listPref.getValue(), Daedalus.getInstance()));
+            listPref.setOnPreferenceChangeListener((preference, newValue) -> {
+                preference.setSummary(DNSServerHelper.getDescription((String) newValue, Daedalus.getInstance()));
+                return true;
+            });
+        }
 
         EditTextPreference testDNSServers = findPreference("dns_test_servers");
         testDNSServers.setSummary(testDNSServers.getText());
@@ -110,6 +110,13 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
 
         updateOptions(advanced.isChecked(), "settings_advanced");
         updateOptions(appFilter.isChecked(), "settings_app_filter");
+
+        findPreference("settings_use_system_dns").setOnPreferenceChangeListener((preference, newValue) -> {
+            boolean vis = !(boolean) newValue;
+            findPreference("primary_server").setVisible(vis);
+            findPreference("secondary_server").setVisible(vis);
+            return true;
+        });
     }
 
     private void updateOptions(boolean checked, String pref) {

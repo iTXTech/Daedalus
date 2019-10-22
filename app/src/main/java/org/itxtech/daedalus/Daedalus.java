@@ -18,10 +18,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.stream.JsonReader;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.service.DaedalusVpnService;
-import org.itxtech.daedalus.util.Configurations;
-import org.itxtech.daedalus.util.Logger;
-import org.itxtech.daedalus.util.Rule;
-import org.itxtech.daedalus.util.RuleResolver;
+import org.itxtech.daedalus.util.*;
 import org.itxtech.daedalus.util.server.DNSServer;
 import org.itxtech.daedalus.util.server.DNSServerHelper;
 
@@ -217,6 +214,17 @@ public class Daedalus extends Application {
     public static void activateService(Context context) {
         DaedalusVpnService.primaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getPrimary());
         DaedalusVpnService.secondaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getSecondary());
+        if (getPrefs().getBoolean("settings_use_system_dns", false)) {
+            String[] servers = DnsServersDetector.getServers(context);
+            if (servers != null) {
+                if (servers.length >= 2) {
+                    DaedalusVpnService.primaryServer = servers[0];
+                    DaedalusVpnService.secondaryServer = servers[1];
+                } else {
+                    DaedalusVpnService.primaryServer = DaedalusVpnService.secondaryServer = servers[0];
+                }
+            }
+        }
         if (getInstance().prefs.getBoolean("settings_foreground", false)
                 && Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             Logger.info("Starting foreground service");
