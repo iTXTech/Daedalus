@@ -175,7 +175,6 @@ public class Daedalus extends Application {
 
     @Override
     public void onTerminate() {
-        Log.d("Daedalus", "onTerminate");
         super.onTerminate();
 
         instance = null;
@@ -242,7 +241,7 @@ public class Daedalus extends Application {
 
     public static void updateShortcut(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            Log.d("Daedalus", "Updating shortcut");
+            Logger.info("Updating shortcut");
             boolean activate = DaedalusVpnService.isActivated();
             String notice = activate ? context.getString(R.string.button_text_deactivate) : context.getString(R.string.button_text_activate);
             ShortcutInfo info = new ShortcutInfo.Builder(context, Daedalus.SHORTCUT_ID_ACTIVATE)

@@ -129,7 +129,7 @@ public class RuleResolver implements Runnable {
                         dataIO.close();
                         stream.close();
 
-                        Logger.info("Loaded " + String.valueOf(count) + " rules");
+                        Logger.info("Loaded " + count + " rules");
                     }
                 }
             } else if (mode == MODE_DNSMASQ) {
@@ -162,7 +162,7 @@ public class RuleResolver implements Runnable {
                         dataIO.close();
                         stream.close();
 
-                        Logger.info("Loaded " + String.valueOf(count) + " rules");
+                        Logger.info("Loaded " + count + " rules");
                     }
                 }
             }

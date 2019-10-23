@@ -3,7 +3,6 @@
     <string name="app_name">Daedalus</string>
     <string name="quick_toggle">开关</string>
 
-    <string name="notice_main">世界很大，我要去看看。</string>
     <string name="notice_activated">已啟動 iTXTech Daedalus。</string>
     <string name="notice_start_test">正在測試指定的 DNS 伺服器……</string>
     <string name="notice_queries">DNS 查詢次數:</string>

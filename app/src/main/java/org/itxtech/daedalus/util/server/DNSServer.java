@@ -19,7 +19,7 @@ public class DNSServer extends AbstractDNSServer {
     private static int totalId = 0;
 
     private String id;
-    private int description = 0;
+    private int description;
 
     public DNSServer(String address, int description, int port) {
         super(address, port);

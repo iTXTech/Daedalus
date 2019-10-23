@@ -161,7 +161,7 @@ public class TcpProvider extends UdpProvider {
         try {
             DataInputStream stream = new DataInputStream(dnsSocket.getInputStream());
             int length = stream.readUnsignedShort();
-            Log.d(TAG, "Reading length: " + String.valueOf(length));
+            Log.d(TAG, "Reading length: " + length);
             byte[] data = new byte[length];
             stream.read(data);
             dnsSocket.close();

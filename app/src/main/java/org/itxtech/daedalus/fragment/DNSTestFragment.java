@@ -181,7 +181,7 @@ public class DNSTestFragment extends ToolbarFragment {
                                 }
                             }
                             testText.append("\n").append(getString(R.string.test_time_used)).append(" ").
-                                    append(String.valueOf(endTime - startTime)).append(" ms");
+                                    append(endTime - startTime).append(" ms");
                             succ = true;
                         }
                     } catch (SocketTimeoutException ignored) {

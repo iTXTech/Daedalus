@@ -49,14 +49,6 @@ public class HomeFragment extends ToolbarFragment {
         updateUserInterface();
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            updateUserInterface();
-        }
-    }
-
     private void updateUserInterface() {
         Log.d("DMainFragment", "updateInterface");
         Button but = getView().findViewById(R.id.button_activate);

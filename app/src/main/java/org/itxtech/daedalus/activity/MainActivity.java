@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void updateUserInterface(Intent intent) {
         int launchAction = intent.getIntExtra(LAUNCH_ACTION, LAUNCH_ACTION_NONE);
-        Log.d(TAG, "Updating user interface with Launch Action " + String.valueOf(launchAction));
+        Log.d(TAG, "Updating user interface with Launch Action " + launchAction);
         if (launchAction == LAUNCH_ACTION_ACTIVATE) {
             this.activateService();
         } else if (launchAction == LAUNCH_ACTION_DEACTIVATE) {
@@ -240,7 +240,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         switch (id) {
