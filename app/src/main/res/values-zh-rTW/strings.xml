@@ -101,4 +101,6 @@
     <string name="test_test_domain">google.com</string>
 
     <string name="nav_version">版本:</string>
+
+    <string name="error_occurred">啟動時出現了一個錯誤</string>
 </resources>

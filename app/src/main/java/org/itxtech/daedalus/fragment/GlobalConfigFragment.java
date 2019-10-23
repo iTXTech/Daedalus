@@ -39,7 +39,6 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
             add("secondary_server");
         }}) {
             ListPreference listPref = findPreference(k);
-            listPref.setVisible(visible);
             listPref.setEntries(DnsServerHelper.getNames(Daedalus.getInstance()));
             listPref.setEntryValues(DnsServerHelper.getIds());
             listPref.setSummary(DnsServerHelper.getDescription(listPref.getValue(), Daedalus.getInstance()));
@@ -110,13 +109,6 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
 
         updateOptions(advanced.isChecked(), "settings_advanced");
         updateOptions(appFilter.isChecked(), "settings_app_filter");
-
-        findPreference("settings_use_system_dns").setOnPreferenceChangeListener((preference, newValue) -> {
-            boolean vis = !(boolean) newValue;
-            findPreference("primary_server").setVisible(vis);
-            findPreference("secondary_server").setVisible(vis);
-            return true;
-        });
     }
 
     private void updateOptions(boolean checked, String pref) {

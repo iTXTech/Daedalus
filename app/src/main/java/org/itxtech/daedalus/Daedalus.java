@@ -16,10 +16,14 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import com.google.gson.stream.JsonReader;
 import org.itxtech.daedalus.activity.MainActivity;
+import org.itxtech.daedalus.server.AbstractDnsServer;
 import org.itxtech.daedalus.server.DnsServer;
 import org.itxtech.daedalus.server.DnsServerHelper;
 import org.itxtech.daedalus.service.DaedalusVpnService;
-import org.itxtech.daedalus.util.*;
+import org.itxtech.daedalus.util.Configurations;
+import org.itxtech.daedalus.util.Logger;
+import org.itxtech.daedalus.util.Rule;
+import org.itxtech.daedalus.util.RuleResolver;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -206,19 +210,8 @@ public class Daedalus extends Application {
     }
 
     public static void activateService(Context context) {
-        DaedalusVpnService.primaryServer = DnsServerHelper.getServerById(DnsServerHelper.getPrimary());
-        DaedalusVpnService.secondaryServer = DnsServerHelper.getServerById(DnsServerHelper.getSecondary());
-        if (getPrefs().getBoolean("settings_use_system_dns", false)) {
-            String[] servers = DnsServersDetector.getServers(context);
-            if (servers != null) {
-                if (servers.length >= 2) {
-                    DaedalusVpnService.primaryServer = new DnsServer(servers[0], 0);
-                    DaedalusVpnService.secondaryServer = new DnsServer(servers[1], 0);
-                } else {
-                    DaedalusVpnService.primaryServer = DaedalusVpnService.secondaryServer = new DnsServer(servers[0]);
-                }
-            }
-        }
+        DaedalusVpnService.primaryServer = (AbstractDnsServer) DnsServerHelper.getServerById(DnsServerHelper.getPrimary()).clone();
+        DaedalusVpnService.secondaryServer = (AbstractDnsServer) DnsServerHelper.getServerById(DnsServerHelper.getSecondary()).clone();
         if (getInstance().prefs.getBoolean("settings_foreground", false)
                 && Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             Logger.info("Starting foreground service");

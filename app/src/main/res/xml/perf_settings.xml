@@ -6,10 +6,6 @@
             android:key="settingsServer"
             android:title="@string/settings_server">
 
-        <SwitchPreference
-                android:key="settings_use_system_dns"
-                android:title="@string/settings_use_system_dns"
-                android:defaultValue="false"/>
         <ListPreference
                 android:key="primary_server"
                 android:title="@string/primary_server"
@@ -96,6 +92,10 @@
                 android:title="@string/settings_dont_build_cache"
                 android:defaultValue="false"
                 android:enabled="false"/>
+        <SwitchPreference
+                android:key="settings_use_system_dns"
+                android:title="@string/settings_use_system_dns"
+                android:defaultValue="false"/>
         <ListPreference
                 android:key="settings_dns_query_method"
                 android:title="@string/settings_dns_query_method"

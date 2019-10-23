@@ -104,4 +104,6 @@
     <string name="test_test_domain">google.com</string>
 
     <string name="nav_version">版本:</string>
+
+    <string name="error_occurred">启动时出现了一个错误</string>
 </resources>

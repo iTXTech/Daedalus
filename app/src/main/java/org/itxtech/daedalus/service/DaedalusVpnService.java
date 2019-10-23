@@ -4,14 +4,18 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.ParcelFileDescriptor;
 import android.system.OsConstants;
 import android.util.Log;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationCompat;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
@@ -19,10 +23,12 @@ import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.provider.Provider;
 import org.itxtech.daedalus.provider.ProviderPicker;
 import org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver;
+import org.itxtech.daedalus.server.AbstractDnsServer;
+import org.itxtech.daedalus.server.DnsServer;
+import org.itxtech.daedalus.server.DnsServerHelper;
+import org.itxtech.daedalus.util.DnsServersDetector;
 import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.RuleResolver;
-import org.itxtech.daedalus.server.AbstractDnsServer;
-import org.itxtech.daedalus.server.DnsServerHelper;
 
 import java.net.Inet4Address;
 import java.net.Inet6Address;
@@ -54,20 +60,19 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
     public static AbstractDnsServer primaryServer;
     public static AbstractDnsServer secondaryServer;
+    private static InetAddress aliasPrimary;
+    private static InetAddress aliasSecondary;
 
     private NotificationCompat.Builder notification = null;
-
     private boolean running = false;
     private long lastUpdate = 0;
     private boolean statisticQuery;
     private Provider provider;
     private ParcelFileDescriptor descriptor;
-
     private Thread mThread = null;
-
     public HashMap<String, AbstractDnsServer> dnsServers;
-
     private static boolean activated = false;
+    private static BroadcastReceiver receiver;
 
     public static boolean isActivated() {
         return activated;
@@ -76,6 +81,44 @@ public class DaedalusVpnService extends VpnService implements Runnable {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (Daedalus.getPrefs().getBoolean("settings_use_system_dns", false)) {
+            registerReceiver(receiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    updateUpstreamServers(context);
+                }
+            }, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+    }
+
+    public static void updateUpstreamServers(Context context) {
+        String[] servers = DnsServersDetector.getServers(context);
+        if (servers != null) {
+            if (servers.length >= 2 && (aliasPrimary == null || !aliasPrimary.getHostAddress().equals(servers[0])) &&
+                    (aliasSecondary == null || !aliasSecondary.getHostAddress().equals(servers[0])) &&
+                    (aliasPrimary == null || !aliasPrimary.getHostAddress().equals(servers[1])) &&
+                    (aliasSecondary == null || !aliasSecondary.getHostAddress().equals(servers[1]))) {
+                primaryServer.setAddress(servers[0]);
+                primaryServer.setPort(DnsServer.DNS_SERVER_DEFAULT_PORT);
+                secondaryServer.setAddress(servers[1]);
+                secondaryServer.setPort(DnsServer.DNS_SERVER_DEFAULT_PORT);
+            } else if ((aliasPrimary == null || !aliasPrimary.getHostAddress().equals(servers[0])) &&
+                    (aliasSecondary == null || !aliasSecondary.getHostAddress().equals(servers[0]))) {
+                primaryServer.setAddress(servers[0]);
+                primaryServer.setPort(DnsServer.DNS_SERVER_DEFAULT_PORT);
+                secondaryServer.setAddress(servers[0]);
+                secondaryServer.setPort(DnsServer.DNS_SERVER_DEFAULT_PORT);
+            } else {
+                StringBuilder buf = new StringBuilder();
+                for (String server : servers) {
+                    buf.append(server).append(" ");
+                }
+                Logger.error("Invalid upstream DNS " + buf);
+            }
+            Logger.info("Upstream DNS updated: " + primaryServer.getAddress() + " " + secondaryServer.getAddress());
+        } else {
+            Logger.error("Cannot obtain upstream DNS server!");
+        }
     }
 
     @Override
@@ -85,7 +128,6 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                 case ACTION_ACTIVATE:
                     activated = true;
                     if (Daedalus.getPrefs().getBoolean("settings_notification", true)) {
-
                         NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
                         NotificationCompat.Builder builder;
@@ -127,12 +169,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                     }
 
                     Daedalus.initRuleResolver();
-
-                    if (this.mThread == null) {
-                        this.mThread = new Thread(this, "DaedalusVpn");
-                        this.running = true;
-                        this.mThread.start();
-                    }
+                    startThread();
                     Daedalus.updateShortcut(getApplicationContext());
                     if (MainActivity.getInstance() != null) {
                         MainActivity.getInstance().startActivity(new Intent(getApplicationContext(), MainActivity.class)
@@ -147,9 +184,20 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         return START_NOT_STICKY;
     }
 
+    private void startThread() {
+        if (this.mThread == null) {
+            this.mThread = new Thread(this, "DaedalusVpn");
+            this.running = true;
+            this.mThread.start();
+        }
+    }
+
     @Override
     public void onDestroy() {
         stopThread();
+        if (receiver != null) {
+            unregisterReceiver(receiver);
+        }
     }
 
     private void stopThread() {
@@ -203,7 +251,8 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         stopThread();
     }
 
-    private InetAddress addDnsServer(Builder builder, String format, byte[] ipv6Template, AbstractDnsServer addr) throws UnknownHostException {
+    private InetAddress addDnsServer(Builder builder, String format, byte[] ipv6Template, AbstractDnsServer addr)
+            throws UnknownHostException {
         int size = dnsServers.size();
         size++;
         if (addr.getAddress().contains("/")) {//https uri
@@ -241,7 +290,6 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                             new Intent(this, MainActivity.class).putExtra(MainActivity.LAUNCH_FRAGMENT, MainActivity.FRAGMENT_SETTINGS),
                             PendingIntent.FLAG_ONE_SHOT));
 
-            //Set App Filter
             if (Daedalus.getPrefs().getBoolean("settings_app_filter_switch", false)) {
                 ArrayList<String> apps = Daedalus.configurations.getAppObjects();
                 if (apps.size() > 0) {
@@ -278,22 +326,16 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             statisticQuery = Daedalus.getPrefs().getBoolean("settings_count_query_times", false);
             byte[] ipv6Template = new byte[]{32, 1, 13, (byte) (184 & 0xFF), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-            if (primaryServer.getAddress().contains(":") || secondaryServer.getAddress().contains(":")) {//IPv6
-                try {
-                    InetAddress addr = Inet6Address.getByAddress(ipv6Template);
-                    Log.d(TAG, "configure: Adding IPv6 address" + addr);
-                    builder.addAddress(addr, 120);
-                } catch (Exception e) {
-                    Logger.logException(e);
+            try {
+                InetAddress addr = Inet6Address.getByAddress(ipv6Template);
+                Log.d(TAG, "configure: Adding IPv6 address" + addr);
+                builder.addAddress(addr, 120);
+            } catch (Exception e) {
+                Logger.logException(e);
 
-                    ipv6Template = null;
-                }
-            } else {
                 ipv6Template = null;
             }
 
-            InetAddress aliasPrimary;
-            InetAddress aliasSecondary;
             if (advanced) {
                 dnsServers = new HashMap<>();
                 aliasPrimary = addDnsServer(builder, format, ipv6Template, primaryServer);
@@ -303,8 +345,8 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                 aliasSecondary = InetAddress.getByName(secondaryServer.getAddress());
             }
 
-            Logger.info("Daedalus VPN service is listening on " + primaryServer + " as " + aliasPrimary.getHostAddress());
-            Logger.info("Daedalus VPN service is listening on " + secondaryServer + " as " + aliasSecondary.getHostAddress());
+            Logger.info("Daedalus VPN service is listening on " + primaryServer.getAddress() + " as " + aliasPrimary.getHostAddress());
+            Logger.info("Daedalus VPN service is listening on " + secondaryServer.getAddress() + " as " + aliasSecondary.getHostAddress());
             builder.addDnsServer(aliasPrimary).addDnsServer(aliasSecondary);
 
             if (advanced) {
@@ -325,13 +367,17 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                     Thread.sleep(1000);
                 }
             }
-        } catch (
-                InterruptedException ignored) {
-        } catch (
-                Exception e) {
+        } catch (InterruptedException ignored) {
+        } catch (Exception e) {
+            MainActivity.getInstance().runOnUiThread(() ->
+                    new AlertDialog.Builder(MainActivity.getInstance())
+                            .setTitle(R.string.error_occurred)
+                            .setMessage(Logger.getExceptionMessage(e))
+                            .setPositiveButton(android.R.string.ok, (d, id) -> {
+                            })
+                            .show());
             Logger.logException(e);
         } finally {
-            Log.d(TAG, "quit");
             stopThread();
         }
     }
@@ -354,11 +400,11 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         }
     }
 
-
     public static class VpnNetworkException extends Exception {
         public VpnNetworkException(String s) {
             super(s);
         }
+
         public VpnNetworkException(String s, Throwable t) {
             super(s, t);
         }

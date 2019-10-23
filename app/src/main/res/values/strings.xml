@@ -112,4 +112,6 @@
     <string name="nav_version">Version:</string>
     <string name="nav_git_commit">Git commit:</string>
     <string name="nav_github">GitHub</string>
+
+    <string name="error_occurred">An error occurred at startup</string>
 </resources>
