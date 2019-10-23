@@ -40,6 +40,6 @@ public class ProviderPicker {
     }
 
     public static int getDnsQueryMethod() {
-        return Integer.valueOf(Daedalus.getPrefs().getString("settings_dns_query_method", "0"));
+        return Integer.parseInt(Daedalus.getPrefs().getString("settings_dns_query_method", "0"));
     }
 }

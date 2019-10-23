@@ -7,7 +7,7 @@ import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.AppFilterActivity;
 import org.itxtech.daedalus.activity.MainActivity;
-import org.itxtech.daedalus.util.server.DNSServerHelper;
+import org.itxtech.daedalus.server.DnsServerHelper;
 
 import java.util.ArrayList;
 
@@ -27,8 +27,8 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         Daedalus.getPrefs().edit()
-                .putString("primary_server", DNSServerHelper.getPrimary())
-                .putString("secondary_server", DNSServerHelper.getSecondary())
+                .putString("primary_server", DnsServerHelper.getPrimary())
+                .putString("secondary_server", DnsServerHelper.getSecondary())
                 .apply();
 
         addPreferencesFromResource(R.xml.perf_settings);
@@ -40,11 +40,11 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
         }}) {
             ListPreference listPref = findPreference(k);
             listPref.setVisible(visible);
-            listPref.setEntries(DNSServerHelper.getNames(Daedalus.getInstance()));
-            listPref.setEntryValues(DNSServerHelper.getIds());
-            listPref.setSummary(DNSServerHelper.getDescription(listPref.getValue(), Daedalus.getInstance()));
+            listPref.setEntries(DnsServerHelper.getNames(Daedalus.getInstance()));
+            listPref.setEntryValues(DnsServerHelper.getIds());
+            listPref.setSummary(DnsServerHelper.getDescription(listPref.getValue(), Daedalus.getInstance()));
             listPref.setOnPreferenceChangeListener((preference, newValue) -> {
-                preference.setSummary(DNSServerHelper.getDescription((String) newValue, Daedalus.getInstance()));
+                preference.setSummary(DnsServerHelper.getDescription((String) newValue, Daedalus.getInstance()));
                 return true;
             });
         }

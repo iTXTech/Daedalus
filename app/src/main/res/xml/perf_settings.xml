@@ -92,8 +92,8 @@
                 android:defaultValue="false"
                 android:enabled="false"/>
         <SwitchPreference
-                android:key="settings_dont_build_doh_cache"
-                android:title="@string/settings_dont_build_doh_cache"
+                android:key="settings_dont_build_cache"
+                android:title="@string/settings_dont_build_cache"
                 android:defaultValue="false"
                 android:enabled="false"/>
         <ListPreference

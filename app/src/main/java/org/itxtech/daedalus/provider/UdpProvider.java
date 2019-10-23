@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Logger;
-import org.itxtech.daedalus.util.server.DNSServerHelper;
+import org.itxtech.daedalus.server.AbstractDnsServer;
 import org.minidns.dnsmessage.DnsMessage;
 import org.pcap4j.packet.IpPacket;
 import org.pcap4j.packet.IpSelector;
@@ -118,7 +118,7 @@ public class UdpProvider extends Provider {
         }
     }
 
-    protected void forwardPacket(DatagramPacket outPacket, IpPacket parsedPacket) throws DaedalusVpnService.VpnNetworkException {
+    protected void forwardPacket(DatagramPacket outPacket, IpPacket parsedPacket, AbstractDnsServer dnsServer) throws DaedalusVpnService.VpnNetworkException {
         DatagramSocket dnsSocket;
         try {
             // Packets to be sent to the real DNS server will need to be protected from the VPN
@@ -158,7 +158,6 @@ public class UdpProvider extends Provider {
      */
     @Override
     protected void handleDnsRequest(byte[] packetData) throws DaedalusVpnService.VpnNetworkException {
-
         IpPacket parsedPacket;
         try {
             parsedPacket = (IpPacket) IpSelector.newPacket(packetData, 0, packetData.length);
@@ -169,17 +168,20 @@ public class UdpProvider extends Provider {
 
         if (!(parsedPacket.getPayload() instanceof UdpPacket)) {
             try {
-                Log.i(TAG, "handleDnsRequest: Discarding unknown packet type " + parsedPacket.getPayload());
+                Logger.debug("handleDnsRequest: Discarding unknown packet type " + parsedPacket.getPayload());
             } catch (Exception ignored) {
             }
             return;
         }
 
         InetAddress destAddr = parsedPacket.getHeader().getDstAddr();
-        if (destAddr == null)
+        if (destAddr == null) {
             return;
+        }
+        AbstractDnsServer dnsServer;
         try {
-            destAddr = InetAddress.getByName(service.dnsServers.get(destAddr.getHostAddress()));
+            dnsServer = service.dnsServers.get(destAddr.getHostAddress());
+            destAddr = InetAddress.getByName(dnsServer.getHostAddress());
         } catch (Exception e) {
             Logger.logException(e);
             Logger.error("handleDnsRequest: DNS server alias query failed for " + destAddr.getHostAddress());
@@ -194,9 +196,8 @@ public class UdpProvider extends Provider {
             // Let's be nice to Firefox. Firefox uses an empty UDP packet to
             // the gateway to reduce the RTT. For further details, please see
             // https://bugzilla.mozilla.org/show_bug.cgi?id=888268
-            DatagramPacket outPacket = new DatagramPacket(new byte[0], 0, 0, destAddr,
-                    DNSServerHelper.getPortOrDefault(destAddr, parsedUdp.getHeader().getDstPort().valueAsInt()));
-            forwardPacket(outPacket, null);
+            DatagramPacket outPacket = new DatagramPacket(new byte[0], 0, 0, destAddr, dnsServer.getPort());
+            forwardPacket(outPacket, null, dnsServer);
             return;
         }
 
@@ -212,14 +213,13 @@ public class UdpProvider extends Provider {
             return;
         }
         if (dnsMsg.getQuestion() == null) {
-            Log.i(TAG, "handleDnsRequest: Discarding DNS packet with no query " + dnsMsg);
+            Logger.debug("handleDnsRequest: Discarding DNS packet with no query " + dnsMsg);
             return;
         }
 
         if (!resolve(parsedPacket, dnsMsg)) {
-            DatagramPacket outPacket = new DatagramPacket(dnsRawData, 0, dnsRawData.length, destAddr,
-                    DNSServerHelper.getPortOrDefault(destAddr, parsedUdp.getHeader().getDstPort().valueAsInt()));
-            forwardPacket(outPacket, parsedPacket);
+            DatagramPacket outPacket = new DatagramPacket(dnsRawData, 0, dnsRawData.length, destAddr, dnsServer.getPort());
+            forwardPacket(outPacket, parsedPacket, dnsServer);
         }
     }
 

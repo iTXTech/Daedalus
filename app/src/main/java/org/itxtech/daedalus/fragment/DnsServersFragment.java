@@ -15,8 +15,8 @@ import com.google.android.material.snackbar.Snackbar;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.ConfigActivity;
-import org.itxtech.daedalus.util.server.CustomDNSServer;
-import org.itxtech.daedalus.util.server.DNSServerHelper;
+import org.itxtech.daedalus.server.CustomDnsServer;
+import org.itxtech.daedalus.server.DnsServerHelper;
 
 /**
  * Daedalus Project
@@ -29,9 +29,9 @@ import org.itxtech.daedalus.util.server.DNSServerHelper;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class DNSServersFragment extends ToolbarFragment {
+public class DnsServersFragment extends ToolbarFragment {
     private DNSServerAdapter adapter;
-    private CustomDNSServer server = null;
+    private CustomDnsServer server = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class DNSServersFragment extends ToolbarFragment {
                 if (viewHolder instanceof ViewHolder) {
                     int index = ((ViewHolder) viewHolder).getIndex();
                     if (index < Daedalus.configurations.getCustomDNSServers().size() &&
-                            DNSServerHelper.isInUsing(Daedalus.configurations.getCustomDNSServers().get(index))) {
+                            DnsServerHelper.isInUsing(Daedalus.configurations.getCustomDNSServers().get(index))) {
                         return 0;
                     }
                 }
@@ -118,7 +118,7 @@ public class DNSServersFragment extends ToolbarFragment {
     private class DNSServerAdapter extends RecyclerView.Adapter<ViewHolder> {
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            CustomDNSServer server = Daedalus.configurations.getCustomDNSServers().get(position);
+            CustomDnsServer server = Daedalus.configurations.getCustomDNSServers().get(position);
             holder.setIndex(position);
             holder.textViewName.setText(server.getName());
             holder.textViewAddress.setText(server.getRealName());
@@ -159,7 +159,7 @@ public class DNSServersFragment extends ToolbarFragment {
 
         @Override
         public void onClick(View v) {
-            if (!DNSServerHelper.isInUsing(Daedalus.configurations.getCustomDNSServers().get(index))) {
+            if (!DnsServerHelper.isInUsing(Daedalus.configurations.getCustomDNSServers().get(index))) {
                 Daedalus.getInstance().startActivity(new Intent(Daedalus.getInstance(), ConfigActivity.class)
                         .putExtra(ConfigActivity.LAUNCH_ACTION_ID, index)
                         .putExtra(ConfigActivity.LAUNCH_ACTION_FRAGMENT, ConfigActivity.LAUNCH_FRAGMENT_DNS_SERVER)

@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.fragment.ConfigFragment;
-import org.itxtech.daedalus.fragment.DNSServerConfigFragment;
+import org.itxtech.daedalus.fragment.DnsServerConfigFragment;
 import org.itxtech.daedalus.fragment.RuleConfigFragment;
 
 /**
@@ -45,13 +45,13 @@ public class ConfigActivity extends AppCompatActivity {
         ConfigFragment fragment;
         switch (getIntent().getIntExtra(LAUNCH_ACTION_FRAGMENT, LAUNCH_FRAGMENT_DNS_SERVER)) {
             case LAUNCH_FRAGMENT_DNS_SERVER:
-                fragment = new DNSServerConfigFragment();
+                fragment = new DnsServerConfigFragment();
                 break;
             case LAUNCH_FRAGMENT_RULE:
                 fragment = new RuleConfigFragment();
                 break;
             default://should never reach this
-                fragment = new DNSServerConfigFragment();
+                fragment = new DnsServerConfigFragment();
                 break;
         }
 

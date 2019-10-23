@@ -60,7 +60,7 @@
     <string name="settings_log_size">Log Size Limit</string>
     <string name="settings_manual">Manual</string>
     <string name="settings_manual_summary">Visit GitHub wiki page.</string>
-    <string name="settings_dont_build_doh_cache">Don\'t build DNS Cache for DoH DNS</string>
+    <string name="settings_dont_build_cache">Don\'t cache ip for DNS servers</string>
     <string name="settings_debug_output">Debug Output</string>
     <string name="settings_dark_theme">Use Dark Theme</string>
     <string name="settings_dns_query_method">DNS Query Method</string>

@@ -11,8 +11,8 @@ import com.google.android.material.snackbar.Snackbar;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.ConfigActivity;
-import org.itxtech.daedalus.util.server.CustomDNSServer;
-import org.itxtech.daedalus.util.server.DNSServer;
+import org.itxtech.daedalus.server.CustomDnsServer;
+import org.itxtech.daedalus.server.DnsServer;
 
 /**
  * Daedalus Project
@@ -25,7 +25,7 @@ import org.itxtech.daedalus.util.server.DNSServer;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class DNSServerConfigFragment extends ConfigFragment {
+public class DnsServerConfigFragment extends ConfigFragment {
     private int index;
 
     @Override
@@ -58,7 +58,7 @@ public class DNSServerConfigFragment extends ConfigFragment {
 
         index = intent.getIntExtra(ConfigActivity.LAUNCH_ACTION_ID, ConfigActivity.ID_NONE);
         if (index != ConfigActivity.ID_NONE) {
-            CustomDNSServer server = Daedalus.configurations.getCustomDNSServers().get(index);
+            CustomDnsServer server = Daedalus.configurations.getCustomDNSServers().get(index);
             serverName.setText(server.getName());
             serverName.setSummary(server.getName());
             serverAddress.setText(server.getAddress());
@@ -68,7 +68,7 @@ public class DNSServerConfigFragment extends ConfigFragment {
         } else {
             serverName.setText("");
             serverAddress.setText("");
-            String port = String.valueOf(DNSServer.DNS_SERVER_DEFAULT_PORT);
+            String port = String.valueOf(DnsServer.DNS_SERVER_DEFAULT_PORT);
             serverPort.setText(port);
             serverPort.setSummary(port);
         }
@@ -92,9 +92,9 @@ public class DNSServerConfigFragment extends ConfigFragment {
                 }
 
                 if (index == ConfigActivity.ID_NONE) {
-                    Daedalus.configurations.getCustomDNSServers().add(new CustomDNSServer(serverName, serverAddress, Integer.parseInt(serverPort)));
+                    Daedalus.configurations.getCustomDNSServers().add(new CustomDnsServer(serverName, serverAddress, Integer.parseInt(serverPort)));
                 } else {
-                    CustomDNSServer server = Daedalus.configurations.getCustomDNSServers().get(index);
+                    CustomDnsServer server = Daedalus.configurations.getCustomDNSServers().get(index);
                     server.setName(serverName);
                     server.setAddress(serverAddress);
                     server.setPort(Integer.parseInt(serverPort));

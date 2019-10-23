@@ -10,7 +10,6 @@ import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
-import android.util.Log;
 import androidx.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -19,8 +18,8 @@ import com.google.gson.stream.JsonReader;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.*;
-import org.itxtech.daedalus.util.server.DNSServer;
-import org.itxtech.daedalus.util.server.DNSServerHelper;
+import org.itxtech.daedalus.server.DnsServer;
+import org.itxtech.daedalus.server.DnsServerHelper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,13 +41,13 @@ public class Daedalus extends Application {
 
     private static final String SHORTCUT_ID_ACTIVATE = "shortcut_activate";
 
-    public static final List<DNSServer> DNS_SERVERS = new ArrayList<DNSServer>() {{
-        add(new DNSServer("101.101.101.101", R.string.server_twnic_primary));
-        add(new DNSServer("101.102.103.104", R.string.server_twnic_secondary));
-        add(new DNSServer("dns.rubyfish.cn/dns-query", R.string.server_rubyfish));
-        add(new DNSServer("cloudflare-dns.com/dns-query", R.string.server_cloudflare));
-        add(new DNSServer("dns.google/dns-query", R.string.server_google_ietf));
-        add(new DNSServer("dns.google/resolve", R.string.server_google_json));
+    public static final List<DnsServer> DNS_SERVERS = new ArrayList<DnsServer>() {{
+        add(new DnsServer("101.101.101.101", R.string.server_twnic_primary));
+        add(new DnsServer("101.102.103.104", R.string.server_twnic_secondary));
+        add(new DnsServer("rubyfish.cn/dns-query", R.string.server_rubyfish));
+        add(new DnsServer("cloudflare-dns.com/dns-query", R.string.server_cloudflare));
+        add(new DnsServer("dns.google/dns-query", R.string.server_google_ietf));
+        add(new DnsServer("dns.google/resolve", R.string.server_google_json));
     }};
 
     public static final List<Rule> RULES = new ArrayList<Rule>() {{
@@ -211,16 +210,16 @@ public class Daedalus extends Application {
     }
 
     public static void activateService(Context context) {
-        DaedalusVpnService.primaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getPrimary());
-        DaedalusVpnService.secondaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getSecondary());
+        DaedalusVpnService.primaryServer = DnsServerHelper.getServerById(DnsServerHelper.getPrimary());
+        DaedalusVpnService.secondaryServer = DnsServerHelper.getServerById(DnsServerHelper.getSecondary());
         if (getPrefs().getBoolean("settings_use_system_dns", false)) {
             String[] servers = DnsServersDetector.getServers(context);
             if (servers != null) {
                 if (servers.length >= 2) {
-                    DaedalusVpnService.primaryServer = servers[0];
-                    DaedalusVpnService.secondaryServer = servers[1];
+                    DaedalusVpnService.primaryServer = new DnsServer(servers[0], 0);
+                    DaedalusVpnService.secondaryServer = new DnsServer(servers[1], 0);
                 } else {
-                    DaedalusVpnService.primaryServer = DaedalusVpnService.secondaryServer = servers[0];
+                    DaedalusVpnService.primaryServer = DaedalusVpnService.secondaryServer = new DnsServer(servers[0]);
                 }
             }
         }

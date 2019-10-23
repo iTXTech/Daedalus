@@ -50,7 +50,6 @@ public class HomeFragment extends ToolbarFragment {
     }
 
     private void updateUserInterface() {
-        Log.d("DMainFragment", "updateInterface");
         Button but = getView().findViewById(R.id.button_activate);
         if (DaedalusVpnService.isActivated()) {
             but.setText(R.string.button_text_deactivate);

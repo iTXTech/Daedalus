@@ -2,7 +2,6 @@ package org.itxtech.daedalus.activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.VpnService;
 import android.os.Bundle;
@@ -25,7 +24,6 @@ import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.fragment.*;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Logger;
-import org.itxtech.daedalus.util.server.DNSServerHelper;
 
 /**
  * Daedalus Project
@@ -215,10 +213,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 switchFragment(AboutFragment.class);
                 break;
             case FRAGMENT_DNS_SERVERS:
-                switchFragment(DNSServersFragment.class);
+                switchFragment(DnsServersFragment.class);
                 break;
             case FRAGMENT_DNS_TEST:
-                switchFragment(DNSTestFragment.class);
+                switchFragment(DnsTestFragment.class);
                 break;
             case FRAGMENT_HOME:
                 switchFragment(HomeFragment.class);
@@ -247,10 +245,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 switchFragment(AboutFragment.class);
                 break;
             case R.id.nav_dns_server:
-                switchFragment(DNSServersFragment.class);
+                switchFragment(DnsServersFragment.class);
                 break;
             case R.id.nav_dns_test:
-                switchFragment(DNSTestFragment.class);
+                switchFragment(DnsTestFragment.class);
                 break;
             case R.id.nav_github:
                 Daedalus.openUri("https://github.com/iTXTech/Daedalus");
