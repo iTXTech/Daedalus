@@ -50,8 +50,7 @@ public class DnsServersDetector {
     private static String[] getServersMethodConnectivityManager(Context context) {
         ArrayList<String> priorityServersArrayList = new ArrayList<>();
         ArrayList<String> serversArrayList = new ArrayList<>();
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager != null) {
             for (Network network : connectivityManager.getAllNetworks()) {
                 NetworkInfo networkInfo = connectivityManager.getNetworkInfo(network);
@@ -83,15 +82,15 @@ public class DnsServersDetector {
 
     private static String[] getServersMethodSystemProperties() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            final String re1 = "^\\d+(\\.\\d+){3}$";
-            final String re2 = "^[0-9a-f]+(:[0-9a-f]*)+:[0-9a-f]+$";
+            String re1 = "^\\d+(\\.\\d+){3}$";
+            String re2 = "^[0-9a-f]+(:[0-9a-f]*)+:[0-9a-f]+$";
             ArrayList<String> serversArrayList = new ArrayList<>();
             try {
                 Class SystemProperties = Class.forName("android.os.SystemProperties");
                 Method method = SystemProperties.getMethod("get", new Class[]{String.class});
-                final String[] netdns = new String[]{"net.dns1", "net.dns2", "net.dns3", "net.dns4"};
-                for (int i = 0; i < netdns.length; i++) {
-                    Object[] args = new Object[]{netdns[i]};
+                String[] netdns = new String[]{"net.dns1", "net.dns2", "net.dns3", "net.dns4"};
+                for (String dns : netdns) {
+                    Object[] args = new Object[]{dns};
                     String v = (String) method.invoke(null, args);
                     if (v != null && (v.matches(re1) || v.matches(re2)) && !serversArrayList.contains(v)) {
                         serversArrayList.add(v);
@@ -100,7 +99,6 @@ public class DnsServersDetector {
                 if (serversArrayList.size() > 0) {
                     return serversArrayList.toArray(new String[0]);
                 }
-
             } catch (Exception ex) {
                 Logger.logException(ex);
             }
@@ -125,7 +123,7 @@ public class DnsServersDetector {
 
     private static Set<String> methodExecParseProps(BufferedReader lineNumberReader) throws Exception {
         String line;
-        Set<String> serversSet = new HashSet<String>(10);
+        HashSet<String> serversSet = new HashSet<>();
         while ((line = lineNumberReader.readLine()) != null) {
             int split = line.indexOf(METHOD_EXEC_PROP_DELIM);
             if (split == -1) {
@@ -141,14 +139,16 @@ public class DnsServersDetector {
             if (value.isEmpty()) {
                 continue;
             }
-            if (property.endsWith(".dns") || property.endsWith(".dns1") ||
-                    property.endsWith(".dns2") || property.endsWith(".dns3") ||
-                    property.endsWith(".dns4")) {
+            if (property.endsWith(".dns") || property.endsWith(".dns1") || property.endsWith(".dns2") ||
+                    property.endsWith(".dns3") || property.endsWith(".dns4")) {
                 InetAddress ip = InetAddress.getByName(value);
-                if (ip == null) continue;
+                if (ip == null) {
+                    continue;
+                }
                 value = ip.getHostAddress();
-                if (value == null) continue;
-                if (value.length() == 0) continue;
+                if (value == null || value.length() == 0) {
+                    continue;
+                }
                 serversSet.add(value);
             }
         }

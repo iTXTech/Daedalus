@@ -44,12 +44,10 @@ public class ConfigActivity extends AppCompatActivity {
 
         ConfigFragment fragment;
         switch (getIntent().getIntExtra(LAUNCH_ACTION_FRAGMENT, LAUNCH_FRAGMENT_DNS_SERVER)) {
-            case LAUNCH_FRAGMENT_DNS_SERVER:
-                fragment = new DnsServerConfigFragment();
-                break;
             case LAUNCH_FRAGMENT_RULE:
                 fragment = new RuleConfigFragment();
                 break;
+            case LAUNCH_FRAGMENT_DNS_SERVER:
             default://should never reach this
                 fragment = new DnsServerConfigFragment();
                 break;

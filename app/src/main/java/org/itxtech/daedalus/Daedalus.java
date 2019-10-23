@@ -16,10 +16,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import com.google.gson.stream.JsonReader;
 import org.itxtech.daedalus.activity.MainActivity;
-import org.itxtech.daedalus.service.DaedalusVpnService;
-import org.itxtech.daedalus.util.*;
 import org.itxtech.daedalus.server.DnsServer;
 import org.itxtech.daedalus.server.DnsServerHelper;
+import org.itxtech.daedalus.service.DaedalusVpnService;
+import org.itxtech.daedalus.util.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class Daedalus extends Application {
         add(new DnsServer("dns.google/resolve", R.string.server_google_json));
     }};
 
-    public static final List<Rule> RULES = new ArrayList<Rule>() {{
+    public static final ArrayList<Rule> RULES = new ArrayList<Rule>() {{
         add(new Rule("googlehosts/hosts", "googlehosts.hosts", Rule.TYPE_HOSTS,
                 "https://raw.githubusercontent.com/googlehosts/hosts/master/hosts-files/hosts", false));
         add(new Rule("vokins/yhosts", "vokins.hosts", Rule.TYPE_HOSTS,
@@ -62,7 +62,7 @@ public class Daedalus extends Application {
                 "https://raw.githubusercontent.com/vokins/yhosts/master/dnsmasq/union.conf", false));
     }};
 
-    public static final String[] DEFAULT_TEST_DOMAINS = new String[]{
+    public static final String[] DEFAULT_TEST_DOMAINS = {
             "google.com",
             "twitter.com",
             "youtube.com",
@@ -71,12 +71,11 @@ public class Daedalus extends Application {
     };
 
     public static Configurations configurations;
+    public static String rulePath;
+    public static String logPath;
+    private static String configPath;
 
-    public static String rulePath = null;
-    public static String logPath = null;
-    private static String configPath = null;
-
-    private static Daedalus instance = null;
+    private static Daedalus instance;
     private SharedPreferences prefs;
     private Thread mResolver;
 
@@ -85,12 +84,9 @@ public class Daedalus extends Application {
         super.onCreate();
 
         instance = this;
-
         Logger.init();
-
         mResolver = new Thread(new RuleResolver());
         mResolver.start();
-
         initData();
     }
 
@@ -131,30 +127,30 @@ public class Daedalus extends Application {
     }
 
     public static void initRuleResolver() {
-            ArrayList<String> pendingLoad = new ArrayList<>();
-            ArrayList<Rule> usingRules = configurations.getUsingRules();
-            if (usingRules != null && usingRules.size() > 0) {
-                for (Rule rule : usingRules) {
-                    if (rule.isUsing()) {
-                        pendingLoad.add(rulePath + rule.getFileName());
-                    }
+        ArrayList<String> pendingLoad = new ArrayList<>();
+        ArrayList<Rule> usingRules = configurations.getUsingRules();
+        if (usingRules != null && usingRules.size() > 0) {
+            for (Rule rule : usingRules) {
+                if (rule.isUsing()) {
+                    pendingLoad.add(rulePath + rule.getFileName());
                 }
-                if (pendingLoad.size() > 0) {
-                    String[] arr = new String[pendingLoad.size()];
-                    pendingLoad.toArray(arr);
-                    switch (usingRules.get(0).getType()) {
-                        case Rule.TYPE_HOSTS:
-                            RuleResolver.startLoadHosts(arr);
-                            break;
-                        case Rule.TYPE_DNAMASQ:
-                            RuleResolver.startLoadDnsmasq(arr);
-                            break;
-                    }
-                } else {
-                    RuleResolver.clear();
+            }
+            if (pendingLoad.size() > 0) {
+                String[] arr = new String[pendingLoad.size()];
+                pendingLoad.toArray(arr);
+                switch (usingRules.get(0).getType()) {
+                    case Rule.TYPE_HOSTS:
+                        RuleResolver.startLoadHosts(arr);
+                        break;
+                    case Rule.TYPE_DNAMASQ:
+                        RuleResolver.startLoadDnsmasq(arr);
+                        break;
                 }
             } else {
                 RuleResolver.clear();
+            }
+        } else {
+            RuleResolver.clear();
         }
     }
 
