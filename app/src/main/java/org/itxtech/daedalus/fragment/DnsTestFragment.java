@@ -151,7 +151,6 @@ public class DnsTestFragment extends ToolbarFragment {
                 }
             }
 
-
             private StringBuilder testServer(DnsQuery dnsQuery, Record.TYPE type, AbstractDnsServer server, String domain, StringBuilder testText) {
                 Logger.debug("Testing DNS server " + server.getRealName());
                 testText.append(getString(R.string.test_domain)).append(" ").append(domain).append("\n")

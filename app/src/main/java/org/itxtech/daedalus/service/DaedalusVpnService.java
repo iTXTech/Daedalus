@@ -91,7 +91,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         }
     }
 
-    public static void updateUpstreamServers(Context context) {
+    private static void updateUpstreamServers(Context context) {
         String[] servers = DnsServersDetector.getServers(context);
         if (servers != null) {
             if (servers.length >= 2 && (aliasPrimary == null || !aliasPrimary.getHostAddress().equals(servers[0])) &&
@@ -197,6 +197,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         stopThread();
         if (receiver != null) {
             unregisterReceiver(receiver);
+            receiver = null;
         }
     }
 

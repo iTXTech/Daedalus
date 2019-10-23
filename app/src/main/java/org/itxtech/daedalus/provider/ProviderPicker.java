@@ -15,7 +15,7 @@ import org.itxtech.daedalus.service.DaedalusVpnService;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class ProviderPicker {
+public abstract class ProviderPicker {
     public static final int DNS_QUERY_METHOD_UDP = 0;
     public static final int DNS_QUERY_METHOD_TCP = 1;
     public static final int DNS_QUERY_METHOD_TLS = 2;
