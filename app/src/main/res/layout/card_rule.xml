@@ -14,47 +14,39 @@
             app:cardPreventCornerOverlap="true"
             android:id="@+id/cardView_indicator">
 
-        <LinearLayout
+        <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusable="true"
                 android:orientation="vertical"
-                android:background="?android:attr/selectableItemBackground">
-            <RelativeLayout
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_marginStart="@dimen/margin_small">
+            <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_small"
-                    android:layout_marginLeft="@dimen/margin_small">
-
-                <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/margin_small"
-                        android:id="@+id/textView_rule_name"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"/>
-                <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/textView_rule_name"
-                        android:padding="@dimen/margin_small"
-                        android:id="@+id/textView_rule_detail"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"/>
-                <TextView android:id="@+id/textView_rule_size"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_gravity="bottom"
-                          android:padding="@dimen/margin_small"
-                          android:layout_alignParentEnd="true"
-                          android:layout_alignParentRight="true"
-                          android:ellipsize="end"
-                          android:textAppearance="?android:attr/textAppearanceSmall"/>
-            </RelativeLayout>
-        </LinearLayout>
+                    android:padding="@dimen/margin_small"
+                    android:id="@+id/textView_rule_name"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"/>
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textView_rule_name"
+                    android:padding="@dimen/margin_small"
+                    android:id="@+id/textView_rule_detail"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"/>
+            <TextView
+                    android:id="@+id/textView_rule_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:padding="@dimen/margin_small"
+                    android:layout_alignParentEnd="true"
+                    android:ellipsize="end"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </FrameLayout>
