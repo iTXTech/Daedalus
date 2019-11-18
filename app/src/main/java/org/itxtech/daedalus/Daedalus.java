@@ -245,7 +245,7 @@ public class Daedalus extends Application {
     }
 
     public static void donate() {
-        openUri("https://qr.alipay.com/a6x07022gffiehykicipv1a");
+        openUri("https://qr.alipay.com/FKX04751EZDP0SQ0BOT137");
     }
 
     public static void openUri(String uri) {
