@@ -210,9 +210,13 @@ public class Daedalus extends Application {
     }
 
     public static void activateService(Context context) {
+        activateService(context, false);
+    }
+
+    public static void activateService(Context context, boolean forceForeground) {
         DaedalusVpnService.primaryServer = (AbstractDnsServer) DnsServerHelper.getServerById(DnsServerHelper.getPrimary()).clone();
         DaedalusVpnService.secondaryServer = (AbstractDnsServer) DnsServerHelper.getServerById(DnsServerHelper.getSecondary()).clone();
-        if (getInstance().prefs.getBoolean("settings_foreground", false)
+        if ((getInstance().prefs.getBoolean("settings_foreground", false) || forceForeground)
                 && Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             Logger.info("Starting foreground service");
             context.startForegroundService(Daedalus.getServiceIntent(context).setAction(DaedalusVpnService.ACTION_ACTIVATE));
