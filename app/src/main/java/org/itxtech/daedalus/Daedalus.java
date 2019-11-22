@@ -10,6 +10,7 @@ import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
+import androidx.appcompat.app.AlertDialog;
 import androidx.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -214,8 +215,8 @@ public class Daedalus extends Application {
     }
 
     public static void activateService(Context context, boolean forceForeground) {
-        DaedalusVpnService.primaryServer = (AbstractDnsServer) DnsServerHelper.getServerById(DnsServerHelper.getPrimary()).clone();
-        DaedalusVpnService.secondaryServer = (AbstractDnsServer) DnsServerHelper.getServerById(DnsServerHelper.getSecondary()).clone();
+        DaedalusVpnService.primaryServer = DnsServerHelper.getServerById(DnsServerHelper.getPrimary()).clone();
+        DaedalusVpnService.secondaryServer = DnsServerHelper.getServerById(DnsServerHelper.getSecondary()).clone();
         if ((getInstance().prefs.getBoolean("settings_foreground", false) || forceForeground)
                 && Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             Logger.info("Starting foreground service");
@@ -223,6 +224,28 @@ public class Daedalus extends Application {
         } else {
             Logger.info("Starting background service");
             context.startService(Daedalus.getServiceIntent(context).setAction(DaedalusVpnService.ACTION_ACTIVATE));
+        }
+
+        long activateCounter = Daedalus.configurations.getActivateCounter();
+        if (activateCounter == -1) {
+            return;
+        }
+        activateCounter++;
+        Daedalus.configurations.setActivateCounter(activateCounter);
+        if (MainActivity.getInstance() != null && activateCounter % 10 == 0) {
+            new AlertDialog.Builder(MainActivity.getInstance())
+                    .setTitle("觉得还不错？")
+                    .setMessage("您的支持是我动力来源！\n请考虑为我买杯咖啡醒醒脑，甚至其他…… ;)")
+                    .setPositiveButton("为我买杯咖啡", (dialog, which) -> {
+                        Daedalus.donate();
+                        new AlertDialog.Builder(MainActivity.getInstance())
+                                .setMessage("感谢您的支持！;)\n我会再接再厉！")
+                                .setPositiveButton("确认", null)
+                                .show();
+                    })
+                    .setNeutralButton("不再显示", (dialog, which) -> Daedalus.configurations.setActivateCounter(-1))
+                    .setNegativeButton("取消", null)
+                    .show();
         }
     }
 

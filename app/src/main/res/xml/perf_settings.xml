@@ -83,6 +83,16 @@
                 android:title="@string/settings_advanced_on"
                 android:defaultValue="false"/>
         <SwitchPreference
+                android:key="settings_server_mode"
+                android:title="@string/settings_server_mode"
+                android:defaultValue="false"/>
+        <EditTextPreference
+                android:key="settings_server_addr"
+                android:title="@string/settings_server_addr"
+                android:defaultValue="127.0.0.1:5353"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"/>
+        <SwitchPreference
                 android:key="settings_count_query_times"
                 android:title="@string/settings_count_number_of_queries"
                 android:defaultValue="false"

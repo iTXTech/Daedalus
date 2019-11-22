@@ -68,9 +68,9 @@ public class AbstractDnsServer implements Cloneable {
 
     @NonNull
     @Override
-    public Object clone() {
+    public AbstractDnsServer clone() {
         try {
-            return super.clone();
+            return (AbstractDnsServer) super.clone();
         } catch (Exception ignored) {
         }
         return new AbstractDnsServer("", 0);

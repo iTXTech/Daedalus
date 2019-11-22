@@ -66,6 +66,8 @@
     <string name="settings_dns_query_method">DNS Query Method</string>
     <string name="settings_foreground">Run service in Foreground</string>
     <string name="settings_use_system_dns">Use System DNS as upstream DNS</string>
+    <string name="settings_server_mode">Server Mode</string>
+    <string name="settings_server_addr">Server Address</string>
 
     <string name="settings_dns_tcp">TCP</string>
     <string name="settings_dns_udp">UDP</string>

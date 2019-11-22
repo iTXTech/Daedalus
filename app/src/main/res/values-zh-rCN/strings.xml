@@ -66,7 +66,9 @@
     <string name="settings_dark_theme">使用暗主题</string>
     <string name="settings_dns_query_method">DNS 查询方式</string>
     <string name="settings_foreground">运行前台服务</string>
-    <string name="settings_use_system_dns">使用系統DNS作為上游DNS</string>
+    <string name="settings_use_system_dns">使用系统DNS作为上游DNS</string>
+    <string name="settings_server_mode">服务端模式</string>
+    <string name="settings_server_addr">服务端监听地址</string>
 
     <string name="settings_rule_name">规则名称</string>
     <string name="settings_rule_type">规则类型</string>
@@ -101,7 +103,6 @@
     <string name="test_dns_server">DNS 服务器:</string>
     <string name="test_result_resolved">解析地址:</string>
     <string name="test_failed">查询失败。超时或未知的主机。</string>
-    <string name="test_test_domain">google.com</string>
 
     <string name="nav_version">版本:</string>
 

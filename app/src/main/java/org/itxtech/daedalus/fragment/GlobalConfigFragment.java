@@ -33,7 +33,6 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
 
         addPreferencesFromResource(R.xml.perf_settings);
 
-        boolean visible = !Daedalus.getPrefs().getBoolean("settings_use_system_dns", false);
         for (String k : new ArrayList<String>() {{
             add("primary_server");
             add("secondary_server");
@@ -48,9 +47,16 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
             });
         }
 
-        EditTextPreference testDNSServers = findPreference("dns_test_servers");
-        testDNSServers.setSummary(testDNSServers.getText());
-        testDNSServers.setOnPreferenceChangeListener((preference, newValue) -> {
+        EditTextPreference testDnsServers = findPreference("dns_test_servers");
+        testDnsServers.setSummary(testDnsServers.getText());
+        testDnsServers.setOnPreferenceChangeListener((preference, newValue) -> {
+            preference.setSummary((String) newValue);
+            return true;
+        });
+
+        EditTextPreference serverAddr = findPreference("settings_server_addr");
+        serverAddr.setSummary(serverAddr.getText());
+        serverAddr.setOnPreferenceChangeListener((preference, newValue) -> {
             preference.setSummary((String) newValue);
             return true;
         });

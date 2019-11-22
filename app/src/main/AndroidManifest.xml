@@ -25,6 +25,9 @@
             </intent-filter>
         </service>
         <service
+                android:name=".service.DaedalusServerService">
+        </service>
+        <service
                 android:name=".service.DaedalusTileService"
                 android:label="@string/app_name"
                 android:icon="@drawable/ic_security"
