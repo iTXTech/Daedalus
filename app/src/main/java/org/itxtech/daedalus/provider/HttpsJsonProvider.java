@@ -39,7 +39,7 @@ public class HttpsJsonProvider extends HttpsProvider {
 
     @Override
     protected void sendRequestToServer(IpPacket parsedPacket, DnsMessage message, String uri) {
-        whqList.add(new WaitingHttpsRequest(parsedPacket) {
+        dnsIn.add(new WaitingOnSocketPacket(null, parsedPacket) {
             @Override
             public void doRequest() {
                 final byte[] rawRequest = message.toArray();

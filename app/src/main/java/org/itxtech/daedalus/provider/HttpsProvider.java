@@ -38,12 +38,9 @@ import java.util.concurrent.TimeUnit;
  * (at your option) any later version.
  */
 abstract public class HttpsProvider extends Provider {
-
     public static final String HTTPS_SUFFIX = "https://";
 
-    private static final String TAG = "HttpsProvider";
-
-    final WhqList whqList = new WhqList();
+    protected final WospList dnsIn = new WospList(false);
 
     HttpsProvider(ParcelFileDescriptor descriptor, DaedalusVpnService service) {
         super(descriptor, service);
@@ -64,60 +61,6 @@ abstract public class HttpsProvider extends Provider {
                     return Arrays.asList(InetAddress.getAllByName(hostname));
                 })
                 .build();
-    }
-
-    public void process() {
-        try {
-            FileDescriptor[] pipes = Os.pipe();
-            mInterruptFd = pipes[0];
-            mBlockFd = pipes[1];
-            FileInputStream inputStream = new FileInputStream(descriptor.getFileDescriptor());
-            FileOutputStream outputStream = new FileOutputStream(descriptor.getFileDescriptor());
-
-            byte[] packet = new byte[32767];
-            while (running) {
-                StructPollfd deviceFd = new StructPollfd();
-                deviceFd.fd = inputStream.getFD();
-                deviceFd.events = (short) OsConstants.POLLIN;
-                StructPollfd blockFd = new StructPollfd();
-                blockFd.fd = mBlockFd;
-                blockFd.events = (short) (OsConstants.POLLHUP | OsConstants.POLLERR);
-
-                if (!deviceWrites.isEmpty())
-                    deviceFd.events |= (short) OsConstants.POLLOUT;
-
-                StructPollfd[] polls = new StructPollfd[2];
-                polls[0] = deviceFd;
-                polls[1] = blockFd;
-                Os.poll(polls, 100);
-                if (blockFd.revents != 0) {
-                    Log.i(TAG, "Told to stop VPN");
-                    running = false;
-                    return;
-                }
-
-                Iterator<WaitingHttpsRequest> iterator = whqList.iterator();
-                while (iterator.hasNext()) {
-                    WaitingHttpsRequest request = iterator.next();
-                    if (request.completed) {
-                        handleDnsResponse(request.packet, request.result);
-                        iterator.remove();
-                    }
-                }
-
-                if ((deviceFd.revents & OsConstants.POLLOUT) != 0) {
-                    Log.d(TAG, "Write to device");
-                    writeToDevice(outputStream);
-                }
-                if ((deviceFd.revents & OsConstants.POLLIN) != 0) {
-                    Log.d(TAG, "Read from device");
-                    readPacketFromDevice(inputStream, packet);
-                }
-                service.providerLoopCallback();
-            }
-        } catch (Exception e) {
-            Logger.logException(e);
-        }
     }
 
     @Override
@@ -173,30 +116,4 @@ abstract public class HttpsProvider extends Provider {
 
     protected abstract void sendRequestToServer(IpPacket parsedPacket, DnsMessage message, String uri);
     //uri example: 1.1.1.1:1234/dnsQuery. The specified provider will add https:// and parameters
-
-    public abstract static class WaitingHttpsRequest {
-        public boolean completed = false;
-        public byte[] result;
-        public final IpPacket packet;
-
-        public WaitingHttpsRequest(IpPacket packet) {
-            this.packet = packet;
-        }
-
-        public abstract void doRequest();
-    }
-
-    public static class WhqList implements Iterable<WaitingHttpsRequest> {
-        private final LinkedList<WaitingHttpsRequest> list = new LinkedList<>();
-
-        public void add(WaitingHttpsRequest request) {
-            list.add(request);
-            request.doRequest();
-        }
-
-        @NonNull
-        public Iterator<WaitingHttpsRequest> iterator() {
-            return list.iterator();
-        }
-    }
 }
