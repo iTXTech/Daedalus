@@ -1,12 +1,19 @@
 package org.itxtech.daedalus.service;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.VpnService;
 import android.os.Build;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.NotificationCompat;
 import org.itxtech.daedalus.Daedalus;
+import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.MainActivity;
+import org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver;
 import org.itxtech.daedalus.server.AbstractDnsServer;
 import org.itxtech.daedalus.server.DnsServerHelper;
 import org.itxtech.daedalus.util.Logger;
@@ -23,16 +30,83 @@ import org.itxtech.daedalus.util.Logger;
  * (at your option) any later version.
  */
 public class ServiceHolder {
+    private static final int NOTIFICATION_ACTIVATED = 0;
+    private static final String CHANNEL_ID = "daedalus_channel_1";
+    private static final String CHANNEL_NAME = "Daedalus";
     public static final String ACTION_ACTIVATE = "ACTION_ACTIVATE";
     public static final String ACTION_DEACTIVATE = "ACTION_DEACTIVATE";
 
     private static boolean running = false;
+    private static NotificationCompat.Builder notification = null;
 
     public static AbstractDnsServer primaryServer;
     public static AbstractDnsServer secondaryServer;
 
-    public static void setRunning(boolean running) {
+    public static void setRunning(boolean running, Context context) {
         ServiceHolder.running = running;
+        if (running) {
+            if (Daedalus.getPrefs().getBoolean("settings_notification", true)) {
+                NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+                NotificationCompat.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
+                    manager.createNotificationChannel(channel);
+                    builder = new NotificationCompat.Builder(context, CHANNEL_ID);
+                } else {
+                    builder = new NotificationCompat.Builder(context);
+                }
+
+                Intent deactivateIntent = new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION);
+                deactivateIntent.setClass(context, StatusBarBroadcastReceiver.class);
+                Intent settingsIntent = new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION);
+                settingsIntent.setClass(context, StatusBarBroadcastReceiver.class);
+                PendingIntent pIntent = PendingIntent.getActivity(context, 0,
+                        new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+                builder.setWhen(0)
+                        .setContentTitle(context.getString(R.string.notice_activated))
+                        .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
+                        .setSmallIcon(R.drawable.ic_security)
+                        .setColor(context.getColor(R.color.colorPrimary))
+                        .setAutoCancel(false)
+                        .setOngoing(true)
+                        .setTicker(context.getString(R.string.notice_activated))
+                        .setContentIntent(pIntent)
+                        .addAction(R.drawable.ic_clear, context.getString(R.string.button_text_deactivate),
+                                PendingIntent.getBroadcast(context, 0,
+                                        deactivateIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+                        .addAction(R.drawable.ic_settings, context.getString(R.string.action_settings),
+                                PendingIntent.getBroadcast(context, 0,
+                                        settingsIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+                Notification n = builder.build();
+
+                manager.notify(NOTIFICATION_ACTIVATED, n);
+
+                notification = builder;
+            }
+
+            Daedalus.initRuleResolver();
+            Daedalus.updateShortcut(Daedalus.getInstance());
+            if (MainActivity.getInstance() != null) {
+                MainActivity.getInstance().startActivity(new Intent(Daedalus.getInstance(), MainActivity.class)
+                        .putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_SERVICE_DONE));
+            }
+        } else {
+            if (notification != null) {
+                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.cancel(NOTIFICATION_ACTIVATED);
+                notification = null;
+            }
+        }
+    }
+
+    public static void updateNotification(Context context, long times) {
+        if (notification != null) {
+            notification.setContentTitle(context.getString(R.string.notice_queries) + " " + times);
+            NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            manager.notify(NOTIFICATION_ACTIVATED, notification.build());
+        }
     }
 
     public static boolean isRunning() {
