@@ -5,7 +5,7 @@ import android.net.Uri;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.provider.HttpsProvider;
 import org.itxtech.daedalus.provider.ProviderPicker;
-import org.itxtech.daedalus.service.DaedalusVpnService;
+import org.itxtech.daedalus.service.ServiceHolder;
 import org.itxtech.daedalus.util.Logger;
 
 import java.net.InetAddress;
@@ -145,6 +145,6 @@ public class DnsServerHelper {
     }
 
     public static boolean isInUsing(CustomDnsServer server) {
-        return DaedalusVpnService.isActivated() && (server.getId().equals(getPrimary()) || server.getId().equals(getSecondary()));
+        return ServiceHolder.isRunning() && (server.getId().equals(getPrimary()) || server.getId().equals(getSecondary()));
     }
 }

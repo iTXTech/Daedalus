@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -22,7 +21,7 @@ import org.itxtech.daedalus.BuildConfig;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.fragment.*;
-import org.itxtech.daedalus.service.DaedalusVpnService;
+import org.itxtech.daedalus.service.ServiceHolder;
 import org.itxtech.daedalus.util.Logger;
 
 /**
@@ -136,26 +135,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = VpnService.prepare(Daedalus.getInstance());
             if (intent != null) {
                 startActivityForResult(intent, 0);
-            } else {
-                onActivityResult(0, Activity.RESULT_OK, null);
+                return;
             }
         }
+        onActivityResult(0, Activity.RESULT_OK, null);
     }
 
     @Override
     public void onActivityResult(int request, int result, Intent data) {
         if (result == Activity.RESULT_OK) {
-            Daedalus.activateService(Daedalus.getInstance());
+            ServiceHolder.startService(Daedalus.getInstance());
             updateMainButton(R.string.button_text_deactivate);
-            Daedalus.updateShortcut(getApplicationContext());
         }
         super.onActivityResult(request, result, data);
     }
 
     private void updateMainButton(int id) {
         if (currentFragment instanceof HomeFragment) {
-            Button button = currentFragment.getView().findViewById(R.id.button_activate);
-            button.setText(id);
+            ((Button) currentFragment.getView().findViewById(R.id.button_activate)).setText(id);
         }
     }
 
@@ -165,10 +162,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (launchAction == LAUNCH_ACTION_ACTIVATE) {
             this.activateService();
         } else if (launchAction == LAUNCH_ACTION_DEACTIVATE) {
-            Daedalus.deactivateService(getApplicationContext());
+            ServiceHolder.stopService(getApplicationContext());
         } else if (launchAction == LAUNCH_ACTION_SERVICE_DONE) {
             Daedalus.updateShortcut(getApplicationContext());
-            if (DaedalusVpnService.isActivated()) {
+            if (ServiceHolder.isRunning()) {
                 updateMainButton(R.string.button_text_deactivate);
             } else {
                 updateMainButton(R.string.button_text_activate);
@@ -251,8 +248,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
-        InputMethodManager imm = (InputMethodManager) Daedalus.getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(findViewById(R.id.id_content).getWindowToken(), 0);
+        ((InputMethodManager) Daedalus.getInstance().getSystemService(Context.INPUT_METHOD_SERVICE))
+                .hideSoftInputFromWindow(findViewById(R.id.id_content).getWindowToken(), 0);
         return true;
     }
 }

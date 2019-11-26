@@ -1,5 +1,6 @@
 package org.itxtech.daedalus.service;
 
+import android.content.Intent;
 import android.net.VpnService;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
@@ -30,9 +31,22 @@ public class DaedalusServerService extends VpnService implements Runnable {
     private InetSocketAddress address;
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null) {
+            switch (intent.getAction()) {
+                case ServiceHolder.ACTION_ACTIVATE:
+                    return START_STICKY;
+                case ServiceHolder.ACTION_DEACTIVATE:
+                    return START_NOT_STICKY;
+            }
+        }
+        return START_NOT_STICKY;
+    }
+
+    @Override
     public void run() {
         address = new InetSocketAddress("127.0.0.1", 5353);
-        EventLoopGroup bossGroup = new NioEventLoopGroup(); // (1)
+        EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
@@ -53,7 +67,7 @@ public class DaedalusServerService extends VpnService implements Runnable {
                             }, new ChannelInboundHandlerAdapter() {
                                 @Override
                                 public void channelRead(ChannelHandlerContext ctx, Object msg) {
-                                    ((ByteBuf) msg).release();
+                                    ((DnsMessage) msg).toString();
                                 }
                             });
                         }

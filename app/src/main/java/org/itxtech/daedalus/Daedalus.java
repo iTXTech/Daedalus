@@ -8,19 +8,15 @@ import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
-import android.net.VpnService;
 import android.os.Build;
-import androidx.appcompat.app.AlertDialog;
 import androidx.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import com.google.gson.stream.JsonReader;
 import org.itxtech.daedalus.activity.MainActivity;
-import org.itxtech.daedalus.server.AbstractDnsServer;
 import org.itxtech.daedalus.server.DnsServer;
-import org.itxtech.daedalus.server.DnsServerHelper;
-import org.itxtech.daedalus.service.DaedalusVpnService;
+import org.itxtech.daedalus.service.ServiceHolder;
 import org.itxtech.daedalus.util.Configurations;
 import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.Rule;
@@ -160,7 +156,7 @@ public class Daedalus extends Application {
     }
 
     public static void setRulesChanged() {
-        if (DaedalusVpnService.isActivated()) {
+        if (ServiceHolder.isRunning()) {
             initRuleResolver();
         }
     }
@@ -186,85 +182,17 @@ public class Daedalus extends Application {
         Logger.shutdown();
     }
 
-    public static Intent getServiceIntent(Context context) {
-        return new Intent(context, DaedalusVpnService.class);
-    }
-
-    public static boolean switchService() {
-        if (DaedalusVpnService.isActivated()) {
-            deactivateService(instance);
-            return false;
-        } else {
-            prepareAndActivateService(instance);
-            return true;
-        }
-    }
-
-    public static boolean prepareAndActivateService(Context context) {
-        Intent intent = VpnService.prepare(context);
-        if (intent != null) {
-            return false;
-        } else {
-            activateService(context);
-            return true;
-        }
-    }
-
-    public static void activateService(Context context) {
-        activateService(context, false);
-    }
-
-    public static void activateService(Context context, boolean forceForeground) {
-        DaedalusVpnService.primaryServer = DnsServerHelper.getServerById(DnsServerHelper.getPrimary()).clone();
-        DaedalusVpnService.secondaryServer = DnsServerHelper.getServerById(DnsServerHelper.getSecondary()).clone();
-        if ((getInstance().prefs.getBoolean("settings_foreground", false) || forceForeground)
-                && Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
-            Logger.info("Starting foreground service");
-            context.startForegroundService(Daedalus.getServiceIntent(context).setAction(DaedalusVpnService.ACTION_ACTIVATE));
-        } else {
-            Logger.info("Starting background service");
-            context.startService(Daedalus.getServiceIntent(context).setAction(DaedalusVpnService.ACTION_ACTIVATE));
-        }
-
-        long activateCounter = Daedalus.configurations.getActivateCounter();
-        if (activateCounter == -1) {
-            return;
-        }
-        activateCounter++;
-        Daedalus.configurations.setActivateCounter(activateCounter);
-        if (MainActivity.getInstance() != null && activateCounter % 10 == 0) {
-            new AlertDialog.Builder(MainActivity.getInstance())
-                    .setTitle("觉得还不错？")
-                    .setMessage("您的支持是我动力来源！\n请考虑为我买杯咖啡醒醒脑，甚至其他…… ;)")
-                    .setPositiveButton("为我买杯咖啡", (dialog, which) -> {
-                        Daedalus.donate();
-                        new AlertDialog.Builder(MainActivity.getInstance())
-                                .setMessage("感谢您的支持！;)\n我会再接再厉！")
-                                .setPositiveButton("确认", null)
-                                .show();
-                    })
-                    .setNeutralButton("不再显示", (dialog, which) -> Daedalus.configurations.setActivateCounter(-1))
-                    .setNegativeButton("取消", null)
-                    .show();
-        }
-    }
-
-    public static void deactivateService(Context context) {
-        context.startService(getServiceIntent(context).setAction(DaedalusVpnService.ACTION_DEACTIVATE));
-        context.stopService(getServiceIntent(context));
-    }
-
     public static void updateShortcut(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             Logger.info("Updating shortcut");
-            boolean activate = DaedalusVpnService.isActivated();
-            String notice = activate ? context.getString(R.string.button_text_deactivate) : context.getString(R.string.button_text_activate);
+            boolean running = ServiceHolder.isRunning();
+            String notice = running ? context.getString(R.string.button_text_deactivate) : context.getString(R.string.button_text_activate);
             ShortcutInfo info = new ShortcutInfo.Builder(context, Daedalus.SHORTCUT_ID_ACTIVATE)
                     .setLongLabel(notice)
                     .setShortLabel(notice)
                     .setIcon(Icon.createWithResource(context, R.mipmap.ic_launcher))
                     .setIntent(new Intent(context, MainActivity.class).setAction(Intent.ACTION_VIEW)
-                            .putExtra(MainActivity.LAUNCH_ACTION, activate ? MainActivity.LAUNCH_ACTION_DEACTIVATE : MainActivity.LAUNCH_ACTION_ACTIVATE))
+                            .putExtra(MainActivity.LAUNCH_ACTION, running ? MainActivity.LAUNCH_ACTION_DEACTIVATE : MainActivity.LAUNCH_ACTION_ACTIVATE))
                     .build();
             ShortcutManager shortcutManager = (ShortcutManager) context.getSystemService(SHORTCUT_SERVICE);
             shortcutManager.addDynamicShortcuts(Collections.singletonList(info));

@@ -8,6 +8,7 @@ import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.AppFilterActivity;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.server.DnsServerHelper;
+import org.itxtech.daedalus.service.ServiceHolder;
 
 import java.util.ArrayList;
 
@@ -115,6 +116,9 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
 
         updateOptions(advanced.isChecked(), "settings_advanced");
         updateOptions(appFilter.isChecked(), "settings_app_filter");
+        if (ServiceHolder.isRunning()) {
+            findPreference("settings_server_mode").setEnabled(false);
+        }
     }
 
     private void updateOptions(boolean checked, String pref) {

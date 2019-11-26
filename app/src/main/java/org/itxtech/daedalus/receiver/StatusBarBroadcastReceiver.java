@@ -3,8 +3,8 @@ package org.itxtech.daedalus.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.activity.MainActivity;
+import org.itxtech.daedalus.service.ServiceHolder;
 import org.itxtech.daedalus.util.Logger;
 
 import java.lang.reflect.Method;
@@ -27,7 +27,7 @@ public class StatusBarBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION)) {
-            Daedalus.deactivateService(context);
+            ServiceHolder.stopService(context);
         }
         if (intent.getAction().equals(STATUS_BAR_BTN_SETTINGS_CLICK_ACTION)) {
             Intent settingsIntent = new Intent(context, MainActivity.class).putExtra(MainActivity.LAUNCH_FRAGMENT, MainActivity.FRAGMENT_SETTINGS);

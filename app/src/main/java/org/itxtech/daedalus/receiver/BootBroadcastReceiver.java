@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import org.itxtech.daedalus.Daedalus;
+import org.itxtech.daedalus.service.ServiceHolder;
 import org.itxtech.daedalus.util.Logger;
 
 /**
@@ -21,7 +22,7 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (Daedalus.getPrefs().getBoolean("settings_boot", false)) {
-            Daedalus.activateService(context, true);
+            ServiceHolder.startService(context, true);
             Logger.info("Triggered boot receiver");
         }
     }

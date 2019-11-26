@@ -49,17 +49,12 @@ import java.util.HashMap;
  * (at your option) any later version.
  */
 public class DaedalusVpnService extends VpnService implements Runnable {
-    public static final String ACTION_ACTIVATE = "org.itxtech.daedalus.service.DaedalusVpnService.ACTION_ACTIVATE";
-    public static final String ACTION_DEACTIVATE = "org.itxtech.daedalus.service.DaedalusVpnService.ACTION_DEACTIVATE";
-
     private static final int NOTIFICATION_ACTIVATED = 0;
 
     private static final String TAG = "DaedalusVpnService";
     private static final String CHANNEL_ID = "daedalus_channel_1";
     private static final String CHANNEL_NAME = "daedalus_channel";
 
-    public static AbstractDnsServer primaryServer;
-    public static AbstractDnsServer secondaryServer;
     private static InetAddress aliasPrimary;
     private static InetAddress aliasSecondary;
 
@@ -71,12 +66,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
     private ParcelFileDescriptor descriptor;
     private Thread mThread = null;
     public HashMap<String, AbstractDnsServer> dnsServers;
-    private static boolean activated = false;
     private static BroadcastReceiver receiver;
-
-    public static boolean isActivated() {
-        return activated;
-    }
 
     @Override
     public void onCreate() {
@@ -98,16 +88,16 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                     (aliasSecondary == null || !aliasSecondary.getHostAddress().equals(servers[0])) &&
                     (aliasPrimary == null || !aliasPrimary.getHostAddress().equals(servers[1])) &&
                     (aliasSecondary == null || !aliasSecondary.getHostAddress().equals(servers[1]))) {
-                primaryServer.setAddress(servers[0]);
-                primaryServer.setPort(DnsServer.DNS_SERVER_DEFAULT_PORT);
-                secondaryServer.setAddress(servers[1]);
-                secondaryServer.setPort(DnsServer.DNS_SERVER_DEFAULT_PORT);
+                ServiceHolder.primaryServer.setAddress(servers[0]);
+                ServiceHolder.primaryServer.setPort(DnsServer.DNS_SERVER_DEFAULT_PORT);
+                ServiceHolder.secondaryServer.setAddress(servers[1]);
+                ServiceHolder.secondaryServer.setPort(DnsServer.DNS_SERVER_DEFAULT_PORT);
             } else if ((aliasPrimary == null || !aliasPrimary.getHostAddress().equals(servers[0])) &&
                     (aliasSecondary == null || !aliasSecondary.getHostAddress().equals(servers[0]))) {
-                primaryServer.setAddress(servers[0]);
-                primaryServer.setPort(DnsServer.DNS_SERVER_DEFAULT_PORT);
-                secondaryServer.setAddress(servers[0]);
-                secondaryServer.setPort(DnsServer.DNS_SERVER_DEFAULT_PORT);
+                ServiceHolder.primaryServer.setAddress(servers[0]);
+                ServiceHolder.primaryServer.setPort(DnsServer.DNS_SERVER_DEFAULT_PORT);
+                ServiceHolder.secondaryServer.setAddress(servers[0]);
+                ServiceHolder.secondaryServer.setPort(DnsServer.DNS_SERVER_DEFAULT_PORT);
             } else {
                 StringBuilder buf = new StringBuilder();
                 for (String server : servers) {
@@ -115,7 +105,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                 }
                 Logger.error("Invalid upstream DNS " + buf);
             }
-            Logger.info("Upstream DNS updated: " + primaryServer.getAddress() + " " + secondaryServer.getAddress());
+            Logger.info("Upstream DNS updated: " + ServiceHolder.primaryServer.getAddress() + " " + ServiceHolder.secondaryServer.getAddress());
         } else {
             Logger.error("Cannot obtain upstream DNS server!");
         }
@@ -125,8 +115,8 @@ public class DaedalusVpnService extends VpnService implements Runnable {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
             switch (intent.getAction()) {
-                case ACTION_ACTIVATE:
-                    activated = true;
+                case ServiceHolder.ACTION_ACTIVATE:
+                    ServiceHolder.setRunning(true);
                     if (Daedalus.getPrefs().getBoolean("settings_notification", true)) {
                         NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -146,13 +136,13 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                         PendingIntent pIntent = PendingIntent.getActivity(this, 0,
                                 new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
                         builder.setWhen(0)
-                                .setContentTitle(getResources().getString(R.string.notice_activated))
+                                .setContentTitle(getString(R.string.notice_activated))
                                 .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
                                 .setSmallIcon(R.drawable.ic_security)
-                                .setColor(getResources().getColor(R.color.colorPrimary)) //backward compatibility
+                                .setColor(getColor(R.color.colorPrimary)) //backward compatibility
                                 .setAutoCancel(false)
                                 .setOngoing(true)
-                                .setTicker(getResources().getString(R.string.notice_activated))
+                                .setTicker(getString(R.string.notice_activated))
                                 .setContentIntent(pIntent)
                                 .addAction(R.drawable.ic_clear, getResources().getString(R.string.button_text_deactivate),
                                         PendingIntent.getBroadcast(this, 0,
@@ -176,7 +166,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                                 .putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_SERVICE_DONE));
                     }
                     return START_STICKY;
-                case ACTION_DEACTIVATE:
+                case ServiceHolder.ACTION_DEACTIVATE:
                     stopThread();
                     return START_NOT_STICKY;
             }
@@ -203,7 +193,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
     private void stopThread() {
         Log.d(TAG, "stopThread");
-        activated = false;
+        ServiceHolder.setRunning(false);
         boolean shouldRefresh = false;
         try {
             if (this.descriptor != null) {
@@ -339,15 +329,15 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
             if (advanced) {
                 dnsServers = new HashMap<>();
-                aliasPrimary = addDnsServer(builder, format, ipv6Template, primaryServer);
-                aliasSecondary = addDnsServer(builder, format, ipv6Template, secondaryServer);
+                aliasPrimary = addDnsServer(builder, format, ipv6Template, ServiceHolder.primaryServer);
+                aliasSecondary = addDnsServer(builder, format, ipv6Template, ServiceHolder.secondaryServer);
             } else {
-                aliasPrimary = InetAddress.getByName(primaryServer.getAddress());
-                aliasSecondary = InetAddress.getByName(secondaryServer.getAddress());
+                aliasPrimary = InetAddress.getByName(ServiceHolder.primaryServer.getAddress());
+                aliasSecondary = InetAddress.getByName(ServiceHolder.secondaryServer.getAddress());
             }
 
-            Logger.info("Daedalus VPN service is listening on " + primaryServer.getAddress() + " as " + aliasPrimary.getHostAddress());
-            Logger.info("Daedalus VPN service is listening on " + secondaryServer.getAddress() + " as " + aliasSecondary.getHostAddress());
+            Logger.info("Daedalus VPN service is listening on " + ServiceHolder.primaryServer.getAddress() + " as " + aliasPrimary.getHostAddress());
+            Logger.info("Daedalus VPN service is listening on " + ServiceHolder.secondaryServer.getAddress() + " as " + aliasSecondary.getHostAddress());
             builder.addDnsServer(aliasPrimary).addDnsServer(aliasSecondary);
 
             if (advanced) {

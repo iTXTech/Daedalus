@@ -144,8 +144,8 @@ public abstract class Provider {
         final Object socket;
         final IpPacket packet;
         private final long time;
-        public boolean completed = false;
-        public byte[] result;
+        boolean completed = false;
+        byte[] result;
 
         WaitingOnSocketPacket(Object socket, IpPacket packet) {
             this.socket = socket;
@@ -170,7 +170,7 @@ public abstract class Provider {
 
         private boolean closeable;
 
-        public WospList(boolean closeable) {
+        WospList(boolean closeable) {
             this.closeable = closeable;
         }
 
