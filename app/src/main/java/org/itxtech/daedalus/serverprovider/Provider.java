@@ -25,6 +25,11 @@ import java.net.InetSocketAddress;
  */
 public abstract class Provider {
     protected Channel channel;
+    protected long queryTimes = 0;
+
+    public long getQueryTimes() {
+        return queryTimes;
+    }
 
     public Provider(Channel channel) {
         this.channel = channel;
@@ -33,6 +38,7 @@ public abstract class Provider {
     public abstract void query(DnsMessage message, InetSocketAddress receiver) throws Exception;
 
     public DnsMessage resolve(DnsMessage message) {
+        queryTimes++;
         String dnsQueryName = message.getQuestion().name.toString();
 
         try {

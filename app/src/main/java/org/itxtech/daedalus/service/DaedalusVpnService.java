@@ -310,15 +310,11 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
     public void providerLoopCallback() {
         if (statisticQuery) {
-            updateUserInterface();
-        }
-    }
-
-    private void updateUserInterface() {
-        long time = System.currentTimeMillis();
-        if (time - lastUpdate >= 1000) {
-            lastUpdate = time;
-            ServiceHolder.updateNotification(this, provider.getDnsQueryTimes());
+            long time = System.currentTimeMillis();
+            if (time - lastUpdate >= 1000) {
+                lastUpdate = time;
+                ServiceHolder.updateNotification(this, provider.getDnsQueryTimes());
+            }
         }
     }
 

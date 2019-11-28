@@ -44,9 +44,9 @@ import java.io.IOException;
 public class DaedalusServerService extends Service implements Runnable {
     private Thread thread;
     private EventLoopGroup group;
-    private Channel channel;
     private BroadcastReceiver receiver;
     private Provider provider;
+    private long lastUpdate = 0;
 
     @Override
     public void onCreate() {
@@ -163,6 +163,13 @@ public class DaedalusServerService extends Service implements Runnable {
                                 ctx.writeAndFlush(new DatagramPacket(Unpooled.copiedBuffer(message.toArray()), msg.sender()));
                             } else {
                                 provider.query(message, msg.sender());
+                            }
+                            if (Daedalus.getPrefs().getBoolean("settings_count_query_times", false)) {
+                                long time = System.currentTimeMillis();
+                                if (time - lastUpdate >= 1000) {
+                                    lastUpdate = time;
+                                    ServiceHolder.updateNotification(DaedalusServerService.this, provider.getQueryTimes());
+                                }
                             }
                         }
 
