@@ -11,9 +11,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
-import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.server.AbstractDnsServer;
 import org.itxtech.daedalus.server.DnsServerHelper;
+import org.itxtech.daedalus.util.Logger;
 import org.minidns.dnsmessage.DnsMessage;
 import org.minidns.dnsmessage.Question;
 import org.minidns.record.Record;
@@ -36,8 +36,8 @@ import java.util.Random;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class DnsTestFragment extends ToolbarFragment {
-    private class Type {
+public class DnsTesterFragment extends ToolbarFragment {
+    private static class Type {
         private Record.TYPE type;
         private String name;
 
@@ -116,7 +116,7 @@ public class DnsTestFragment extends ToolbarFragment {
                         if (!servers.equals("")) {
                             for (String server : servers.split(",")) {
                                 if (server.contains(".") && server.contains(":")) {//IPv4
-                                    String[] pieces = servers.split(":");
+                                    String[] pieces = server.split(":");
                                     int port = AbstractDnsServer.DNS_SERVER_DEFAULT_PORT;
                                     try {
                                         port = Integer.parseInt(pieces[1]);
@@ -125,7 +125,7 @@ public class DnsTestFragment extends ToolbarFragment {
                                     }
                                     add(new AbstractDnsServer(pieces[0], port));
                                 } else if (!server.contains(".") && server.contains("|")) {//IPv6
-                                    String[] pieces = servers.split("\\|");
+                                    String[] pieces = server.split("\\|");
                                     int port = AbstractDnsServer.DNS_SERVER_DEFAULT_PORT;
                                     try {
                                         port = Integer.parseInt(pieces[1]);

@@ -32,7 +32,7 @@ import java.net.URI;
  * (at your option) any later version.
  */
 public class ServiceHolder {
-    public static final int NOTIFICATION_ACTIVATED = 0;
+    public static final int NOTIFICATION_ACTIVATED = 2;
     public static final String CHANNEL_ID = "daedalus_channel";
     public static final String CHANNEL_NAME = "Daedalus";
     public static final String ACTION_ACTIVATE = "ACTION_ACTIVATE";
@@ -162,7 +162,7 @@ public class ServiceHolder {
             URI uri = new URI("my://" + Daedalus.getPrefs().getString("settings_server_addr", "127.0.0.1:5353"));
             String host = uri.getHost();
             int port = uri.getPort();
-            if (uri.getHost() != null && uri.getPort() == -1) {
+            if (uri.getHost() != null && uri.getPort() != -1) {
                 serverAddr = new InetSocketAddress(host, port);
             }
         } catch (Exception e) {

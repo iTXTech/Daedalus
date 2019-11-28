@@ -11,6 +11,7 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import org.itxtech.daedalus.Daedalus;
@@ -39,13 +40,11 @@ public class DaedalusServerService extends Service implements Runnable {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (ServiceHolder.isForeground()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(
-                        new NotificationChannel(ServiceHolder.CHANNEL_ID, ServiceHolder.CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH));
-                ServiceHolder.buildNotification(this);
-                startForeground(ServiceHolder.NOTIFICATION_ACTIVATED, ServiceHolder.getBuilder().build());
-            }
+        if (ServiceHolder.isForeground() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(
+                    new NotificationChannel(ServiceHolder.CHANNEL_ID, ServiceHolder.CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH));
+            ServiceHolder.buildNotification(this);
+            startForeground(ServiceHolder.NOTIFICATION_ACTIVATED, ServiceHolder.getBuilder().build());
         }
     }
 
@@ -101,9 +100,12 @@ public class DaedalusServerService extends Service implements Runnable {
             Bootstrap bootstrap = new Bootstrap();
             bootstrap.group(group)
                     .channel(NioDatagramChannel.class)
-                    .handler(new ChannelInitializer<NioDatagramChannel>() {
+                    .option(ChannelOption.SO_BROADCAST, true)
+                    .option(ChannelOption.SO_RCVBUF, 1024 * 1024)
+                    .option(ChannelOption.SO_SNDBUF, 1024 * 1024)
+                    .handler(new ChannelInitializer<DatagramChannel>() {
                         @Override
-                        protected void initChannel(NioDatagramChannel ch) throws Exception {
+                        protected void initChannel(DatagramChannel ch) throws Exception {
                             ch.pipeline().addLast(new SimpleChannelInboundHandler<DatagramPacket>() {
                                 @Override
                                 protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket msg) throws Exception {
@@ -115,13 +117,11 @@ public class DaedalusServerService extends Service implements Runnable {
                                 }
                             });
                         }
-                    })
-                    .option(ChannelOption.SO_BROADCAST, true)
-                    .option(ChannelOption.SO_RCVBUF, 1024 * 1024)
-                    .option(ChannelOption.SO_SNDBUF, 1024 * 1024);
+                    });
             ChannelFuture f = bootstrap.bind(ServiceHolder.serverAddr).sync();
-            channel = f.channel();
             Logger.debug("Daedalus Server is listening on " + ServiceHolder.serverAddr.getHostString() + ":" + ServiceHolder.serverAddr.getPort());
+            channel = f.channel();
+            f.channel().closeFuture().await();
         } catch (Exception e) {
             Logger.logException(e);
         } finally {

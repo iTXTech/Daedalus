@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 switchFragment(DnsServersFragment.class);
                 break;
             case FRAGMENT_DNS_TEST:
-                switchFragment(DnsTestFragment.class);
+                switchFragment(DnsTesterFragment.class);
                 break;
             case FRAGMENT_HOME:
                 switchFragment(HomeFragment.class);
@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 switchFragment(DnsServersFragment.class);
                 break;
             case R.id.nav_dns_test:
-                switchFragment(DnsTestFragment.class);
+                switchFragment(DnsTesterFragment.class);
                 break;
             case R.id.nav_github:
                 Daedalus.openUri("https://github.com/iTXTech/Daedalus");
