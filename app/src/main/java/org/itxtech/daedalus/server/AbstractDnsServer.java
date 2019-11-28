@@ -2,6 +2,8 @@ package org.itxtech.daedalus.server;
 
 import androidx.annotation.NonNull;
 
+import java.net.InetSocketAddress;
+
 /**
  * Daedalus Project
  *
@@ -23,6 +25,10 @@ public class AbstractDnsServer implements Cloneable {
     public AbstractDnsServer(String address, int port) {
         this.address = address;
         this.port = port;
+    }
+
+    public InetSocketAddress getInetSocketAddress() {
+        return new InetSocketAddress(address, port);
     }
 
     public void setHostAddress(String hostAddress) {

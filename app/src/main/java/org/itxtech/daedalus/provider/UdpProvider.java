@@ -1,29 +1,19 @@
 package org.itxtech.daedalus.provider;
 
 import android.os.ParcelFileDescriptor;
-import android.system.Os;
-import android.system.OsConstants;
-import android.system.StructPollfd;
-import android.util.Log;
-import androidx.annotation.NonNull;
 import org.itxtech.daedalus.Daedalus;
+import org.itxtech.daedalus.server.AbstractDnsServer;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Logger;
-import org.itxtech.daedalus.server.AbstractDnsServer;
 import org.minidns.dnsmessage.DnsMessage;
 import org.pcap4j.packet.IpPacket;
 import org.pcap4j.packet.IpSelector;
 import org.pcap4j.packet.UdpPacket;
 
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.Iterator;
-import java.util.LinkedList;
 
 /**
  * Daedalus Project
