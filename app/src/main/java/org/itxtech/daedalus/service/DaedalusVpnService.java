@@ -49,7 +49,6 @@ public class DaedalusVpnService extends VpnService implements Runnable {
     private static InetAddress aliasPrimary;
     private static InetAddress aliasSecondary;
 
-    private boolean running = false;
     private long lastUpdate = 0;
     private boolean statisticQuery;
     private Provider provider;
@@ -120,7 +119,6 @@ public class DaedalusVpnService extends VpnService implements Runnable {
     private void startThread() {
         if (this.mThread == null) {
             this.mThread = new Thread(this, "DaedalusVpn");
-            this.running = true;
             this.mThread.start();
         }
     }
@@ -144,7 +142,6 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                 this.descriptor = null;
             }
             if (mThread != null) {
-                running = false;
                 shouldRefresh = true;
                 if (provider != null) {
                     provider.shutdown();
@@ -292,7 +289,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                 provider.start();
                 provider.process();
             } else {
-                while (running) {
+                while (ServiceHolder.isRunning()) {
                     Thread.sleep(1000);
                 }
             }

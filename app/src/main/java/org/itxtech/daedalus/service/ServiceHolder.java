@@ -1,6 +1,5 @@
 package org.itxtech.daedalus.service;
 
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -18,6 +17,9 @@ import org.itxtech.daedalus.server.AbstractDnsServer;
 import org.itxtech.daedalus.server.DnsServerHelper;
 import org.itxtech.daedalus.util.Logger;
 
+import java.net.InetSocketAddress;
+import java.net.URI;
+
 /**
  * Daedalus Project
  *
@@ -30,60 +32,69 @@ import org.itxtech.daedalus.util.Logger;
  * (at your option) any later version.
  */
 public class ServiceHolder {
-    private static final int NOTIFICATION_ACTIVATED = 0;
-    private static final String CHANNEL_ID = "daedalus_channel_1";
-    private static final String CHANNEL_NAME = "Daedalus";
+    public static final int NOTIFICATION_ACTIVATED = 0;
+    public static final String CHANNEL_ID = "daedalus_channel";
+    public static final String CHANNEL_NAME = "Daedalus";
     public static final String ACTION_ACTIVATE = "ACTION_ACTIVATE";
     public static final String ACTION_DEACTIVATE = "ACTION_DEACTIVATE";
 
     private static boolean running = false;
-    private static NotificationCompat.Builder notification = null;
+    private static NotificationCompat.Builder builder = null;
 
     public static AbstractDnsServer primaryServer;
     public static AbstractDnsServer secondaryServer;
+    public static InetSocketAddress serverAddr;
+    private static boolean foreground = false;
+
+    public static boolean isForeground() {
+        return foreground;
+    }
+
+    public static NotificationCompat.Builder getBuilder() {
+        return builder;
+    }
+
+    public static void buildNotification(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            builder = new NotificationCompat.Builder(context, CHANNEL_ID);
+        } else {
+            builder = new NotificationCompat.Builder(context);
+        }
+
+        Intent deactivateIntent = new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION);
+        deactivateIntent.setClass(context, StatusBarBroadcastReceiver.class);
+        Intent settingsIntent = new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION);
+        settingsIntent.setClass(context, StatusBarBroadcastReceiver.class);
+        PendingIntent pIntent = PendingIntent.getActivity(context, 0,
+                new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setWhen(0)
+                .setContentTitle(context.getString(R.string.notice_activated))
+                .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
+                .setSmallIcon(R.drawable.ic_security)
+                .setColor(context.getResources().getColor(R.color.colorPrimary))
+                .setAutoCancel(false)
+                .setOngoing(true)
+                .setTicker(context.getString(R.string.notice_activated))
+                .setContentIntent(pIntent)
+                .addAction(R.drawable.ic_clear, context.getString(R.string.button_text_deactivate),
+                        PendingIntent.getBroadcast(context, 0,
+                                deactivateIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+                .addAction(R.drawable.ic_settings, context.getString(R.string.action_settings),
+                        PendingIntent.getBroadcast(context, 0,
+                                settingsIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+    }
 
     public static void setRunning(boolean running, Context context) {
         ServiceHolder.running = running;
         if (running) {
-            if (Daedalus.getPrefs().getBoolean("settings_notification", true)) {
+            if (Daedalus.getPrefs().getBoolean("settings_notification", true) && (!isServerMode() || !isForeground())) {
                 NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-                NotificationCompat.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
                     manager.createNotificationChannel(channel);
-                    builder = new NotificationCompat.Builder(context, CHANNEL_ID);
-                } else {
-                    builder = new NotificationCompat.Builder(context);
                 }
-
-                Intent deactivateIntent = new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION);
-                deactivateIntent.setClass(context, StatusBarBroadcastReceiver.class);
-                Intent settingsIntent = new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION);
-                settingsIntent.setClass(context, StatusBarBroadcastReceiver.class);
-                PendingIntent pIntent = PendingIntent.getActivity(context, 0,
-                        new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-                builder.setWhen(0)
-                        .setContentTitle(context.getString(R.string.notice_activated))
-                        .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
-                        .setSmallIcon(R.drawable.ic_security)
-                        .setColor(context.getColor(R.color.colorPrimary))
-                        .setAutoCancel(false)
-                        .setOngoing(true)
-                        .setTicker(context.getString(R.string.notice_activated))
-                        .setContentIntent(pIntent)
-                        .addAction(R.drawable.ic_clear, context.getString(R.string.button_text_deactivate),
-                                PendingIntent.getBroadcast(context, 0,
-                                        deactivateIntent, PendingIntent.FLAG_UPDATE_CURRENT))
-                        .addAction(R.drawable.ic_settings, context.getString(R.string.action_settings),
-                                PendingIntent.getBroadcast(context, 0,
-                                        settingsIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-
-                Notification n = builder.build();
-
-                manager.notify(NOTIFICATION_ACTIVATED, n);
-
-                notification = builder;
+                buildNotification(context);
+                manager.notify(NOTIFICATION_ACTIVATED, builder.build());
             }
 
             Daedalus.initRuleResolver();
@@ -93,19 +104,19 @@ public class ServiceHolder {
                         .putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_SERVICE_DONE));
             }
         } else {
-            if (notification != null) {
+            if (builder != null) {
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.cancel(NOTIFICATION_ACTIVATED);
-                notification = null;
+                builder = null;
             }
         }
     }
 
     public static void updateNotification(Context context, long times) {
-        if (notification != null) {
-            notification.setContentTitle(context.getString(R.string.notice_queries) + " " + times);
+        if (builder != null) {
+            builder.setContentTitle(context.getString(R.string.notice_queries) + " " + times);
             NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            manager.notify(NOTIFICATION_ACTIVATED, notification.build());
+            manager.notify(NOTIFICATION_ACTIVATED, builder.build());
         }
     }
 
@@ -146,13 +157,26 @@ public class ServiceHolder {
     }
 
     public static void startService(Context context, boolean forceForeground) {
+        serverAddr = new InetSocketAddress("127.0.0.1", 5353);
+        try {
+            URI uri = new URI("my://" + Daedalus.getPrefs().getString("settings_server_addr", "127.0.0.1:5353"));
+            String host = uri.getHost();
+            int port = uri.getPort();
+            if (uri.getHost() != null && uri.getPort() == -1) {
+                serverAddr = new InetSocketAddress(host, port);
+            }
+        } catch (Exception e) {
+            Logger.logException(e);
+        }
         primaryServer = DnsServerHelper.getServerById(DnsServerHelper.getPrimary()).clone();
         secondaryServer = DnsServerHelper.getServerById(DnsServerHelper.getSecondary()).clone();
         if ((Daedalus.getPrefs().getBoolean("settings_foreground", false) || forceForeground)
                 && Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            ServiceHolder.foreground = true;
             Logger.info("Starting foreground service");
             context.startForegroundService(getServiceIntent(context).setAction(ACTION_ACTIVATE));
         } else {
+            ServiceHolder.foreground = false;
             Logger.info("Starting background service");
             context.startService(getServiceIntent(context).setAction(ACTION_ACTIVATE));
         }
