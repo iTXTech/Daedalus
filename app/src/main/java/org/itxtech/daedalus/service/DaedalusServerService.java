@@ -11,7 +11,6 @@ import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.IBinder;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -27,8 +26,6 @@ import org.itxtech.daedalus.util.DnsServersDetector;
 import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.RuleResolver;
 import org.minidns.dnsmessage.DnsMessage;
-
-import java.io.IOException;
 
 /**
  * Daedalus Project
@@ -145,8 +142,8 @@ public class DaedalusServerService extends Service implements Runnable {
     public void run() {
         group = new NioEventLoopGroup();
         try {
-            Bootstrap bootstrap = new Bootstrap();
-            bootstrap.group(group)
+            Bootstrap bootstrap = new Bootstrap()
+                    .group(group)
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
                     .option(ChannelOption.SO_RCVBUF, 1024 * 1024)
@@ -154,7 +151,7 @@ public class DaedalusServerService extends Service implements Runnable {
                     .handler(new SimpleChannelInboundHandler<DatagramPacket>() {
                         @Override
                         protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket msg) throws Exception {
-                            DnsMessage message = getDnsMessage(msg);
+                            DnsMessage message = Provider.getDnsMessage(msg.content());
                             if (Daedalus.getPrefs().getBoolean("settings_debug_output", false)) {
                                 Logger.debug("DnsRequest: " + message.toString());
                             }
@@ -194,12 +191,5 @@ public class DaedalusServerService extends Service implements Runnable {
         if (group != null) {
             group.shutdownGracefully();
         }
-    }
-
-    public static DnsMessage getDnsMessage(DatagramPacket p) throws IOException {
-        ByteBuf buf = p.content();
-        byte[] req = new byte[buf.readableBytes()];
-        buf.readBytes(req);
-        return new DnsMessage(req);
     }
 }

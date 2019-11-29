@@ -25,6 +25,8 @@ public abstract class ProviderPicker {
         switch (org.itxtech.daedalus.provider.ProviderPicker.getDnsQueryMethod()) {
             case DNS_QUERY_METHOD_UDP:
                 return new UdpProvider(channel);
+            case DNS_QUERY_METHOD_TCP:
+                return new TcpProvider(channel);
         }
         return new UdpProvider(channel);
     }

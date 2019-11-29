@@ -1,6 +1,10 @@
 package org.itxtech.daedalus.serverprovider;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
+import io.netty.channel.socket.DatagramPacket;
+import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.RuleResolver;
 import org.minidns.dnsmessage.DnsMessage;
@@ -8,6 +12,7 @@ import org.minidns.record.A;
 import org.minidns.record.AAAA;
 import org.minidns.record.Record;
 
+import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetSocketAddress;
@@ -36,6 +41,20 @@ public abstract class Provider {
     }
 
     public abstract void query(DnsMessage message, InetSocketAddress receiver) throws Exception;
+
+    protected void sendResponse(ByteBuf buf, InetSocketAddress receiver) throws IOException {
+        DnsMessage message = getDnsMessage(buf);
+        if (Daedalus.getPrefs().getBoolean("settings_debug_output", false)) {
+            Logger.debug("DnsResponse: " + message.toString());
+        }
+        channel.writeAndFlush(new DatagramPacket(Unpooled.copiedBuffer(message.toArray()), receiver));
+    }
+
+    public static DnsMessage getDnsMessage(ByteBuf buf) throws IOException {
+        byte[] req = new byte[buf.readableBytes()];
+        buf.readBytes(req);
+        return new DnsMessage(req);
+    }
 
     public DnsMessage resolve(DnsMessage message) {
         queryTimes++;
