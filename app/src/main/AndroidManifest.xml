@@ -59,7 +59,7 @@
                 android:label="@string/app_name"
                 android:launchMode="singleTask"
                 android:theme="@style/AppTheme.NoActionBar.TransparentStatusBar"
-                android:exported="false">
+                android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

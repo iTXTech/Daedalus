@@ -78,6 +78,10 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         return activated;
     }
 
+    private static int getPendingIntent(int flag) {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE | flag : flag;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -144,7 +148,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                         Intent settingsIntent = new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION);
                         settingsIntent.setClass(this, StatusBarBroadcastReceiver.class);
                         PendingIntent pIntent = PendingIntent.getActivity(this, 0,
-                                new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+                                new Intent(this, MainActivity.class), getPendingIntent(PendingIntent.FLAG_UPDATE_CURRENT));
                         builder.setWhen(0)
                                 .setContentTitle(getResources().getString(R.string.notice_activated))
                                 .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
@@ -156,10 +160,10 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                                 .setContentIntent(pIntent)
                                 .addAction(R.drawable.ic_clear, getResources().getString(R.string.button_text_deactivate),
                                         PendingIntent.getBroadcast(this, 0,
-                                                deactivateIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+                                                deactivateIntent, getPendingIntent(PendingIntent.FLAG_UPDATE_CURRENT)))
                                 .addAction(R.drawable.ic_settings, getResources().getString(R.string.action_settings),
                                         PendingIntent.getBroadcast(this, 0,
-                                                settingsIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+                                                settingsIntent, getPendingIntent(PendingIntent.FLAG_UPDATE_CURRENT)));
 
                         Notification notification = builder.build();
 
@@ -289,7 +293,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                     .setSession("Daedalus")
                     .setConfigureIntent(PendingIntent.getActivity(this, 0,
                             new Intent(this, MainActivity.class).putExtra(MainActivity.LAUNCH_FRAGMENT, MainActivity.FRAGMENT_SETTINGS),
-                            PendingIntent.FLAG_ONE_SHOT));
+                            getPendingIntent(PendingIntent.FLAG_ONE_SHOT)));
 
             if (Daedalus.getPrefs().getBoolean("settings_app_filter_switch", false)) {
                 ArrayList<String> apps = Daedalus.configurations.getAppObjects();
