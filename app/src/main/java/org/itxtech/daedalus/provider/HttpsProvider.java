@@ -10,7 +10,7 @@ import okhttp3.OkHttpClient;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Logger;
-import org.itxtech.daedalus.util.server.DNSServerHelper;
+import org.itxtech.daedalus.server.DnsServerHelper;
 import org.minidns.dnsmessage.DnsMessage;
 import org.pcap4j.packet.IpPacket;
 import org.pcap4j.packet.IpSelector;
@@ -58,8 +58,8 @@ abstract public class HttpsProvider extends Provider {
                         .header("Accept", accept)
                         .build()))
                 .dns(hostname -> {
-                    if (DNSServerHelper.domainCache.containsKey(hostname)) {
-                        return DNSServerHelper.domainCache.get(hostname);
+                    if (DnsServerHelper.domainCache.containsKey(hostname)) {
+                        return DnsServerHelper.domainCache.get(hostname);
                     }
                     return Arrays.asList(InetAddress.getAllByName(hostname));
                 })
@@ -138,7 +138,7 @@ abstract public class HttpsProvider extends Provider {
             return;
         String uri;
         try {
-            uri = service.dnsServers.get(destAddr.getHostAddress());//https uri
+            uri = service.dnsServers.get(destAddr.getHostAddress()).getAddress();//https uri
         } catch (Exception e) {
             Logger.logException(e);
             return;
@@ -161,7 +161,7 @@ abstract public class HttpsProvider extends Provider {
             return;
         }
         if (dnsMsg.getQuestion() == null) {
-            Log.i(TAG, "handleDnsRequest: Discarding DNS packet with no query " + dnsMsg);
+            Logger.debug("handleDnsRequest: Discarding DNS packet with no query " + dnsMsg);
             return;
         }
 

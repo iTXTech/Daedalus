@@ -5,6 +5,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:clickable="true"
+        android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         app:cardCornerRadius="10dp"
         app:cardPreventCornerOverlap="true"
@@ -23,7 +24,6 @@
                 android:id="@+id/textView_custom_dns_name"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"/>
         <TextView
                 android:layout_width="match_parent"
@@ -34,7 +34,6 @@
                 android:id="@+id/textView_custom_dns_address"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"/>
 
     </RelativeLayout>

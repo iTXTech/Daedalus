@@ -1,7 +1,5 @@
 package org.itxtech.daedalus.activity;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -9,10 +7,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.fragment.ConfigFragment;
-import org.itxtech.daedalus.fragment.DNSServerConfigFragment;
+import org.itxtech.daedalus.fragment.DnsServerConfigFragment;
 import org.itxtech.daedalus.fragment.RuleConfigFragment;
 
 /**
@@ -44,14 +44,12 @@ public class ConfigActivity extends AppCompatActivity {
 
         ConfigFragment fragment;
         switch (getIntent().getIntExtra(LAUNCH_ACTION_FRAGMENT, LAUNCH_FRAGMENT_DNS_SERVER)) {
-            case LAUNCH_FRAGMENT_DNS_SERVER:
-                fragment = new DNSServerConfigFragment();
-                break;
             case LAUNCH_FRAGMENT_RULE:
                 fragment = new RuleConfigFragment();
                 break;
+            case LAUNCH_FRAGMENT_DNS_SERVER:
             default://should never reach this
-                fragment = new DNSServerConfigFragment();
+                fragment = new DnsServerConfigFragment();
                 break;
         }
 
@@ -64,7 +62,7 @@ public class ConfigActivity extends AppCompatActivity {
         toolbar.setOnMenuItemClickListener(fragment);
         toolbar.inflateMenu(R.menu.custom_config);
 
-        FragmentManager manager = getFragmentManager();
+        FragmentManager manager = getSupportFragmentManager();
         fragment.setIntent(getIntent());
         FragmentTransaction fragmentTransaction = manager.beginTransaction();
         fragmentTransaction.replace(R.id.id_config, fragment);

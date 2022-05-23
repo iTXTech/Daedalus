@@ -44,7 +44,7 @@ public class LogFragment extends ToolbarFragment implements Toolbar.OnMenuItemCl
 
     private void export() {
         try {
-            String file = Daedalus.logPath + String.valueOf(System.currentTimeMillis()) + ".log";
+            String file = Daedalus.logPath + System.currentTimeMillis() + ".log";
             FileWriter fileWriter = new FileWriter(file);
             fileWriter.write(Logger.getLog());
             fileWriter.close();

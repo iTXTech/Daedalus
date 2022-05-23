@@ -21,7 +21,7 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (Daedalus.getPrefs().getBoolean("settings_boot", false)) {
-            Daedalus.activateService(context);
+            Daedalus.activateService(context, true);
             Logger.info("Triggered boot receiver");
         }
     }

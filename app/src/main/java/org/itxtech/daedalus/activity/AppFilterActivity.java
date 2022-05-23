@@ -40,7 +40,6 @@ import java.util.Objects;
  * (at your option) any later version.
  */
 public class AppFilterActivity extends AppCompatActivity {
-
     private RecyclerViewAdapter adapter;
 
     @Override
@@ -78,7 +77,7 @@ public class AppFilterActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-    private class AppObject {
+    private static class AppObject {
         private String appName;
         private String appPackageName;
         private Drawable appIcon;
@@ -111,13 +110,11 @@ public class AppFilterActivity extends AppCompatActivity {
 
         void updateList(ArrayList<AppObject> appObjects) {
             appList = appObjects;
-
             for (int i = 0; i < appObjects.size(); i++) {
                 if (Daedalus.configurations.getAppObjects().contains(appObjects.get(i).appPackageName)) {
                     checkStatus.put(i, true);
                 }
             }
-
             runOnUiThread(this::notifyDataSetChanged);
         }
 
@@ -158,7 +155,7 @@ public class AppFilterActivity extends AppCompatActivity {
         }
     }
 
-    private class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private static class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView appIcon;
         private TextView appName;
         private CheckBox appCheck;
@@ -171,7 +168,6 @@ public class AppFilterActivity extends AppCompatActivity {
             appCheck = itemView.findViewById(R.id.app_check);
             itemView.setOnClickListener(this);
         }
-
 
         @Override
         public void onClick(View v) {

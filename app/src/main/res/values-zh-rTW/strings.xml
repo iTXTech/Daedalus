@@ -3,7 +3,6 @@
     <string name="app_name">Daedalus</string>
     <string name="quick_toggle">开关</string>
 
-    <string name="notice_main">世界很大，我要去看看。</string>
     <string name="notice_activated">已啟動 iTXTech Daedalus。</string>
     <string name="notice_start_test">正在測試指定的 DNS 伺服器……</string>
     <string name="notice_queries">DNS 查詢次數:</string>
@@ -63,7 +62,7 @@
     <string name="settings_manual_summary">造訪 GitHub wiki 頁面。</string>
     <string name="settings_log_size">紀錄檔大小限制</string>
     <string name="settings_debug_output">调试输出 TODO</string>
-    <string name="settings_dont_build_doh_cache">不緩存 DoH DNS 的 IP地址</string>
+    <string name="settings_dont_build_cache">不緩存 DNS 的 IP地址</string>
     <string name="settings_dark_theme">使用暗主题</string>
 
     <string name="settings_rule_name">規則名稱</string>
@@ -76,6 +75,7 @@
     <string name="settings_rule_import_built_in">内置</string>
     <string name="settings_rule_import_external">外部</string>
     <string name="settings_dns_query_method">DNS 查询方式</string>
+    <string name="settings_foreground">運行前臺服務</string>
 
     <string name="settings_server_name">伺服器名稱</string>
     <string name="settings_server_address">伺服器網址</string>
@@ -101,4 +101,6 @@
     <string name="test_test_domain">google.com</string>
 
     <string name="nav_version">版本:</string>
+
+    <string name="error_occurred">啟動時出現了一個錯誤</string>
 </resources>

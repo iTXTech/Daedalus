@@ -9,7 +9,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Logger;
-import org.itxtech.daedalus.util.server.DNSServerHelper;
+import org.itxtech.daedalus.server.AbstractDnsServer;
 import org.pcap4j.packet.IpPacket;
 
 import java.io.*;
@@ -123,7 +123,7 @@ public class TcpProvider extends UdpProvider {
     }
 
     @Override
-    protected void forwardPacket(DatagramPacket outPacket, IpPacket parsedPacket) throws DaedalusVpnService.VpnNetworkException {
+    protected void forwardPacket(DatagramPacket outPacket, IpPacket parsedPacket, AbstractDnsServer dnsServer) throws DaedalusVpnService.VpnNetworkException {
         Socket dnsSocket;
         try {
             // Packets to be sent to the real DNS server will need to be protected from the VPN
@@ -131,7 +131,7 @@ public class TcpProvider extends UdpProvider {
 
             service.protect(dnsSocket);
 
-            SocketAddress address = new InetSocketAddress(outPacket.getAddress(), DNSServerHelper.getPortOrDefault(outPacket.getAddress(), outPacket.getPort()));
+            SocketAddress address = new InetSocketAddress(outPacket.getAddress(), dnsServer.getPort());
             dnsSocket.connect(address, 5000);
             dnsSocket.setSoTimeout(5000);
             Logger.info("TcpProvider: Sending DNS query request");
@@ -161,7 +161,7 @@ public class TcpProvider extends UdpProvider {
         try {
             DataInputStream stream = new DataInputStream(dnsSocket.getInputStream());
             int length = stream.readUnsignedShort();
-            Log.d(TAG, "Reading length: " + String.valueOf(length));
+            Log.d(TAG, "Reading length: " + length);
             byte[] data = new byte[length];
             stream.read(data);
             dnsSocket.close();

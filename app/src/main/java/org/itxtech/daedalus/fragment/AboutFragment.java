@@ -13,6 +13,7 @@ import android.webkit.WebViewClient;
 import org.itxtech.daedalus.BuildConfig;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
+import org.itxtech.daedalus.util.Logger;
 
 import java.util.Locale;
 
@@ -64,7 +65,7 @@ public class AboutFragment extends ToolbarFragment {
                     mWebView.loadUrl("javascript:changeColor('"+(Daedalus.isDarkTheme() ? "#FFFFFF" : "#000000")+"')");
                     mWebView.loadUrl("javascript:changeVersionInfo('" + Daedalus.getInstance().getPackageManager().getPackageInfo(Daedalus.getInstance().getPackageName(), 0).versionName + "', '" + BuildConfig.BUILD_TIME + "', '" + BuildConfig.GIT_COMMIT + "')");
                 } catch (Exception e) {
-                    Log.e("DAboutActivity", e.toString());
+                    Logger.logException(e);
                 }
             }
         });
@@ -82,8 +83,6 @@ public class AboutFragment extends ToolbarFragment {
         super.onDestroyView();
 
         if (mWebView != null) {
-            Log.d("DAboutActivity", "onDestroy");
-
             mWebView.removeAllViews();
             mWebView.setWebViewClient(null);
             ((ViewGroup) mWebView.getParent()).removeView(mWebView);

@@ -10,20 +10,20 @@ import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
-import android.preference.PreferenceManager;
-import android.util.Log;
+import androidx.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import com.google.gson.stream.JsonReader;
 import org.itxtech.daedalus.activity.MainActivity;
+import org.itxtech.daedalus.server.AbstractDnsServer;
+import org.itxtech.daedalus.server.DnsServer;
+import org.itxtech.daedalus.server.DnsServerHelper;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Configurations;
 import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.Rule;
 import org.itxtech.daedalus.util.RuleResolver;
-import org.itxtech.daedalus.util.server.DNSServer;
-import org.itxtech.daedalus.util.server.DNSServerHelper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -45,16 +45,16 @@ public class Daedalus extends Application {
 
     private static final String SHORTCUT_ID_ACTIVATE = "shortcut_activate";
 
-    public static final List<DNSServer> DNS_SERVERS = new ArrayList<DNSServer>() {{
-        add(new DNSServer("101.101.101.101", R.string.server_twnic_primary));
-        add(new DNSServer("101.102.103.104", R.string.server_twnic_secondary));
-        add(new DNSServer("dns.rubyfish.cn/dns-query", R.string.server_rubyfish));
-        add(new DNSServer("cloudflare-dns.com/dns-query", R.string.server_cloudflare));
-        add(new DNSServer("dns.google/dns-query", R.string.server_google_ietf));
-        add(new DNSServer("dns.google/resolve", R.string.server_google_json));
+    public static final List<DnsServer> DNS_SERVERS = new ArrayList<DnsServer>() {{
+        add(new DnsServer("101.101.101.101", R.string.server_twnic_primary));
+        add(new DnsServer("101.102.103.104", R.string.server_twnic_secondary));
+        add(new DnsServer("rubyfish.cn/dns-query", R.string.server_rubyfish));
+        add(new DnsServer("cloudflare-dns.com/dns-query", R.string.server_cloudflare));
+        add(new DnsServer("dns.google/dns-query", R.string.server_google_ietf));
+        add(new DnsServer("dns.google/resolve", R.string.server_google_json));
     }};
 
-    public static final List<Rule> RULES = new ArrayList<Rule>() {{
+    public static final ArrayList<Rule> RULES = new ArrayList<Rule>() {{
         add(new Rule("googlehosts/hosts", "googlehosts.hosts", Rule.TYPE_HOSTS,
                 "https://raw.githubusercontent.com/googlehosts/hosts/master/hosts-files/hosts", false));
         add(new Rule("vokins/yhosts", "vokins.hosts", Rule.TYPE_HOSTS,
@@ -66,7 +66,7 @@ public class Daedalus extends Application {
                 "https://raw.githubusercontent.com/vokins/yhosts/master/dnsmasq/union.conf", false));
     }};
 
-    public static final String[] DEFAULT_TEST_DOMAINS = new String[]{
+    public static final String[] DEFAULT_TEST_DOMAINS = {
             "google.com",
             "twitter.com",
             "youtube.com",
@@ -75,12 +75,11 @@ public class Daedalus extends Application {
     };
 
     public static Configurations configurations;
+    public static String rulePath;
+    public static String logPath;
+    private static String configPath;
 
-    public static String rulePath = null;
-    public static String logPath = null;
-    private static String configPath = null;
-
-    private static Daedalus instance = null;
+    private static Daedalus instance;
     private SharedPreferences prefs;
     private Thread mResolver;
 
@@ -89,12 +88,9 @@ public class Daedalus extends Application {
         super.onCreate();
 
         instance = this;
-
         Logger.init();
-
         mResolver = new Thread(new RuleResolver());
         mResolver.start();
-
         initData();
     }
 
@@ -135,30 +131,30 @@ public class Daedalus extends Application {
     }
 
     public static void initRuleResolver() {
-            ArrayList<String> pendingLoad = new ArrayList<>();
-            ArrayList<Rule> usingRules = configurations.getUsingRules();
-            if (usingRules != null && usingRules.size() > 0) {
-                for (Rule rule : usingRules) {
-                    if (rule.isUsing()) {
-                        pendingLoad.add(rulePath + rule.getFileName());
-                    }
+        ArrayList<String> pendingLoad = new ArrayList<>();
+        ArrayList<Rule> usingRules = configurations.getUsingRules();
+        if (usingRules != null && usingRules.size() > 0) {
+            for (Rule rule : usingRules) {
+                if (rule.isUsing()) {
+                    pendingLoad.add(rulePath + rule.getFileName());
                 }
-                if (pendingLoad.size() > 0) {
-                    String[] arr = new String[pendingLoad.size()];
-                    pendingLoad.toArray(arr);
-                    switch (usingRules.get(0).getType()) {
-                        case Rule.TYPE_HOSTS:
-                            RuleResolver.startLoadHosts(arr);
-                            break;
-                        case Rule.TYPE_DNAMASQ:
-                            RuleResolver.startLoadDnsmasq(arr);
-                            break;
-                    }
-                } else {
-                    RuleResolver.clear();
+            }
+            if (pendingLoad.size() > 0) {
+                String[] arr = new String[pendingLoad.size()];
+                pendingLoad.toArray(arr);
+                switch (usingRules.get(0).getType()) {
+                    case Rule.TYPE_HOSTS:
+                        RuleResolver.startLoadHosts(arr);
+                        break;
+                    case Rule.TYPE_DNAMASQ:
+                        RuleResolver.startLoadDnsmasq(arr);
+                        break;
                 }
             } else {
                 RuleResolver.clear();
+            }
+        } else {
+            RuleResolver.clear();
         }
     }
 
@@ -178,7 +174,6 @@ public class Daedalus extends Application {
 
     @Override
     public void onTerminate() {
-        Log.d("Daedalus", "onTerminate");
         super.onTerminate();
 
         instance = null;
@@ -199,20 +194,35 @@ public class Daedalus extends Application {
             deactivateService(instance);
             return false;
         } else {
-            activateService(instance);
+            prepareAndActivateService(instance);
             return true;
         }
     }
 
-    public static boolean activateService(Context context) {
+    public static boolean prepareAndActivateService(Context context) {
         Intent intent = VpnService.prepare(context);
         if (intent != null) {
             return false;
         } else {
-            DaedalusVpnService.primaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getPrimary());
-            DaedalusVpnService.secondaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getSecondary());
-            context.startService(Daedalus.getServiceIntent(context).setAction(DaedalusVpnService.ACTION_ACTIVATE));
+            activateService(context);
             return true;
+        }
+    }
+
+    public static void activateService(Context context) {
+        activateService(context, false);
+    }
+
+    public static void activateService(Context context, boolean forceForeground) {
+        DaedalusVpnService.primaryServer = (AbstractDnsServer) DnsServerHelper.getServerById(DnsServerHelper.getPrimary()).clone();
+        DaedalusVpnService.secondaryServer = (AbstractDnsServer) DnsServerHelper.getServerById(DnsServerHelper.getSecondary()).clone();
+        if ((getInstance().prefs.getBoolean("settings_foreground", false) || forceForeground)
+                && Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            Logger.info("Starting foreground service");
+            context.startForegroundService(Daedalus.getServiceIntent(context).setAction(DaedalusVpnService.ACTION_ACTIVATE));
+        } else {
+            Logger.info("Starting background service");
+            context.startService(Daedalus.getServiceIntent(context).setAction(DaedalusVpnService.ACTION_ACTIVATE));
         }
     }
 
@@ -223,7 +233,7 @@ public class Daedalus extends Application {
 
     public static void updateShortcut(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            Log.d("Daedalus", "Updating shortcut");
+            Logger.info("Updating shortcut");
             boolean activate = DaedalusVpnService.isActivated();
             String notice = activate ? context.getString(R.string.button_text_deactivate) : context.getString(R.string.button_text_activate);
             ShortcutInfo info = new ShortcutInfo.Builder(context, Daedalus.SHORTCUT_ID_ACTIVATE)
@@ -239,7 +249,7 @@ public class Daedalus extends Application {
     }
 
     public static void donate() {
-        openUri("https://qr.alipay.com/a6x07022gffiehykicipv1a");
+        openUri("https://qr.alipay.com/FKX04751EZDP0SQ0BOT137");
     }
 
     public static void openUri(String uri) {

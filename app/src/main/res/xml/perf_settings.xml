@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                                      xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
+            app:iconSpaceReserved="false"
             android:key="settingsServer"
             android:title="@string/settings_server">
 
@@ -10,7 +11,6 @@
                 android:title="@string/primary_server"
                 android:defaultValue="0">
         </ListPreference>
-
         <ListPreference
                 android:key="secondary_server"
                 android:title="@string/secondary_server"
@@ -23,7 +23,9 @@
                 android:singleLine="true"
                 android:title="@string/settings_dns_test_servers"/>
     </PreferenceCategory>
+
     <PreferenceCategory
+            app:iconSpaceReserved="false"
             android:key="settings_system"
             android:title="@string/settings_system">
 
@@ -39,6 +41,10 @@
                 android:key="settings_dark_theme"
                 android:title="@string/settings_dark_theme"
                 android:defaultValue="false"/>
+        <SwitchPreference
+                android:key="settings_foreground"
+                android:title="@string/settings_foreground"
+                android:defaultValue="false"/>
         <EditTextPreference
                 android:key="settings_log_size"
                 android:selectAllOnFocus="false"
@@ -49,25 +55,27 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="settings_app_filter"
-        android:title="@string/settings_app_filter">
+            app:iconSpaceReserved="false"
+            android:key="settings_app_filter"
+            android:title="@string/settings_app_filter">
         <SwitchPreference
-            android:key="settings_app_filter_switch"
-            android:title="@string/settings_app_filter"
-            android:defaultValue="false"/>
+                android:key="settings_app_filter_switch"
+                android:title="@string/settings_app_filter"
+                android:defaultValue="false"/>
         <SwitchPreference
-            android:key="settings_app_filter_mode_switch"
-            android:title="@string/settings_app_filter_mode"
-            android:defaultValue="false"
-            android:enabled="false"/>
+                android:key="settings_app_filter_mode_switch"
+                android:title="@string/settings_app_filter_mode"
+                android:defaultValue="false"
+                android:enabled="false"/>
         <org.itxtech.daedalus.widget.ClickPreference
-            android:key="settings_app_filter_list"
-            android:title="@string/settings_app_filter_list"
-            android:summary="@string/settings_app_filter_list_summary"
-            android:enabled="false"/>
+                android:key="settings_app_filter_list"
+                android:title="@string/settings_app_filter_list"
+                android:summary="@string/settings_app_filter_list_summary"
+                android:enabled="false"/>
     </PreferenceCategory>
 
     <PreferenceCategory
+            app:iconSpaceReserved="false"
             android:key="settings_advanced"
             android:title="@string/settings_advanced">
         <SwitchPreference
@@ -80,10 +88,14 @@
                 android:defaultValue="false"
                 android:enabled="false"/>
         <SwitchPreference
-                android:key="settings_dont_build_doh_cache"
-                android:title="@string/settings_dont_build_doh_cache"
+                android:key="settings_dont_build_cache"
+                android:title="@string/settings_dont_build_cache"
                 android:defaultValue="false"
                 android:enabled="false"/>
+        <SwitchPreference
+                android:key="settings_use_system_dns"
+                android:title="@string/settings_use_system_dns"
+                android:defaultValue="false"/>
         <ListPreference
                 android:key="settings_dns_query_method"
                 android:title="@string/settings_dns_query_method"
@@ -100,6 +112,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+            app:iconSpaceReserved="false"
             android:key="settings_help"
             android:title="@string/settings_help_and_support">
         <org.itxtech.daedalus.widget.ClickPreference
@@ -118,4 +131,4 @@
                 android:title="@string/settings_manual"
                 android:summary="@string/settings_manual_summary"/>
     </PreferenceCategory>
-</PreferenceScreen>
+</androidx.preference.PreferenceScreen>

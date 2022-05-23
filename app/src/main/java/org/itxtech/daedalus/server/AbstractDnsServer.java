@@ -1,4 +1,6 @@
-package org.itxtech.daedalus.util.server;
+package org.itxtech.daedalus.server;
+
+import androidx.annotation.NonNull;
 
 /**
  * Daedalus Project
@@ -11,15 +13,24 @@ package org.itxtech.daedalus.util.server;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class AbstractDNSServer {
+public class AbstractDnsServer implements Cloneable {
     public static final int DNS_SERVER_DEFAULT_PORT = 53;
 
     protected String address;
     protected int port;
+    protected String hostAddress;
 
-    public AbstractDNSServer(String address, int port) {
+    public AbstractDnsServer(String address, int port) {
         this.address = address;
         this.port = port;
+    }
+
+    public void setHostAddress(String hostAddress) {
+        this.hostAddress = hostAddress;
+    }
+
+    public String getHostAddress() {
+        return hostAddress;
     }
 
     public void setAddress(String address) {
@@ -53,5 +64,15 @@ public class AbstractDNSServer {
 
     public boolean isHttpsServer() {
         return address.contains("/");
+    }
+
+    @NonNull
+    @Override
+    public Object clone() {
+        try {
+            return super.clone();
+        } catch (Exception ignored) {
+        }
+        return new AbstractDnsServer("", 0);
     }
 }

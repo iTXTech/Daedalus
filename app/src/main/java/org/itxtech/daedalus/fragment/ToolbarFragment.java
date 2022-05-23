@@ -1,10 +1,10 @@
 package org.itxtech.daedalus.fragment;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import com.google.android.material.navigation.NavigationView;
 import org.itxtech.daedalus.R;
 

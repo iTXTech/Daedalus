@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                                      xmlns:app="http://schemas.android.com/apk/res-auto">
     <EditTextPreference
             android:key="ruleName"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="@string/settings_rule_name"/>
+
     <PreferenceCategory
+            app:iconSpaceReserved="false"
             android:key="rulSettings"
             android:title="@string/settings_rule">
         <ListPreference
@@ -27,7 +30,9 @@
                 android:key="ruleSync"
                 android:title="@string/settings_rule_sync"/>
     </PreferenceCategory>
+
     <PreferenceCategory
+            app:iconSpaceReserved="false"
             android:key="Import"
             android:title="@string/settings_rule_import">
         <ListPreference
@@ -37,4 +42,4 @@
                 android:key="ruleImportExternal"
                 android:title="@string/settings_rule_import_external"/>
     </PreferenceCategory>
-</PreferenceScreen>
+</androidx.preference.PreferenceScreen>

@@ -1,8 +1,8 @@
 package org.itxtech.daedalus.fragment;
 
 import android.content.Intent;
-import android.preference.PreferenceFragment;
 import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceFragmentCompat;
 
 /**
  * Daedalus Project
@@ -15,7 +15,7 @@ import androidx.appcompat.widget.Toolbar;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-abstract public class ConfigFragment extends PreferenceFragment implements Toolbar.OnMenuItemClickListener {
+abstract public class ConfigFragment extends PreferenceFragmentCompat implements Toolbar.OnMenuItemClickListener {
     protected Intent intent = null;
 
     public void setIntent(Intent intent) {

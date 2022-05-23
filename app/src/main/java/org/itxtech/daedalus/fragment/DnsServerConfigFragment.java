@@ -2,7 +2,7 @@ package org.itxtech.daedalus.fragment;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
+import androidx.preference.EditTextPreference;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,8 +11,8 @@ import com.google.android.material.snackbar.Snackbar;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.ConfigActivity;
-import org.itxtech.daedalus.util.server.CustomDNSServer;
-import org.itxtech.daedalus.util.server.DNSServer;
+import org.itxtech.daedalus.server.CustomDnsServer;
+import org.itxtech.daedalus.server.DnsServer;
 
 /**
  * Daedalus Project
@@ -25,12 +25,11 @@ import org.itxtech.daedalus.util.server.DNSServer;
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  */
-public class DNSServerConfigFragment extends ConfigFragment {
+public class DnsServerConfigFragment extends ConfigFragment {
     private int index;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.perf_server);
     }
 
@@ -38,19 +37,19 @@ public class DNSServerConfigFragment extends ConfigFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        EditTextPreference serverName = (EditTextPreference) findPreference("serverName");
+        EditTextPreference serverName = findPreference("serverName");
         serverName.setOnPreferenceChangeListener((preference, newValue) -> {
             preference.setSummary((String) newValue);
             return true;
         });
 
-        EditTextPreference serverAddress = (EditTextPreference) findPreference("serverAddress");
+        EditTextPreference serverAddress = findPreference("serverAddress");
         serverAddress.setOnPreferenceChangeListener((preference, newValue) -> {
             preference.setSummary((String) newValue);
             return true;
         });
 
-        EditTextPreference serverPort = (EditTextPreference) findPreference("serverPort");
+        EditTextPreference serverPort = findPreference("serverPort");
         serverPort.setOnPreferenceChangeListener((preference, newValue) -> {
             preference.setSummary((String) newValue);
             return true;
@@ -59,7 +58,7 @@ public class DNSServerConfigFragment extends ConfigFragment {
 
         index = intent.getIntExtra(ConfigActivity.LAUNCH_ACTION_ID, ConfigActivity.ID_NONE);
         if (index != ConfigActivity.ID_NONE) {
-            CustomDNSServer server = Daedalus.configurations.getCustomDNSServers().get(index);
+            CustomDnsServer server = Daedalus.configurations.getCustomDNSServers().get(index);
             serverName.setText(server.getName());
             serverName.setSummary(server.getName());
             serverAddress.setText(server.getAddress());
@@ -69,7 +68,7 @@ public class DNSServerConfigFragment extends ConfigFragment {
         } else {
             serverName.setText("");
             serverAddress.setText("");
-            String port = String.valueOf(DNSServer.DNS_SERVER_DEFAULT_PORT);
+            String port = String.valueOf(DnsServer.DNS_SERVER_DEFAULT_PORT);
             serverPort.setText(port);
             serverPort.setSummary(port);
         }
@@ -93,9 +92,9 @@ public class DNSServerConfigFragment extends ConfigFragment {
                 }
 
                 if (index == ConfigActivity.ID_NONE) {
-                    Daedalus.configurations.getCustomDNSServers().add(new CustomDNSServer(serverName, serverAddress, Integer.parseInt(serverPort)));
+                    Daedalus.configurations.getCustomDNSServers().add(new CustomDnsServer(serverName, serverAddress, Integer.parseInt(serverPort)));
                 } else {
-                    CustomDNSServer server = Daedalus.configurations.getCustomDNSServers().get(index);
+                    CustomDnsServer server = Daedalus.configurations.getCustomDNSServers().get(index);
                     server.setName(serverName);
                     server.setAddress(serverAddress);
                     server.setPort(Integer.parseInt(serverPort));
