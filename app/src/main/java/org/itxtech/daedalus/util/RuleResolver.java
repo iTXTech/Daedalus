@@ -129,7 +129,7 @@ public class RuleResolver implements Runnable {
                         dataIO.close();
                         stream.close();
 
-                        Logger.info("Loaded " + String.valueOf(count) + " rules");
+                        Logger.info("Loaded " + count + " rules");
                     }
                 }
             } else if (mode == MODE_DNSMASQ) {
@@ -147,7 +147,7 @@ public class RuleResolver implements Runnable {
                                 data = strLine.split("/");
                                 if (data.length == 3 && data[0].equals("address=")) {
                                     if (data[1].startsWith(".")) {
-                                        data[1] = data[1].substring(1, data[1].length());
+                                        data[1] = data[1].substring(1);
                                     }
                                     if (strLine.contains(":")) {//IPv6
                                         rulesAAAA.put(data[1], data[2]);
@@ -162,7 +162,7 @@ public class RuleResolver implements Runnable {
                         dataIO.close();
                         stream.close();
 
-                        Logger.info("Loaded " + String.valueOf(count) + " rules");
+                        Logger.info("Loaded " + count + " rules");
                     }
                 }
             }

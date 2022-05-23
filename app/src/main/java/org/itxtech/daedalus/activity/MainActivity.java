@@ -175,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void onActivityResult(int request, int result, Intent data) {
+        super.onActivityResult(request, result, data);
         if (result == Activity.RESULT_OK) {
             DaedalusVpnService.primaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getPrimary());
             DaedalusVpnService.secondaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getSecondary());
