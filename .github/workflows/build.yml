@@ -1,0 +1,22 @@
+on: [ push ]
+
+name: Test build
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 1.8
+      - name: Build APK
+        run: bash ./gradlew assemblePureDebug --stacktrace
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: apk
+          path: app/build/outputs/apk/pure/debug/*.apk

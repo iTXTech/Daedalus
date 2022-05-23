@@ -1,11 +1,8 @@
 # iTXTech Daedalus
 
-[![Build Status](https://travis-ci.org/iTXTech/Daedalus.svg?branch=master)](https://travis-ci.org/iTXTech/Daedalus)
-
 __No root required Android DNS modifier and Hosts/DNSMasq resolver.__
 
-## Installation
-* __[Jenkins](http://dev.itxtech.org:10298/job/Daedalus/)__ - Debug signature
+## Installations
 * __[Releases](https://github.com/iTXTech/Daedalus/releases)__ - Release signature
 * __[Play Test](https://play.google.com/apps/testing/org.itxtech.daedalus)__ - Release signature
 
