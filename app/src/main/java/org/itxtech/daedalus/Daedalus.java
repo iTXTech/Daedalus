@@ -57,11 +57,13 @@ public class Daedalus extends Application {
     public static final ArrayList<Rule> RULES = new ArrayList<Rule>() {{
         add(new Rule("googlehosts/hosts", "googlehosts.hosts", Rule.TYPE_HOSTS,
                 "https://raw.githubusercontent.com/googlehosts/hosts/master/hosts-files/hosts", false));
-        add(new Rule("vokins/yhosts", "vokins.hosts", Rule.TYPE_HOSTS,
-                "https://raw.githubusercontent.com/vokins/yhosts/master/hosts", false));
+        add(new Rule("VeleSila/yhosts", "vokins.hosts", Rule.TYPE_HOSTS,
+                "https://raw.githubusercontent.com/VeleSila/yhosts/master/hosts.txt", false));
         add(new Rule("adaway", "adaway.hosts", Rule.TYPE_HOSTS,
                 "https://adaway.org/hosts.txt", false));
         //Build-in DNSMasq rule providers
+        add(new Rule("anti-AD", "antiad.dnsmasq", Rule.TYPE_DNAMASQ,
+                "https://anti-ad.net/anti-ad-for-dnsmasq.conf", false));
         add(new Rule("vokins/yhosts/union", "union.dnsmasq", Rule.TYPE_DNAMASQ,
                 "https://raw.githubusercontent.com/vokins/yhosts/master/dnsmasq/union.conf", false));
     }};

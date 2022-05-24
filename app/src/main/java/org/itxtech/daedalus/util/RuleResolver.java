@@ -108,7 +108,7 @@ public class RuleResolver implements Runnable {
                 for (String hostsFile : hostsFiles) {
                     File file = new File(hostsFile);
                     if (file.canRead()) {
-                        Logger.info("Loading hosts from " + file.toString());
+                        Logger.info("Loading hosts from " + file);
                         FileInputStream stream = new FileInputStream(file);
                         BufferedReader dataIO = new BufferedReader(new InputStreamReader(stream));
                         String strLine;
@@ -136,7 +136,7 @@ public class RuleResolver implements Runnable {
                 for (String dnsmasqFile : dnsmasqFiles) {
                     File file = new File(dnsmasqFile);
                     if (file.canRead()) {
-                        Logger.info("Loading DNSMasq configuration from " + file.toString());
+                        Logger.info("Loading DNSMasq configuration from " + file);
                         FileInputStream stream = new FileInputStream(file);
                         BufferedReader dataIO = new BufferedReader(new InputStreamReader(stream));
                         String strLine;
@@ -145,7 +145,12 @@ public class RuleResolver implements Runnable {
                         while ((strLine = dataIO.readLine()) != null) {
                             if (!strLine.equals("") && !strLine.startsWith("#")) {
                                 data = strLine.split("/");
-                                if (data.length == 3 && data[0].equals("address=")) {
+                                if (data.length >= 2 && data[0].equals("address=")) {
+                                    if (data.length == 2) {
+                                        rulesA.put(data[1], "0.0.0.0");
+                                        count++;
+                                        continue;
+                                    }
                                     if (data[1].startsWith(".")) {
                                         data[1] = data[1].substring(1);
                                     }
@@ -153,6 +158,8 @@ public class RuleResolver implements Runnable {
                                         rulesAAAA.put(data[1], data[2]);
                                     } else if (strLine.contains(".")) {//IPv4
                                         rulesA.put(data[1], data[2]);
+                                    } else {
+                                        rulesA.put(data[1], "0.0.0.0");
                                     }
                                     count++;
                                 }
