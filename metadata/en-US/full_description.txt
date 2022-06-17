@@ -1,0 +1,22 @@
+This application can create a VPN tunnel to modify the DNS settings on Android.
+
+Features
+* No root access required, no ads contained
+* Functional under data connection
+* A tester for DNS servers
+* IPv6 support (including Rules!)
+* Custom DNS server
+* Custom hosts and DNSMasq configuration
+* EXTREME LOW power consume
+* Material Design
+
+Supported DNS Query Methods:
+* UDP
+* TCP
+* DNS over TLS (RFC7858)
+* DNS over HTTPS (RFC8484)
+* DNS over HTTPS (Google JSON)
+
+Users must comply with local laws and regulations.
+
+Read more: <a href="https://github.com/iTXTech/Daedalus/wiki">Wiki</a>
