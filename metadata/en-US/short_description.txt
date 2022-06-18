@@ -1,0 +1,1 @@
+No root required Android DNS modifier and Hosts/DNSMasq resolver

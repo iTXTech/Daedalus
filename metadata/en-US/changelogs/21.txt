@@ -1,0 +1,5 @@
+Changes:
+* Support SDK 31
+* Support more DNSMasq rules
+* Many optimizations
+* Initial F-Droid release
