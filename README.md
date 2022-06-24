@@ -9,6 +9,9 @@ __No root required Android DNS modifier and Hosts/DNSMasq resolver.__
 [<img alt='Get it on Google Play'
       src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'
       height="80">](https://play.google.com/store/apps/details?id=org.itxtech.daedalus)
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/org.itxtech.daedalus)
 
 ## Useful links
 * __[Telegram](https://t.me/iTXTechDaedalus)__ - Join chat
