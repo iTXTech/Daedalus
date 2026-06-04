@@ -1,6 +1,7 @@
 package org.itxtech.daedalus.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 import org.itxtech.daedalus.BuildConfig;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
@@ -54,7 +56,11 @@ public class AboutFragment extends ToolbarFragment {
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {//for better compatibility
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(Daedalus.getInstance(), "No app found to open this link", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             }
 
