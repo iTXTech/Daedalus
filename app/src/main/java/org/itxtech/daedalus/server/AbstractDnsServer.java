@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
  */
 public class AbstractDnsServer implements Cloneable {
     public static final int DNS_SERVER_DEFAULT_PORT = 53;
+    public static final int DNS_SERVER_TLS_PORT = 853;
 
     protected String address;
     protected int port;
@@ -47,6 +48,14 @@ public class AbstractDnsServer implements Cloneable {
 
     public int getPort() {
         return port;
+    }
+
+    /**
+     * Identifier stored in the preferences. Ad-hoc servers (for example the extra
+     * servers of the DNS test) have none.
+     */
+    public String getId() {
+        return null;
     }
 
     public String getName() {

@@ -23,6 +23,7 @@ public class CustomDnsServer extends AbstractDnsServer {
         this.id = String.valueOf(Daedalus.configurations.getNextDnsId());
     }
 
+    @Override
     public String getId() {
         return id;
     }

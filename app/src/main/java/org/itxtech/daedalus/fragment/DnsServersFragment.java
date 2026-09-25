@@ -64,6 +64,7 @@ public class DnsServersFragment extends ToolbarFragment {
                 int position = viewHolder.getAdapterPosition();
                 server = Daedalus.configurations.getCustomDNSServers().get(position);
                 Daedalus.configurations.getCustomDNSServers().remove(position);
+                Daedalus.configurations.save();
                 Snackbar.make(view, R.string.action_removed, Snackbar.LENGTH_LONG)
                         .setAction(R.string.action_undo, new SnackbarClickListener(position)).show();
                 adapter.notifyItemRemoved(position);
@@ -95,6 +96,7 @@ public class DnsServersFragment extends ToolbarFragment {
         @Override
         public void onClick(View v) {
             Daedalus.configurations.getCustomDNSServers().add(position, server);
+            Daedalus.configurations.save();
             adapter.notifyItemInserted(position);
         }
     }

@@ -2,6 +2,7 @@ package org.itxtech.daedalus.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import androidx.fragment.app.Fragment;
 import androidx.preference.*;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
@@ -29,24 +30,29 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.perf_settings);
 
-        }}) {
+        for (String k : new String[]{"primary_server", "secondary_server"}) {
             ListPreference listPref = findPreference(k);
-            listPref.setEntries(DnsServerHelper.getNames(Daedalus.getInstance()));
-            listPref.setEntryValues(DnsServerHelper.getIds());
-            listPref.setSummary(DnsServerHelper.getDescription(listPref.getValue(), Daedalus.getInstance()));
+            final String hint = getString(k.equals("primary_server") ? R.string.primary_server_summary : R.string.secondary_server_summary);
             listPref.setOnPreferenceChangeListener((preference, newValue) -> {
-                preference.setSummary(DnsServerHelper.getDescription((String) newValue, Daedalus.getInstance()));
+                preference.setSummary(DnsServerHelper.getDescription((String) newValue, Daedalus.getInstance()) + "\n" + hint);
+                // Picked up by the running VPN after the value has been persisted
+                DaedalusVpnService.notifyConfigurationChanged();
                 return true;
             });
         }
+        updateServerLists();
 
         EditTextPreference testDNSServers = findPreference("dns_test_servers");
         testDNSServers.setSummary(testDNSServers.getText());
         testDNSServers.setOnPreferenceChangeListener((preference, newValue) -> {
             preference.setSummary((String) newValue);
+        findPreference("settings_server_management").setOnPreferenceClickListener(preference -> {
+            Fragment parent = getParentFragment();
+            if (parent instanceof SettingsFragment) {
+                ((SettingsFragment) parent).showServerManagement();
+            }
             return true;
         });
-
         EditTextPreference logSize = findPreference("settings_log_size");
         logSize.setSummary(logSize.getText());
         logSize.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -106,6 +112,33 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
 
         updateOptions(advanced.isChecked(), "settings_advanced");
         updateOptions(appFilter.isChecked(), "settings_app_filter");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Servers may have been switched on or off in Server Management meanwhile
+        updateServerLists();
+    }
+
+
+    /**
+     * Fills the primary/secondary lists with the servers that are switched on. A saved
+     * selection that has been switched off falls back to an available server.
+     */
+    private void updateServerLists() {
+        String[] names = DnsServerHelper.getNames(Daedalus.getInstance());
+        String[] ids = DnsServerHelper.getIds();
+        for (String k : new String[]{"primary_server", "secondary_server"}) {
+            ListPreference listPref = findPreference(k);
+            listPref.setEntries(names);
+            listPref.setEntryValues(ids);
+            boolean primary = k.equals("primary_server");
+            String value = primary ? DnsServerHelper.getPrimary() : DnsServerHelper.getSecondary();
+            listPref.setValue(value);
+            listPref.setSummary(DnsServerHelper.getDescription(value, Daedalus.getInstance()) + "\n"
+                    + getString(primary ? R.string.primary_server_summary : R.string.secondary_server_summary));
+        }
     }
 
     private void updateOptions(boolean checked, String pref) {

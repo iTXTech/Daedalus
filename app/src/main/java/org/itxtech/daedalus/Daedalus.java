@@ -46,12 +46,16 @@ public class Daedalus extends Application {
     private static final String SHORTCUT_ID_ACTIVATE = "shortcut_activate";
 
     public static final List<DnsServer> DNS_SERVERS = new ArrayList<DnsServer>() {{
+        // Every built-in server can be switched off in Settings > Server Management
         add(new DnsServer("101.101.101.101", R.string.server_twnic_primary));
         add(new DnsServer("101.102.103.104", R.string.server_twnic_secondary));
         add(new DnsServer("rubyfish.cn/dns-query", R.string.server_rubyfish));
         add(new DnsServer("cloudflare-dns.com/dns-query", R.string.server_cloudflare));
         add(new DnsServer("dns.google/dns-query", R.string.server_google_ietf));
         add(new DnsServer("dns.google/resolve", R.string.server_google_json));
+        add(new DnsServer("dns.alidns.com", R.string.server_alidns, AbstractDnsServer.DNS_SERVER_TLS_PORT));
+        add(new DnsServer("dns.alidns.com/dns-query", R.string.server_alidns_doh));
+        add(new DnsServer("i4cm5lqxfu.cloudflare-gateway.com/dns-query", R.string.server_cloudflare_gateway));
     }};
 
     public static final ArrayList<Rule> RULES = new ArrayList<Rule>() {{

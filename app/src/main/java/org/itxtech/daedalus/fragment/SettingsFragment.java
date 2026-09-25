@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.fragment.app.Fragment;
 import org.itxtech.daedalus.R;
 
 /**
@@ -35,6 +36,10 @@ public class SettingsFragment extends ToolbarFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getChildFragmentManager().beginTransaction().replace(R.id.settings_content, new GlobalConfigFragment()).commit();
+    }
+
+    public void showServerManagement() {
+        showSubPage(new ServerManagementFragment(), R.string.settings_server_management);
     }
 
     public void showNetworkRules() {

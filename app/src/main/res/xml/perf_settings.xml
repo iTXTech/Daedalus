@@ -7,6 +7,10 @@
             android:title="@string/settings_server">
 
         <org.itxtech.daedalus.widget.ClickPreference
+                android:key="settings_server_management"
+                android:title="@string/settings_server_management"
+                android:summary="@string/settings_server_management_summary"/>
+        <org.itxtech.daedalus.widget.ClickPreference
                 android:key="settings_network_rules"
                 android:title="@string/settings_network_rules"
                 android:summary="@string/settings_network_rules_summary"/>

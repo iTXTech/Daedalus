@@ -18,8 +18,9 @@ public class DnsServer extends AbstractDnsServer {
 
     private static int totalId = 0;
 
-    private String id;
-    private int description;
+    private final String id;
+    private final int description;
+    private boolean enabledByDefault = true;
 
     public DnsServer(String address, int description, int port) {
         super(address, port);
@@ -35,8 +36,37 @@ public class DnsServer extends AbstractDnsServer {
         this(address, 0);
     }
 
+    @Override
     public String getId() {
         return id;
+    }
+
+    /**
+     * Initial state of the on/off switch in Settings > Server Management. A server that
+     * is off keeps its ID (so saved settings stay valid) but is hidden from every list.
+     */
+    public DnsServer setEnabledByDefault(boolean enabled) {
+        this.enabledByDefault = enabled;
+        return this;
+    }
+
+    public boolean isEnabledByDefault() {
+        return enabledByDefault;
+    }
+
+    /**
+     * Preference key of the on/off switch. Based on the address rather than the ID so
+     * that reordering the built-in list does not move the switches around.
+     */
+    public String getEnabledKey() {
+        return "server_enabled_" + address;
+    }
+
+    /**
+     * Whether the server is shown in the server lists, as toggled in Settings > Server Management.
+     */
+    public boolean isEnabled() {
+        return Daedalus.getPrefs().getBoolean(getEnabledKey(), enabledByDefault);
     }
 
     public String getStringDescription(Context context) {

@@ -109,7 +109,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (!(currentFragment instanceof HomeFragment)) {
+            return;
+        }
+        // Sub pages of the current fragment (e.g. Server Management in Settings) close first
+        if (currentFragment != null && currentFragment.getChildFragmentManager().popBackStackImmediate()) {
+            return;
+        }
+        if (!(currentFragment instanceof HomeFragment)) {
             switchFragment(HomeFragment.class);
         } else {
             super.onBackPressed();
