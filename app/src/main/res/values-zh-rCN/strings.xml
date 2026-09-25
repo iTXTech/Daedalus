@@ -62,6 +62,9 @@
     <string name="settings_use_system_dns_summary">忽略这里配置的服务器和网络规则，转发给当前网络分配的 DNS；只想用过滤规则时开启</string>
     <string name="primary_server_summary">没有网络规则命中时使用</string>
     <string name="secondary_server_summary">首选失败或超时时使用</string>
+    <string name="settings_socks5_host_summary">代理的 IP 或域名，本机 EasyTier 填 127.0.0.1</string>
+    <string name="settings_socks5_username_summary">代理不需要认证时留空</string>
+    <string name="settings_server_port_summary">53 为普通 DNS，853 自动使用 DoT（下方指定协议时除外）</string>
     <string name="network_rules_none">还没有规则，任何网络都使用上方的首选和备用服务器。</string>
     <string name="network_rules_add">添加规则…</string>
     <string name="network_rule_type">条件</string>
@@ -71,6 +74,18 @@
     <string name="network_rule_subnets_summary">逗号分隔，例如 192.168.31.0/24, 10.0.0.0/8</string>
     <string name="network_rule_servers">首选: %1$s\n备用: %2$s</string>
     <string name="config_network_rule">网络规则配置</string>
+    <string name="settings_socks5">SOCKS5 代理</string>
+    <string name="settings_socks5_host">代理地址</string>
+    <string name="settings_socks5_port">代理端口</string>
+    <string name="settings_socks5_username">用户名（可选）</string>
+    <string name="settings_socks5_password">密码（可选）</string>
+    <string name="settings_server_proxied">通过 SOCKS5 代理连接</string>
+    <string name="settings_server_proxied_summary">经下方的代理连接此服务器，例如本机的 EasyTier；UDP 查询会改走 TCP</string>
+    <string name="server_test">测试连接</string>
+    <string name="server_test_summary">按上面当前填写的内容发送一次查询，不会保存</string>
+    <string name="server_test_running">正在测试…</string>
+    <string name="server_test_ok">成功 · %1$s · %2$d ms\n%3$s</string>
+    <string name="server_test_failed">失败: %s</string>
     <string name="settings_help_and_support">支持和帮助</string>
     <string name="settings_advanced">高级系统设置</string>
     <string name="settings_advanced_on">开启</string>
@@ -123,6 +138,7 @@
     <string name="test_failed">查询失败。超时或未知的主机。</string>
     <string name="test_timeout">请求超时。</string>
     <string name="test_error">错误:</string>
+    <string name="test_proxy_tcp_hint">SOCKS5 代理只能承载 TCP。请确认该 DNS 服务器开启了 TCP %d 端口（SmartDNS 需要配置 bind-tcp），或用 EasyTier 的端口转发把它的 UDP 端口映射到本机后不经代理使用。</string>
     <string name="test_test_domain">google.com</string>
 
     <string name="nav_version">版本:</string>

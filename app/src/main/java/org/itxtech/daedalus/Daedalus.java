@@ -17,6 +17,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.stream.JsonReader;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.server.AbstractDnsServer;
+import org.itxtech.daedalus.server.CustomDnsServer;
 import org.itxtech.daedalus.server.DnsServer;
 import org.itxtech.daedalus.server.DnsServerHelper;
 import org.itxtech.daedalus.service.DaedalusVpnService;
@@ -24,6 +25,7 @@ import org.itxtech.daedalus.util.Configurations;
 import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.Rule;
 import org.itxtech.daedalus.util.RuleResolver;
+import org.itxtech.daedalus.util.SocksProxy;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -97,6 +99,7 @@ public class Daedalus extends Application {
         mResolver = new Thread(new RuleResolver());
         mResolver.start();
         initData();
+        SocksProxy.installAuthenticator();
     }
 
     private void initDirectory(String dir) {
@@ -126,6 +129,41 @@ public class Daedalus extends Application {
         // Internal storage is always available, unlike the external files directory that
         // older versions used and that may be missing right after boot.
         configurations = Configurations.load(new File(getFilesDir(), "config.json"), legacyConfigFile);
+        migrateProxySettings();
+    }
+
+    /**
+     * The SOCKS5 proxy used to be configured once for all servers in the settings; it now
+     * belongs to each custom server. Servers flagged as proxied by an older version get
+     * the settings of that time copied in, then the old keys are dropped.
+     */
+    private void migrateProxySettings() {
+        boolean changed = false;
+        for (CustomDnsServer server : configurations.getCustomDNSServers()) {
+            if (!server.hasLegacyProxyFlag()) {
+                continue;
+            }
+            String host = prefs.getString("settings_socks5_host", SocksProxy.DEFAULT_HOST);
+            if (host == null || host.trim().isEmpty()) {
+                host = SocksProxy.DEFAULT_HOST;
+            }
+            int port = SocksProxy.DEFAULT_PORT;
+            try {
+                port = Integer.parseInt(prefs.getString("settings_socks5_port", String.valueOf(SocksProxy.DEFAULT_PORT)).trim());
+            } catch (Exception ignored) {
+            }
+            server.setProxy(host, port, prefs.getString("settings_socks5_username", null),
+                    prefs.getString("settings_socks5_password", null));
+            changed = true;
+        }
+        if (changed) {
+            configurations.save();
+            Logger.info("Moved the SOCKS5 proxy settings into the proxied custom servers");
+        }
+        prefs.edit()
+                .remove("settings_socks5_host").remove("settings_socks5_port")
+                .remove("settings_socks5_username").remove("settings_socks5_password")
+                .apply();
     }
 
     public static <T> T parseJson(Class<T> beanClass, JsonReader reader) throws JsonParseException {

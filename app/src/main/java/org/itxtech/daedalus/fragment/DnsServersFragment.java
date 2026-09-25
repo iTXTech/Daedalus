@@ -123,7 +123,7 @@ public class DnsServersFragment extends ToolbarFragment {
             CustomDnsServer server = Daedalus.configurations.getCustomDNSServers().get(position);
             holder.setIndex(position);
             holder.textViewName.setText(server.getName());
-            holder.textViewAddress.setText(server.getRealName());
+            holder.textViewAddress.setText(server.isProxied() ? server.getRealName() + " (SOCKS5)" : server.getRealName());
         }
 
         @Override

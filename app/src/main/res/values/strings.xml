@@ -61,6 +61,9 @@
     <string name="settings_use_system_dns_summary">Forward to the DNS servers of the current network instead of the servers and network rules configured here; for using only the filter rules</string>
     <string name="primary_server_summary">Used when no network rule matches</string>
     <string name="secondary_server_summary">Tried when the primary server fails or times out</string>
+    <string name="settings_socks5_host_summary">IP or host name of the proxy; 127.0.0.1 for EasyTier on this phone</string>
+    <string name="settings_socks5_username_summary">Leave empty when the proxy needs no authentication</string>
+    <string name="settings_server_port_summary">53 for plain DNS; 853 switches to DNS over TLS automatically unless a protocol is set below</string>
     <string name="network_rules_none">No rules yet. The primary and secondary servers above are used on every network.</string>
     <string name="network_rules_add">Add rule…</string>
     <string name="network_rule_type">Condition</string>
@@ -70,6 +73,18 @@
     <string name="network_rule_subnets_summary">Comma separated, e.g. 192.168.31.0/24, 10.0.0.0/8</string>
     <string name="network_rule_servers">Primary: %1$s\nSecondary: %2$s</string>
     <string name="config_network_rule">Network rule</string>
+    <string name="settings_socks5">SOCKS5 Proxy</string>
+    <string name="settings_socks5_host">Proxy address</string>
+    <string name="settings_socks5_port">Proxy port</string>
+    <string name="settings_socks5_username">Username (optional)</string>
+    <string name="settings_socks5_password">Password (optional)</string>
+    <string name="settings_server_proxied">Connect through SOCKS5 proxy</string>
+    <string name="settings_server_proxied_summary">Reach this server through the proxy below, e.g. EasyTier\'s on this phone; UDP queries are sent over TCP</string>
+    <string name="server_test">Test connection</string>
+    <string name="server_test_summary">Sends a query with the settings above as they are filled in now, without saving</string>
+    <string name="server_test_running">Testing…</string>
+    <string name="server_test_ok">OK · %1$s · %2$d ms\n%3$s</string>
+    <string name="server_test_failed">Failed: %s</string>
     <string name="settings_help_and_support">Help &amp; Support</string>
     <string name="settings_advanced">Advanced System Settings</string>
     <string name="settings_advanced_on">On</string>
@@ -128,6 +143,7 @@
     <string name="test_failed">DNS query failed. Timeout or unknown hostname.</string>
     <string name="test_timeout">Request timed out.</string>
     <string name="test_error">Error:</string>
+    <string name="test_proxy_tcp_hint">A SOCKS5 proxy only carries TCP. Make sure the DNS server accepts TCP on port %d (SmartDNS needs bind-tcp), or forward a UDP port with EasyTier and use it without the proxy.</string>
     <string name="test_test_domain">google.com</string>
 
     <string name="nav_version">Version:</string>

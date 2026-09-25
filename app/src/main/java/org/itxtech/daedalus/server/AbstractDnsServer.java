@@ -62,6 +62,31 @@ public class AbstractDnsServer implements Cloneable {
         return "";
     }
 
+
+    /**
+     * Host of the SOCKS5 proxy the server is reached through, or null for a direct
+     * connection. Each server carries its own proxy settings.
+     */
+    public String getProxyHost() {
+        return null;
+    }
+
+    public int getProxyPort() {
+        return 0;
+    }
+
+    public String getProxyUsername() {
+        return null;
+    }
+
+    public String getProxyPassword() {
+        return null;
+    }
+
+    public boolean isProxied() {
+        String host = getProxyHost();
+        return host != null && !host.trim().isEmpty();
+    }
     @Override
     public String toString() {
         return getName();
