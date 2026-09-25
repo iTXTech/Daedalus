@@ -79,7 +79,6 @@ public class Daedalus extends Application {
     public static Configurations configurations;
     public static String rulePath;
     public static String logPath;
-    private static String configPath;
 
     private static Daedalus instance;
     private SharedPreferences prefs;
@@ -110,20 +109,19 @@ public class Daedalus extends Application {
         PreferenceManager.setDefaultValues(this, R.xml.perf_settings, false);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
+        File legacyConfigFile = null;
         if (getExternalFilesDir(null) != null) {
             rulePath = getExternalFilesDir(null).getPath() + "/rules/";
             logPath = getExternalFilesDir(null).getPath() + "/logs/";
-            configPath = getExternalFilesDir(null).getPath() + "/config.json";
+            legacyConfigFile = new File(getExternalFilesDir(null), "config.json");
 
             initDirectory(rulePath);
             initDirectory(logPath);
         }
 
-        if (configPath != null) {
-            configurations = Configurations.load(new File(configPath));
-        } else {
-            configurations = new Configurations();
-        }
+        // Internal storage is always available, unlike the external files directory that
+        // older versions used and that may be missing right after boot.
+        configurations = Configurations.load(new File(getFilesDir(), "config.json"), legacyConfigFile);
     }
 
     public static <T> T parseJson(Class<T> beanClass, JsonReader reader) throws JsonParseException {
