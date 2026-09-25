@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
 
 def gitCommit = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
 
@@ -76,7 +75,7 @@ apply plugin: 'com.google.gms.google-services'
 android.applicationVariants.all { variant ->
     project.tasks.each { t ->
         if (!t.name.toLowerCase().contains("googlerelease") &&
-                (t.name.contains("GoogleServices") || t.name.contains("fabric"))) {
+                (t.name.contains("GoogleServices"))) {
             t.enabled = false
         }
     }
