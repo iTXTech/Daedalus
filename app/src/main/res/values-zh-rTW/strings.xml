@@ -64,6 +64,7 @@
     <string name="settings_dns_query_method_summary">僅用於 53 連接埠的伺服器。853 連接埠自動使用 DoT，帶路徑的位址自動使用 DoH。</string>
     <string name="log_crashes">=== 當機記錄（logs/crash.log）===</string>
     <string name="settings_use_system_dns_summary">忽略這裡設定的伺服器和網路規則，轉發給目前網路分配的 DNS；只想用過濾規則時開啟</string>
+    <string name="settings_import_config_url_summary">下載並合併一份設定檔，例如自行託管的</string>
     <string name="primary_server_summary">沒有網路規則命中時使用</string>
     <string name="secondary_server_summary">首選失敗或逾時時使用</string>
     <string name="settings_socks5_host_summary">代理的 IP 或網域名稱，本機 EasyTier 填 127.0.0.1</string>
@@ -163,6 +164,15 @@
     <string name="test_timeout">請求逾時。</string>
     <string name="test_error">錯誤:</string>
     <string name="test_proxy_tcp_hint">SOCKS5 代理只能承載 TCP。請確認該 DNS 伺服器開啟了 TCP %d 連接埠（SmartDNS 需要設定 bind-tcp），或用 EasyTier 的連接埠轉發把它的 UDP 連接埠映射到本機後不經代理使用。</string>
+    <string name="notice_servers_import_failed">匯入失敗: %s</string>
+    <string name="settings_backup">備份與還原</string>
+    <string name="settings_export_config">匯出設定</string>
+    <string name="settings_export_config_summary">伺服器及其憑證、網路規則、過濾規則、應用程式清單與全部設定，匯出為一個 JSON 檔案</string>
+    <string name="settings_import_config">匯入設定</string>
+    <string name="settings_import_config_summary">合併到目前設定：既有項目更新，不會刪除任何內容</string>
+    <string name="settings_import_config_url">從 URL 匯入設定</string>
+    <string name="notice_config_exported">設定已匯出。</string>
+    <string name="notice_config_imported">已匯入：伺服器新增 %1$d、更新 %2$d；網路規則 %3$d / %4$d；過濾規則 %5$d / %6$d；應用程式 %7$d；設定項 %8$d</string>
     <string name="test_test_domain">google.com</string>
 
     <string name="nav_version">版本:</string>

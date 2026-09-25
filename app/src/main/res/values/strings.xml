@@ -63,6 +63,7 @@
     <string name="settings_dns_query_method_summary">For servers on port 53 only. Port 853 uses DoT and addresses with a path use DoH automatically.</string>
     <string name="log_crashes">=== Crashes (logs/crash.log) ===</string>
     <string name="settings_use_system_dns_summary">Forward to the DNS servers of the current network instead of the servers and network rules configured here; for using only the filter rules</string>
+    <string name="settings_import_config_url_summary">Download a configuration file and merge it, e.g. one you host yourself</string>
     <string name="primary_server_summary">Used when no network rule matches</string>
     <string name="secondary_server_summary">Tried when the primary server fails or times out</string>
     <string name="settings_socks5_host_summary">IP or host name of the proxy; 127.0.0.1 for EasyTier on this phone</string>
@@ -163,6 +164,16 @@
     <string name="test_timeout">Request timed out.</string>
     <string name="test_error">Error:</string>
     <string name="test_proxy_tcp_hint">A SOCKS5 proxy only carries TCP. Make sure the DNS server accepts TCP on port %d (SmartDNS needs bind-tcp), or forward a UDP port with EasyTier and use it without the proxy.</string>
+    <string name="notice_servers_import_failed">Import failed: %s</string>
+    <string name="settings_backup">Backup &amp; Restore</string>
+    <string name="settings_export_config">Export configuration</string>
+    <string name="settings_export_config_summary">Servers with certificates, network rules, filter rules, app list and all settings as one JSON file</string>
+    <string name="settings_import_config">Import configuration</string>
+    <string name="settings_import_config_summary">Merges into the current configuration: existing items are updated, nothing is deleted</string>
+    <string name="settings_import_config_url">Import configuration from URL</string>
+    <string name="notice_config_exported">Configuration exported.</string>
+    <string name="notice_config_imported">Imported: servers %1$d added, %2$d updated; network rules %3$d / %4$d; filter rules %5$d / %6$d; apps %7$d; settings %8$d</string>
+    <string name="config_remote_url_hint" translatable="false">https://example.com/daedalus-config.json</string>
     <string name="test_test_domain">google.com</string>
 
     <string name="nav_version">Version:</string>

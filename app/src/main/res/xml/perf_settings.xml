@@ -122,6 +122,24 @@
 
     <PreferenceCategory
             app:iconSpaceReserved="false"
+            android:key="settings_backup"
+            android:title="@string/settings_backup">
+        <org.itxtech.daedalus.widget.ClickPreference
+                android:key="settings_export_config"
+                android:title="@string/settings_export_config"
+                android:summary="@string/settings_export_config_summary"/>
+        <org.itxtech.daedalus.widget.ClickPreference
+                android:key="settings_import_config"
+                android:title="@string/settings_import_config"
+                android:summary="@string/settings_import_config_summary"/>
+        <org.itxtech.daedalus.widget.ClickPreference
+                android:key="settings_import_config_url"
+                android:title="@string/settings_import_config_url"
+                android:summary="@string/settings_import_config_url_summary"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            app:iconSpaceReserved="false"
             android:key="settings_help"
             android:title="@string/settings_help_and_support">
         <org.itxtech.daedalus.widget.ClickPreference

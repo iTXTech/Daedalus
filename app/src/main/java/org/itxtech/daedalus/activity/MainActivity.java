@@ -57,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static final String LAUNCH_NEED_RECREATE = "org.itxtech.daedalus.activity.MainActivity.LAUNCH_NEED_RECREATE";
 
+    private static final int REQUEST_VPN_PERMISSION = 100;
+
     private static MainActivity instance = null;
 
     private ToolbarFragment currentFragment;
@@ -140,9 +142,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void activateService() {
         Intent intent = VpnService.prepare(Daedalus.getInstance());
         if (intent != null) {
-            startActivityForResult(intent, 0);
+            startActivityForResult(intent, REQUEST_VPN_PERMISSION);
         } else {
-            onActivityResult(0, Activity.RESULT_OK, null);
+            onActivityResult(REQUEST_VPN_PERMISSION, Activity.RESULT_OK, null);
         }
 
         long activateCounter = Daedalus.configurations.getActivateCounter();
@@ -170,12 +172,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void onActivityResult(int request, int result, Intent data) {
         super.onActivityResult(request, result, data);
-        if (result == Activity.RESULT_OK) {
+        // Results of the fragments (file pickers etc.) arrive here as well; only the VPN
+        // permission result activates the service
+        if (request == REQUEST_VPN_PERMISSION && result == Activity.RESULT_OK) {
             Daedalus.activateService(Daedalus.getInstance());
             updateMainButton(R.string.button_text_deactivate);
             Daedalus.updateShortcut(getApplicationContext());
         }
-        super.onActivityResult(request, result, data);
     }
 
     private void updateMainButton(int id) {
