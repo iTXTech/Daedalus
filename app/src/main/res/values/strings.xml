@@ -63,6 +63,7 @@
     <string name="secondary_server_summary">Tried when the primary server fails or times out</string>
     <string name="settings_socks5_host_summary">IP or host name of the proxy; 127.0.0.1 for EasyTier on this phone</string>
     <string name="settings_socks5_username_summary">Leave empty when the proxy needs no authentication</string>
+    <string name="settings_server_address_summary">IP or host name. For DoH enter host and path, e.g. dns.alidns.com/dns-query</string>
     <string name="settings_server_port_summary">53 for plain DNS; 853 switches to DNS over TLS automatically unless a protocol is set below</string>
     <string name="network_rules_none">No rules yet. The primary and secondary servers above are used on every network.</string>
     <string name="network_rules_add">Add rule…</string>
@@ -73,6 +74,12 @@
     <string name="network_rule_subnets_summary">Comma separated, e.g. 192.168.31.0/24, 10.0.0.0/8</string>
     <string name="network_rule_servers">Primary: %1$s\nSecondary: %2$s</string>
     <string name="config_network_rule">Network rule</string>
+    <string name="settings_server_certificate">TLS certificate (DoT)</string>
+    <string name="cert_none">Not set, system CAs only. Import the self-signed certificate or the CA of this server (PEM or DER).</string>
+    <string name="cert_replace">Replace certificate…</string>
+    <string name="cert_remove">Remove certificate</string>
+    <string name="cert_import_failed">Cannot read a certificate from this file</string>
+    <string name="cert_details">Issuer: %1$s\nValid until %2$s</string>
     <string name="settings_socks5">SOCKS5 Proxy</string>
     <string name="settings_socks5_host">Proxy address</string>
     <string name="settings_socks5_port">Proxy port</string>

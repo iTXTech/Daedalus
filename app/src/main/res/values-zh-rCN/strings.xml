@@ -64,6 +64,7 @@
     <string name="secondary_server_summary">首选失败或超时时使用</string>
     <string name="settings_socks5_host_summary">代理的 IP 或域名，本机 EasyTier 填 127.0.0.1</string>
     <string name="settings_socks5_username_summary">代理不需要认证时留空</string>
+    <string name="settings_server_address_summary">IP 或域名；DoH 填主机名加路径，例如 dns.alidns.com/dns-query</string>
     <string name="settings_server_port_summary">53 为普通 DNS，853 自动使用 DoT（下方指定协议时除外）</string>
     <string name="network_rules_none">还没有规则，任何网络都使用上方的首选和备用服务器。</string>
     <string name="network_rules_add">添加规则…</string>
@@ -74,6 +75,12 @@
     <string name="network_rule_subnets_summary">逗号分隔，例如 192.168.31.0/24, 10.0.0.0/8</string>
     <string name="network_rule_servers">首选: %1$s\n备用: %2$s</string>
     <string name="config_network_rule">网络规则配置</string>
+    <string name="settings_server_certificate">TLS 证书（DoT）</string>
+    <string name="cert_none">未设置，仅信任系统 CA。可导入此服务器的自签名证书或其 CA（PEM 或 DER）。</string>
+    <string name="cert_replace">更换证书…</string>
+    <string name="cert_remove">移除证书</string>
+    <string name="cert_import_failed">无法从该文件读取证书</string>
+    <string name="cert_details">颁发者: %1$s\n有效期至 %2$s</string>
     <string name="settings_socks5">SOCKS5 代理</string>
     <string name="settings_socks5_host">代理地址</string>
     <string name="settings_socks5_port">代理端口</string>

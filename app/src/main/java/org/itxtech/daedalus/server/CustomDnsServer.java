@@ -27,6 +27,8 @@ public class CustomDnsServer extends AbstractDnsServer {
     private int proxyPort;
     private String proxyUsername;
     private String proxyPassword;
+    // Certificate trusted for DoT connections to this server (self-signed or private CA), or null
+    private String certificate;
 
     public CustomDnsServer(String name, String address, int port) {
         super(address, port);
@@ -95,4 +97,12 @@ public class CustomDnsServer extends AbstractDnsServer {
         return proxied && proxyHost == null;
     }
 
+    @Override
+    public String getCertificate() {
+        return certificate;
+    }
+
+    public void setCertificate(String certificate) {
+        this.certificate = certificate;
+    }
 }

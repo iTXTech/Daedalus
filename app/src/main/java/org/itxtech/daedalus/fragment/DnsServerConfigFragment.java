@@ -1,6 +1,8 @@
 package org.itxtech.daedalus.fragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.InputType;
@@ -9,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.preference.EditTextPreference;
+import androidx.preference.Preference;
 import androidx.preference.SwitchPreference;
 import com.google.android.material.snackbar.Snackbar;
 import org.itxtech.daedalus.Daedalus;
@@ -19,12 +22,15 @@ import org.itxtech.daedalus.server.DnsServer;
 import org.itxtech.daedalus.util.Logger;
 import org.itxtech.daedalus.util.QueryLog;
 import org.itxtech.daedalus.util.SocksProxy;
+import org.itxtech.daedalus.util.TlsCertificates;
 import org.minidns.dnsmessage.DnsMessage;
 import org.minidns.dnsmessage.Question;
 import org.minidns.record.Record;
 
 import java.io.EOFException;
 import java.net.SocketException;
+import java.security.cert.X509Certificate;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -40,10 +46,13 @@ import java.util.Random;
  * (at your option) any later version.
  */
 public class DnsServerConfigFragment extends ConfigFragment {
+    private static final int IMPORT_CERTIFICATE_REQUEST_CODE = 1;
     private static final int TEST_TIMEOUT = 5000;
     private static final String[] PROXY_FIELDS = {"serverProxyHost", "serverProxyPort", "serverProxyUsername", "serverProxyPassword"};
 
     private int index;
+    // Certificate chosen for this server; applied to the server together with the other fields
+    private String certificate = null;
     private Thread testThread = null;
 
     @Override
@@ -64,9 +73,8 @@ public class DnsServerConfigFragment extends ConfigFragment {
         bindText("serverPort", R.string.settings_server_port_summary);
         numeric("serverPort");
 
-        EditTextPreference serverAddress = findPreference("serverAddress");
-        serverAddress.setOnPreferenceChangeListener((preference, newValue) -> {
-            preference.setSummary((String) newValue);
+        findPreference("serverCertificate").setOnPreferenceClickListener(preference -> {
+            onCertificateClicked();
             return true;
         });
 
@@ -117,6 +125,9 @@ public class DnsServerConfigFragment extends ConfigFragment {
         password.setText(proxied && server.getProxyPassword() != null ? server.getProxyPassword() : "");
         password.setSummary(maskPassword(password.getText()));
         setProxyFieldsEnabled(proxied);
+
+        certificate = server != null ? server.getCertificate() : null;
+        updateCertificateSummary();
         return view;
     }
 
@@ -161,6 +172,95 @@ public class DnsServerConfigFragment extends ConfigFragment {
             findPreference(key).setEnabled(enabled);
         }
     }
+                result = app.getString(R.string.server_test_ok, DnsTransport.describe(server),
+                        SystemClock.elapsedRealtime() - start, QueryLog.summarize(response.message));
+            } catch (Exception e) {
+                Logger.logException(e);
+                String reason = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
+                result = app.getString(R.string.server_test_failed, reason);
+                if (server.isProxied() && (e instanceof SocketException || e instanceof EOFException)) {
+                    result += "\n" + app.getString(R.string.test_proxy_tcp_hint, server.getPort());
+                }
+            } finally {
+                SocksProxy.setExtraServer(null);
+            }
+            final String text = result;
+            Activity activity = getActivity();
+            if (activity == null) {
+                testThread = null;
+                return;
+            }
+            activity.runOnUiThread(() -> {
+                testThread = null;
+                Preference preference = isAdded() ? findPreference("serverTest") : null;
+                if (preference != null) {
+                    preference.setSummary(text);
+                    preference.setEnabled(true);
+                }
+            });
+        }, "ServerTest");
+        testThread.start();
+    }
+
+    private void onCertificateClicked() {
+        if (certificate == null) {
+            pickCertificate();
+            return;
+        }
+        new AlertDialog.Builder(getActivity())
+                .setItems(new CharSequence[]{getString(R.string.cert_replace), getString(R.string.cert_remove)},
+                        (dialog, which) -> {
+                            if (which == 0) {
+                                pickCertificate();
+                            } else {
+                                certificate = null;
+                                updateCertificateSummary();
+                            }
+                        })
+                .show();
+    }
+
+    private void pickCertificate() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
+        startActivityForResult(intent, IMPORT_CERTIFICATE_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode != IMPORT_CERTIFICATE_REQUEST_CODE || resultCode != Activity.RESULT_OK
+                || data == null || data.getData() == null) {
+            return;
+        }
+        try {
+            certificate = TlsCertificates.importFrom(getActivity().getContentResolver(), data.getData());
+            updateCertificateSummary();
+        } catch (Exception e) {
+            Logger.logException(e);
+            Snackbar.make(getView(), R.string.cert_import_failed, Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    private void updateCertificateSummary() {
+        Preference preference = findPreference("serverCertificate");
+        if (certificate == null) {
+            preference.setSummary(R.string.cert_none);
+            return;
+        }
+        try {
+            X509Certificate first = TlsCertificates.load(certificate).get(0);
+            preference.setSummary(TlsCertificates.getCommonName(first.getSubjectX500Principal()) + "\n"
+                    + getString(R.string.cert_details,
+                    TlsCertificates.getCommonName(first.getIssuerX500Principal()),
+                    DateFormat.getDateInstance().format(first.getNotAfter())));
+        } catch (Exception e) {
+            Logger.logException(e);
+            preference.setSummary(certificate);
+        }
+    }
+
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         int id = item.getItemId();
@@ -190,6 +290,8 @@ public class DnsServerConfigFragment extends ConfigFragment {
                 }
                 // Save right away rather than only when the activity is destroyed
                 Daedalus.configurations.save();
+                if (previousCertificate != null && !previousCertificate.equals(form.certificate)) {
+                    TlsCertificates.deleteIfUnused(previousCertificate);
                 }
                 Daedalus.setRulesChanged();
                 getActivity().finish();
@@ -199,7 +301,9 @@ public class DnsServerConfigFragment extends ConfigFragment {
                     new AlertDialog.Builder(getActivity())
                             .setTitle(R.string.notice_delete_confirm_prompt)
                             .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                                Daedalus.configurations.getCustomDNSServers().remove(index);
+                                CustomDnsServer removed = servers.remove(index);
+                                Daedalus.configurations.save();
+                                TlsCertificates.deleteIfUnused(removed.getCertificate());
                                 getActivity().finish();
                             })
                             .setNegativeButton(android.R.string.no, null)

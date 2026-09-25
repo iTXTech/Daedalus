@@ -87,6 +87,15 @@ public class AbstractDnsServer implements Cloneable {
         String host = getProxyHost();
         return host != null && !host.trim().isEmpty();
     }
+
+    /**
+     * Name of the certificate trusted for DNS over TLS connections to this server in
+     * addition to the system CAs, or null. See {@link org.itxtech.daedalus.util.TlsCertificates}.
+     */
+    public String getCertificate() {
+        return null;
+    }
+
     @Override
     public String toString() {
         return getName();

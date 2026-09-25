@@ -21,6 +21,10 @@
                 android:selectAllOnFocus="false"
                 android:singleLine="true"
                 android:title="@string/settings_server_port"/>
+        <Preference
+                android:key="serverCertificate"
+                android:title="@string/settings_server_certificate"
+                android:summary="@string/cert_none"/>
     </PreferenceCategory>
 
     <PreferenceCategory
