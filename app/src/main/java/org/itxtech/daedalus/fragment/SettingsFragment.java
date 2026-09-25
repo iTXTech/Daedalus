@@ -18,6 +18,14 @@ import org.itxtech.daedalus.R;
  * (at your option) any later version.
  */
 public class SettingsFragment extends ToolbarFragment {
+    private int subPageTitle = R.string.action_settings;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getChildFragmentManager().addOnBackStackChangedListener(this::updateTitle);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_settings, container, false);
@@ -29,9 +37,31 @@ public class SettingsFragment extends ToolbarFragment {
         getChildFragmentManager().beginTransaction().replace(R.id.settings_content, new GlobalConfigFragment()).commit();
     }
 
+    public void showNetworkRules() {
+        showSubPage(new NetworkRulesFragment(), R.string.settings_network_rules);
+    }
+
+    /**
+     * Opens a sub page of the settings. The back button returns to the settings list.
+     */
+    private void showSubPage(Fragment fragment, int titleRes) {
+        subPageTitle = titleRes;
+        getChildFragmentManager().beginTransaction()
+                .replace(R.id.settings_content, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
     @Override
     public void checkStatus() {
         menu.findItem(R.id.nav_settings).setChecked(true);
-        toolbar.setTitle(R.string.action_settings);
+        updateTitle();
+    }
+
+    private void updateTitle() {
+        if (toolbar != null) {
+            toolbar.setTitle(getChildFragmentManager().getBackStackEntryCount() > 0
+                    ? subPageTitle : R.string.action_settings);
+        }
     }
 }

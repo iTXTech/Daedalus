@@ -55,6 +55,18 @@
     <string name="settings_bug_report">提交反馈</string>
     <string name="settings_issue_summary">前往 GitHub 提交 Bug 反馈。</string>
     <string name="settings_dns_test_servers">DNS 测试服务器</string>
+    <string name="settings_network_rules">网络规则</string>
+    <string name="settings_network_rules_summary">根据所在网络自动选择 DNS 服务器</string>
+    <string name="settings_use_system_dns_summary">忽略这里配置的服务器和网络规则，转发给当前网络分配的 DNS；只想用过滤规则时开启</string>
+    <string name="network_rules_none">还没有规则，任何网络都使用上方的首选和备用服务器。</string>
+    <string name="network_rules_add">添加规则…</string>
+    <string name="network_rule_type">条件</string>
+    <string name="network_rule_type_subnet">所在网段</string>
+    <string name="network_rule_type_mobile">移动数据</string>
+    <string name="network_rule_subnets">网段</string>
+    <string name="network_rule_subnets_summary">逗号分隔，例如 192.168.31.0/24, 10.0.0.0/8</string>
+    <string name="network_rule_servers">首选: %1$s\n备用: %2$s</string>
+    <string name="config_network_rule">网络规则配置</string>
     <string name="settings_help_and_support">支持和帮助</string>
     <string name="settings_advanced">高级系统设置</string>
     <string name="settings_advanced_on">开启</string>
@@ -102,6 +114,8 @@
     <string name="test_dns_server">DNS 服务器:</string>
     <string name="test_result_resolved">解析地址:</string>
     <string name="test_failed">查询失败。超时或未知的主机。</string>
+    <string name="test_timeout">请求超时。</string>
+    <string name="test_error">错误:</string>
     <string name="test_test_domain">google.com</string>
 
     <string name="nav_version">版本:</string>

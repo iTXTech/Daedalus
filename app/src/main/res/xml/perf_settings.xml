@@ -6,6 +6,10 @@
             android:key="settingsServer"
             android:title="@string/settings_server">
 
+        <org.itxtech.daedalus.widget.ClickPreference
+                android:key="settings_network_rules"
+                android:title="@string/settings_network_rules"
+                android:summary="@string/settings_network_rules_summary"/>
         <ListPreference
                 android:key="primary_server"
                 android:title="@string/primary_server"
@@ -95,6 +99,7 @@
         <SwitchPreference
                 android:key="settings_use_system_dns"
                 android:title="@string/settings_use_system_dns"
+                android:summary="@string/settings_use_system_dns_summary"
                 android:defaultValue="false"/>
         <ListPreference
                 android:key="settings_dns_query_method"

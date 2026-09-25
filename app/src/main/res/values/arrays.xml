@@ -13,6 +13,14 @@
         <item>@string/settings_dns_tls</item>
         <item>@string/settings_dns_https_ietf</item>
         <item>@string/settings_dns_https_json</item>
+    <string-array name="network_rule_type_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="network_rule_types">
+        <item>@string/network_rule_type_subnet</item>
+        <item>@string/network_rule_type_mobile</item>
+    </string-array>
     </string-array>
 </resources>
 

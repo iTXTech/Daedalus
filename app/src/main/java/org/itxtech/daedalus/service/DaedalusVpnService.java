@@ -28,6 +28,7 @@ import org.itxtech.daedalus.server.DnsServer;
 import org.itxtech.daedalus.server.DnsServerHelper;
 import org.itxtech.daedalus.util.DnsServersDetector;
 import org.itxtech.daedalus.util.Logger;
+import org.itxtech.daedalus.util.NetworkRules;
 import org.itxtech.daedalus.util.RuleResolver;
 
 import java.net.Inet4Address;
@@ -80,6 +81,16 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
     private static int getPendingIntent(int flag) {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE | flag : flag;
+    /**
+     * Re-evaluates the network rules with the current servers, rules and settings, e.g.
+     * after they were edited or imported while the VPN is running.
+     */
+    public static void notifyConfigurationChanged() {
+        DaedalusVpnService service = instance;
+        if (service != null && service.running) {
+            service.currentSelection = null;
+            service.scheduleApplyServers();
+        }
     }
 
     @Override

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                                      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ListPreference
+            android:key="ruleType"
+            android:title="@string/network_rule_type"
+            android:entries="@array/network_rule_types"
+            android:entryValues="@array/network_rule_type_values"
+            android:defaultValue="0"/>
+    <EditTextPreference
+            android:key="ruleSubnets"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/network_rule_subnets"/>
+
+    <PreferenceCategory
+            app:iconSpaceReserved="false"
+            android:key="ruleServers"
+            android:title="@string/settings_server">
+        <ListPreference
+                android:key="rulePrimary"
+                android:title="@string/primary_server"/>
+        <ListPreference
+                android:key="ruleSecondary"
+                android:title="@string/secondary_server"/>
+    </PreferenceCategory>
+</androidx.preference.PreferenceScreen>

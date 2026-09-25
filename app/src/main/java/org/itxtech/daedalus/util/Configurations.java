@@ -31,6 +31,7 @@ public class Configurations {
     private static File file;
 
     private ArrayList<CustomDnsServer> customDNSServers;
+    private ArrayList<NetworkRule> networkRules;
     private ArrayList<String> appObjects;
 
     private ArrayList<Rule> hostsRules;
@@ -68,6 +69,13 @@ public class Configurations {
             customDNSServers = new ArrayList<>();
         }
         return customDNSServers;
+    }
+
+    public ArrayList<NetworkRule> getNetworkRules() {
+        if (networkRules == null) {
+            networkRules = new ArrayList<>();
+        }
+        return networkRules;
     }
 
     public ArrayList<String> getAppObjects() {

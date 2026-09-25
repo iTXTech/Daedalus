@@ -8,6 +8,7 @@ import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.AppFilterActivity;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.server.DnsServerHelper;
+import org.itxtech.daedalus.service.DaedalusVpnService;
 
 import java.util.ArrayList;
 
@@ -26,17 +27,8 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        Daedalus.getPrefs().edit()
-                .putString("primary_server", DnsServerHelper.getPrimary())
-                .putString("secondary_server", DnsServerHelper.getSecondary())
-                .apply();
-
         addPreferencesFromResource(R.xml.perf_settings);
 
-        boolean visible = !Daedalus.getPrefs().getBoolean("settings_use_system_dns", false);
-        for (String k : new ArrayList<String>() {{
-            add("primary_server");
-            add("secondary_server");
         }}) {
             ListPreference listPref = findPreference(k);
             listPref.setEntries(DnsServerHelper.getNames(Daedalus.getInstance()));
@@ -59,6 +51,11 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
         logSize.setSummary(logSize.getText());
         logSize.setOnPreferenceChangeListener((preference, newValue) -> {
             preference.setSummary((String) newValue);
+        findPreference("settings_network_rules").setOnPreferenceClickListener(preference -> {
+            Fragment parent = getParentFragment();
+            if (parent instanceof SettingsFragment) {
+                ((SettingsFragment) parent).showNetworkRules();
+            }
             return true;
         });
 

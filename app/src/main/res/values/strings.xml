@@ -54,6 +54,18 @@
     <string name="settings_bug_report">Report a Bug</string>
     <string name="settings_issue_summary">Submit an Issue on GitHub Issues Page.</string>
     <string name="settings_dns_test_servers">DNS Test Servers</string>
+    <string name="settings_network_rules">Network Rules</string>
+    <string name="settings_network_rules_summary">Pick the DNS servers by the network you are on</string>
+    <string name="settings_use_system_dns_summary">Forward to the DNS servers of the current network instead of the servers and network rules configured here; for using only the filter rules</string>
+    <string name="network_rules_none">No rules yet. The primary and secondary servers above are used on every network.</string>
+    <string name="network_rules_add">Add rule…</string>
+    <string name="network_rule_type">Condition</string>
+    <string name="network_rule_type_subnet">Connected to subnet</string>
+    <string name="network_rule_type_mobile">Mobile data</string>
+    <string name="network_rule_subnets">Subnets</string>
+    <string name="network_rule_subnets_summary">Comma separated, e.g. 192.168.31.0/24, 10.0.0.0/8</string>
+    <string name="network_rule_servers">Primary: %1$s\nSecondary: %2$s</string>
+    <string name="config_network_rule">Network rule</string>
     <string name="settings_help_and_support">Help &amp; Support</string>
     <string name="settings_advanced">Advanced System Settings</string>
     <string name="settings_advanced_on">On</string>
@@ -107,6 +119,8 @@
     <string name="test_dns_server">DNS Server:</string>
     <string name="test_result_resolved">Address:</string>
     <string name="test_failed">DNS query failed. Timeout or unknown hostname.</string>
+    <string name="test_timeout">Request timed out.</string>
+    <string name="test_error">Error:</string>
     <string name="test_test_domain">google.com</string>
 
     <string name="nav_version">Version:</string>
