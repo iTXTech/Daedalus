@@ -15,7 +15,8 @@
     <string name="notice_delete_confirm_prompt">您确定要删除此配置项？</string>
     <string name="notice_after_stop">请在服务停止后更改启用的规则。</string>
     <string name="notice_check_dynamic_rule_reload">请在设置中勾选“允许动态更新规则”</string>
-    <string name="notice_export_complete">导出完成。</string>
+    <string name="notice_export_complete">日志已导出。</string>
+    <string name="notice_export_failed">导出失败: %s</string>
     <string name="notice_importing_rule">正在导入规则，请稍等。</string>
 
     <string name="action_settings">设置</string>
@@ -60,6 +61,7 @@
     <string name="settings_network_rules">网络规则</string>
     <string name="settings_network_rules_summary">根据所在网络自动选择 DNS 服务器</string>
     <string name="settings_dns_query_method_summary">仅用于 53 端口的服务器。853 端口自动使用 DoT，带路径的地址自动使用 DoH。</string>
+    <string name="log_crashes">=== 崩溃记录（logs/crash.log）===</string>
     <string name="settings_use_system_dns_summary">忽略这里配置的服务器和网络规则，转发给当前网络分配的 DNS；只想用过滤规则时开启</string>
     <string name="primary_server_summary">没有网络规则命中时使用</string>
     <string name="secondary_server_summary">首选失败或超时时使用</string>

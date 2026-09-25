@@ -99,6 +99,7 @@ public class Daedalus extends Application {
         mResolver = new Thread(new RuleResolver());
         mResolver.start();
         initData();
+        Logger.installCrashHandler();
         SocksProxy.installAuthenticator();
     }
 
