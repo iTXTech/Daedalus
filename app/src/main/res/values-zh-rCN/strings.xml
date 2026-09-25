@@ -142,6 +142,10 @@
     <string name="settings_app_filter_list">选择应用</string>
     <string name="settings_app_filter_mode">黑名单模式</string>
     <string name="settings_app_filter_list_summary">选择要过滤的应用</string>
+    <string name="app_filter_search">搜索应用</string>
+    <string name="app_filter_selected">已选择 %d 个</string>
+    <string name="app_filter_loading">正在加载应用列表…</string>
+    <string name="app_filter_system">系统应用</string>
 
     <string name="server_twnic_primary">Quad 101 主服务器</string>
     <string name="server_twnic_secondary">Quad 101 辅服务器</string>

@@ -142,6 +142,10 @@
     <string name="settings_app_filter_mode">Blacklist mode</string>
     <string name="settings_app_filter_list">Select application</string>
     <string name="settings_app_filter_list_summary">Select apps to pass through</string>
+    <string name="app_filter_search">Search apps</string>
+    <string name="app_filter_selected">%d selected</string>
+    <string name="app_filter_loading">Loading apps…</string>
+    <string name="app_filter_system">system app</string>
 
     <string name="server_twnic_primary">Quad 101 Primary</string>
     <string name="server_twnic_secondary">Quad 101 Secondary</string>
