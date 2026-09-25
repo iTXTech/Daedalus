@@ -63,8 +63,17 @@
     <string name="settings_network_rules">Network Rules</string>
     <string name="settings_network_rules_summary">Pick the DNS servers by the network you are on</string>
     <string name="settings_dns_query_method_summary">For servers on port 53 only. Port 853 uses DoT and addresses with a path use DoH automatically.</string>
+    <string name="settings_boot_summary">Start the service automatically after the phone boots</string>
+    <string name="settings_notification_summary">Persistent notification while the service runs, with a stop button and a shortcut to the settings</string>
+    <string name="settings_foreground_summary">Run as a foreground service so that the system is less likely to kill it; the notification is then always shown</string>
     <string name="log_crashes">=== Crashes (logs/crash.log) ===</string>
+    <string name="settings_log_size_summary">Maximum size of the log in characters; 0 disables the log, -1 removes the limit</string>
+    <string name="settings_app_filter_summary">Route only the selected apps through Daedalus, or every app except the selected ones</string>
+    <string name="settings_app_filter_mode_summary">On: the selected apps bypass Daedalus. Off: only the selected apps use it</string>
+    <string name="settings_advanced_summary">Daedalus intercepts and forwards DNS itself. Required for DoT, DoH, the SOCKS5 proxy, certificates, network rules, failover and the query log. Off: the system talks plain DNS to the server\'s IP</string>
+    <string name="settings_count_query_times_summary">Show the number of handled queries in the notification</string>
     <string name="settings_use_system_dns_summary">Forward to the DNS servers of the current network instead of the servers and network rules configured here; for using only the filter rules</string>
+    <string name="settings_debug_output_summary">Write every query and response in full to the log; only while troubleshooting</string>
     <string name="settings_import_config_url_summary">Download a configuration file and merge it, e.g. one you host yourself</string>
     <string name="primary_server_summary">Used when no network rule matches</string>
     <string name="secondary_server_summary">Tried when the primary server fails or times out</string>

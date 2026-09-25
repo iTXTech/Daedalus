@@ -63,8 +63,17 @@
     <string name="settings_network_rules">网络规则</string>
     <string name="settings_network_rules_summary">根据所在网络自动选择 DNS 服务器</string>
     <string name="settings_dns_query_method_summary">仅用于 53 端口的服务器。853 端口自动使用 DoT，带路径的地址自动使用 DoH。</string>
+    <string name="settings_boot_summary">开机后自动启用服务</string>
+    <string name="settings_notification_summary">服务运行时显示常驻通知，可从通知直接停用或打开设置</string>
+    <string name="settings_foreground_summary">以前台服务运行，减少被系统清理的概率；此时通知必定显示</string>
     <string name="log_crashes">=== 崩溃记录（logs/crash.log）===</string>
+    <string name="settings_log_size_summary">日志最多保留的字符数；0 关闭日志，-1 不限制</string>
+    <string name="settings_app_filter_summary">只让选中的应用经过 Daedalus，或者排除选中的应用</string>
+    <string name="settings_app_filter_mode_summary">开启：选中的应用不经过 Daedalus；关闭：只有选中的应用经过</string>
+    <string name="settings_advanced_summary">由 Daedalus 自己拦截并转发 DNS。DoT、DoH、SOCKS5 代理、证书、网络规则、故障转移和查询记录都需要开启。关闭时只是把服务器 IP 交给系统做普通 DNS</string>
+    <string name="settings_count_query_times_summary">在通知里显示已处理的查询数</string>
     <string name="settings_use_system_dns_summary">忽略这里配置的服务器和网络规则，转发给当前网络分配的 DNS；只想用过滤规则时开启</string>
+    <string name="settings_debug_output_summary">把每个查询和响应的完整内容写入日志，仅排查问题时开启</string>
     <string name="settings_import_config_url_summary">下载并合并一份配置文件，例如自己托管的</string>
     <string name="primary_server_summary">没有网络规则命中时使用</string>
     <string name="secondary_server_summary">首选失败或超时时使用</string>

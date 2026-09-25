@@ -40,10 +40,12 @@
         <SwitchPreference
                 android:key="settings_boot"
                 android:title="@string/settings_boot"
+                android:summary="@string/settings_boot_summary"
                 android:defaultValue="false"/>
         <SwitchPreference
                 android:key="settings_notification"
                 android:title="@string/settings_notification"
+                android:summary="@string/settings_notification_summary"
                 android:defaultValue="true"/>
         <SwitchPreference
                 android:key="settings_dark_theme"
@@ -52,6 +54,7 @@
         <SwitchPreference
                 android:key="settings_foreground"
                 android:title="@string/settings_foreground"
+                android:summary="@string/settings_foreground_summary"
                 android:defaultValue="false"/>
         <EditTextPreference
                 android:key="settings_log_size"
@@ -69,10 +72,12 @@
         <SwitchPreference
                 android:key="settings_app_filter_switch"
                 android:title="@string/settings_app_filter"
+                android:summary="@string/settings_app_filter_summary"
                 android:defaultValue="false"/>
         <SwitchPreference
                 android:key="settings_app_filter_mode_switch"
                 android:title="@string/settings_app_filter_mode"
+                android:summary="@string/settings_app_filter_mode_summary"
                 android:defaultValue="false"
                 android:enabled="false"/>
         <org.itxtech.daedalus.widget.ClickPreference
@@ -89,15 +94,12 @@
         <SwitchPreference
                 android:key="settings_advanced_switch"
                 android:title="@string/settings_advanced_on"
+                android:summary="@string/settings_advanced_summary"
                 android:defaultValue="false"/>
         <SwitchPreference
                 android:key="settings_count_query_times"
                 android:title="@string/settings_count_number_of_queries"
-                android:defaultValue="false"
-                android:enabled="false"/>
-        <SwitchPreference
-                android:key="settings_dont_build_cache"
-                android:title="@string/settings_dont_build_cache"
+                android:summary="@string/settings_count_query_times_summary"
                 android:defaultValue="false"
                 android:enabled="false"/>
         <SwitchPreference
@@ -108,6 +110,7 @@
         <ListPreference
                 android:key="settings_dns_query_method"
                 android:title="@string/settings_dns_query_method"
+                android:summary="@string/settings_dns_query_method_summary"
                 android:dialogTitle="@string/settings_dns_query_method"
                 android:entries="@array/dns_query_methods"
                 android:entryValues="@array/dns_query_method_values"
@@ -116,6 +119,7 @@
         <SwitchPreference
                 android:key="settings_debug_output"
                 android:title="@string/settings_debug_output"
+                android:summary="@string/settings_debug_output_summary"
                 android:defaultValue="false"
                 android:enabled="false"/>
     </PreferenceCategory>

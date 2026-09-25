@@ -64,10 +64,6 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
             }
             return true;
         });
-        EditTextPreference logSize = findPreference("settings_log_size");
-        logSize.setSummary(logSize.getText());
-        logSize.setOnPreferenceChangeListener((preference, newValue) -> {
-            preference.setSummary((String) newValue);
         findPreference("settings_network_rules").setOnPreferenceClickListener(preference -> {
             Fragment parent = getParentFragment();
             if (parent instanceof SettingsFragment) {
@@ -81,6 +77,9 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
             getActivity().startActivity(new Intent(Daedalus.getInstance(), MainActivity.class)
                     .putExtra(MainActivity.LAUNCH_FRAGMENT, MainActivity.FRAGMENT_SETTINGS)
                     .putExtra(MainActivity.LAUNCH_NEED_RECREATE, true));
+        setSummaryWithHint(findPreference("dns_test_servers"), R.string.settings_dns_test_servers_summary);
+        setSummaryWithHint(findPreference("settings_log_size"), R.string.settings_log_size_summary);
+
             return true;
         });
 
@@ -286,6 +285,27 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
             listPref.setSummary(DnsServerHelper.getDescription(value, Daedalus.getInstance()) + "\n"
                     + getString(primary ? R.string.primary_server_summary : R.string.secondary_server_summary));
         }
+    }
+
+    /**
+     * Shows the current value of a text setting with an explanation underneath, or only
+     * the explanation while the value is empty.
+     */
+    private void setSummaryWithHint(EditTextPreference preference, int hintRes) {
+        final String hint = hintRes == 0 ? null : getString(hintRes);
+        preference.setSummary(withHint(preference.getText(), hint));
+        preference.setOnPreferenceChangeListener((p, newValue) -> {
+            p.setSummary(withHint((String) newValue, hint));
+            return true;
+        });
+    }
+
+    private static String withHint(CharSequence value, String hint) {
+        boolean empty = value == null || value.toString().trim().isEmpty();
+        if (hint == null) {
+            return empty ? "" : value.toString();
+        }
+        return empty ? hint : value + "\n" + hint;
     }
 
     private void updateOptions(boolean checked, String pref) {
