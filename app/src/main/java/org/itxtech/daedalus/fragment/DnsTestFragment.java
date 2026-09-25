@@ -3,26 +3,37 @@ package org.itxtech.daedalus.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.TextView;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
-import org.itxtech.daedalus.util.Logger;
+import org.itxtech.daedalus.provider.DnsTransport;
 import org.itxtech.daedalus.server.AbstractDnsServer;
 import org.itxtech.daedalus.server.DnsServerHelper;
+import org.itxtech.daedalus.util.Logger;
 import org.minidns.dnsmessage.DnsMessage;
 import org.minidns.dnsmessage.Question;
+import org.minidns.record.Data;
 import org.minidns.record.Record;
-import org.minidns.source.NetworkDataSource;
 
+import java.io.Closeable;
+import java.io.EOFException;
 import java.io.IOException;
-import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -37,9 +48,9 @@ import java.util.Random;
  * (at your option) any later version.
  */
 public class DnsTestFragment extends ToolbarFragment {
-    private class Type {
-        private Record.TYPE type;
-        private String name;
+    private static class Type {
+        private final Record.TYPE type;
+        private final String name;
 
         private Type(String name, Record.TYPE type) {
             this.name = name;
@@ -56,18 +67,24 @@ public class DnsTestFragment extends ToolbarFragment {
         }
     }
 
-    private static Thread mThread = null;
-    private static Runnable mRunnable = null;
-    private DnsTestHandler mHandler = null;
+    private volatile DnsTestHandler mHandler = null;
+    private Thread mThread = null;
+    private DnsQuery mQuery = null;
+
+    private Button mStartButton = null;
+    private Button mStopButton = null;
+    private TextView mTestInfo = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dns_test, container, false);
 
-        final TextView textViewTestInfo = view.findViewById(R.id.textView_test_info);
+        mTestInfo = view.findViewById(R.id.textView_test_info);
+        mStartButton = view.findViewById(R.id.button_start_test);
+        mStopButton = view.findViewById(R.id.button_stop_test);
 
         final Spinner spinnerServerChoice = view.findViewById(R.id.spinner_server_choice);
-        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, DnsServerHelper.getAllServers());
+        ArrayAdapter<AbstractDnsServer> spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, DnsServerHelper.getAllServers());
         spinnerServerChoice.setAdapter(spinnerArrayAdapter);
         spinnerServerChoice.setSelection(DnsServerHelper.getPosition(DnsServerHelper.getPrimary()));
 
@@ -98,123 +115,32 @@ public class DnsTestFragment extends ToolbarFragment {
         spinnerType.setAdapter(typeAdapter);
 
         final AutoCompleteTextView textViewTestDomain = view.findViewById(R.id.autoCompleteTextView_test_url);
-        ArrayAdapter autoCompleteArrayAdapter = new ArrayAdapter<>(Daedalus.getInstance(), android.R.layout.simple_list_item_1, Daedalus.DEFAULT_TEST_DOMAINS);
+        ArrayAdapter<String> autoCompleteArrayAdapter = new ArrayAdapter<>(Daedalus.getInstance(), android.R.layout.simple_list_item_1, Daedalus.DEFAULT_TEST_DOMAINS);
         textViewTestDomain.setAdapter(autoCompleteArrayAdapter);
 
-        mRunnable = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String testDomain = textViewTestDomain.getText().toString();
-                    if (testDomain.equals("")) {
-                        testDomain = Daedalus.DEFAULT_TEST_DOMAINS[0];
-                    }
-                    StringBuilder testText = new StringBuilder();
-                    ArrayList<AbstractDnsServer> dnsServers = new ArrayList<AbstractDnsServer>() {{
-                        add(((AbstractDnsServer) spinnerServerChoice.getSelectedItem()));
-                        String servers = Daedalus.getPrefs().getString("dns_test_servers", "");
-                        if (!servers.equals("")) {
-                            for (String server : servers.split(",")) {
-                                if (server.contains(".") && server.contains(":")) {//IPv4
-                                    String[] pieces = servers.split(":");
-                                    int port = AbstractDnsServer.DNS_SERVER_DEFAULT_PORT;
-                                    try {
-                                        port = Integer.parseInt(pieces[1]);
-                                    } catch (Exception e) {
-                                        Logger.logException(e);
-                                    }
-                                    add(new AbstractDnsServer(pieces[0], port));
-                                } else if (!server.contains(".") && server.contains("|")) {//IPv6
-                                    String[] pieces = servers.split("\\|");
-                                    int port = AbstractDnsServer.DNS_SERVER_DEFAULT_PORT;
-                                    try {
-                                        port = Integer.parseInt(pieces[1]);
-                                    } catch (Exception e) {
-                                        Logger.logException(e);
-                                    }
-                                    add(new AbstractDnsServer(pieces[0], port));
-                                } else {
-                                    add(new AbstractDnsServer(server, AbstractDnsServer.DNS_SERVER_DEFAULT_PORT));
-                                }
-                            }
-                        }
-                    }};
-                    DnsQuery dnsQuery = new DnsQuery();
-                    Record.TYPE type = ((Type) spinnerType.getSelectedItem()).getType();
-                    for (AbstractDnsServer dnsServer : dnsServers) {
-                        testText = testServer(dnsQuery, type, dnsServer, testDomain, testText);
-                    }
-                    mHandler.obtainMessage(DnsTestHandler.MSG_TEST_DONE).sendToTarget();
-                } catch (IllegalStateException ignored) {
-                } catch (Exception e) {
-                    Logger.logException(e);
-                }
+        mStartButton.setOnClickListener(v -> {
+            if (mThread != null) {
+                return;
             }
-
-            private StringBuilder testServer(DnsQuery dnsQuery, Record.TYPE type, AbstractDnsServer server, String domain, StringBuilder testText) {
-                Logger.debug("Testing DNS server " + server.getRealName());
-                testText.append(getString(R.string.test_domain)).append(" ").append(domain).append("\n")
-                        .append(getString(R.string.test_dns_server)).append(" ").append(server.getRealName());
-
-                mHandler.obtainMessage(DnsTestHandler.MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
-
-                boolean succ = false;
-                if (!server.isHttpsServer()) {//TODO: DoH Server Test
-                    try {
-                        DnsMessage.Builder message = DnsMessage.builder()
-                                .addQuestion(new Question(domain, type))
-                                .setId((new Random()).nextInt())
-                                .setRecursionDesired(true)
-                                .setOpcode(DnsMessage.OPCODE.QUERY)
-                                .setResponseCode(DnsMessage.RESPONSE_CODE.NO_ERROR)
-                                .setQrFlag(false);
-
-                        long startTime = System.currentTimeMillis();
-                        DnsMessage response = dnsQuery.queryDns(message.build(), InetAddress.getByName(server.getAddress()), server.getPort());
-                        long endTime = System.currentTimeMillis();
-
-                        if (response.answerSection.size() > 0) {
-                            for (Record record : response.answerSection) {
-                                if (record.getPayload().getType() == type) {
-                                    testText.append("\n").append(getString(R.string.test_result_resolved)).append(" ").append(record.getPayload().toString());
-                                }
-                            }
-                            testText.append("\n").append(getString(R.string.test_time_used)).append(" ").
-                                    append(endTime - startTime).append(" ms");
-                            succ = true;
-                        }
-                    } catch (SocketTimeoutException ignored) {
-                    } catch (Exception e) {
-                        Logger.logException(e);
-                    }
-                }
-
-                if (!succ){
-                    testText.append("\n").append(getString(R.string.test_failed));
-                }
-                testText.append("\n\n");
-
-                mHandler.obtainMessage(DnsTestHandler.MSG_DISPLAY_STATUS, testText.toString()).sendToTarget();
-                return testText;
-            }
-        };
-
-        final Button startTestBut = view.findViewById(R.id.button_start_test);
-        startTestBut.setOnClickListener(v -> {
-            startTestBut.setEnabled(false);
             InputMethodManager imm = (InputMethodManager) Daedalus.getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-            textViewTestInfo.setText("");
+            mTestInfo.setText("");
 
-            if (mThread == null) {
-                mThread = new Thread(mRunnable);
-                mThread.start();
+            String domain = textViewTestDomain.getText().toString().trim();
+            if (domain.isEmpty()) {
+                domain = Daedalus.DEFAULT_TEST_DOMAINS[0];
             }
+            Record.TYPE type = ((Type) spinnerType.getSelectedItem()).getType();
+            ArrayList<AbstractDnsServer> servers = new ArrayList<>();
+            servers.add((AbstractDnsServer) spinnerServerChoice.getSelectedItem());
+            servers.addAll(getExtraTestServers());
+
+            startTest(domain, type, servers);
         });
+        mStopButton.setOnClickListener(v -> stopTest());
+        mStopButton.setEnabled(false);
 
-
-        mHandler = new DnsTestHandler();
-        mHandler.setViews(startTestBut, textViewTestInfo);
+        mHandler = new DnsTestHandler(this);
 
         return view;
     }
@@ -229,62 +155,260 @@ public class DnsTestFragment extends ToolbarFragment {
     public void onDestroy() {
         super.onDestroy();
 
-        stopThread();
-        mHandler.removeCallbacks(mRunnable);
-        mRunnable = null;
-        mHandler.shutdown();
+        DnsQuery query = mQuery;
+        if (query != null) {
+            query.cancel();
+        }
+        mQuery = null;
+        mThread = null;
+
+        DnsTestHandler handler = mHandler;
         mHandler = null;
+        if (handler != null) {
+            handler.shutdown();
+        }
+        mStartButton = null;
+        mStopButton = null;
+        mTestInfo = null;
     }
 
-    private static void stopThread() {
-        try {
-            if (mThread != null) {
-                mThread.interrupt();
-                mThread = null;
+    private void startTest(String domain, Record.TYPE type, List<AbstractDnsServer> servers) {
+        mStartButton.setEnabled(false);
+        mStopButton.setEnabled(true);
+
+        final DnsQuery query = new DnsQuery();
+        mQuery = query;
+        mThread = new Thread(() -> {
+            StringBuilder text = new StringBuilder();
+            try {
+                for (AbstractDnsServer server : servers) {
+                    if (query.isCancelled()) {
+                        break;
+                    }
+                    testServer(query, type, server, domain, text);
+                }
+                if (query.isCancelled()) {
+                    text.append(str(R.string.test_stopped));
+                    post(DnsTestHandler.MSG_DISPLAY_STATUS, text.toString());
+                }
+            } catch (Exception e) {
+                Logger.logException(e);
+            } finally {
+                post(DnsTestHandler.MSG_TEST_DONE, null);
             }
-        } catch (Exception ignored) {
+        }, "DnsTest");
+        mThread.start();
+    }
+
+    /**
+     * Stops the running test. The socket (or HTTP call) currently blocking the worker
+     * thread is closed, so the thread fails fast instead of waiting for the timeout.
+     */
+    private void stopTest() {
+        DnsQuery query = mQuery;
+        if (query != null) {
+            mStopButton.setEnabled(false);
+            query.cancel();
         }
+    }
+
+    private void onTestFinished() {
+        mThread = null;
+        mQuery = null;
+        if (mStartButton != null) {
+            mStartButton.setEnabled(true);
+        }
+        if (mStopButton != null) {
+            mStopButton.setEnabled(false);
+        }
+    }
+
+    private void showStatus(String status) {
+        if (mTestInfo != null) {
+            mTestInfo.setText(status);
+        }
+    }
+
+    private void post(int what, Object obj) {
+        DnsTestHandler handler = mHandler;
+        if (handler != null) {
+            handler.obtainMessage(what, obj).sendToTarget();
+        }
+    }
+
+    private static String str(int id) {
+        return Daedalus.getInstance().getString(id);
+    }
+
+    /**
+     * Parses the "dns_test_servers" preference. Entries are separated by commas and are
+     * either "host:port" (IPv4 address or host name), "ipv6|port", or a bare address that
+     * uses the default port.
+     */
+    private static List<AbstractDnsServer> getExtraTestServers() {
+        ArrayList<AbstractDnsServer> servers = new ArrayList<>();
+        String pref = Daedalus.getPrefs().getString("dns_test_servers", "");
+        if (pref == null || pref.trim().isEmpty()) {
+            return servers;
+        }
+        for (String entry : pref.split(",")) {
+            String server = entry.trim();
+            if (server.isEmpty()) {
+                continue;
+            }
+            String separator = null;
+            if (server.contains(".") && server.contains(":")) {
+                separator = ":";
+            } else if (!server.contains(".") && server.contains("|")) {
+                separator = "\\|";
+            }
+            if (separator == null) {
+                servers.add(new AbstractDnsServer(server, AbstractDnsServer.DNS_SERVER_DEFAULT_PORT));
+                continue;
+            }
+            String[] pieces = server.split(separator);
+            int port = AbstractDnsServer.DNS_SERVER_DEFAULT_PORT;
+            if (pieces.length > 1) {
+                try {
+                    port = Integer.parseInt(pieces[1].trim());
+                } catch (NumberFormatException e) {
+                    Logger.logException(e);
+                }
+            }
+            servers.add(new AbstractDnsServer(pieces[0].trim(), port));
+        }
+        return servers;
+    }
+
+    private void testServer(DnsQuery query, Record.TYPE type, AbstractDnsServer server, String domain, StringBuilder text) {
+        Logger.debug("Testing DNS server " + server.getRealName());
+        text.append(str(R.string.test_domain)).append(" ").append(domain).append("\n")
+                .append(str(R.string.test_dns_server)).append(" ").append(DnsTransport.describe(server));
+        post(DnsTestHandler.MSG_DISPLAY_STATUS, text.toString());
+
+        boolean succ = false;
+        try {
+            DnsMessage message = DnsMessage.builder()
+                    .addQuestion(new Question(domain, type))
+                    .setId(new Random().nextInt())
+                    .setRecursionDesired(true)
+                    .setOpcode(DnsMessage.OPCODE.QUERY)
+                    .setResponseCode(DnsMessage.RESPONSE_CODE.NO_ERROR)
+                    .setQrFlag(false)
+                    .build();
+
+            long startTime = SystemClock.elapsedRealtime();
+            DnsMessage response = query.query(message, server);
+            long timeUsed = SystemClock.elapsedRealtime() - startTime;
+
+            for (Record<? extends Data> record : response.answerSection) {
+                if (record.type == type) {
+                    text.append("\n").append(str(R.string.test_result_resolved)).append(" ").append(record.getPayload().toString());
+                }
+            }
+            if (response.answerSection.size() > 0) {
+                succ = true;
+            } else if (response.responseCode != DnsMessage.RESPONSE_CODE.NO_ERROR) {
+                text.append("\n").append(str(R.string.test_error)).append(" ").append(response.responseCode);
+            }
+            text.append("\n").append(str(R.string.test_time_used)).append(" ").append(timeUsed).append(" ms");
+        } catch (Exception e) {
+            if (!query.isCancelled()) {
+                Logger.logException(e);
+                if (e instanceof SocketTimeoutException) {
+                    text.append("\n").append(str(R.string.test_timeout));
+                } else {
+                    String reason = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
+                    text.append("\n").append(str(R.string.test_error)).append(" ").append(reason);
+                    if (server.isProxied() && (e instanceof SocketException || e instanceof EOFException)) {
+                        // The proxy accepted the connection but the target closed it, or the proxy
+                        // refused the connection: the server most likely does not listen on TCP
+                        text.append("\n").append(Daedalus.getInstance().getString(R.string.test_proxy_tcp_hint, server.getPort()));
+                    }
+                }
+            }
+        }
+
+        if (!query.isCancelled() && !succ) {
+            text.append("\n").append(str(R.string.test_failed));
+        }
+        text.append("\n\n");
+        post(DnsTestHandler.MSG_DISPLAY_STATUS, text.toString());
     }
 
     private static class DnsTestHandler extends Handler {
         static final int MSG_DISPLAY_STATUS = 0;
         static final int MSG_TEST_DONE = 1;
 
-        private Button startTestBtn = null;
-        private TextView textViewTestInfo = null;
+        private DnsTestFragment fragment;
 
-        void setViews(Button startTestButton, TextView textViewTestInfo) {
-            this.startTestBtn = startTestButton;
-            this.textViewTestInfo = textViewTestInfo;
+        DnsTestHandler(DnsTestFragment fragment) {
+            super(Looper.getMainLooper());
+            this.fragment = fragment;
         }
 
         void shutdown() {
-            startTestBtn = null;
-            textViewTestInfo = null;
+            fragment = null;
         }
 
+        @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-
-            if (startTestBtn == null) {
+            DnsTestFragment fragment = this.fragment;
+            if (fragment == null) {
                 return;
             }
-
             switch (msg.what) {
                 case MSG_DISPLAY_STATUS:
-                    textViewTestInfo.setText((String) msg.obj);
+                    fragment.showStatus((String) msg.obj);
                     break;
                 case MSG_TEST_DONE:
-                    startTestBtn.setEnabled(true);
-                    stopThread();
+                    fragment.onTestFinished();
                     break;
             }
         }
     }
 
-    private class DnsQuery extends NetworkDataSource {
-        public DnsMessage queryDns(DnsMessage message, InetAddress address, int port) throws IOException {
-            return queryUdp(message, address, port);
+    /**
+     * Runs the queries of one test through {@link DnsTransport}, exactly like the VPN
+     * does, and tracks the blocking network object so that {@link #cancel()} can abort the
+     * query from another thread.
+     */
+    private static class DnsQuery implements DnsTransport.Hooks {
+        private static final int TIMEOUT = 5000;
+
+        private volatile boolean cancelled = false;
+        private volatile Closeable current = null;
+
+        boolean isCancelled() {
+            return cancelled;
+        }
+
+        /**
+         * Aborts the query in progress. Closing the socket (or cancelling the HTTP call)
+         * makes the blocked worker thread fail immediately with an exception.
+         */
+        void cancel() {
+            cancelled = true;
+            Closeable closeable = current;
+            if (closeable != null) {
+                try {
+                    closeable.close();
+                } catch (IOException ignored) {
+                }
+            }
+        }
+
+        @Override
+        public void track(Closeable closeable) throws IOException {
+            current = closeable;
+            if (cancelled) {
+                closeable.close();
+                throw new IOException("Test stopped");
+            }
+        }
+
+        DnsMessage query(DnsMessage message, AbstractDnsServer server) throws IOException, GeneralSecurityException {
+            return DnsTransport.query(server, message, TIMEOUT, this).message;
         }
     }
 }

@@ -23,6 +23,7 @@
     <string name="action_about">關於</string>
     <string name="action_dns_test">測試</string>
     <string name="action_start_test">開始測試</string>
+    <string name="action_stop_test">停止測試</string>
     <string name="action_home">主頁</string>
     <string name="action_rules">規則</string>
     <string name="action_dns_servers">伺服器</string>
@@ -67,6 +68,7 @@
     <string name="settings_import_config_url_summary">下載並合併一份設定檔，例如自行託管的</string>
     <string name="primary_server_summary">沒有網路規則命中時使用</string>
     <string name="secondary_server_summary">首選失敗或逾時時使用</string>
+    <string name="settings_dns_test_servers_summary">測試頁在所選伺服器之後額外測試的伺服器，以逗號分隔</string>
     <string name="settings_socks5_host_summary">代理的 IP 或網域名稱，本機 EasyTier 填 127.0.0.1</string>
     <string name="settings_socks5_username_summary">代理不需要驗證時留空</string>
     <string name="settings_server_address_summary">IP 或網域名稱；DoH 填主機名稱加路徑，例如 dns.alidns.com/dns-query</string>
@@ -167,6 +169,7 @@
     <string name="test_failed">DNS 查詢失敗。逾時或未知的主機。</string>
     <string name="test_timeout">請求逾時。</string>
     <string name="test_error">錯誤:</string>
+    <string name="test_stopped">測試已停止。</string>
     <string name="test_proxy_tcp_hint">SOCKS5 代理只能承載 TCP。請確認該 DNS 伺服器開啟了 TCP %d 連接埠（SmartDNS 需要設定 bind-tcp），或用 EasyTier 的連接埠轉發把它的 UDP 連接埠映射到本機後不經代理使用。</string>
     <string name="notice_servers_import_failed">匯入失敗: %s</string>
     <string name="settings_backup">備份與還原</string>

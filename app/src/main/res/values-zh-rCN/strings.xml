@@ -23,6 +23,7 @@
     <string name="action_about">关于</string>
     <string name="action_dns_test">测试</string>
     <string name="action_start_test">开始测试</string>
+    <string name="action_stop_test">停止测试</string>
     <string name="action_home">主页</string>
     <string name="action_rules">规则</string>
     <string name="action_dns_servers">服务器</string>
@@ -67,6 +68,7 @@
     <string name="settings_import_config_url_summary">下载并合并一份配置文件，例如自己托管的</string>
     <string name="primary_server_summary">没有网络规则命中时使用</string>
     <string name="secondary_server_summary">首选失败或超时时使用</string>
+    <string name="settings_dns_test_servers_summary">测试页在所选服务器之后额外测试的服务器，逗号分隔</string>
     <string name="settings_socks5_host_summary">代理的 IP 或域名，本机 EasyTier 填 127.0.0.1</string>
     <string name="settings_socks5_username_summary">代理不需要认证时留空</string>
     <string name="settings_server_address_summary">IP 或域名；DoH 填主机名加路径，例如 dns.alidns.com/dns-query</string>
@@ -167,6 +169,7 @@
     <string name="test_failed">查询失败。超时或未知的主机。</string>
     <string name="test_timeout">请求超时。</string>
     <string name="test_error">错误:</string>
+    <string name="test_stopped">测试已停止。</string>
     <string name="test_proxy_tcp_hint">SOCKS5 代理只能承载 TCP。请确认该 DNS 服务器开启了 TCP %d 端口（SmartDNS 需要配置 bind-tcp），或用 EasyTier 的端口转发把它的 UDP 端口映射到本机后不经代理使用。</string>
     <string name="notice_servers_import_failed">导入失败: %s</string>
     <string name="settings_backup">备份与恢复</string>

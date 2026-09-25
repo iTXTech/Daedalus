@@ -57,10 +57,6 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
         }
         updateServerLists();
 
-        EditTextPreference testDNSServers = findPreference("dns_test_servers");
-        testDNSServers.setSummary(testDNSServers.getText());
-        testDNSServers.setOnPreferenceChangeListener((preference, newValue) -> {
-            preference.setSummary((String) newValue);
         findPreference("settings_server_management").setOnPreferenceClickListener(preference -> {
             Fragment parent = getParentFragment();
             if (parent instanceof SettingsFragment) {

@@ -117,6 +117,11 @@ public class Daedalus extends Application {
         PreferenceManager.setDefaultValues(this, R.xml.perf_settings, false);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
+        // "dns_test_servers" used to default to the VPN alias addresses, which only answer
+        // while the VPN is running. Installs that still carry that value get the new default once.
+        if ("10.0.0.2,10.0.0.3".equals(prefs.getString("dns_test_servers", ""))) {
+            prefs.edit().putString("dns_test_servers", getString(R.string.default_dns_test_servers)).apply();
+        }
         File legacyConfigFile = null;
         if (getExternalFilesDir(null) != null) {
             rulePath = getExternalFilesDir(null).getPath() + "/rules/";

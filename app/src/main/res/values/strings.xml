@@ -22,6 +22,7 @@
     <string name="action_about">About</string>
     <string name="action_dns_test">Test</string>
     <string name="action_start_test">Start Test</string>
+    <string name="action_stop_test">Stop Test</string>
     <string name="action_home">Home</string>
     <string name="action_rules">Rules</string>
     <string name="action_dns_servers">Servers</string>
@@ -56,6 +57,7 @@
     <string name="settings_bug_report">Report a Bug</string>
     <string name="settings_issue_summary">Submit an Issue on GitHub Issues Page.</string>
     <string name="settings_dns_test_servers">DNS Test Servers</string>
+    <string name="default_dns_test_servers" translatable="false">223.5.5.5,114.114.114.114</string>
     <string name="settings_server_management">Server Management</string>
     <string name="settings_server_management_summary">Choose which built-in servers are available</string>
     <string name="settings_network_rules">Network Rules</string>
@@ -66,6 +68,7 @@
     <string name="settings_import_config_url_summary">Download a configuration file and merge it, e.g. one you host yourself</string>
     <string name="primary_server_summary">Used when no network rule matches</string>
     <string name="secondary_server_summary">Tried when the primary server fails or times out</string>
+    <string name="settings_dns_test_servers_summary">Extra servers the Test page tries after the selected one, comma separated</string>
     <string name="settings_socks5_host_summary">IP or host name of the proxy; 127.0.0.1 for EasyTier on this phone</string>
     <string name="settings_socks5_username_summary">Leave empty when the proxy needs no authentication</string>
     <string name="settings_server_address_summary">IP or host name. For DoH enter host and path, e.g. dns.alidns.com/dns-query</string>
@@ -167,6 +170,7 @@
     <string name="test_failed">DNS query failed. Timeout or unknown hostname.</string>
     <string name="test_timeout">Request timed out.</string>
     <string name="test_error">Error:</string>
+    <string name="test_stopped">Test stopped.</string>
     <string name="test_proxy_tcp_hint">A SOCKS5 proxy only carries TCP. Make sure the DNS server accepts TCP on port %d (SmartDNS needs bind-tcp), or forward a UDP port with EasyTier and use it without the proxy.</string>
     <string name="notice_servers_import_failed">Import failed: %s</string>
     <string name="settings_backup">Backup &amp; Restore</string>
