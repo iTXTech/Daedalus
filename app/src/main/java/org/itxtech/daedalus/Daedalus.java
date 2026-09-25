@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
+import android.content.res.Configuration;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.net.VpnService;
@@ -122,6 +123,11 @@ public class Daedalus extends Application {
         if ("10.0.0.2,10.0.0.3".equals(prefs.getString("dns_test_servers", ""))) {
             prefs.edit().putString("dns_test_servers", getString(R.string.default_dns_test_servers)).apply();
         }
+        // The dark theme used to be a switch; a switched-on one becomes the "dark" choice
+        if (!prefs.contains("settings_theme") && prefs.getBoolean("settings_dark_theme", false)) {
+            prefs.edit().putString("settings_theme", THEME_DARK).apply();
+        }
+
         File legacyConfigFile = null;
         if (getExternalFilesDir(null) != null) {
             rulePath = getExternalFilesDir(null).getPath() + "/rules/";
@@ -216,8 +222,27 @@ public class Daedalus extends Application {
         return getInstance().prefs;
     }
 
+    public static final String THEME_AUTO = "auto";
+    public static final String THEME_DARK = "dark";
+    public static final String THEME_LIGHT = "light";
+
+    /**
+     * Whether the dark theme applies right now: the "settings_theme" choice, following
+     * the system's night mode when set to auto.
+     */
     public static boolean isDarkTheme() {
-        return getInstance().prefs.getBoolean("settings_dark_theme", false);
+        return isDarkTheme(getInstance().getResources().getConfiguration());
+    }
+
+    public static boolean isDarkTheme(Configuration configuration) {
+        String theme = getInstance().prefs.getString("settings_theme", THEME_AUTO);
+        if (THEME_DARK.equals(theme)) {
+            return true;
+        }
+        if (THEME_LIGHT.equals(theme)) {
+            return false;
+        }
+        return (configuration.uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
     }
 
     @Override

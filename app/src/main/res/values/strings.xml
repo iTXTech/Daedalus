@@ -125,7 +125,10 @@
     <string name="settings_manual">Manual</string>
     <string name="settings_manual_summary">Visit GitHub wiki page.</string>
     <string name="settings_debug_output">Debug Output</string>
-    <string name="settings_dark_theme">Use Dark Theme</string>
+    <string name="settings_theme">Theme</string>
+    <string name="theme_auto">Follow system</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_light">Light</string>
     <string name="settings_dns_query_method">DNS Query Method</string>
     <string name="settings_foreground">Run service in Foreground</string>
     <string name="settings_use_system_dns">Use System DNS as upstream DNS</string>

@@ -3,6 +3,7 @@ package org.itxtech.daedalus.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.VpnService;
 import android.os.Bundle;
 import android.util.Log;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static MainActivity instance = null;
 
     private ToolbarFragment currentFragment;
+    private boolean darkTheme;
 
     public static MainActivity getInstance() {
         return instance;
@@ -69,7 +71,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (Daedalus.isDarkTheme()) {
+        darkTheme = Daedalus.isDarkTheme();
+        if (darkTheme) {
             setTheme(R.style.AppTheme_Dark_NoActionBar_TransparentStatusBar);
         }
         super.onCreate(savedInstanceState);
@@ -93,6 +96,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.textView_nav_git_commit)).setText(getString(R.string.nav_git_commit) + " " + BuildConfig.GIT_COMMIT);
 
         updateUserInterface(getIntent());
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // uiMode changes arrive here instead of recreating the activity; with the theme
+        // following the system, a switch between day and night needs the activity rebuilt
+        if (Daedalus.isDarkTheme(newConfig) != darkTheme) {
+            finish();
+            overridePendingTransition(R.anim.start, R.anim.end);
+            startActivity(new Intent(this, MainActivity.class).putExtra(LAUNCH_FRAGMENT, getFragmentId(currentFragment)));
+        }
+    }
+
+    private static int getFragmentId(ToolbarFragment fragment) {
+        if (fragment instanceof DnsTestFragment) {
+            return FRAGMENT_DNS_TEST;
+        } else if (fragment instanceof SettingsFragment) {
+            return FRAGMENT_SETTINGS;
+        } else if (fragment instanceof AboutFragment) {
+            return FRAGMENT_ABOUT;
+        } else if (fragment instanceof RulesFragment) {
+            return FRAGMENT_RULES;
+        } else if (fragment instanceof DnsServersFragment) {
+            return FRAGMENT_DNS_SERVERS;
+        } else if (fragment instanceof LogFragment) {
+            return FRAGMENT_LOG;
+        } else if (fragment instanceof QueryLogFragment) {
+            return FRAGMENT_QUERY_LOG;
+        }
+        return FRAGMENT_HOME;
     }
 
     private void switchFragment(Class fragmentClass) {

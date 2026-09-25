@@ -47,10 +47,14 @@
                 android:title="@string/settings_notification"
                 android:summary="@string/settings_notification_summary"
                 android:defaultValue="true"/>
-        <SwitchPreference
-                android:key="settings_dark_theme"
-                android:title="@string/settings_dark_theme"
-                android:defaultValue="false"/>
+        <ListPreference
+                android:key="settings_theme"
+                android:title="@string/settings_theme"
+                android:dialogTitle="@string/settings_theme"
+                android:entries="@array/theme_entries"
+                android:entryValues="@array/theme_values"
+                android:defaultValue="auto"
+                app:useSimpleSummaryProvider="true"/>
         <SwitchPreference
                 android:key="settings_foreground"
                 android:title="@string/settings_foreground"

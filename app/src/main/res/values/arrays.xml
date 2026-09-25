@@ -26,5 +26,14 @@
         <item>@string/network_rule_type_subnet</item>
         <item>@string/network_rule_type_mobile</item>
     </string-array>
+    <string-array name="theme_values">
+        <item>auto</item>
+        <item>dark</item>
+        <item>light</item>
+    </string-array>
+    <string-array name="theme_entries">
+        <item>@string/theme_auto</item>
+        <item>@string/theme_dark</item>
+        <item>@string/theme_light</item>
     </string-array>
 </resources>

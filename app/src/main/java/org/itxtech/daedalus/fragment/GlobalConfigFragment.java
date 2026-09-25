@@ -72,14 +72,14 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
             return true;
         });
 
-        SwitchPreference darkTheme = findPreference("settings_dark_theme");
-        darkTheme.setOnPreferenceChangeListener((preference, o) -> {
-            getActivity().startActivity(new Intent(Daedalus.getInstance(), MainActivity.class)
-                    .putExtra(MainActivity.LAUNCH_FRAGMENT, MainActivity.FRAGMENT_SETTINGS)
-                    .putExtra(MainActivity.LAUNCH_NEED_RECREATE, true));
         setSummaryWithHint(findPreference("dns_test_servers"), R.string.settings_dns_test_servers_summary);
         setSummaryWithHint(findPreference("settings_log_size"), R.string.settings_log_size_summary);
 
+        ListPreference theme = findPreference("settings_theme");
+        theme.setOnPreferenceChangeListener((preference, newValue) -> {
+            if (!newValue.equals(theme.getValue())) {
+                recreateSettings();
+            }
             return true;
         });
 
