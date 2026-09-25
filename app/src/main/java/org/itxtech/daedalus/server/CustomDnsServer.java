@@ -29,6 +29,8 @@ public class CustomDnsServer extends AbstractDnsServer {
     private String proxyPassword;
     // Certificate trusted for DoT connections to this server (self-signed or private CA), or null
     private String certificate;
+    // Plain-DNS transport forced by the user (TRANSPORT_AUTO/UDP/TCP of AbstractDnsServer)
+    private int transport = TRANSPORT_AUTO;
 
     public CustomDnsServer(String name, String address, int port) {
         super(address, port);
@@ -51,6 +53,19 @@ public class CustomDnsServer extends AbstractDnsServer {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public int getTransport() {
+        return transport;
+    }
+
+    /**
+     * Forces plain DNS over UDP or TCP for this server; TRANSPORT_AUTO restores the
+     * automatic choice.
+     */
+    public void setTransport(int transport) {
+        this.transport = transport;
     }
 
     @Override

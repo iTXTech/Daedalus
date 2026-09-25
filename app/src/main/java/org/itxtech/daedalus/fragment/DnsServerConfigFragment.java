@@ -11,12 +11,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.preference.EditTextPreference;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.SwitchPreference;
 import com.google.android.material.snackbar.Snackbar;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.ConfigActivity;
+import org.itxtech.daedalus.provider.DnsTransport;
+import org.itxtech.daedalus.server.AbstractDnsServer;
 import org.itxtech.daedalus.server.CustomDnsServer;
 import org.itxtech.daedalus.server.DnsServer;
 import org.itxtech.daedalus.util.Logger;
@@ -78,6 +81,12 @@ public class DnsServerConfigFragment extends ConfigFragment {
             return true;
         });
 
+        ListPreference serverTransport = findPreference("serverTransport");
+        serverTransport.setOnPreferenceChangeListener((preference, newValue) -> {
+            setTransportSummary(Integer.parseInt((String) newValue));
+            return true;
+        });
+
         SwitchPreference serverProxied = findPreference("serverProxied");
         serverProxied.setOnPreferenceChangeListener((preference, newValue) -> {
             setProxyFieldsEnabled((Boolean) newValue);
@@ -101,21 +110,18 @@ public class DnsServerConfigFragment extends ConfigFragment {
         });
 
         index = intent.getIntExtra(ConfigActivity.LAUNCH_ACTION_ID, ConfigActivity.ID_NONE);
-        if (index != ConfigActivity.ID_NONE) {
-            CustomDnsServer server = Daedalus.configurations.getCustomDNSServers().get(index);
-            serverName.setText(server.getName());
-            serverName.setSummary(server.getName());
-            serverAddress.setText(server.getAddress());
-            serverAddress.setSummary(server.getAddress());
-            serverPort.setText(String.valueOf(server.getPort()));
-            serverPort.setSummary(String.valueOf(server.getPort()));
-        } else {
-            serverName.setText("");
-            serverAddress.setText("");
-            String port = String.valueOf(DnsServer.DNS_SERVER_DEFAULT_PORT);
-            serverPort.setText(port);
-            serverPort.setSummary(port);
-        }
+        ArrayList<CustomDnsServer> servers = Daedalus.configurations.getCustomDNSServers();
+        CustomDnsServer server = index != ConfigActivity.ID_NONE && index < servers.size() ? servers.get(index) : null;
+
+        serverName.setText(server != null ? server.getName() : "");
+        serverName.setSummary(server != null ? server.getName() : "");
+        setText("serverAddress", server != null ? server.getAddress() : "", R.string.settings_server_address_summary);
+        setText("serverPort", String.valueOf(server != null ? server.getPort() : DnsServer.DNS_SERVER_DEFAULT_PORT),
+                R.string.settings_server_port_summary);
+        int transport = server != null ? server.getTransport() : AbstractDnsServer.TRANSPORT_AUTO;
+        serverTransport.setValue(String.valueOf(transport));
+        setTransportSummary(transport);
+
         boolean proxied = server != null && server.isProxied();
         serverProxied.setChecked(proxied);
         setText("serverProxyHost", proxied ? server.getProxyHost() : SocksProxy.DEFAULT_HOST, R.string.settings_socks5_host_summary);
@@ -172,6 +178,155 @@ public class DnsServerConfigFragment extends ConfigFragment {
             findPreference(key).setEnabled(enabled);
         }
     }
+
+    /**
+     * Shows the chosen protocol above the explanation of what each choice does.
+     */
+    private void setTransportSummary(int transport) {
+        findPreference("serverTransport").setSummary(getString(transportName(transport)) + "\n"
+                + getString(R.string.settings_server_transport_summary));
+    }
+
+    private static int transportName(int transport) {
+        switch (transport) {
+            case AbstractDnsServer.TRANSPORT_UDP:
+                return R.string.settings_dns_udp;
+            case AbstractDnsServer.TRANSPORT_TCP:
+                return R.string.settings_dns_tcp;
+            default:
+                return R.string.settings_server_transport_auto;
+        }
+    }
+
+    /**
+     * The fields as filled in right now. Applied to a CustomDnsServer on save, or turned
+     * into a stand-alone server for the connection test.
+     */
+    private static class Form {
+        String name;
+        String address;
+        int port;
+        int transport;
+        boolean proxied;
+        String proxyHost;
+        int proxyPort;
+        String proxyUsername;
+        String proxyPassword;
+        String certificate;
+
+        void applyTo(CustomDnsServer server) {
+            server.setName(name);
+            server.setAddress(address);
+            server.setPort(port);
+            server.setTransport(transport);
+            if (proxied) {
+                server.setProxy(proxyHost, proxyPort, proxyUsername, proxyPassword);
+            } else {
+                server.clearProxy();
+            }
+            server.setCertificate(certificate);
+        }
+
+        AbstractDnsServer toServer() {
+            return new AbstractDnsServer(address, port) {
+                @Override
+                public int getTransport() {
+                    return transport;
+                }
+
+                @Override
+                public String getProxyHost() {
+                    return proxied ? proxyHost : null;
+                }
+
+                @Override
+                public int getProxyPort() {
+                    return proxied ? proxyPort : 0;
+                }
+
+                @Override
+                public String getProxyUsername() {
+                    return proxied && !proxyUsername.isEmpty() ? proxyUsername : null;
+                }
+
+                @Override
+                public String getProxyPassword() {
+                    return proxied ? proxyPassword : null;
+                }
+
+                @Override
+                public String getCertificate() {
+                    return certificate;
+                }
+            };
+        }
+    }
+
+    /**
+     * Reads the form, or shows a message and returns null when a required field is
+     * missing or a port is not a number.
+     */
+    private Form readForm(boolean requireName) {
+        Form form = new Form();
+        form.name = text("serverName");
+        form.address = text("serverAddress");
+        String port = text("serverPort");
+        form.proxied = ((SwitchPreference) findPreference("serverProxied")).isChecked();
+        form.proxyHost = text("serverProxyHost");
+        String proxyPort = text("serverProxyPort");
+        form.proxyUsername = text("serverProxyUsername");
+        String password = ((EditTextPreference) findPreference("serverProxyPassword")).getText();
+        form.proxyPassword = password == null ? "" : password;
+        form.certificate = certificate;
+        String transport = ((ListPreference) findPreference("serverTransport")).getValue();
+        form.transport = transport == null ? AbstractDnsServer.TRANSPORT_AUTO : Integer.parseInt(transport);
+
+        if ((requireName && form.name.isEmpty()) || form.address.isEmpty() || port.isEmpty()
+                || (form.proxied && (form.proxyHost.isEmpty() || proxyPort.isEmpty()))) {
+            Snackbar.make(getView(), R.string.notice_fill_in_all, Snackbar.LENGTH_LONG).show();
+            return null;
+        }
+        try {
+            form.port = Integer.parseInt(port);
+            form.proxyPort = form.proxied ? Integer.parseInt(proxyPort) : 0;
+        } catch (NumberFormatException e) {
+            Snackbar.make(getView(), R.string.notice_fill_in_all, Snackbar.LENGTH_LONG).show();
+            return null;
+        }
+        return form;
+    }
+
+    /**
+     * Sends one query with the settings as they are filled in now, without saving them,
+     * and shows the outcome under the test button.
+     */
+    private void runTest() {
+        if (testThread != null) {
+            return;
+        }
+        Form form = readForm(false);
+        if (form == null) {
+            return;
+        }
+        final AbstractDnsServer server = form.toServer();
+        Preference test = findPreference("serverTest");
+        test.setEnabled(false);
+        test.setSummary(R.string.server_test_running);
+        SocksProxy.setExtraServer(server);
+        testThread = new Thread(() -> {
+            Daedalus app = Daedalus.getInstance();
+            String result;
+            try {
+                DnsMessage message = DnsMessage.builder()
+                        .addQuestion(new Question(Daedalus.DEFAULT_TEST_DOMAINS[0], Record.TYPE.A))
+                        .setId(new Random().nextInt())
+                        .setRecursionDesired(true)
+                        .setOpcode(DnsMessage.OPCODE.QUERY)
+                        .setResponseCode(DnsMessage.RESPONSE_CODE.NO_ERROR)
+                        .setQrFlag(false)
+                        .build();
+                long start = SystemClock.elapsedRealtime();
+                DnsTransport.Result response = DnsTransport.query(server, message, TEST_TIMEOUT, DnsTransport.NO_HOOKS);
                 result = app.getString(R.string.server_test_ok, DnsTransport.describe(server),
                         SystemClock.elapsedRealtime() - start, QueryLog.summarize(response.message));
             } catch (Exception e) {
@@ -264,26 +419,20 @@ public class DnsServerConfigFragment extends ConfigFragment {
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         int id = item.getItemId();
+        ArrayList<CustomDnsServer> servers = Daedalus.configurations.getCustomDNSServers();
 
         switch (id) {
             case R.id.action_apply:
-                String serverName = ((EditTextPreference) findPreference("serverName")).getText();
-                String serverAddress = ((EditTextPreference) findPreference("serverAddress")).getText();
-                String serverPort = ((EditTextPreference) findPreference("serverPort")).getText();
-
-                if (serverName.equals("") | serverAddress.equals("") | serverPort.equals("")) {
-                    Snackbar.make(getView(), R.string.notice_fill_in_all, Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                Form form = readForm(true);
+                if (form == null) {
                     break;
                 }
-
-                if (index == ConfigActivity.ID_NONE) {
-                    Daedalus.configurations.getCustomDNSServers().add(new CustomDnsServer(serverName, serverAddress, Integer.parseInt(serverPort)));
+                String previousCertificate = null;
+                if (index == ConfigActivity.ID_NONE || index >= servers.size()) {
+                    CustomDnsServer server = new CustomDnsServer(form.name, form.address, form.port);
+                    form.applyTo(server);
+                    servers.add(server);
                 } else {
-                    CustomDnsServer server = Daedalus.configurations.getCustomDNSServers().get(index);
-                    server.setName(serverName);
-                    server.setAddress(serverAddress);
-                    server.setPort(Integer.parseInt(serverPort));
                     CustomDnsServer server = servers.get(index);
                     previousCertificate = server.getCertificate();
                     form.applyTo(server);

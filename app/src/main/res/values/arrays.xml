@@ -3,16 +3,21 @@
     <string-array name="dns_query_method_values">
         <item>0</item>
         <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
     </string-array>
     <string-array name="dns_query_methods">
         <item>@string/settings_dns_udp</item>
         <item>@string/settings_dns_tcp</item>
-        <item>@string/settings_dns_tls</item>
-        <item>@string/settings_dns_https_ietf</item>
-        <item>@string/settings_dns_https_json</item>
+    </string-array>
+    <string-array name="server_transport_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="server_transport_entries">
+        <item>@string/settings_server_transport_auto</item>
+        <item>@string/settings_dns_udp</item>
+        <item>@string/settings_dns_tcp</item>
+    </string-array>
     <string-array name="network_rule_type_values">
         <item>0</item>
         <item>1</item>
@@ -23,4 +28,3 @@
     </string-array>
     </string-array>
 </resources>
-

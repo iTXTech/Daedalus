@@ -59,6 +59,7 @@
     <string name="settings_server_management_summary">選擇可用的內建伺服器，關閉的不會出現在下方列表中</string>
     <string name="settings_network_rules">網路規則</string>
     <string name="settings_network_rules_summary">依所在網路自動選擇 DNS 伺服器</string>
+    <string name="settings_dns_query_method_summary">僅用於 53 連接埠的伺服器。853 連接埠自動使用 DoT，帶路徑的位址自動使用 DoH。</string>
     <string name="settings_use_system_dns_summary">忽略這裡設定的伺服器和網路規則，轉發給目前網路分配的 DNS；只想用過濾規則時開啟</string>
     <string name="primary_server_summary">沒有網路規則命中時使用</string>
     <string name="secondary_server_summary">首選失敗或逾時時使用</string>
@@ -66,6 +67,9 @@
     <string name="settings_socks5_username_summary">代理不需要驗證時留空</string>
     <string name="settings_server_address_summary">IP 或網域名稱；DoH 填主機名稱加路徑，例如 dns.alidns.com/dns-query</string>
     <string name="settings_server_port_summary">53 為普通 DNS，853 自動使用 DoT（下方指定協定時除外）</string>
+    <string name="settings_server_transport">協定</string>
+    <string name="settings_server_transport_summary">自動：853 連接埠走 DoT，帶路徑的位址走 DoH，其餘依全域查詢方式。選 UDP 或 TCP 則走普通 DNS（853 也不例外）；帶路徑的位址一律走 DoH，經 SOCKS5 代理一律走 TCP。</string>
+    <string name="settings_server_transport_auto">自動</string>
     <string name="network_rules_none">還沒有規則，任何網路都使用上方的首選和備用伺服器。</string>
     <string name="network_rules_add">新增規則…</string>
     <string name="network_rule_type">條件</string>
@@ -100,7 +104,6 @@
     <string name="settings_manual_summary">造訪 GitHub wiki 頁面。</string>
     <string name="settings_log_size">紀錄檔大小限制</string>
     <string name="settings_debug_output">调试输出 TODO</string>
-    <string name="settings_dont_build_cache">不緩存 DNS 的 IP地址</string>
     <string name="settings_dark_theme">使用暗主题</string>
 
     <string name="settings_rule_name">規則名稱</string>
@@ -115,6 +118,11 @@
     <string name="settings_dns_query_method">DNS 查询方式</string>
     <string name="settings_foreground">運行前臺服務</string>
     <string name="settings_use_system_dns">使用系統DNS作為上游DNS</string>
+    <string name="settings_dns_tcp">TCP</string>
+    <string name="settings_dns_udp">UDP</string>
+    <string name="settings_dns_tls">TLS</string>
+    <string name="settings_dns_https_ietf">HTTPS (RFC8484)</string>
+    <string name="settings_dns_https_json">HTTPS (Google JSON)</string>
 
     <string name="settings_server_name">伺服器名稱</string>
     <string name="settings_server_address">伺服器網址</string>

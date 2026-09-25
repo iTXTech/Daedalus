@@ -17,6 +17,15 @@ public class AbstractDnsServer implements Cloneable {
     public static final int DNS_SERVER_DEFAULT_PORT = 53;
     public static final int DNS_SERVER_TLS_PORT = 853;
 
+    /**
+     * Plain-DNS transport of a server: chosen by Daedalus from the address, the port and
+     * the global query method (TRANSPORT_AUTO, see
+     * {@link org.itxtech.daedalus.provider.DnsTransport#getMethod}), or forced by the user.
+     */
+    public static final int TRANSPORT_AUTO = 0;
+    public static final int TRANSPORT_UDP = 1;
+    public static final int TRANSPORT_TCP = 2;
+
     protected String address;
     protected int port;
     protected String hostAddress;
@@ -62,6 +71,13 @@ public class AbstractDnsServer implements Cloneable {
         return "";
     }
 
+    /**
+     * Transport forced by the user for plain DNS to this server, or {@link #TRANSPORT_AUTO}
+     * to let Daedalus choose. Built-in servers always use the automatic choice.
+     */
+    public int getTransport() {
+        return TRANSPORT_AUTO;
+    }
 
     /**
      * Host of the SOCKS5 proxy the server is reached through, or null for a direct

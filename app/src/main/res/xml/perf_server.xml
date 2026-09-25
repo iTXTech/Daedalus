@@ -21,6 +21,13 @@
                 android:selectAllOnFocus="false"
                 android:singleLine="true"
                 android:title="@string/settings_server_port"/>
+        <ListPreference
+                android:key="serverTransport"
+                android:title="@string/settings_server_transport"
+                android:summary="@string/settings_server_transport_summary"
+                android:entries="@array/server_transport_entries"
+                android:entryValues="@array/server_transport_values"
+                android:defaultValue="0"/>
         <Preference
                 android:key="serverCertificate"
                 android:title="@string/settings_server_certificate"

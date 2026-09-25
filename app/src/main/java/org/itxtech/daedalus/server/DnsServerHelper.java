@@ -1,18 +1,14 @@
 package org.itxtech.daedalus.server;
 
 import android.content.Context;
-import android.net.Uri;
 import org.itxtech.daedalus.Daedalus;
-import org.itxtech.daedalus.provider.HttpsProvider;
-import org.itxtech.daedalus.provider.ProviderPicker;
 import org.itxtech.daedalus.service.DaedalusVpnService;
-import org.itxtech.daedalus.util.Logger;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Daedalus Project
@@ -26,18 +22,16 @@ import java.util.List;
  * (at your option) any later version.
  */
 public class DnsServerHelper {
-    public static HashMap<String, List<InetAddress>> domainCache = new HashMap<>();
+    /**
+     * Addresses of DoH server host names, resolved by the VPN service on the underlying
+     * network so that the lookup never goes through the VPN itself.
+     */
+    public static final Map<String, List<InetAddress>> domainCache = new ConcurrentHashMap<>();
 
     public static void clearCache() {
-        domainCache = new HashMap<>();
+        domainCache.clear();
     }
 
-    public static void buildCache() {
-        domainCache = new HashMap<>();
-        if (ProviderPicker.getDnsQueryMethod() >= ProviderPicker.DNS_QUERY_METHOD_HTTPS_IETF &&
-                !Daedalus.getPrefs().getBoolean("settings_dont_build_cache", false)) {
-            buildDomainCache(getServerById(getPrimary()).getAddress());
-            buildDomainCache(getServerById(getSecondary()).getAddress());
     /**
      * Built-in servers that are not disabled, in list order.
      */
@@ -51,13 +45,6 @@ public class DnsServerHelper {
         return servers;
     }
 
-    private static void buildDomainCache(String addr) {
-        addr = HttpsProvider.HTTPS_SUFFIX + addr;
-        String host = Uri.parse(addr).getHost();
-        try {
-            domainCache.put(host, Arrays.asList(InetAddress.getAllByName(host)));
-        } catch (Exception e) {
-            Logger.logException(e);
     /**
      * Custom servers first, the most recently added on top, followed by the enabled
      * built-in servers. This is the order used by every server list in the UI.

@@ -59,6 +59,7 @@
     <string name="settings_server_management_summary">选择可用的内置服务器，关闭的不会出现在下方列表中</string>
     <string name="settings_network_rules">网络规则</string>
     <string name="settings_network_rules_summary">根据所在网络自动选择 DNS 服务器</string>
+    <string name="settings_dns_query_method_summary">仅用于 53 端口的服务器。853 端口自动使用 DoT，带路径的地址自动使用 DoH。</string>
     <string name="settings_use_system_dns_summary">忽略这里配置的服务器和网络规则，转发给当前网络分配的 DNS；只想用过滤规则时开启</string>
     <string name="primary_server_summary">没有网络规则命中时使用</string>
     <string name="secondary_server_summary">首选失败或超时时使用</string>
@@ -66,6 +67,9 @@
     <string name="settings_socks5_username_summary">代理不需要认证时留空</string>
     <string name="settings_server_address_summary">IP 或域名；DoH 填主机名加路径，例如 dns.alidns.com/dns-query</string>
     <string name="settings_server_port_summary">53 为普通 DNS，853 自动使用 DoT（下方指定协议时除外）</string>
+    <string name="settings_server_transport">协议</string>
+    <string name="settings_server_transport_summary">自动：853 端口走 DoT，带路径的地址走 DoH，其余按全局查询方式。选 UDP 或 TCP 则走普通 DNS（853 也不例外）；带路径的地址始终走 DoH，经 SOCKS5 代理始终走 TCP。</string>
+    <string name="settings_server_transport_auto">自动</string>
     <string name="network_rules_none">还没有规则，任何网络都使用上方的首选和备用服务器。</string>
     <string name="network_rules_add">添加规则…</string>
     <string name="network_rule_type">条件</string>
@@ -100,11 +104,15 @@
     <string name="settings_manual_summary">访问 GitHub wiki 页面。</string>
     <string name="settings_log_size">日志大小限制</string>
     <string name="settings_debug_output">调试输出</string>
-    <string name="settings_dont_build_cache">不缓存 DNS 的 IP地址</string>
     <string name="settings_dark_theme">使用暗主题</string>
     <string name="settings_dns_query_method">DNS 查询方式</string>
     <string name="settings_foreground">运行前台服务</string>
     <string name="settings_use_system_dns">使用系统DNS作为上游DNS</string>
+    <string name="settings_dns_tcp">TCP</string>
+    <string name="settings_dns_udp">UDP</string>
+    <string name="settings_dns_tls">TLS</string>
+    <string name="settings_dns_https_ietf">HTTPS (RFC8484)</string>
+    <string name="settings_dns_https_json">HTTPS (Google JSON)</string>
 
     <string name="settings_rule_name">规则名称</string>
     <string name="settings_rule_type">规则类型</string>
