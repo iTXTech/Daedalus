@@ -57,8 +57,24 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class DaedalusVpnService extends VpnService implements Runnable {
     public static final String ACTION_ACTIVATE = "org.itxtech.daedalus.service.DaedalusVpnService.ACTION_ACTIVATE";
     public static final String ACTION_DEACTIVATE = "org.itxtech.daedalus.service.DaedalusVpnService.ACTION_DEACTIVATE";
+    /**
+     * Set when the service is started with startForegroundService(): it then has to call
+     * startForeground() right away, or the system kills the app after a few seconds.
+     */
+    public static final String EXTRA_FOREGROUND = "org.itxtech.daedalus.service.DaedalusVpnService.EXTRA_FOREGROUND";
+    /**
+     * Whether the running service is a foreground service; read back when the system
+     * restarts the service after killing the process.
+     */
+    private static final String PREF_FOREGROUND = "service_foreground";
 
-    private static final int NOTIFICATION_ACTIVATED = 0;
+    /**
+     * Notification id of the activated state. It must not be 0: {@code startForeground(0, n)}
+     * reaches the system as {@code id == 0}, which is the same call {@code stopForeground()}
+     * makes, so it stops the foreground state instead of starting it and never answers a
+     * pending startForegroundService() request.
+     */
+    private static final int NOTIFICATION_ACTIVATED = 1;
 
     private static final String TAG = "DaedalusVpnService";
     private static final String CHANNEL_ID = "daedalus_channel_1";
@@ -79,6 +95,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
     private static InetAddress aliasSecondary;
 
     private NotificationCompat.Builder notification = null;
+    private boolean foreground = false;
     private boolean running = false;
     private long lastUpdate = 0;
     private boolean statisticQuery;
@@ -101,8 +118,6 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         return activated;
     }
 
-    private static int getPendingIntent(int flag) {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE | flag : flag;
     /**
      * Re-evaluates the network rules with the current servers, rules and settings, e.g.
      * after they were edited or imported while the VPN is running.
@@ -121,69 +136,128 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         instance = this;
     }
 
+    private static int getPendingIntent(int flag) {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE | flag : flag;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null) {
-            switch (intent.getAction()) {
-                case ACTION_ACTIVATE:
-                    activated = true;
-                    if (Daedalus.getPrefs().getBoolean("settings_notification", true)) {
-                        NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-
-                        NotificationCompat.Builder builder;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
-                            manager.createNotificationChannel(channel);
-                            builder = new NotificationCompat.Builder(this, CHANNEL_ID);
-                        } else {
-                            builder = new NotificationCompat.Builder(this);
-                        }
-
-                        Intent deactivateIntent = new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION);
-                        deactivateIntent.setClass(this, StatusBarBroadcastReceiver.class);
-                        Intent settingsIntent = new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION);
-                        settingsIntent.setClass(this, StatusBarBroadcastReceiver.class);
-                        PendingIntent pIntent = PendingIntent.getActivity(this, 0,
-                                new Intent(this, MainActivity.class), getPendingIntent(PendingIntent.FLAG_UPDATE_CURRENT));
-                        builder.setWhen(0)
-                                .setContentTitle(getResources().getString(R.string.notice_activated))
-                                .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
-                                .setSmallIcon(R.drawable.ic_security)
-                                .setColor(getResources().getColor(R.color.colorPrimary)) //backward compatibility
-                                .setAutoCancel(false)
-                                .setOngoing(true)
-                                .setTicker(getResources().getString(R.string.notice_activated))
-                                .setContentIntent(pIntent)
-                                .addAction(R.drawable.ic_clear, getResources().getString(R.string.button_text_deactivate),
-                                        PendingIntent.getBroadcast(this, 0,
-                                                deactivateIntent, getPendingIntent(PendingIntent.FLAG_UPDATE_CURRENT)))
-                                .addAction(R.drawable.ic_settings, getResources().getString(R.string.action_settings),
-                                        PendingIntent.getBroadcast(this, 0,
-                                                settingsIntent, getPendingIntent(PendingIntent.FLAG_UPDATE_CURRENT)));
-
-                        Notification notification = builder.build();
-
-                        manager.notify(NOTIFICATION_ACTIVATED, notification);
-
-                        this.notification = builder;
-                    }
-
-                    Daedalus.initRuleResolver();
-                    startThread();
-                    Daedalus.updateShortcut(getApplicationContext());
-                    if (MainActivity.getInstance() != null) {
-                        MainActivity.getInstance().startActivity(new Intent(getApplicationContext(), MainActivity.class)
-                                .putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_SERVICE_DONE));
-                    }
-                    return START_STICKY;
-                case ACTION_DEACTIVATE:
-                    stopThread();
-                    return START_NOT_STICKY;
-            }
+        if (intent == null) {
+            // START_STICKY restart after the system killed the process: nothing is re-delivered
+            // and the statics of the previous process are gone. Re-establish the VPN with the
+            // servers of the settings; a service that ran in the foreground goes back there
+            // right away, otherwise the system kills the app once more.
+            Logger.warning("Service restarted by the system after the process was killed, re-activating the VPN");
+            return activate(true, Daedalus.getPrefs().getBoolean(PREF_FOREGROUND, false));
+        }
+        String action = intent.getAction();
+        if (ACTION_ACTIVATE.equals(action)) {
+            return activate(false, intent.getBooleanExtra(EXTRA_FOREGROUND, false));
+        }
+        if (ACTION_DEACTIVATE.equals(action)) {
+            stopThread();
         }
         return START_NOT_STICKY;
+    }
+
+    private int activate(boolean restart, boolean foregroundRequested) {
+        if (mThread != null) {
+            // Already running, e.g. the activate intent was delivered twice. A start that came
+            // through startForegroundService() must still be answered with startForeground():
+            // the request stays pending otherwise and the system kills the app a few seconds
+            // later with an ANR.
+            if (foregroundRequested) {
+                promoteToForeground();
+            }
+            return START_STICKY;
+        }
+        activated = true;
+        if (primaryServer == null || secondaryServer == null) {
+            primaryServer = (AbstractDnsServer) DnsServerHelper.getServerById(DnsServerHelper.getPrimary()).clone();
+            secondaryServer = (AbstractDnsServer) DnsServerHelper.getServerById(DnsServerHelper.getSecondary()).clone();
+        }
+
+        boolean showNotification = Daedalus.getPrefs().getBoolean("settings_notification", true);
+        if (foregroundRequested) {
+            promoteToForeground();
+        }
+        if (foreground) {
+            this.notification.setContentTitle(getResources().getString(R.string.notice_activated));
+        } else if (showNotification) {
+            NotificationCompat.Builder builder = buildNotification();
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            manager.notify(NOTIFICATION_ACTIVATED, builder.build());
+            this.notification = builder;
+        }
+        Daedalus.getPrefs().edit().putBoolean(PREF_FOREGROUND, foreground).apply();
+
+        Daedalus.initRuleResolver();
+        startThread();
+        Daedalus.updateShortcut(getApplicationContext());
+        if (!restart && MainActivity.getInstance() != null) {
+            MainActivity.getInstance().startActivity(new Intent(getApplicationContext(), MainActivity.class)
+                    .putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_SERVICE_DONE));
+        }
+        return START_STICKY;
+    }
+
+    /**
+     * Answers a startForegroundService() request. Every such start must reach startForeground(),
+     * or the system kills the app a few seconds later; the request is per start, so a service
+     * that is already in the foreground has to answer it as well.
+     */
+    private void promoteToForeground() {
+        if (foreground) {
+            return;
+        }
+        NotificationCompat.Builder builder = buildNotification();
+        try {
+            // A foreground service always shows its notification
+            startForeground(NOTIFICATION_ACTIVATED, builder.build());
+            foreground = true;
+            this.notification = builder;
+        } catch (Exception e) {
+            // Android 12+ refuses startForeground() from the background unless the system
+            // itself asked for the service. The pending request cannot be answered then, and
+            // waiting it out means being killed, so stop cleanly instead.
+            Logger.warning("Cannot run in the foreground, stopping the service: " + e);
+            stopThread();
+        }
+    }
+
+    private NotificationCompat.Builder buildNotification() {
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
+            manager.createNotificationChannel(channel);
+            builder = new NotificationCompat.Builder(this, CHANNEL_ID);
+        } else {
+            builder = new NotificationCompat.Builder(this);
+        }
+
+        Intent deactivateIntent = new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION);
+        deactivateIntent.setClass(this, StatusBarBroadcastReceiver.class);
+        Intent settingsIntent = new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION);
+        settingsIntent.setClass(this, StatusBarBroadcastReceiver.class);
+        PendingIntent pIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, MainActivity.class), getPendingIntent(PendingIntent.FLAG_UPDATE_CURRENT));
+        builder.setWhen(0)
+                .setContentTitle(getResources().getString(R.string.notice_activated))
+                .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
+                .setSmallIcon(R.drawable.ic_security)
+                .setColor(getResources().getColor(R.color.colorPrimary)) //backward compatibility
+                .setAutoCancel(false)
+                .setOngoing(true)
+                .setTicker(getResources().getString(R.string.notice_activated))
+                .setContentIntent(pIntent)
+                .addAction(R.drawable.ic_clear, getResources().getString(R.string.button_text_deactivate),
+                        PendingIntent.getBroadcast(this, 0,
+                                deactivateIntent, getPendingIntent(PendingIntent.FLAG_UPDATE_CURRENT)))
+                .addAction(R.drawable.ic_settings, getResources().getString(R.string.action_settings),
+                        PendingIntent.getBroadcast(this, 0,
+                                settingsIntent, getPendingIntent(PendingIntent.FLAG_UPDATE_CURRENT)));
+        return builder;
     }
 
     private void startThread() {
@@ -205,6 +279,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
     private void stopThread() {
         Log.d(TAG, "stopThread");
         activated = false;
+        Daedalus.getPrefs().edit().putBoolean(PREF_FOREGROUND, false).apply();
         boolean shouldRefresh = false;
         unregisterNetworkCallback();
         try {
@@ -223,6 +298,10 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                     mThread.interrupt();
                 }
                 mThread = null;
+            }
+            if (foreground) {
+                stopForeground(true);
+                foreground = false;
             }
             if (notification != null) {
                 NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -251,6 +330,7 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
     @Override
     public void onRevoke() {
+        Logger.warning("VPN permission revoked: another VPN app took over, or the VPN was turned off in the system settings");
         stopThread();
     }
 

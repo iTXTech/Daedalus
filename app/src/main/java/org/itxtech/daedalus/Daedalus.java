@@ -289,13 +289,22 @@ public class Daedalus extends Application {
     public static void activateService(Context context, boolean forceForeground) {
         DaedalusVpnService.primaryServer = (AbstractDnsServer) DnsServerHelper.getServerById(DnsServerHelper.getPrimary()).clone();
         DaedalusVpnService.secondaryServer = (AbstractDnsServer) DnsServerHelper.getServerById(DnsServerHelper.getSecondary()).clone();
-        if ((getInstance().prefs.getBoolean("settings_foreground", false) || forceForeground)
-                && Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
-            Logger.info("Starting foreground service");
-            context.startForegroundService(Daedalus.getServiceIntent(context).setAction(DaedalusVpnService.ACTION_ACTIVATE));
-        } else {
-            Logger.info("Starting background service");
-            context.startService(Daedalus.getServiceIntent(context).setAction(DaedalusVpnService.ACTION_ACTIVATE));
+        try {
+            if ((getInstance().prefs.getBoolean("settings_foreground", false) || forceForeground)
+                    && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Logger.info("Starting foreground service");
+                // The service must then call startForeground() promptly, see DaedalusVpnService
+                context.startForegroundService(Daedalus.getServiceIntent(context)
+                        .setAction(DaedalusVpnService.ACTION_ACTIVATE)
+                        .putExtra(DaedalusVpnService.EXTRA_FOREGROUND, true));
+            } else {
+                Logger.info("Starting background service");
+                context.startService(Daedalus.getServiceIntent(context).setAction(DaedalusVpnService.ACTION_ACTIVATE));
+            }
+        } catch (Exception e) {
+            // Android 8+ refuses to start a service while the app is in the background, e.g.
+            // from a quick settings tile on some systems; the user has to start it from the app
+            Logger.logException(e);
         }
     }
 

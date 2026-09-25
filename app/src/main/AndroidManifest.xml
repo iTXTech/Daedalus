@@ -3,6 +3,7 @@
           package="org.itxtech.daedalus">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <!--
       The app filter lets the user pick the apps that are routed through Daedalus. Since
       Android 11 an app only sees the packages that match a <queries> declaration, so without
