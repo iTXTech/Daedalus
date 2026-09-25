@@ -3,8 +3,10 @@ package org.itxtech.daedalus.provider;
 import android.os.ParcelFileDescriptor;
 import android.system.Os;
 import org.itxtech.daedalus.Daedalus;
+import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Logger;
+import org.itxtech.daedalus.util.QueryLog;
 import org.itxtech.daedalus.util.RuleResolver;
 import org.minidns.dnsmessage.DnsMessage;
 import org.minidns.record.A;
@@ -96,6 +98,8 @@ public abstract class Provider {
                         .addAnswer(new Record<>(dnsQueryName, Record.TYPE.A, 1, 64,
                                 new A(Inet4Address.getByName(response).getAddress())));
                 handleDnsResponse(parsedPacket, builder.build().toArray());
+                QueryLog.add(dnsQueryName + " " + dnsMsg.getQuestion().type.name(),
+                        Daedalus.getInstance().getString(R.string.query_log_local_rule), "", response, 0, null);
                 return true;
             } else if (response != null && dnsMsg.getQuestion().type == Record.TYPE.AAAA) {
                 Logger.info("Provider: Resolved " + dnsQueryName + "  Local resolver response: " + response);
@@ -104,6 +108,8 @@ public abstract class Provider {
                         .addAnswer(new Record<>(dnsQueryName, Record.TYPE.AAAA, 1, 64,
                                 new AAAA(Inet6Address.getByName(response).getAddress())));
                 handleDnsResponse(parsedPacket, builder.build().toArray());
+                QueryLog.add(dnsQueryName + " " + dnsMsg.getQuestion().type.name(),
+                        Daedalus.getInstance().getString(R.string.query_log_local_rule), "", response, 0, null);
                 return true;
             }
         } catch (Exception e) {

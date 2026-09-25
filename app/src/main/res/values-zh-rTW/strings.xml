@@ -29,6 +29,7 @@
     <string name="action_removed">已移除。</string>
     <string name="action_undo">復原</string>
     <string name="action_log">紀錄檔</string>
+    <string name="action_query_log">查詢記錄</string>
     <string name="action_refresh">重新整理</string>
     <string name="action_reload">重新載入</string>
 
@@ -81,6 +82,12 @@
     <string name="network_rule_subnets_summary">以逗號分隔，例如 192.168.31.0/24, 10.0.0.0/8</string>
     <string name="network_rule_servers">首選: %1$s\n備用: %2$s</string>
     <string name="config_network_rule">網路規則設定</string>
+    <string name="query_log_filter_hint">依網域名稱篩選</string>
+    <string name="query_log_empty">還沒有記錄。服務以進階模式執行時會記錄每次查詢。</string>
+    <string name="query_log_local_rule">本地規則</string>
+    <string name="query_log_no_record">無 %s 記錄</string>
+    <string name="query_log_default_servers">預設首選/備用</string>
+    <string name="query_log_system_dns">系統 DNS</string>
     <string name="settings_server_certificate">TLS 憑證（DoT）</string>
     <string name="cert_none">未設定，僅信任系統 CA。可匯入此伺服器的自簽憑證或其 CA（PEM 或 DER）。</string>
     <string name="cert_replace">更換憑證…</string>

@@ -29,6 +29,7 @@
     <string name="action_removed">已移除。</string>
     <string name="action_undo">撤销</string>
     <string name="action_log">日志</string>
+    <string name="action_query_log">查询记录</string>
     <string name="action_refresh">刷新</string>
     <string name="action_reload">重新加载规则</string>
 
@@ -81,6 +82,12 @@
     <string name="network_rule_subnets_summary">逗号分隔，例如 192.168.31.0/24, 10.0.0.0/8</string>
     <string name="network_rule_servers">首选: %1$s\n备用: %2$s</string>
     <string name="config_network_rule">网络规则配置</string>
+    <string name="query_log_filter_hint">按域名过滤</string>
+    <string name="query_log_empty">还没有记录。服务以高级模式运行时会记录每次查询。</string>
+    <string name="query_log_local_rule">本地规则</string>
+    <string name="query_log_no_record">无 %s 记录</string>
+    <string name="query_log_default_servers">默认首选/备用</string>
+    <string name="query_log_system_dns">系统 DNS</string>
     <string name="settings_server_certificate">TLS 证书（DoT）</string>
     <string name="cert_none">未设置，仅信任系统 CA。可导入此服务器的自签名证书或其 CA（PEM 或 DER）。</string>
     <string name="cert_replace">更换证书…</string>

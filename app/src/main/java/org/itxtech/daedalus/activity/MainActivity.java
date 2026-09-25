@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int FRAGMENT_RULES = 4;
     public static final int FRAGMENT_DNS_SERVERS = 5;
     public static final int FRAGMENT_LOG = 6;
+    public static final int FRAGMENT_QUERY_LOG = 7;
 
     public static final String LAUNCH_NEED_RECREATE = "org.itxtech.daedalus.activity.MainActivity.LAUNCH_NEED_RECREATE";
 
@@ -236,6 +237,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case FRAGMENT_LOG:
                 switchFragment(LogFragment.class);
                 break;
+            case FRAGMENT_QUERY_LOG:
+                switchFragment(QueryLogFragment.class);
+                break;
         }
         if (currentFragment == null) {
             switchFragment(HomeFragment.class);
@@ -270,6 +274,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_log:
                 switchFragment(LogFragment.class);
+                break;
+            case R.id.nav_query_log:
+                switchFragment(QueryLogFragment.class);
                 break;
         }
 

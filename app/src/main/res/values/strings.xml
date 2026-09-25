@@ -28,6 +28,7 @@
     <string name="action_removed">Removed.</string>
     <string name="action_undo">Undo</string>
     <string name="action_log">Log</string>
+    <string name="action_query_log">Query Log</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_reload">Reload</string>
 
@@ -80,6 +81,12 @@
     <string name="network_rule_subnets_summary">Comma separated, e.g. 192.168.31.0/24, 10.0.0.0/8</string>
     <string name="network_rule_servers">Primary: %1$s\nSecondary: %2$s</string>
     <string name="config_network_rule">Network rule</string>
+    <string name="query_log_filter_hint">Filter by domain</string>
+    <string name="query_log_empty">No queries recorded yet. Queries are recorded while the service runs in advanced mode.</string>
+    <string name="query_log_local_rule">local rule</string>
+    <string name="query_log_no_record">no %s record</string>
+    <string name="query_log_default_servers">default servers</string>
+    <string name="query_log_system_dns">system DNS</string>
     <string name="settings_server_certificate">TLS certificate (DoT)</string>
     <string name="cert_none">Not set, system CAs only. Import the self-signed certificate or the CA of this server (PEM or DER).</string>
     <string name="cert_replace">Replace certificate…</string>
