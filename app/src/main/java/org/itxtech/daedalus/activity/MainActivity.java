@@ -3,6 +3,7 @@ package org.itxtech.daedalus.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.VpnService;
 import android.os.Bundle;
 import android.util.Log;
@@ -53,12 +54,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int FRAGMENT_RULES = 4;
     public static final int FRAGMENT_DNS_SERVERS = 5;
     public static final int FRAGMENT_LOG = 6;
+    public static final int FRAGMENT_QUERY_LOG = 7;
 
     public static final String LAUNCH_NEED_RECREATE = "org.itxtech.daedalus.activity.MainActivity.LAUNCH_NEED_RECREATE";
+
+    private static final int REQUEST_VPN_PERMISSION = 100;
 
     private static MainActivity instance = null;
 
     private ToolbarFragment currentFragment;
+    private boolean darkTheme;
 
     public static MainActivity getInstance() {
         return instance;
@@ -66,7 +71,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (Daedalus.isDarkTheme()) {
+        darkTheme = Daedalus.isDarkTheme();
+        if (darkTheme) {
             setTheme(R.style.AppTheme_Dark_NoActionBar_TransparentStatusBar);
         }
         super.onCreate(savedInstanceState);
@@ -92,6 +98,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         updateUserInterface(getIntent());
     }
 
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // uiMode changes arrive here instead of recreating the activity; with the theme
+        // following the system, a switch between day and night needs the activity rebuilt
+        if (Daedalus.isDarkTheme(newConfig) != darkTheme) {
+            finish();
+            overridePendingTransition(R.anim.start, R.anim.end);
+            startActivity(new Intent(this, MainActivity.class).putExtra(LAUNCH_FRAGMENT, getFragmentId(currentFragment)));
+        }
+    }
+
+    private static int getFragmentId(ToolbarFragment fragment) {
+        if (fragment instanceof DnsTestFragment) {
+            return FRAGMENT_DNS_TEST;
+        } else if (fragment instanceof SettingsFragment) {
+            return FRAGMENT_SETTINGS;
+        } else if (fragment instanceof AboutFragment) {
+            return FRAGMENT_ABOUT;
+        } else if (fragment instanceof RulesFragment) {
+            return FRAGMENT_RULES;
+        } else if (fragment instanceof DnsServersFragment) {
+            return FRAGMENT_DNS_SERVERS;
+        } else if (fragment instanceof LogFragment) {
+            return FRAGMENT_LOG;
+        } else if (fragment instanceof QueryLogFragment) {
+            return FRAGMENT_QUERY_LOG;
+        }
+        return FRAGMENT_HOME;
+    }
+
     private void switchFragment(Class fragmentClass) {
         if (currentFragment == null || fragmentClass != currentFragment.getClass()) {
             try {
@@ -109,7 +146,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (!(currentFragment instanceof HomeFragment)) {
+            return;
+        }
+        // Sub pages of the current fragment (e.g. Server Management in Settings) close first
+        if (currentFragment != null && currentFragment.getChildFragmentManager().popBackStackImmediate()) {
+            return;
+        }
+        if (!(currentFragment instanceof HomeFragment)) {
             switchFragment(HomeFragment.class);
         } else {
             super.onBackPressed();
@@ -133,9 +176,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void activateService() {
         Intent intent = VpnService.prepare(Daedalus.getInstance());
         if (intent != null) {
-            startActivityForResult(intent, 0);
+            startActivityForResult(intent, REQUEST_VPN_PERMISSION);
         } else {
-            onActivityResult(0, Activity.RESULT_OK, null);
+            onActivityResult(REQUEST_VPN_PERMISSION, Activity.RESULT_OK, null);
         }
 
         long activateCounter = Daedalus.configurations.getActivateCounter();
@@ -163,12 +206,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void onActivityResult(int request, int result, Intent data) {
         super.onActivityResult(request, result, data);
-        if (result == Activity.RESULT_OK) {
+        // Results of the fragments (file pickers etc.) arrive here as well; only the VPN
+        // permission result activates the service
+        if (request == REQUEST_VPN_PERMISSION && result == Activity.RESULT_OK) {
             Daedalus.activateService(Daedalus.getInstance());
             updateMainButton(R.string.button_text_deactivate);
             Daedalus.updateShortcut(getApplicationContext());
         }
-        super.onActivityResult(request, result, data);
     }
 
     private void updateMainButton(int id) {
@@ -230,6 +274,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case FRAGMENT_LOG:
                 switchFragment(LogFragment.class);
                 break;
+            case FRAGMENT_QUERY_LOG:
+                switchFragment(QueryLogFragment.class);
+                break;
         }
         if (currentFragment == null) {
             switchFragment(HomeFragment.class);
@@ -264,6 +311,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_log:
                 switchFragment(LogFragment.class);
+                break;
+            case R.id.nav_query_log:
+                switchFragment(QueryLogFragment.class);
                 break;
         }
 

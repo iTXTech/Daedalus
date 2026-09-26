@@ -1,8 +1,6 @@
 package org.itxtech.daedalus.provider;
 
-import android.os.ParcelFileDescriptor;
 import org.itxtech.daedalus.Daedalus;
-import org.itxtech.daedalus.service.DaedalusVpnService;
 
 /**
  * Daedalus Project
@@ -23,23 +21,16 @@ public abstract class ProviderPicker {
     public static final int DNS_QUERY_METHOD_HTTPS_JSON = 4;
     //This section mush be the same as the one in arrays.xml
 
-    public static Provider getProvider(ParcelFileDescriptor descriptor, DaedalusVpnService service) {
-        switch (getDnsQueryMethod()) {
-            case DNS_QUERY_METHOD_UDP:
-                return new UdpProvider(descriptor, service);
-            case DNS_QUERY_METHOD_TCP:
-                return new TcpProvider(descriptor, service);
-            case DNS_QUERY_METHOD_HTTPS_IETF:
-                return new HttpsIetfProvider(descriptor, service);
-            case DNS_QUERY_METHOD_HTTPS_JSON:
-                return new HttpsJsonProvider(descriptor, service);
-            case DNS_QUERY_METHOD_TLS:
-                return new TlsProvider(descriptor, service);
-        }
-        return new UdpProvider(descriptor, service);
-    }
-
+    /**
+     * Transport for servers on port 53: UDP or TCP. DoT and DoH are chosen per server by
+     * {@link DnsTransport}, so the TLS/HTTPS values of older versions fall back to UDP.
+     */
     public static int getDnsQueryMethod() {
-        return Integer.parseInt(Daedalus.getPrefs().getString("settings_dns_query_method", "0"));
+        try {
+            int method = Integer.parseInt(Daedalus.getPrefs().getString("settings_dns_query_method", "0"));
+            return method == DNS_QUERY_METHOD_TCP ? DNS_QUERY_METHOD_TCP : DNS_QUERY_METHOD_UDP;
+        } catch (Exception e) {
+            return DNS_QUERY_METHOD_UDP;
+        }
     }
 }

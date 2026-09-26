@@ -28,6 +28,9 @@
 
     <group android:checkableBehavior="single"
            android:id="@+id/nav_group_more">
+        <item android:id="@+id/nav_query_log"
+              android:title="@string/action_query_log"
+              android:icon="@drawable/ic_assignment"/>
         <item android:id="@+id/nav_log"
               android:title="@string/action_log"
               android:icon="@drawable/ic_assignment"/>

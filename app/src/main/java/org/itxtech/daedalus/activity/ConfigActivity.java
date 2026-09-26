@@ -13,7 +13,9 @@ import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.fragment.ConfigFragment;
 import org.itxtech.daedalus.fragment.DnsServerConfigFragment;
+import org.itxtech.daedalus.fragment.NetworkRuleConfigFragment;
 import org.itxtech.daedalus.fragment.RuleConfigFragment;
+import org.itxtech.daedalus.service.DaedalusVpnService;
 
 /**
  * Daedalus Project
@@ -30,6 +32,7 @@ public class ConfigActivity extends AppCompatActivity {
     public static final String LAUNCH_ACTION_FRAGMENT = "org.itxtech.daedalus.activity.ConfigActivity.LAUNCH_ACTION_FRAGMENT";
     public static final int LAUNCH_FRAGMENT_DNS_SERVER = 0;
     public static final int LAUNCH_FRAGMENT_RULE = 1;
+    public static final int LAUNCH_FRAGMENT_NETWORK_RULE = 2;
 
     public static final String LAUNCH_ACTION_ID = "org.itxtech.daedalus.activity.ConfigActivity.LAUNCH_ACTION_ID";
     public static final int ID_NONE = -1;
@@ -46,6 +49,9 @@ public class ConfigActivity extends AppCompatActivity {
         switch (getIntent().getIntExtra(LAUNCH_ACTION_FRAGMENT, LAUNCH_FRAGMENT_DNS_SERVER)) {
             case LAUNCH_FRAGMENT_RULE:
                 fragment = new RuleConfigFragment();
+                break;
+            case LAUNCH_FRAGMENT_NETWORK_RULE:
+                fragment = new NetworkRuleConfigFragment();
                 break;
             case LAUNCH_FRAGMENT_DNS_SERVER:
             default://should never reach this
@@ -81,6 +87,9 @@ public class ConfigActivity extends AppCompatActivity {
             case LAUNCH_FRAGMENT_RULE:
                 toolbar.setTitle(R.string.config_rule);
                 break;
+            case LAUNCH_FRAGMENT_NETWORK_RULE:
+                toolbar.setTitle(R.string.config_network_rule);
+                break;
             default://should never reach this
                 break;
         }
@@ -91,5 +100,7 @@ public class ConfigActivity extends AppCompatActivity {
         super.onDestroy();
 
         Daedalus.configurations.save();
+        // Servers or rules may have changed while the VPN is running
+        DaedalusVpnService.notifyConfigurationChanged();
     }
 }

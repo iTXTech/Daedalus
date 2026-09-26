@@ -1,4 +1,6 @@
-on: [ push ]
+on:
+  push:
+  workflow_dispatch:
 
 name: Test build
 
@@ -8,16 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup JDK
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: 17
+          cache: 'gradle'
       - name: Build APK
         run: bash ./gradlew assemblePureDebug --stacktrace
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: apk
           path: app/build/outputs/apk/pure/debug/*.apk

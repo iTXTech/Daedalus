@@ -6,6 +6,14 @@
             android:key="settingsServer"
             android:title="@string/settings_server">
 
+        <org.itxtech.daedalus.widget.ClickPreference
+                android:key="settings_server_management"
+                android:title="@string/settings_server_management"
+                android:summary="@string/settings_server_management_summary"/>
+        <org.itxtech.daedalus.widget.ClickPreference
+                android:key="settings_network_rules"
+                android:title="@string/settings_network_rules"
+                android:summary="@string/settings_network_rules_summary"/>
         <ListPreference
                 android:key="primary_server"
                 android:title="@string/primary_server"
@@ -18,7 +26,7 @@
         </ListPreference>
         <EditTextPreference
                 android:key="dns_test_servers"
-                android:defaultValue="10.0.0.2,10.0.0.3"
+                android:defaultValue="@string/default_dns_test_servers"
                 android:selectAllOnFocus="true"
                 android:singleLine="true"
                 android:title="@string/settings_dns_test_servers"/>
@@ -32,18 +40,25 @@
         <SwitchPreference
                 android:key="settings_boot"
                 android:title="@string/settings_boot"
+                android:summary="@string/settings_boot_summary"
                 android:defaultValue="false"/>
         <SwitchPreference
                 android:key="settings_notification"
                 android:title="@string/settings_notification"
+                android:summary="@string/settings_notification_summary"
                 android:defaultValue="true"/>
-        <SwitchPreference
-                android:key="settings_dark_theme"
-                android:title="@string/settings_dark_theme"
-                android:defaultValue="false"/>
+        <ListPreference
+                android:key="settings_theme"
+                android:title="@string/settings_theme"
+                android:dialogTitle="@string/settings_theme"
+                android:entries="@array/theme_entries"
+                android:entryValues="@array/theme_values"
+                android:defaultValue="auto"
+                app:useSimpleSummaryProvider="true"/>
         <SwitchPreference
                 android:key="settings_foreground"
                 android:title="@string/settings_foreground"
+                android:summary="@string/settings_foreground_summary"
                 android:defaultValue="false"/>
         <EditTextPreference
                 android:key="settings_log_size"
@@ -61,10 +76,12 @@
         <SwitchPreference
                 android:key="settings_app_filter_switch"
                 android:title="@string/settings_app_filter"
+                android:summary="@string/settings_app_filter_summary"
                 android:defaultValue="false"/>
         <SwitchPreference
                 android:key="settings_app_filter_mode_switch"
                 android:title="@string/settings_app_filter_mode"
+                android:summary="@string/settings_app_filter_mode_summary"
                 android:defaultValue="false"
                 android:enabled="false"/>
         <org.itxtech.daedalus.widget.ClickPreference
@@ -81,24 +98,23 @@
         <SwitchPreference
                 android:key="settings_advanced_switch"
                 android:title="@string/settings_advanced_on"
+                android:summary="@string/settings_advanced_summary"
                 android:defaultValue="false"/>
         <SwitchPreference
                 android:key="settings_count_query_times"
                 android:title="@string/settings_count_number_of_queries"
-                android:defaultValue="false"
-                android:enabled="false"/>
-        <SwitchPreference
-                android:key="settings_dont_build_cache"
-                android:title="@string/settings_dont_build_cache"
+                android:summary="@string/settings_count_query_times_summary"
                 android:defaultValue="false"
                 android:enabled="false"/>
         <SwitchPreference
                 android:key="settings_use_system_dns"
                 android:title="@string/settings_use_system_dns"
+                android:summary="@string/settings_use_system_dns_summary"
                 android:defaultValue="false"/>
         <ListPreference
                 android:key="settings_dns_query_method"
                 android:title="@string/settings_dns_query_method"
+                android:summary="@string/settings_dns_query_method_summary"
                 android:dialogTitle="@string/settings_dns_query_method"
                 android:entries="@array/dns_query_methods"
                 android:entryValues="@array/dns_query_method_values"
@@ -107,8 +123,27 @@
         <SwitchPreference
                 android:key="settings_debug_output"
                 android:title="@string/settings_debug_output"
+                android:summary="@string/settings_debug_output_summary"
                 android:defaultValue="false"
                 android:enabled="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            app:iconSpaceReserved="false"
+            android:key="settings_backup"
+            android:title="@string/settings_backup">
+        <org.itxtech.daedalus.widget.ClickPreference
+                android:key="settings_export_config"
+                android:title="@string/settings_export_config"
+                android:summary="@string/settings_export_config_summary"/>
+        <org.itxtech.daedalus.widget.ClickPreference
+                android:key="settings_import_config"
+                android:title="@string/settings_import_config"
+                android:summary="@string/settings_import_config_summary"/>
+        <org.itxtech.daedalus.widget.ClickPreference
+                android:key="settings_import_config_url"
+                android:title="@string/settings_import_config_url"
+                android:summary="@string/settings_import_config_url_summary"/>
     </PreferenceCategory>
 
     <PreferenceCategory

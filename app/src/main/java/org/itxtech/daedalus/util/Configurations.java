@@ -6,9 +6,12 @@ import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.server.CustomDnsServer;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 /**
@@ -28,6 +31,7 @@ public class Configurations {
     private static File file;
 
     private ArrayList<CustomDnsServer> customDNSServers;
+    private ArrayList<NetworkRule> networkRules;
     private ArrayList<String> appObjects;
 
     private ArrayList<Rule> hostsRules;
@@ -65,6 +69,13 @@ public class Configurations {
             customDNSServers = new ArrayList<>();
         }
         return customDNSServers;
+    }
+
+    public ArrayList<NetworkRule> getNetworkRules() {
+        if (networkRules == null) {
+            networkRules = new ArrayList<>();
+        }
+        return networkRules;
     }
 
     public ArrayList<String> getAppObjects() {
@@ -124,39 +135,85 @@ public class Configurations {
         return Rule.TYPE_HOSTS;
     }
 
-    public static Configurations load(File file) {
+    /**
+     * Loads the configuration from {@code file} (internal storage, always available).
+     * A configuration written by older versions to {@code legacyFile} (the external
+     * files directory, which is not always mounted when the process starts) is moved
+     * to {@code file} on first run. A file that cannot be parsed is kept aside as
+     * {@code config.json.corrupt} instead of being overwritten by the next save.
+     */
+    public static Configurations load(File file, File legacyFile) {
         Configurations.file = file;
         Configurations config = null;
-        if (file.exists()) {
-            try {
-                config = Daedalus.parseJson(Configurations.class, new JsonReader(new FileReader(file)));
-                Logger.info("Load configuration successfully from " + file);
-            } catch (Exception e) {
-                Logger.logException(e);
+
+        if (!file.exists() && legacyFile != null && legacyFile.exists()) {
+            config = read(legacyFile);
+            if (config != null) {
+                config.save();
+                if (legacyFile.renameTo(new File(legacyFile.getPath() + ".migrated"))) {
+                    Logger.info("Migrated configuration from " + legacyFile + " to " + file);
+                }
+            }
+        }
+
+        if (config == null && file.exists()) {
+            config = read(file);
+            if (config == null) {
+                File corrupt = new File(file.getPath() + ".corrupt");
+                Logger.error("Configuration " + file + " cannot be read, keeping it as " + corrupt);
+                if (!file.renameTo(corrupt)) {
+                    Logger.error("Cannot move " + file + " to " + corrupt);
+                }
             }
         }
 
         if (config == null) {
-            Logger.info("Load configuration failed. Generating default configurations.");
+            Logger.info("Generating default configurations");
             config = new Configurations();
         }
-
         return config;
+    }
+
+    private static Configurations read(File file) {
+        try (JsonReader reader = new JsonReader(new FileReader(file))) {
+            Configurations config = Daedalus.parseJson(Configurations.class, reader);
+            if (config == null) {
+                throw new IOException("Empty configuration file");
+            }
+            Logger.info("Loaded configuration from " + file + " with "
+                    + config.getCustomDNSServers().size() + " custom DNS servers");
+            return config;
+        } catch (Exception e) {
+            Logger.logException(e);
+            return null;
+        }
     }
 
     public Configurations() {
         //TODO: Initial config. Eg. Build-in rules
     }
 
-    public void save() {
+    /**
+     * Writes the configuration to a temporary file and renames it over the real one,
+     * so a process killed while saving never leaves a truncated configuration behind.
+     */
+    public synchronized void save() {
+        if (file == null) {
+            Logger.error("Configuration file is not set, nothing saved");
+            return;
+        }
+        File temp = new File(file.getPath() + ".tmp");
         try {
-            if (file != null) {
-                FileWriter writer = new FileWriter(file);
+            try (FileOutputStream out = new FileOutputStream(temp);
+                 Writer writer = new OutputStreamWriter(out, StandardCharsets.UTF_8)) {
                 new Gson().toJson(this, writer);
                 writer.flush();
-                writer.close();
+                out.getFD().sync();
             }
-        } catch (IOException e) {
+            if (!temp.renameTo(file)) {
+                throw new IOException("Cannot rename " + temp + " to " + file);
+            }
+        } catch (Exception e) {
             Logger.logException(e);
         }
     }

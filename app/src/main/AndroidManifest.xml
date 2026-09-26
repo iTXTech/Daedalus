@@ -3,6 +3,55 @@
           package="org.itxtech.daedalus">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <!--
+      The app filter lets the user pick the apps that are routed through Daedalus. Since
+      Android 11 an app only sees the packages that match a <queries> declaration, so without
+      one the filter lists system apps only and every user app is missing.
+
+      QUERY_ALL_PACKAGES would list everything, but Google Play only grants it to a handful of
+      use cases (device search, antivirus, file managers, browsers); a per-app VPN is not one
+      of them. These are the components a routable app can have instead. Measured on a
+      heavily customized Android 11 device: 90 of 94 user apps and 341 of 408 packages are
+      visible, against 0 user apps without the declaration. What stays hidden is a few apps
+      that expose nothing but non-exported, permission-protected or scheme-only components.
+    -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN"/>
+            <category android:name="android.intent.category.LAUNCHER"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.MAIN"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SEND"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SENDTO"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.PROCESS_TEXT"/>
+        </intent>
+        <intent>
+            <action android:name="android.service.wallpaper.WallpaperService"/>
+        </intent>
+        <intent>
+            <action android:name="android.view.InputMethod"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE"/>
+        </intent>
+        <intent>
+            <action android:name="android.speech.RecognitionService"/>
+        </intent>
+        <intent>
+            <action android:name="android.accounts.AccountAuthenticator"/>
+        </intent>
+    </queries>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR"/>

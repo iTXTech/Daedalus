@@ -20,7 +20,55 @@
                 android:key="serverPort"
                 android:selectAllOnFocus="false"
                 android:singleLine="true"
-                android:numeric="integer"
                 android:title="@string/settings_server_port"/>
+        <ListPreference
+                android:key="serverTransport"
+                android:title="@string/settings_server_transport"
+                android:summary="@string/settings_server_transport_summary"
+                android:entries="@array/server_transport_entries"
+                android:entryValues="@array/server_transport_values"
+                android:defaultValue="0"/>
+        <Preference
+                android:key="serverCertificate"
+                android:title="@string/settings_server_certificate"
+                android:summary="@string/cert_none"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            app:iconSpaceReserved="false"
+            android:key="serverProxy"
+            android:title="@string/settings_socks5">
+        <SwitchPreference
+                android:key="serverProxied"
+                android:title="@string/settings_server_proxied"
+                android:summary="@string/settings_server_proxied_summary"
+                android:defaultValue="false"/>
+        <EditTextPreference
+                android:key="serverProxyHost"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:title="@string/settings_socks5_host"/>
+        <EditTextPreference
+                android:key="serverProxyPort"
+                android:singleLine="true"
+                android:title="@string/settings_socks5_port"/>
+        <EditTextPreference
+                android:key="serverProxyUsername"
+                android:singleLine="true"
+                android:title="@string/settings_socks5_username"/>
+        <EditTextPreference
+                android:key="serverProxyPassword"
+                android:singleLine="true"
+                android:title="@string/settings_socks5_password"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            app:iconSpaceReserved="false"
+            android:key="serverTestCategory"
+            android:title="@string/action_dns_test">
+        <Preference
+                android:key="serverTest"
+                android:title="@string/server_test"
+                android:summary="@string/server_test_summary"/>
     </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

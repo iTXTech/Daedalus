@@ -15,6 +15,16 @@ import androidx.annotation.NonNull;
  */
 public class AbstractDnsServer implements Cloneable {
     public static final int DNS_SERVER_DEFAULT_PORT = 53;
+    public static final int DNS_SERVER_TLS_PORT = 853;
+
+    /**
+     * Plain-DNS transport of a server: chosen by Daedalus from the address, the port and
+     * the global query method (TRANSPORT_AUTO, see
+     * {@link org.itxtech.daedalus.provider.DnsTransport#getMethod}), or forced by the user.
+     */
+    public static final int TRANSPORT_AUTO = 0;
+    public static final int TRANSPORT_UDP = 1;
+    public static final int TRANSPORT_TCP = 2;
 
     protected String address;
     protected int port;
@@ -49,8 +59,57 @@ public class AbstractDnsServer implements Cloneable {
         return port;
     }
 
+    /**
+     * Identifier stored in the preferences. Ad-hoc servers (for example the extra
+     * servers of the DNS test) have none.
+     */
+    public String getId() {
+        return null;
+    }
+
     public String getName() {
         return "";
+    }
+
+    /**
+     * Transport forced by the user for plain DNS to this server, or {@link #TRANSPORT_AUTO}
+     * to let Daedalus choose. Built-in servers always use the automatic choice.
+     */
+    public int getTransport() {
+        return TRANSPORT_AUTO;
+    }
+
+    /**
+     * Host of the SOCKS5 proxy the server is reached through, or null for a direct
+     * connection. Each server carries its own proxy settings.
+     */
+    public String getProxyHost() {
+        return null;
+    }
+
+    public int getProxyPort() {
+        return 0;
+    }
+
+    public String getProxyUsername() {
+        return null;
+    }
+
+    public String getProxyPassword() {
+        return null;
+    }
+
+    public boolean isProxied() {
+        String host = getProxyHost();
+        return host != null && !host.trim().isEmpty();
+    }
+
+    /**
+     * Name of the certificate trusted for DNS over TLS connections to this server in
+     * addition to the system CAs, or null. See {@link org.itxtech.daedalus.util.TlsCertificates}.
+     */
+    public String getCertificate() {
+        return null;
     }
 
     @Override
